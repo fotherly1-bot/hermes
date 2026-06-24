@@ -119,8 +119,10 @@
         container.innerHTML = '<div class="dashboard-card" style="display:inline-block;min-width:220px;text-align:center;">' +
             '<h4>Willow Pool</h4>' +
             '<p>A small, sheltered pool surrounded by willows. Your starting venue.</p>' +
-            '<span class="angler-stat-badge">Fish Capacity: 70</span>' +
-            '<span class="angler-stat-badge" style="margin-left:8px;">Still Water</span>' +
+            '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">' +
+                '<span class="angler-stat-badge">Fish Capacity: 70</span>' +
+                '<span class="angler-stat-badge">Still Water</span>' +
+            '</div>' +
             '</div>';
     }
 
