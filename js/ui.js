@@ -277,7 +277,7 @@ const UI = (function () {
     }
 
     /**
-     * Execute the game reset and re-initialise the UI.
+     * Execute the game reset and show the welcome screen.
      */
     function doReset() {
         hideModal();
@@ -286,16 +286,15 @@ const UI = (function () {
         if (typeof Finance !== 'undefined') Finance.initState();
         if (typeof Breeding !== 'undefined') Breeding.initState();
         if (typeof Anglers !== 'undefined')  Anglers.initState();
-        currentTab = 'dashboard';
-        document.querySelectorAll('.tab-btn').forEach(function (btn) {
-            btn.classList.toggle('active', btn.dataset.tab === 'dashboard');
-        });
-        document.querySelectorAll('.panel').forEach(function (panel) {
-            panel.classList.toggle('active', panel.id === 'panel-dashboard');
-        });
-        if (typeof Weather !== 'undefined') Weather.initWeather();
-        renderAll();
-        showToast('New game started!', 'success');
+        if (typeof Game.saveToStorage === 'function') Game.saveToStorage();
+        var welcome = document.getElementById('welcome-screen');
+        if (welcome) {
+            welcome.style.display = 'block';
+        }
+        if (typeof UI.renderDashboard === 'function') UI.renderDashboard();
+        if (typeof Lakes !== 'undefined' && typeof Lakes.renderLakes === 'function') Lakes.renderLakes();
+        if (typeof Welcome !== 'undefined' && typeof Welcome.show === 'function') Welcome.show();
+        showToast('New game started! Pick your angler.', 'success');
     }
     /**
      * Render the page-wide events strip below the nav.
