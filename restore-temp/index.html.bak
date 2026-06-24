@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carp Fishing Tycoon</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Banner -->
+    <div id="game-banner">
+        <div id="banner-bg"></div>
+    </div>
+
+    <!-- Top Bar -->
+    <header id="top-bar">
+        <button id="pause-btn" class="btn btn-primary" onclick="UI.toggleTimer()">&#x23F8; Pause</button>
+        <button id="speed-btn" class="btn btn-secondary" onclick="UI.toggleSpeed()">&#x23E9; 2x</button>
+        <div id="top-stats">
+            <span id="day-counter" class="stat-item">Day: <strong>1 Jan Y1</strong></span>
+            <span id="money-display" class="stat-item">Money: <strong>&pound;50,000</strong></span>
+            <span id="reputation-display" class="stat-item">Reputation: <strong>0</strong>/1,000</span>
+            <span id="income-display" class="stat-item">Today: <strong>&pound;0</strong></span>
+            <span id="timer-display" class="stat-item">&#x23F1; <strong>1:00</strong></span>
+            <span id="weather-display" class="stat-item weather-stat">&mdash;</span>
+        </div>
+        <button id="reset-btn" class="btn btn-reset" onclick="UI.confirmReset()">&#x21BA; New Game</button>
+    </header>
+    <div id="day-progress-track"><div id="day-progress-fill"></div></div>
+
+    <!-- Tab Navigation -->
+    <nav id="tab-nav">
+        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="lakes">Lakes</button>
+        <button class="tab-btn" data-tab="buylakes">Buy Lakes</button>
+        <button class="tab-btn" data-tab="anglers">Anglers</button>
+        <button class="tab-btn" data-tab="breeding">Breeding Pond</button>
+        <button class="tab-btn" data-tab="shop">Shop</button>
+        <button class="tab-btn" data-tab="staff">Staff</button>
+        <button class="tab-btn" data-tab="cards">&#x1F0CF; Cards</button>
+        <button class="tab-btn" data-tab="news">&#x1F4F0; News</button>
+        <button class="tab-btn" data-tab="finance">Finance</button>
+    </nav>
+
+    <!-- Content Panels -->
+    <main id="content">
+        <!-- Dashboard Panel -->
+        <section id="panel-dashboard" class="panel active">
+            <h2>Dashboard</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Notifications</h3>
+                    <div id="notification-board">
+                        <p class="empty-state">No notifications yet. Press "Next Day" to begin!</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Overview</h3>
+                    <div id="dashboard-overview">
+                        <p>Lakes owned: <span id="overview-lakes">0</span></p>
+                        <p>Total fish: <span id="overview-fish">0</span></p>
+                        <p>Active anglers: <span id="overview-anglers">0</span></p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Quests</h3>
+                    <div id="dashboard-quests">
+                        <p class="empty-state">Quests coming soon...</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Charts</h3>
+                    <div id="dashboard-charts">
+                        <p class="empty-state">Charts coming soon...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lakes Panel -->
+        <section id="panel-lakes" class="panel">
+            <h2>Lake Management</h2>
+
+            <!-- Owned lakes: sidebar list + right detail panel -->
+            <div id="lake-owned-section" class="hidden">
+                <h3 class="lakes-section-heading">&#x1F3E1; My Lakes</h3>
+                <div class="lake-owned-layout">
+                    <div id="lake-owned-list"></div>
+                    <div id="active-lake-detail" class="lake-right-panel"></div>
+                    <div id="lake-management-panel" class="lake-management-panel"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buy Lakes Panel -->
+        <section id="panel-buylakes" class="panel">
+            <h2>Buy Lakes</h2>
+            <div id="lake-market-grid"></div>
+        </section>
+
+        <!-- Anglers Panel -->
+        <section id="panel-anglers" class="panel">
+            <h2>Anglers</h2>
+            <p class="empty-state">Loading anglers...</p>
+        </section>
+
+        <!-- Breeding Pond Panel -->
+        <section id="panel-breeding" class="panel">
+            <h2>&#x1F95A; Breeding Pond</h2>
+            <p class="empty-state">Loading breeding pond...</p>
+        </section>
+
+        <!-- Shop Panel -->
+        <section id="panel-shop" class="panel">
+            <h2>Shop</h2>
+            <p class="empty-state">Loading shop...</p>
+        </section>
+
+        <!-- Cards Panel -->
+        <section id="panel-cards" class="panel">
+            <h2>&#x1F0CF; Card Inventory</h2>
+            <p class="empty-state">Loading cards...</p>
+        </section>
+
+        <!-- News Panel -->
+        <section id="panel-news" class="panel">
+            <h2>&#x1F4F0; News</h2>
+            <p class="empty-state">Loading news...</p>
+        </section>
+
+        <!-- Staff Panel -->
+        <section id="panel-staff" class="panel">
+            <h2>Staff</h2>
+            <p class="empty-state">Loading staff...</p>
+        </section>
+
+        <!-- Finance Panel -->
+        <section id="panel-finance" class="panel">
+            <h2>Finance</h2>
+            <p class="empty-state">Loading finance...</p>
+        </section>
+
+
+    </main>
+
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="hidden">
+        <div id="modal-content">
+            <button id="modal-close" class="btn btn-close">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/fish.js"></script>
+    <script src="js/news.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/anglers.js"></script>
+    <script src="js/disasters.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/breeding.js"></script>
+    <script src="js/staff.js"></script>
+    <script src="js/finance.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/lakes.js"></script>
+</body>
+</html>

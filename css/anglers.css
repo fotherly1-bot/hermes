@@ -1,0 +1,274 @@
+/* anglers - dedicated page styles */
+
+.anglers-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.angler-pool-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
+  gap: 1.1rem;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+}
+
+.angler-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 45%, transparent 75%),
+    radial-gradient(circle at 50% 30%, rgba(160,200,140,0.12), transparent 60%),
+    radial-gradient(circle at 50% 110%, rgba(0,0,0,0.55), transparent 55%),
+    var(--colour-card, #122818);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+  position: relative;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  overflow: visible;
+}
+
+.angler-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+.angler-card-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #fff;
+  text-align: center;
+  padding: 0.75rem 0.6rem 0.25rem;
+  letter-spacing: 0.04em;
+}
+
+.angler-portrait-img,
+.angler-photo-img {
+  width: 100%;
+  height: auto;
+  max-height: 256px;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.35);
+  object-fit: contain;
+  object-position: top center;
+  margin-bottom: 0.5rem;
+}
+
+.angler-photo-placeholder {
+  width: 100%;
+  height: 256px;
+  min-height: 256px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 4px);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.55);
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.angler-portrait-placeholder {
+  width: 100%;
+  min-height: 220px;
+  aspect-ratio: 1 / 1;
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.55);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.angler-card-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0.6rem 0.2rem;
+}
+
+.angler-skill-badge,
+.angler-social-badge,
+.angler-budget-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.45rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.angler-skill-badge {
+  background: #7a2222;
+  color: #ffdada;
+  border: 1px solid rgba(255,120,120,0.25);
+}
+
+.angler-social-badge {
+  background: #1f2a5b;
+  color: #cfe0ff;
+  border: 1px solid rgba(140,170,255,0.3);
+}
+
+.angler-budget-badge {
+  background: #3d2f0f;
+  color: #ffd89b;
+  border: 1px solid rgba(255,200,120,0.3);
+}
+
+.angler-card-prefs {
+  font-size: 0.8rem;
+  color: #f6cce0;
+  text-align: center;
+  padding: 0.15rem 0.7rem 0;
+}
+
+.angler-card-prefs.angler-dislikes {
+  color: #f7b7c4;
+}
+
+.pref-label {
+  font-weight: 800;
+  color: #ffe9f2;
+}
+
+.angler-status-text {
+  color: #2ecc71;
+  text-align: center;
+  margin-top: 0.3rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.angler-more-btn {
+  display: block;
+  margin: 0.6rem auto 0.8rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.25);
+  background: #c0392b;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-width: 120px;
+  text-align: center;
+}
+
+.angler-more-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(192,57,43,0.35);
+}
+
+.angler-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.angler-modal {
+  background: #122818;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 1rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+  color: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.angler-modal-photo {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  object-position: top center;
+  border-radius: 10px;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.angler-modal h2 {
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+}
+
+.angler-modal-intro {
+  color: #f6cce0;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  margin: 0 0 0.6rem;
+}
+
+.angler-modal-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.6rem;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-label {
+  width: 64px;
+  font-weight: 800;
+  font-size: 0.78rem;
+  color: #ffe9f2;
+}
+
+.stat-bar-track {
+  flex: 1;
+  height: 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stat-bar {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.stat-value {
+  width: 28px;
+  text-align: right;
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: #fff;
+}

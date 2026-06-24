@@ -1,0 +1,341 @@
+/* ============================================================
+   BUY LAKES REDESIGN - LUXURY BROKERAGE VIEW
+   ============================================================ */
+
+/* Header styling for buy lakes page */
+.lake-broker-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--colour-border);
+}
+
+.lake-broker-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--colour-text);
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.lake-broker-subtitle {
+    color: var(--colour-text-muted);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Filter bar for lakes */
+.lake-filter-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.lake-filter-btn {
+    background: var(--colour-panel);
+    border: 1px solid var(--colour-border);
+    color: var(--colour-text-muted);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lake-filter-btn:hover {
+    background: var(--colour-card);
+    color: var(--colour-text);
+}
+
+.lake-filter-btn.active {
+    background: var(--colour-accent);
+    color: #fff;
+    border-color: var(--colour-accent);
+}
+
+/* Luxury lake cards grid */
+.lake-luxury-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .lake-luxury-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Individual luxury card */
+.lake-luxury-card {
+    background: linear-gradient(165deg, var(--colour-card) 0%, var(--colour-panel) 100%);
+    border: 2px solid var(--colour-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.lake-luxury-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--colour-accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.lake-luxury-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.lake-luxury-card.owned {
+    border-color: var(--colour-accent);
+    background: linear-gradient(165deg, var(--colour-owned) 0%, var(--colour-card) 100%);
+}
+
+.lake-luxury-card.selected {
+    border-color: var(--colour-gold);
+    box-shadow: 0 0 0 4px rgba(200, 165, 40, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Card header with county badge */
+.lake-card-header {
+    padding: 1.25rem 1.25rem 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.lake-card-name-wrapper {
+    flex: 1;
+}
+
+.lake-card-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--colour-text);
+    margin: 0 0 0.25rem;
+    line-height: 1.2;
+}
+
+.lake-card-county {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.lake-card-county .emoji {
+    font-size: 1rem;
+}
+
+.lake-card-status-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.lake-card-status-badge.available {
+    background: var(--colour-accent);
+    color: #fff;
+}
+
+.lake-card-status-badge.locked {
+    background: var(--colour-danger);
+    color: #fff;
+}
+
+.lake-card-status-badge.owned {
+    background: var(--colour-gold);
+    color: #1a2332;
+}
+
+/* Card visual - lake illustration */
+.lake-card-visual {
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lake-water-effect {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(60, 130, 80, 0.2) 0%, rgba(30, 80, 50, 0.4) 100%);
+}
+
+.lake-water-effect.willow_pool { background: linear-gradient(180deg, rgba(40, 120, 70, 0.3) 0%, rgba(25, 70, 40, 0.5) 100%); }
+.lake-water-effect.oakmere_lake { background: linear-gradient(180deg, rgba(50, 130, 90, 0.35) 0%, rgba(30, 80, 55, 0.55) 100%); }
+.lake-water-effect.kingfisher_waters { background: linear-gradient(180deg, rgba(60, 140, 110, 0.3) 0%, rgba(35, 90, 70, 0.5) 100%); }
+.lake-water-effect.linch_hill { background: linear-gradient(180deg, rgba(70, 120, 90, 0.25) 0%, rgba(40, 80, 60, 0.45) 100%); }
+.lake-water-effect.wraysbury { background: linear-gradient(180deg, rgba(80, 140, 120, 0.3) 0%, rgba(45, 95, 80, 0.5) 100%); }
+.lake-water-effect.yateley { background: linear-gradient(180deg, rgba(100, 160, 140, 0.35) 0%, rgba(55, 110, 95, 0.55) 100%); }
+.lake-water-effect.redmire_pool { background: linear-gradient(180deg, rgba(180, 140, 90, 0.2) 0%, rgba(120, 80, 50, 0.4) 100%); }
+.lake-water-effect.savay_lake { background: linear-gradient(180deg, rgba(120, 180, 200, 0.25) 0%, rgba(80, 140, 160, 0.45) 100%); }
+
+.lake-lily-pads {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    opacity: 0.6;
+}
+
+/* Card stats summary */
+.lake-card-stats {
+    padding: 0.75rem 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.lake-stat-item {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.lake-stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--colour-gold);
+    display: block;
+}
+
+.lake-stat-label {
+    font-size: 0.7rem;
+    color: var(--colour-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Card description and CTA */
+.lake-card-footer {
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.lake-card-description {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+    font-style: italic;
+    margin: 0;
+    flex: 1;
+}
+
+.lake-card-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--colour-gold);
+    margin-right: 1rem;
+}
+
+/* Expanded detail panel */
+.lake-detail-panel {
+    background: var(--colour-card);
+    border: 1px solid var(--colour-gold);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-top: 1rem;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.lake-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.lake-detail-title {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--colour-accent);
+    margin: 0;
+}
+
+.lake-detail-county {
+    font-size: 0.9rem;
+    color: var(--colour-text-muted);
+    margin: 0.25rem 0 0;
+}
+
+.lake-detail-emoji {
+    font-size: 3rem;
+    opacity: 0.8;
+}
+
+.lake-detail-description {
+    font-size: 0.95rem;
+    color: var(--colour-text-muted);
+    font-style: italic;
+    margin: 0 0 1rem;
+}
+
+.lake-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.lake-detail-box {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.lake-detail-box-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--colour-gold);
+}
+
+.lake-detail-box-label {
+    font-size: 0.75rem;
+    color: var(--colour-text-muted);
+    text-transform: uppercase;
+    margin-top: 0.25rem;
+}
+
+.lake-income-projection {
+    background: linear-gradient(135deg, rgba(199, 165, 40, 0.15) 0%, rgba(199, 165, 40, 0.05) 100%);
+    border: 1px solid rgba(199, 165, 40, 0.3);
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.lake-income-projection .value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--colour-gold);
+    display: block;
+}
+
+.lake-income-projection .label {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+    margin-top: 0.25rem;
+}
