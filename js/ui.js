@@ -260,28 +260,9 @@ const UI = (function () {
         showModal(html);
     }
 
-    function openLoadMenu() {
-        var keys = [
-            'carp_tycoon_slot_1',
-            'carp_tycoon_slot_2',
-            'carp_tycoon_slot_3'
-        ];
-        var html = '<h3 style=\"margin-bottom:0.75rem;\">Load Game</h3>';
-        html += '<div style=\"display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;\">';
-        keys.forEach(function (key, idx) {
-            var occupied = !!localStorage.getItem(key);
-            var label = occupied ? 'Slot ' + (idx + 1) + ' — Load' : 'Slot ' + (idx + 1) + ' — Empty';
-            html += '<button class=\"btn ' + (occupied ? 'btn-primary' : 'btn-secondary') + '\" onclick=\"UI.doLoad(' + idx + ')\">' + label + '</button>';
-        });
-        html += '</div>';
-        html += '<div style=\"margin-top:1rem;text-align:right;\"><button class=\"btn btn-secondary\" onclick=\"UI.hideModal()\">Cancel</button></div>';
-        showModal(html);
-    }
-
-    function doLoad(index) {
+    function doLoad() {
         hideModal();
         if (typeof Game !== 'undefined') {
-            Game.setActiveSlotIndex(index);
             var saved = Game.loadFromStorage ? Game.loadFromStorage() : null;
             if (saved) {
                 Game.setState(saved);
@@ -480,7 +461,6 @@ const UI = (function () {
         toggleSpeed: toggleSpeed,
         confirmReset: confirmReset,
         doReset: doReset,
-        openLoadMenu: openLoadMenu,
         doLoad: doLoad
     };
 })();

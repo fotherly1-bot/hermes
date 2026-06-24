@@ -2,51 +2,7 @@
 (function () {
     'use strict';
 
-    var SLOT_KEYS = [
-        'carp_tycoon_slot_1',
-        'carp_tycoon_slot_2',
-        'carp_tycoon_slot_3'
-    ];
-
     var carouselIndex = 0;
-    var selectedSlotIndex = 0;
-
-    function _loadSlotIntoGame(index) {
-        if (typeof Game === 'undefined') return;
-        Game.setActiveSlotIndex(index);
-        var saved = Game.loadFromStorage();
-        if (saved) {
-            Game.setState(saved);
-        } else {
-            Game.setState(JSON.parse(JSON.stringify(Game.DEFAULT_STATE)));
-        }
-    }
-
-    function _slotOccupied(index) {
-        try {
-            return !!localStorage.getItem(SLOT_KEYS[index]);
-        } catch (e) {
-            return false;
-        }
-    }
-
-    function _renderSlotButton(index) {
-        var occupied = _slotOccupied(index);
-        var isActive = (index === selectedSlotIndex);
-        var cls = 'btn ' + (occupied ? 'btn-primary' : 'btn-secondary');
-        if (isActive) cls += ' active-slot';
-        return '<button class="' + cls + ' welcome-slot-btn" data-slot="' + index + '">' +
-            'Slot ' + (index + 1) + '</button>';
-    }
-
-    function _renderSlots() {
-        var container = document.getElementById('welcome-slots');
-        if (!container) return;
-        container.innerHTML = '';
-        SLOT_KEYS.forEach(function (_, idx) {
-            container.innerHTML += _renderSlotButton(idx);
-        });
-    }
 
     function _startGame() {
         if (typeof Game === 'undefined') {
@@ -54,7 +10,12 @@
             return;
         }
 
-        _loadSlotIntoGame(selectedSlotIndex);
+        var saved = Game.loadFromStorage();
+        if (saved) {
+            Game.setState(saved);
+        } else {
+            Game.setState(JSON.parse(JSON.stringify(Game.DEFAULT_STATE)));
+        }
         var state = Game.getState();
 
         if (!state.ownedLakes || state.ownedLakes.indexOf('willow_pool') === -1) {
@@ -138,16 +99,6 @@
             _renderCarousel();
         };
 
-        var slotsContainer = document.getElementById('welcome-slots');
-        if (slotsContainer) {
-            slotsContainer.onclick = function (e) {
-                var btn = e.target.closest('.welcome-slot-btn');
-                if (!btn) return;
-                selectedSlotIndex = parseInt(btn.getAttribute('data-slot'), 10);
-                _renderSlots();
-            };
-        }
-
         var startBtn = document.getElementById('welcome-start-btn');
         if (startBtn) startBtn.onclick = function () {
             _startGame();
@@ -158,9 +109,7 @@
         var welcome = document.getElementById('welcome-screen');
         if (!welcome) return;
         welcome.style.display = 'block';
-        selectedSlotIndex = 0;
         carouselIndex = 0;
-        _renderSlots();
         _renderCarousel();
         _renderLakeCard();
         _bindEvents();

@@ -78,27 +78,7 @@ const Game = (function () {
     };
 
     const STORAGE_KEY = 'carpFishingTycoon_saveData';
-    const SLOT_KEYS = [
-        'carp_tycoon_slot_1',
-        'carp_tycoon_slot_2',
-        'carp_tycoon_slot_3'
-    ];
-    let activeSlotIndex = 0;
     let state = {};
-
-    function getActiveSlotKey() {
-        return SLOT_KEYS[activeSlotIndex] || SLOT_KEYS[0];
-    }
-
-    function setActiveSlotIndex(index) {
-        if (index >= 0 && index < SLOT_KEYS.length) {
-            activeSlotIndex = index;
-        }
-    }
-
-    function getActiveSlotIndex() {
-        return activeSlotIndex;
-    }
 
     /**
      * Initialise the game - load saved state or create new.
@@ -153,14 +133,6 @@ const Game = (function () {
             if (!state.sponsorships)     state.sponsorships     = [];
             if (!state.anglerStats)      state.anglerStats      = {};
             if (!state.matchResults)     state.matchResults     = [];
-            if (state.tournamentCut === undefined) state.tournamentCut = 0.20;
-            if (!state.nextSponsorshipId) state.nextSponsorshipId = 1;
-            if (!state.cardInventory)    state.cardInventory    = [];
-            if (!state.cardPacksBought)  state.cardPacksBought  = {};
-            if (!state.activeCardBuffs)  state.activeCardBuffs  = [];
-            if (!state.cardNextId)       state.cardNextId       = 1;
-        } else {
-            state = JSON.parse(JSON.stringify(DEFAULT_STATE));
         }
         // Sync fish ID counter
         if (typeof Fish !== 'undefined') {
@@ -189,7 +161,7 @@ const Game = (function () {
      */
     function saveToStorage() {
         try {
-            localStorage.setItem(getActiveSlotKey(), JSON.stringify(state));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         } catch (e) {
             console.warn('Failed to save game state:', e);
         }
@@ -197,7 +169,7 @@ const Game = (function () {
 
     function loadFromStorage() {
         try {
-            const data = localStorage.getItem(getActiveSlotKey());
+            const data = localStorage.getItem(STORAGE_KEY);
             if (data) {
                 return JSON.parse(data);
             }
@@ -206,10 +178,6 @@ const Game = (function () {
         }
         return null;
     }
-
-    /**
-     * Reset game to default state.
-     */
     function resetGame() {
         state = JSON.parse(JSON.stringify(DEFAULT_STATE));
         saveToStorage();
@@ -788,9 +756,6 @@ const Game = (function () {
         addNotification: addNotification,
         addEvent: addEvent,
         logFishCreation: logFishCreation,
-        DEFAULT_STATE: DEFAULT_STATE,
-        setActiveSlotIndex: setActiveSlotIndex,
-        getActiveSlotIndex: getActiveSlotIndex,
-        getActiveSlotKey: getActiveSlotKey
+        DEFAULT_STATE: DEFAULT_STATE
     };
 })();

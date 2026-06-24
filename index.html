@@ -26,7 +26,6 @@
             <span id="weather-display" class="stat-item weather-stat">&mdash;</span>
         </div>
         <button id="reset-btn" class="btn btn-reset" onclick="UI.confirmReset()">&#x21BA; New Game</button>
-        <button id="load-btn" class="btn btn-secondary" onclick="UI.openLoadMenu()" style="margin-left:8px;">Load Game</button>
     </header>
     <div id="day-progress-track"><div id="day-progress-fill"></div></div>
 
@@ -157,8 +156,7 @@
     <div id="toast-container"></div>
 
     <style>
-        .active-slot { background-color: #2563eb !important; border-color: #2563eb !important; color: #ffffff !important; }
-        #reset-btn, #load-btn { min-width: 120px; }
+        #reset-btn { min-width: 120px; }
     </style>
 
     <!-- Welcome Screen -->
@@ -166,14 +164,9 @@
         <div style="max-width:900px;margin:0 auto;">
             <h2 style="text-align:center;font-weight:300;letter-spacing:0.05em;">Welcome to Carp Fishing Tycoon</h2>
 
-            <div id="welcome-slots" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0;">
-                <!-- 3 slot buttons injected by JS -->
-            </div>
-
             <div style="background:#141210;border:1px solid #2a2520;border-radius:12px;padding:1rem;margin-bottom:1rem;text-align:center;">
                 <h3 style="margin-top:0;">First steps</h3>
                 <ol style="line-height:1.6;display:inline-block;text-align:left;">
-                    <li>Select your save slot above.</li>
                     <li>Pick your angler using the arrows below.</li>
                     <li><strong>You must hire staff to fill each role before starting!</strong></li>
                 </ol>
