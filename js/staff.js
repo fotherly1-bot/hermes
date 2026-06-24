@@ -320,7 +320,7 @@ const Staff = (function () {
         html += '<p style="font-size:0.8rem;color:var(--colour-text-muted);">'+def.bio+'</p>';
         html += '<p style="font-size:0.75rem;color:var(--colour-text-muted);">'+(r.desc||'')+'</p>';
         html += can
-            ? '<button class="btn btn-primary" onclick="Staff.hireStaff('+poolId+');UI.hideModal();">Hire '+def.name.split(' ')[0]+' — '+UI.formatMoney(def.hire)+'</button>'
+            ? '<button class="btn btn-primary" onclick="Staff.hireStaff('+poolId+');UI.hideModal();">Hire Me</button>'
             : '<p style="color:var(--colour-danger);font-size:0.82rem;">Need '+UI.formatMoney(def.hire-s.money)+' more to hire.</p><button class="btn btn-secondary" disabled>Can\'t Afford</button>';
         html += '</div>';
         UI.showModal(html);
@@ -466,7 +466,7 @@ const Staff = (function () {
                     html += '<span class="staff-applicant-stat">✨ '+traitNames+'</span>';
                     if (def.bio) html += '<span class="staff-applicant-stat staff-applicant-bio">'+def.bio+'</span>';
                     html += '</div>';
-                    html += '<button class="btn btn-primary" onclick="Staff.interviewStaff('+def.id+')">Interview</button>';
+                    html += '<button class="btn btn-primary" onclick="Staff.hireStaff('+def.id+');UI.showToast(\'Hired '+def.name.split(' ')[0]+'!\', \'success\');">Hire Me</button>';
                     html += '</div>';
                 });
                 html += '</div></div>';
