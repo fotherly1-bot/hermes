@@ -74,7 +74,50 @@ const Game = (function () {
         reputationHistory: [],
         newsStories:      [],
         nextNewsId:       1,
-        lastDeathCount:   0
+        lastDeathCount: 0,
+        _initialFish: (function () {
+            var fish = [];
+            var nextId = 1;
+            for (var i = 0; i < 20; i++) {
+                fish.push({
+                    id: nextId++,
+                    name: 'Stock Fish ' + (i + 1),
+                    species: 'common',
+                    speciesName: 'Common Carp',
+                    weight_oz: Math.floor(Math.random() * 312) + 8,
+                    age_days: Math.floor(Math.random() * 200) + 30,
+                    max_age_days: 800,
+                    growth_rate: 1.0,
+                    rarity: 'common',
+                    personality_traits: [],
+                    stats: { health: 60, aggression: 50, size: 50, metabolism: 50, curiosity: 50 },
+                    parent_ids: [],
+                    lake_id: 'willow_pool',
+                    growth_stage: 'adult',
+                    alive: true
+                });
+            }
+            for (var j = 0; j < 2; j++) {
+                fish.push({
+                    id: nextId++,
+                    name: 'Stock Uncommon ' + (j + 1),
+                    species: 'mirror',
+                    speciesName: 'Mirror Carp',
+                    weight_oz: Math.floor(Math.random() * 200) + 40,
+                    age_days: Math.floor(Math.random() * 250) + 60,
+                    max_age_days: 900,
+                    growth_rate: 0.9,
+                    rarity: 'uncommon',
+                    personality_traits: [],
+                    stats: { health: 70, aggression: 60, size: 60, metabolism: 55, curiosity: 55 },
+                    parent_ids: [],
+                    lake_id: 'willow_pool',
+                    growth_stage: 'adult',
+                    alive: true
+                });
+            }
+            return { fish: fish, nextFishId: nextId };
+        })()
     };
 
     const STORAGE_KEY = 'carpFishingTycoon_saveData';

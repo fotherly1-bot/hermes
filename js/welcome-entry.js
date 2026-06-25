@@ -15,6 +15,12 @@
             Game.setState(saved);
         } else {
             Game.setState(JSON.parse(JSON.stringify(Game.DEFAULT_STATE)));
+            var initial = Game.DEFAULT_STATE._initialFish || null;
+            if (initial) {
+                var st = Game.getState();
+                st.fish = initial.fish;
+                st.nextFishId = initial.nextFishId;
+            }
         }
         var state = Game.getState();
 
