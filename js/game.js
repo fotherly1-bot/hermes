@@ -222,6 +222,8 @@ const Game = (function () {
             if (!state.sponsorships)     state.sponsorships     = [];
             if (!state.anglerStats)      state.anglerStats      = {};
             if (!state.matchResults)     state.matchResults     = [];
+        } else {
+            state = JSON.parse(JSON.stringify(DEFAULT_STATE));
         }
         // Sync fish ID counter
         if (typeof Fish !== 'undefined') {
