@@ -174,8 +174,10 @@ const Game = (function () {
      */
     function init() {
         const saved = loadFromStorage();
+        console.log('[Game.init] saved=', saved, 'typeof=', typeof saved, 'keys=', saved ? Object.keys(saved).sort().join(',') : 'none');
         if (saved) {
             state = saved;
+            console.log('[Game.init] took saved branch');
             // Ensure new state fields exist for older saves
             if (!state.breedingPond) state.breedingPond = [];
             if (!state.breedingTimer) state.breedingTimer = 0;
@@ -224,6 +226,7 @@ const Game = (function () {
             if (!state.matchResults)     state.matchResults     = [];
         } else {
             state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+            console.log('[Game.init] took ELSE branch, DEFAULT_STATE keys:', Object.keys(state).sort().join(','));
         }
         // Sync fish ID counter
         if (typeof Fish !== 'undefined') {
@@ -233,6 +236,7 @@ const Game = (function () {
         if (typeof Weather !== 'undefined') {
             Weather.initWeather();
         }
+        console.log('[Game.init] before return keys:', Object.keys(state).sort().join(','));
         return state;
     }
 
