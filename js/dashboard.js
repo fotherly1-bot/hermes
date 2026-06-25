@@ -1279,8 +1279,21 @@ const Dashboard = (function () {
             return html;
         }
 
-        html += '<div style="display:flex;justify-content:center;">';
-        html += '<div class="angler-card" style="width:320px;height:320px;box-sizing:content-box;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:visible;">';
+        var stats = (state.anglerStats || {})[angler.name] || { fishCaught: 0, biggestFishOz: 0, wins: 0 };
+        var anglersWithCatches = Object.keys(state.anglerStats || {}).filter(function (k) {
+            return state.anglerStats[k].fishCaught > 0 || state.anglerStats[k].wins > 0;
+        }).sort(function (a, b) {
+            return (state.anglerStats[b].fishCaught || 0) - (state.anglerStats[a].fishCaught || 0);
+        });
+        var anglerRank = anglersWithCatches.indexOf(angler.name) + 1;
+        var leaderboardText = anglersWithCatches.length === 0
+            ? 'No stats yet'
+            : '#' + anglerRank + ' of ' + anglersWithCatches.length;
+
+        html += '<div style="display:flex;gap:1.5rem;align-items:flex-start;justify-content:center;flex-wrap:wrap;">';
+
+        // Left column — photo + name + basic badges
+        html += '<div class="angler-card" style="width:320px;height:320px;box-sizing:content-box;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:visible;flex-shrink:0;">';
         html += '<div class="angler-photo-slot" style="width:220px;height:220px;">';
         if (angler.photo) {
             html += '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" style="width:100%;height:100%;object-fit:contain;"/>';
@@ -1289,7 +1302,42 @@ const Dashboard = (function () {
         }
         html += '</div>';
         html += '<div class="angler-name" style="margin-top:10px;color:#2563eb;">' + angler.name + '</div>';
-        html += '<div class="angler-stats-row" style="justify-content:center;"><span class="angler-stat-badge">Skill ' + angler.skill + '/10</span><span class="angler-stat-badge">Social Media ' + (typeof angler.socialMedia !== 'undefined' ? '' + angler.socialMedia + '/10' : '—') + '</span></div>';
+        html += '<div class="angler-stats-row" style="justify-content:center;gap:8px;flex-wrap:wrap;"><span class="angler-stat-badge">Skill ' + angler.skill + '/10</span><span class="angler-stat-badge">Social Media ' + (typeof angler.socialMedia !== 'undefined' ? '' + angler.socialMedia + '/10' : '—') + '</span></div>';
+        html += '</div>';
+
+        // Right column — description + stats
+        html += '<div style="flex:1;min-width:220px;max-width:320px;text-align:left;">';
+
+        // Short written description from likes / dislikes
+        var likes = (angler.preferred || []).map(function (t) {
+            switch (t) {
+                case 'still': return 'Still Water';
+                case 'running': return 'Running Water';
+                case 'gravel_pit': return 'Gravel Pit';
+                case 'estate_lake': return 'Estate Lake';
+                default: return t;
+            }
+        }).join(', ');
+        var dislikes = (angler.disliked || []).map(function (t) {
+            switch (t) {
+                case 'still': return 'Still Water';
+                case 'running': return 'Running Water';
+                case 'gravel_pit': return 'Gravel Pit';
+                case 'estate_lake': return 'Estate Lake';
+                default: return t;
+            }
+        }).join(', ');
+        html += '<p style="color:var(--colour-text-muted);margin:0 0 0.6rem;"><strong>Likes:</strong> ' + (likes || '—') + '</p>';
+        html += '<p style="color:var(--colour-text-muted);margin:0 0 0.8rem;"><strong>Dislikes:</strong> ' + (dislikes || '—') + '</p>';
+
+        // Stats rows
+        html += '<div style="display:flex;flex-direction:column;gap:0.35rem;">';
+        html += '<div class="angler-stat-badge">Fish caught: ' + stats.fishCaught + '</div>';
+        html += '<div class="angler-stat-badge">Biggest fish: ' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</div>';
+        html += '<div class="angler-stat-badge">Leaderboard: ' + leaderboardText + '</div>';
+        html += '<div class="angler-stat-badge">Social Media: ' + angler.socialMedia + '/10</div>';
+        html += '</div>';
+
         html += '</div></div>';
         return html;
     }
