@@ -58,7 +58,19 @@ const UI = (function () {
     var _speedMultiplier  = 1;     // 1 = normal, 2 = 2x, 4 = 4x
     var DAY_DURATION      = 60;    // seconds
 
+    function _getDayDuration() {
+        try {
+            var state = (typeof Game !== 'undefined' && typeof Game.getState === 'function')
+                ? Game.getState() : null;
+            if (state && typeof state.day === 'number' && state.day <= 1) return 2;
+        } catch (e) {
+            // ignore
+        }
+        return 60;
+    }
+
     function startDayTimer() {
+        DAY_DURATION = _getDayDuration();
         _timerSecsLeft = DAY_DURATION;
         if (_timerInterval) clearInterval(_timerInterval);
         _timerInterval = setInterval(function () {
@@ -69,6 +81,11 @@ const UI = (function () {
                 _timerSecsLeft = DAY_DURATION;
                 Game.nextDay();
                 renderAll();
+                if (Game.getState().day >= 2) {
+                    DAY_DURATION = 60;
+                    _timerSecsLeft = DAY_DURATION;
+                    updateTimerDisplay();
+                }
             }
         }, 1000);
         updateTimerDisplay();
