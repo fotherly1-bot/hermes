@@ -212,6 +212,18 @@
             if (typeof Game === 'undefined' || typeof Game.init !== 'function') return;
             Game.init();
             if (typeof Welcome === 'undefined' || typeof Welcome.show !== 'function') return;
+
+            // Skip welcome screen if save exists — go straight to dashboard
+            try {
+                var saved = localStorage.getItem('carpFishingTycoon_saveData');
+                if (saved) {
+                    if (typeof UI !== 'undefined' && typeof UI.renderDashboard === 'function') UI.renderDashboard();
+                    if (typeof Lakes !== 'undefined' && typeof Lakes.renderLakes === 'function') Lakes.renderLakes();
+                    return;
+                }
+            } catch (e) {
+                // localStorage unavailable — fall back to welcome
+            }
             Welcome.show();
         });
     </script>
