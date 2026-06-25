@@ -80,6 +80,52 @@ const Game = (function () {
     const STORAGE_KEY = 'carpFishingTycoon_saveData';
     let state = {};
 
+    function _generateInitialFish() {
+        var fish = [];
+        var nextId = 1;
+        // 20 common fish up to 20lb (320oz)
+        for (var i = 0; i < 20; i++) {
+            fish.push({
+                id: nextId++,
+                name: 'Stock Fish ' + (i + 1),
+                species: 'common',
+                speciesName: 'Common Carp',
+                weight_oz: Math.floor(Math.random() * 312) + 8, // up to 20lb
+                age_days: Math.floor(Math.random() * 200) + 30,
+                max_age_days: 800,
+                growth_rate: 1.0,
+                rarity: 'common',
+                personality_traits: [],
+                stats: { health: 60, aggression: 50, size: 50, metabolism: 50, curiosity: 50 },
+                parent_ids: [],
+                lake_id: 'willow_pool',
+                growth_stage: 'adult',
+                alive: true
+            });
+        }
+        // 2 uncommon fish up to 15lb (240oz)
+        for (var j = 0; j < 2; j++) {
+            fish.push({
+                id: nextId++,
+                name: 'Stock Uncommon ' + (j + 1),
+                species: 'mirror',
+                speciesName: 'Mirror Carp',
+                weight_oz: Math.floor(Math.random() * 200) + 40, // up to 15lb
+                age_days: Math.floor(Math.random() * 250) + 60,
+                max_age_days: 900,
+                growth_rate: 0.9,
+                rarity: 'uncommon',
+                personality_traits: [],
+                stats: { health: 70, aggression: 60, size: 60, metabolism: 55, curiosity: 55 },
+                parent_ids: [],
+                lake_id: 'willow_pool',
+                growth_stage: 'adult',
+                alive: true
+            });
+        }
+        return { fish: fish, nextFishId: nextId };
+    }
+
     /**
      * Initialise the game - load saved state or create new.
      */
@@ -180,6 +226,9 @@ const Game = (function () {
     }
     function resetGame() {
         state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        var initial = _generateInitialFish();
+        state.fish = initial.fish;
+        state.nextFishId = initial.nextFishId;
         saveToStorage();
         return state;
     }
