@@ -36,7 +36,7 @@ const Anglers = (function () {
         { id: 6,  name: 'Ali Hamidi',       preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 8,  photo: 'img/anglers/ali-hamidi.png'  },
         { id: 7,  name: 'Alan Blair',       preferred: ['running','still'],           disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/alanb2.png'  },
         { id: 8,  name: 'Mark Pitchers',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 5,  socialMedia: 3,  photo: 'img/anglers/mark-pitchers.png'  },
-        { id: 9,  name: 'Kev Hewitt',       preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5  },
+        { id: 9,  name: 'Kev Hewitt',       preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5,  photo: 'img/anglers/kev-hewitt.png'  },
         { id: 10, name: 'Rob Hughes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7  },
         { id: 11, name: 'Simon Crow',       preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 40, skill: 7,  socialMedia: 6  },
         { id: 12, name: 'Nigel Sharp',      preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 7  },
