@@ -6,7 +6,7 @@
 
 const Breeding = (function () {
 
-    const CYCLE_DAYS   = 3;  // days per breeding cycle
+    const CYCLE_DAYS   = 5;  // days per breeding cycle
     const RARITY_ORDER = ['common','uncommon','rare','epic','legendary','mythic'];
     const RARITY_COLS  = { common:'#aaa', uncommon:'#2ecc71', rare:'#3498db', epic:'#9b59b6', legendary:'#f1c40f', mythic:'#e74c3c' };
 
