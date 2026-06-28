@@ -1014,7 +1014,7 @@ const Lakes = (function () {
             } else if (state.money < upgrade.cost) {
                 html += '<button class="btn btn-secondary btn-sm" disabled>Can\'t afford</button>';
             } else {
-                html += '<button class="btn btn-primary btn-sm" onclick="Shop.buyUpgrade(\'' + upgrade.id + '\');Lakes.renderLakes();">Buy</button>';
+                html += '<button class="btn btn-primary btn-sm" onclick="Shop.setShopLake(\'' + lakeId + '\');Shop.buyUpgrade(\'' + upgrade.id + '\');Lakes.renderLakes();">Buy</button>';
             }
             html += '</div></div>';
         });
@@ -1573,7 +1573,7 @@ const Lakes = (function () {
                 } else if (state.money < upgrade.cost) {
                     html += '<button class="btn btn-secondary btn-sm" disabled>Can\'t afford</button>';
                 } else {
-                    html += '<button class="btn btn-primary btn-sm" onclick="Shop.buyUpgrade(\'' + upgrade.id + '\');Lakes.renderActiveLakeDetail();">Buy</button>';
+                    html += '<button class="btn btn-primary btn-sm" onclick="Shop.setShopLake(\'' + state.activeLakeId + '\');Shop.buyUpgrade(\'' + upgrade.id + '\');Lakes.renderActiveLakeDetail();">Buy</button>';
                 }
                 html += '</div></div>';
             });
