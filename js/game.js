@@ -236,6 +236,18 @@ const Game = (function () {
             state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             console.log('[Game.init] took ELSE branch, DEFAULT_STATE keys:', Object.keys(state).sort().join(','));
         }
+        // If loaded/created state has no fish, seed Willow Pool stock
+        if (!state.fish || state.fish.length === 0) {
+            var initial = DEFAULT_STATE._initialFish || null;
+            if (initial) {
+                state.fish = initial.fish;
+                state.nextFishId = initial.nextFishId;
+                if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
+                    state.fish.forEach(function (f) { f.value = Fish.getFishValue(f); });
+                }
+                console.log('[Game.init] reseeded empty fish array with initial stock, count=', state.fish.length);
+            }
+        }
         // Sync fish ID counter
         if (typeof Fish !== 'undefined') {
             Fish.setNextId(state.nextFishId);

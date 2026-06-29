@@ -13,15 +13,26 @@
         var saved = Game.loadFromStorage();
         if (saved) {
             Game.setState(saved);
+            var st = Game.getState();
+            if (!st.fish || st.fish.length === 0) {
+                var initial = Game.DEFAULT_STATE._initialFish || null;
+                if (initial) {
+                    st.fish = initial.fish;
+                    st.nextFishId = initial.nextFishId;
+                    if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
+                        st.fish.forEach(function (f) { f.value = Fish.getFishValue(f); });
+                    }
+                }
+            }
         } else {
             Game.setState(JSON.parse(JSON.stringify(Game.DEFAULT_STATE)));
             var initial = Game.DEFAULT_STATE._initialFish || null;
             if (initial) {
-                var st = Game.getState();
-                st.fish = initial.fish;
-                st.nextFishId = initial.nextFishId;
+                var st2 = Game.getState();
+                st2.fish = initial.fish;
+                st2.nextFishId = initial.nextFishId;
                 if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
-                    st.fish.forEach(function (f) { f.value = Fish.getFishValue(f); });
+                    st2.fish.forEach(function (f) { f.value = Fish.getFishValue(f); });
                 }
             }
         }
