@@ -86,7 +86,7 @@ const Game = (function () {
                     speciesName: 'Common Carp',
                     weight_oz: (function() {
                         var w = Math.random();
-                        if (typeof w !== 'number' || isNaN(w)) return 100;
+                        if (typeof w !== 'number' || isNaN(w) || w <= 0 || w >= 1) return 100;
                         return Math.floor(w * 312) + 8;
                     }()),
                     age_days: Math.floor(Math.random() * 200) + 30,
@@ -107,7 +107,11 @@ const Game = (function () {
                     name: 'Stock Uncommon ' + (j + 1),
                     species: 'mirror',
                     speciesName: 'Mirror Carp',
-                    weight_oz: Math.floor(Math.random() * 200) + 40,
+                    weight_oz: (function() {
+                        var w = Math.random();
+                        if (typeof w !== 'number' || isNaN(w) || w <= 0 || w >= 1) return 100;
+                        return Math.floor(w * 200) + 40;
+                    }()),
                     age_days: Math.floor(Math.random() * 250) + 60,
                     max_age_days: 900,
                     growth_rate: 0.9,
@@ -139,7 +143,7 @@ const Game = (function () {
                 speciesName: 'Common Carp',
                 weight_oz: (function() {
                     var w = Math.random();
-                    if (typeof w !== 'number' || isNaN(w)) return 100;
+                    if (typeof w !== 'number' || isNaN(w) || w <= 0 || w >= 1) return 100;
                     return Math.floor(w * 312) + 8;
                 }()), // up to 20lb
                 age_days: Math.floor(Math.random() * 200) + 30,
@@ -167,7 +171,7 @@ const Game = (function () {
                 speciesName: 'Mirror Carp',
                 weight_oz: (function() {
                     var w = Math.random();
-                    if (typeof w !== 'number' || isNaN(w)) return 100;
+                    if (typeof w !== 'number' || isNaN(w) || w <= 0 || w >= 1) return 100;
                     return Math.floor(w * 200) + 40;
                 }()), // up to 15lb
                 age_days: Math.floor(Math.random() * 250) + 60,
