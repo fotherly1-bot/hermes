@@ -155,11 +155,9 @@ const Game = (function () {
                 parent_ids: [],
                 lake_id: 'willow_pool',
                 growth_stage: 'adult',
-                alive: true
+                alive: true,
+                value: (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') ? Fish.getFishValue(f) : Math.round((50 * Math.max(0.4, ((Math.floor(Math.random() * 312) + 8)) / 160)) * (0.6 + (60 / 250)))
             };
-            if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
-                f.value = Fish.getFishValue(f);
-            }
             fish.push(f);
         }
         // 2 uncommon fish up to 15lb (240oz)
@@ -183,11 +181,9 @@ const Game = (function () {
                 parent_ids: [],
                 lake_id: 'willow_pool',
                 growth_stage: 'adult',
-                alive: true
+                alive: true,
+                value: (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') ? Fish.getFishValue(f2) : Math.round((200 * Math.max(0.4, ((Math.floor(Math.random() * 200) + 40)) / 160)) * (0.6 + (70 / 250)))
             };
-            if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
-                f2.value = Fish.getFishValue(f2);
-            }
             fish.push(f2);
         }
         return { fish: fish, nextFishId: nextId };
