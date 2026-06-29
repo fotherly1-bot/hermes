@@ -128,7 +128,7 @@ const Game = (function () {
         var nextId = 1;
         // 20 common fish up to 20lb (320oz)
         for (var i = 0; i < 20; i++) {
-            fish.push({
+            var f = {
                 id: nextId++,
                 name: 'Stock Fish ' + (i + 1),
                 species: 'common',
@@ -144,11 +144,15 @@ const Game = (function () {
                 lake_id: 'willow_pool',
                 growth_stage: 'adult',
                 alive: true
-            });
+            };
+            if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
+                f.value = Fish.getFishValue(f);
+            }
+            fish.push(f);
         }
         // 2 uncommon fish up to 15lb (240oz)
         for (var j = 0; j < 2; j++) {
-            fish.push({
+            var f2 = {
                 id: nextId++,
                 name: 'Stock Uncommon ' + (j + 1),
                 species: 'mirror',
@@ -164,7 +168,11 @@ const Game = (function () {
                 lake_id: 'willow_pool',
                 growth_stage: 'adult',
                 alive: true
-            });
+            };
+            if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
+                f2.value = Fish.getFishValue(f2);
+            }
+            fish.push(f2);
         }
         return { fish: fish, nextFishId: nextId };
     }

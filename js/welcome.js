@@ -20,6 +20,9 @@
                 var st = Game.getState();
                 st.fish = initial.fish;
                 st.nextFishId = initial.nextFishId;
+                if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
+                    st.fish.forEach(function (f) { f.value = Fish.getFishValue(f); });
+                }
             }
         }
         var state = Game.getState();
