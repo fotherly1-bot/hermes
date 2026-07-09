@@ -43,7 +43,7 @@ const Anglers = (function () {
         { id: 13, name: 'Darrell Peck',     preferred: ['gravel_pit','running'],      disliked: ['still'],       budget: 45, skill: 8,  socialMedia: 8,  targetHunter: true, photo: 'img/anglers/darrellp112.png'  },
         { id: 14, name: 'Tom Maker',        preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 5,  socialMedia: 3,  photo: 'img/anglers/tommaker112.png'  },
         { id: 15, name: 'Harry Charrington',preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 60, skill: 9,  socialMedia: 6,  targetHunter: true, photo: 'img/anglers/harrychap112.png' },
-        { id: 16, name: 'Oz Holness',       preferred: ['gravel_pit','running'],      disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 9  },
+        { id: 16, name: 'Oz Holness',       preferred: ['gravel_pit','running'],      disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 9,  photo: 'img/anglers/ozholness112.png'  },
         { id: 17, name: 'Martin Bowler',    preferred: ['running','still'],           disliked: ['gravel_pit'],  budget: 35, skill: 6,  socialMedia: 7  },
         { id: 18, name: 'Jim Shelley',      preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 8,  socialMedia: 8  },
         { id: 19, name: 'Lee Jackson',      preferred: ['still','gravel_pit'],        disliked: ['running'],     budget: 30, skill: 5,  socialMedia: 4  },
