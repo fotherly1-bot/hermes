@@ -79,16 +79,11 @@ const Game = (function () {
             var fish = [];
             var nextId = 1;
             for (var i = 0; i < 20; i++) {
-                fish.push({
+                var f = {
                     id: nextId++,
                     name: 'Stock Fish ' + (i + 1),
                     species: 'common',
                     speciesName: 'Common Carp',
-                    weight_oz: (function() {
-                        var w = Math.random();
-                        if (typeof w !== 'number' || isNaN(w) || w <= 0 || w >= 1) return 100;
-                        return Math.floor(w * 312) + 8;
-                    }()),
                     age_days: Math.floor(Math.random() * 200) + 30,
                     max_age_days: 800,
                     growth_rate: 1.0,
@@ -99,19 +94,21 @@ const Game = (function () {
                     lake_id: 'willow_pool',
                     growth_stage: 'adult',
                     alive: true
-                });
+                };
+                f.weight_oz = Math.floor(Math.random() * 305) + 16;
+                if (f.weight_oz < 16) f.weight_oz = 16;
+                if (f.weight_oz > 320) f.weight_oz = 320;
+                f.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
+                    ? Fish.getFishValue(f)
+                    : Math.round((50 * Math.max(0.4, f.weight_oz / 160)) * (0.6 + (f.stats.size / 250)));
+                fish.push(f);
             }
             for (var j = 0; j < 2; j++) {
-                fish.push({
+                var f2 = {
                     id: nextId++,
                     name: 'Stock Uncommon ' + (j + 1),
                     species: 'mirror',
                     speciesName: 'Mirror Carp',
-                    weight_oz: (function() {
-                        var w = Math.random();
-                        if (typeof w !== 'number' || isNaN(w) || w <= 0 || w >= 1) return 100;
-                        return Math.floor(w * 200) + 40;
-                    }()),
                     age_days: Math.floor(Math.random() * 250) + 60,
                     max_age_days: 900,
                     growth_rate: 0.9,
@@ -122,11 +119,19 @@ const Game = (function () {
                     lake_id: 'willow_pool',
                     growth_stage: 'adult',
                     alive: true
-                });
+                };
+                f2.weight_oz = Math.floor(Math.random() * 305) + 16;
+                if (f2.weight_oz < 16) f2.weight_oz = 16;
+                if (f2.weight_oz > 320) f2.weight_oz = 320;
+                f2.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
+                    ? Fish.getFishValue(f2)
+                    : Math.round((200 * Math.max(0.4, f2.weight_oz / 160)) * (0.6 + (f2.stats.size / 250)));
+                fish.push(f2);
             }
             return { fish: fish, nextFishId: nextId };
         })()
     };
+    console.log('[Game] DEFAULT_STATE created');
 
     const STORAGE_KEY = 'carpFishingTycoon_saveData';
     let state = {};
@@ -134,18 +139,13 @@ const Game = (function () {
     function _generateInitialFish() {
         var fish = [];
         var nextId = 1;
-        // 20 common fish up to 20lb (320oz)
+        // 20 common fish 1-20lb (16-320oz)
         for (var i = 0; i < 20; i++) {
             var f = {
                 id: nextId++,
                 name: 'Stock Fish ' + (i + 1),
                 species: 'common',
                 speciesName: 'Common Carp',
-                weight_oz: (function() {
-                    var w = Math.random();
-                    if (typeof w !== 'number' || isNaN(w) || w <= 0 || w >= 1) return 100;
-                    return Math.floor(w * 312) + 8;
-                }()), // up to 20lb
                 age_days: Math.floor(Math.random() * 200) + 30,
                 max_age_days: 800,
                 growth_rate: 1.0,
@@ -155,23 +155,23 @@ const Game = (function () {
                 parent_ids: [],
                 lake_id: 'willow_pool',
                 growth_stage: 'adult',
-                alive: true,
-                value: (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') ? Fish.getFishValue(f) : Math.round((50 * Math.max(0.4, ((Math.floor(Math.random() * 312) + 8)) / 160)) * (0.6 + (60 / 250)))
+                alive: true
             };
+            f.weight_oz = Math.floor(Math.random() * 305) + 16;
+            if (f.weight_oz < 16) f.weight_oz = 16;
+            if (f.weight_oz > 320) f.weight_oz = 320;
+            f.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
+                ? Fish.getFishValue(f)
+                : Math.round((50 * Math.max(0.4, f.weight_oz / 160)) * (0.6 + (f.stats.size / 250)));
             fish.push(f);
         }
-        // 2 uncommon fish up to 15lb (240oz)
+        // 2 uncommon fish 1-20lb (16-320oz)
         for (var j = 0; j < 2; j++) {
             var f2 = {
                 id: nextId++,
                 name: 'Stock Uncommon ' + (j + 1),
                 species: 'mirror',
                 speciesName: 'Mirror Carp',
-                weight_oz: (function() {
-                    var w = Math.random();
-                    if (typeof w !== 'number' || isNaN(w) || w <= 0 || w >= 1) return 100;
-                    return Math.floor(w * 200) + 40;
-                }()), // up to 15lb
                 age_days: Math.floor(Math.random() * 250) + 60,
                 max_age_days: 900,
                 growth_rate: 0.9,
@@ -181,9 +181,14 @@ const Game = (function () {
                 parent_ids: [],
                 lake_id: 'willow_pool',
                 growth_stage: 'adult',
-                alive: true,
-                value: (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') ? Fish.getFishValue(f2) : Math.round((200 * Math.max(0.4, ((Math.floor(Math.random() * 200) + 40)) / 160)) * (0.6 + (70 / 250)))
+                alive: true
             };
+            f2.weight_oz = Math.floor(Math.random() * 305) + 16;
+            if (f2.weight_oz < 16) f2.weight_oz = 16;
+            if (f2.weight_oz > 320) f2.weight_oz = 320;
+            f2.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
+                ? Fish.getFishValue(f2)
+                : Math.round((200 * Math.max(0.4, f2.weight_oz / 160)) * (0.6 + (f2.stats.size / 250)));
             fish.push(f2);
         }
         return { fish: fish, nextFishId: nextId };
@@ -267,6 +272,21 @@ const Game = (function () {
         // Set opening weather silently (no notifications on load)
         if (typeof Weather !== 'undefined') {
             Weather.initWeather();
+        }
+        // Ensure starter fish have weight and value
+        if (state.fish && state.fish.length) {
+            state.fish.forEach(function (f) {
+                if (typeof f.weight_oz !== 'number' || f.weight_oz === null || f.weight_oz === undefined) {
+                    f.weight_oz = Math.floor(Math.random() * 305) + 16;
+                    if (f.weight_oz < 16) f.weight_oz = 16;
+                    if (f.weight_oz > 320) f.weight_oz = 320;
+                }
+                if (typeof f.value !== 'number' || f.value === null || f.value === undefined) {
+                    f.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
+                        ? Fish.getFishValue(f)
+                        : Math.round((50 * Math.max(0.4, f.weight_oz / 160)) * (0.6 + ((f.stats && f.stats.size) || 50) / 250));
+                }
+            });
         }
         console.log('[Game.init] before return keys:', Object.keys(state).sort().join(','));
         return state;

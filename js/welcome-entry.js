@@ -19,9 +19,6 @@
                 if (initial) {
                     st.fish = initial.fish;
                     st.nextFishId = initial.nextFishId;
-                    if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
-                        st.fish.forEach(function (f) { f.value = Fish.getFishValue(f); });
-                    }
                 }
             }
         } else {
@@ -31,10 +28,22 @@
                 var st2 = Game.getState();
                 st2.fish = initial.fish;
                 st2.nextFishId = initial.nextFishId;
-                if (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function') {
-                    st2.fish.forEach(function (f) { f.value = Fish.getFishValue(f); });
-                }
             }
+        }
+        var state = Game.getState();
+        if (state.fish && state.fish.length) {
+            state.fish.forEach(function (f) {
+                if (typeof f.weight_oz !== 'number' || f.weight_oz === null || f.weight_oz === undefined) {
+                    f.weight_oz = Math.floor(Math.random() * 305) + 16;
+                    if (f.weight_oz < 16) f.weight_oz = 16;
+                    if (f.weight_oz > 320) f.weight_oz = 320;
+                }
+                if (typeof f.value !== 'number' || f.value === null || f.value === undefined) {
+                    f.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
+                        ? Fish.getFishValue(f)
+                        : Math.round((50 * Math.max(0.4, f.weight_oz / 160)) * (0.6 + ((f.stats && f.stats.size) || 50) / 250));
+                }
+            });
         }
         var state = Game.getState();
 
