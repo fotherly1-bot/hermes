@@ -7572,18 +7572,20 @@ details[open] > .lake-accordion-summary::before {
    NEWS PAGE
    ============================================================ */
 
-/* Page grid — newspaper wide + 4 social columns */
-.news-page-grid {
+/* Page layout — weekly featured full-width, social panels tiled below */
+.news-weekly-full {
+    margin-bottom: 1.1rem;
+}
+.news-social-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 1.1rem;
     align-items: start;
 }
-@media (max-width: 1100px) { .news-page-grid { grid-template-columns: 1fr 1fr 1fr; } }
-@media (max-width: 700px)  { .news-page-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .news-social-grid { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .news-social-grid { grid-template-columns: 1fr; } }
 
 .news-col       { display: flex; flex-direction: column; gap: 0; }
-.news-col-wide  { /* spans naturally via 2fr */ }
 .news-empty-col { font-size: 0.78rem; color: var(--colour-text-muted); font-style: italic; padding: 0.5rem 0; }
 
 .news-viral-badge {

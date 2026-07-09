@@ -259,10 +259,10 @@ const News = (function () {
         var src = { weekly:[], fishgram:[], carptok:[], blog:[], carptube:[] };
         stories.forEach(function(s){ if (src[s.source]) src[s.source].push(s); });
 
-        html += '<div class="news-page-grid">';
+        html += '<div class="news-weekly-full">';
 
-        // ── Weekly newspaper ──────────────────────────────────────────────────
-        html += '<div class="news-col news-col-wide"><div class="news-paper">';
+        // ── Weekly newspaper — featured full-width ──────────────────────────────
+        html += '<div class="news-paper">';
         html += '<div class="news-paper-masthead"><div class="news-paper-title">Carp Fishing Tycoon Weekly</div>';
         html += '<div class="news-paper-sub">The Voice of British Carp Angling \u00b7 Est. Year 1 \u00b7 Day '+state.day+' Edition</div>';
         html += '<div class="news-paper-rule"></div></div>';
@@ -279,7 +279,11 @@ const News = (function () {
                 html += '</div>';
             });
         }
-        html += '</div></div>';
+        html += '</div>';
+
+        html += '</div>';
+
+        html += '<div class="news-social-grid">';
 
         // ── FishGram ──────────────────────────────────────────────────────────
         html += '<div class="news-col"><div class="news-social-panel news-fishgram">';
@@ -343,6 +347,7 @@ const News = (function () {
         html += '</div></div>';
 
         html += '</div>';
+
         container.innerHTML = html;
     }
 
