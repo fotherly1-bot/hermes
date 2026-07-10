@@ -84,7 +84,7 @@ const Game = (function () {
                 var w = commonWeights[i] || Math.floor(Math.random() * 305) + 16;
                 fish.push({
                     id: nextId++,
-                    name: 'Stock Fish ' + (i + 1),
+                    name: 'Oakmere Common ' + (i + 1),
                     species: 'common',
                     speciesName: 'Common Carp',
                     age_days: Math.floor(Math.random() * 200) + 30,
@@ -105,7 +105,7 @@ const Game = (function () {
                 var w2 = uncommonWeights[j] || Math.floor(Math.random() * 305) + 16;
                 fish.push({
                     id: nextId++,
-                    name: 'Stock Uncommon ' + (j + 1),
+                    name: 'Oakmere Mirror ' + (j + 1),
                     species: 'mirror',
                     speciesName: 'Mirror Carp',
                     age_days: Math.floor(Math.random() * 250) + 60,
@@ -138,7 +138,7 @@ const Game = (function () {
         for (var i = 0; i < 20; i++) {
             var f = {
                 id: nextId++,
-                name: 'Stock Fish ' + (i + 1),
+                name: 'Oakmere Common ' + (i + 1),
                 species: 'common',
                 speciesName: 'Common Carp',
                 age_days: Math.floor(Math.random() * 200) + 30,
@@ -164,7 +164,7 @@ const Game = (function () {
         for (var j = 0; j < 2; j++) {
             var f2 = {
                 id: nextId++,
-                name: 'Stock Uncommon ' + (j + 1),
+                name: 'Oakmere Mirror ' + (j + 1),
                 species: 'mirror',
                 speciesName: 'Mirror Carp',
                 age_days: Math.floor(Math.random() * 250) + 60,
