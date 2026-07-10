@@ -28,33 +28,83 @@ const Anglers = (function () {
      * UK-style angler names.
      */
     const ANGLER_POOL = [
-        { id: 1,  name: 'Rod Hutchison',    preferred: ['still', 'estate_lake'],     disliked: ['running'],     budget: 35, skill: 7,  socialMedia: 5,  photo: 'img/anglers/rod-hutchison.png'  },
-        { id: 2,  name: 'Steve Briggs',     preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 9,  socialMedia: 8,  photo: 'img/anglers/steve-briggs.png'  },
-        { id: 3,  name: 'Terry Hearn',      preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 60, skill: 10, socialMedia: 10, targetHunter: true,  photo: 'img/anglers/terry-hearn.png'  },
-        { id: 4,  name: 'Ian Russell',      preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 6,  socialMedia: 4,  photo: 'img/anglers/ian-russell.png'  },
-        { id: 5,  name: 'Danny Fairbrass',  preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 45, skill: 8,  socialMedia: 9,  targetHunter: true,  photo: 'img/anglers/danny-fairbrass.png'  },
-        { id: 6,  name: 'Ali Hamidi',       preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 8,  photo: 'img/anglers/ali-hamidi.png'  },
-        { id: 7,  name: 'Alan Blair',       preferred: ['running','still'],           disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/alanb2.png'  },
-        { id: 8,  name: 'Mark Pitchers',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 5,  socialMedia: 3,  photo: 'img/anglers/mark-pitchers.png'  },
-        { id: 9,  name: 'Kev Hewitt',       preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5,  photo: 'img/anglers/kev-hewitt.png'  },
-        { id: 10, name: 'Rob Hughes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7,  photo: 'img/anglers/robhughes221.png'  },
-        { id: 11, name: 'Simon Crow',       preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/simoncrow22.png'  },
-        { id: 12, name: 'Nigel Sharp',      preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 7,  photo: 'img/anglers/nigelsharp11.png'  },
-        { id: 13, name: 'Darrell Peck',     preferred: ['gravel_pit','running'],      disliked: ['still'],       budget: 45, skill: 8,  socialMedia: 8,  targetHunter: true, photo: 'img/anglers/darrellp112.png'  },
-        { id: 14, name: 'Tom Maker',        preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 5,  socialMedia: 3,  photo: 'img/anglers/tommaker112.png'  },
-        { id: 15, name: 'Harry Charrington',preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 60, skill: 9,  socialMedia: 6,  targetHunter: true, photo: 'img/anglers/harrychap112.png' },
-        { id: 16, name: 'Oz Holness',       preferred: ['gravel_pit','running'],      disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 9,  photo: 'img/anglers/ozholness112.png'  },
-        { id: 17, name: 'Martin Bowler',    preferred: ['running','still'],           disliked: ['gravel_pit'],  budget: 35, skill: 6,  socialMedia: 7,  photo: 'img/anglers/martinbowler112.png'  },
-        { id: 18, name: 'Jim Shelley',      preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 8,  socialMedia: 8  },
-        { id: 19, name: 'Lee Jackson',      preferred: ['still','gravel_pit'],        disliked: ['running'],     budget: 30, skill: 5,  socialMedia: 4  },
-        { id: 20, name: 'Adam Penning',     preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5  },
-        { id: 21, name: 'Gary Bayes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 45, skill: 7,  socialMedia: 4  },
-        { id: 22, name: 'Ian Chillcott',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7  },
-        { id: 23, name: 'Keith Jenkins',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 4,  socialMedia: 3  },
-        { id: 24, name: 'Paul Forward',     preferred: ['running','still'],           disliked: ['estate_lake'], budget: 30, skill: 5,  socialMedia: 4  },
-        { id: 25, name: 'Jeffrey Curry',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 55, skill: 9,  socialMedia: 6  },
-        { id: 26, name: 'Lee Warner',       preferred: ['still','gravel_pit'],        disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 7  },
-        { id: 27, name: 'Ste Black',        preferred: ['running','gravel_pit'],      disliked: ['still'],       budget: 45, skill: 8,  socialMedia: 8,  targetHunter: true }
+        { id: 1,  name: 'Rod Hutchison',    preferred: ['still', 'estate_lake'],     disliked: ['running'],     budget: 35, skill: 7,  socialMedia: 5,  photo: 'img/anglers/rod-hutchison.png', category: 'Professional' },
+        { id: 2,  name: 'Steve Briggs',     preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 9,  socialMedia: 8,  photo: 'img/anglers/steve-briggs.png', category: 'Professional' },
+        { id: 3,  name: 'Terry Hearn',      preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 60, skill: 10, socialMedia: 10, targetHunter: true,  photo: 'img/anglers/terry-hearn.png', category: 'Professional' },
+        { id: 4,  name: 'Ian Russell',      preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 6,  socialMedia: 4,  photo: 'img/anglers/ian-russell.png', category: 'Professional' },
+        { id: 5,  name: 'Danny Fairbrass',  preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 45, skill: 8,  socialMedia: 9,  targetHunter: true,  photo: 'img/anglers/danny-fairbrass.png', category: 'Professional' },
+        { id: 6,  name: 'Ali Hamidi',       preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 8,  photo: 'img/anglers/ali-hamidi.png', category: 'Professional' },
+        { id: 7,  name: 'Alan Blair',       preferred: ['running','still'],           disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/alanb2.png', category: 'Professional' },
+        { id: 8,  name: 'Mark Pitchers',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 5,  socialMedia: 3,  photo: 'img/anglers/mark-pitchers.png', category: 'Professional' },
+        { id: 9,  name: 'Kev Hewitt',       preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5,  photo: 'img/anglers/kev-hewitt.png', category: 'Professional' },
+        { id: 10, name: 'Rob Hughes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7,  photo: 'img/anglers/robhughes221.png', category: 'Professional' },
+        { id: 11, name: 'Simon Crow',       preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/simoncrow22.png', category: 'Professional' },
+        { id: 12, name: 'Nigel Sharp',      preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 7,  photo: 'img/anglers/nigelsharp11.png', category: 'Professional' },
+        { id: 13, name: 'Darrell Peck',     preferred: ['gravel_pit','running'],      disliked: ['still'],       budget: 45, skill: 8,  socialMedia: 8,  targetHunter: true, photo: 'img/anglers/darrellp112.png', category: 'Professional' },
+        { id: 14, name: 'Tom Maker',        preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 5,  socialMedia: 3,  photo: 'img/anglers/tommaker112.png', category: 'Professional' },
+        { id: 15, name: 'Harry Charrington',preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 60, skill: 9,  socialMedia: 6,  targetHunter: true, photo: 'img/anglers/harrychap112.png', category: 'Professional' },
+        { id: 16, name: 'Oz Holness',       preferred: ['gravel_pit','running'],      disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 9,  photo: 'img/anglers/ozholness112.png', category: 'Professional' },
+        { id: 17, name: 'Martin Bowler',    preferred: ['running','still'],           disliked: ['gravel_pit'],  budget: 35, skill: 6,  socialMedia: 7,  photo: 'img/anglers/martinbowler112.png', category: 'Professional' },
+        { id: 18, name: 'Jim Shelley',      preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 8,  socialMedia: 8, category: 'Professional' },
+        { id: 19, name: 'Lee Jackson',      preferred: ['still','gravel_pit'],        disliked: ['running'],     budget: 30, skill: 5,  socialMedia: 4, category: 'Professional' },
+        { id: 20, name: 'Adam Penning',     preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5, category: 'Professional' },
+        { id: 21, name: 'Gary Bayes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 45, skill: 7,  socialMedia: 4, category: 'Professional' },
+        { id: 22, name: 'Ian Chillcott',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7, category: 'Professional' },
+        { id: 23, name: 'Keith Jenkins',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 4,  socialMedia: 3, category: 'Professional' },
+        { id: 24, name: 'Paul Forward',     preferred: ['running','still'],           disliked: ['estate_lake'], budget: 30, skill: 5,  socialMedia: 4, category: 'Professional' },
+        { id: 25, name: 'Jeffrey Curry',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 55, skill: 9,  socialMedia: 6, category: 'Professional' },
+        { id: 26, name: 'Lee Warner',       preferred: ['still','gravel_pit'],        disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 7, category: 'Professional' },
+        { id: 27, name: 'Ste Black',        preferred: ['running','gravel_pit'],      disliked: ['still'],       budget: 45, skill: 8,  socialMedia: 8,  targetHunter: true, category: 'Professional' },
+        {id: 28, name: 'Amature Angler 1', preferred: ['still','running'], disliked: ['estate_lake'], budget: 17, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 29, name: 'Amature Angler 2', preferred: ['running','estate_lake'], disliked: ['still'], budget: 12, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 30, name: 'Amature Angler 3', preferred: ['estate_lake','still'], disliked: ['running'], budget: 16, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 31, name: 'Amature Angler 4', preferred: ['running','estate_lake'], disliked: ['still'], budget: 16, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 32, name: 'Amature Angler 5', preferred: ['estate_lake','still'], disliked: ['gravel_pit'], budget: 18, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 33, name: 'Amature Angler 6', preferred: ['still','running'], disliked: ['estate_lake'], budget: 18, skill: 3, socialMedia: 0, category: 'Amature' },
+        {id: 34, name: 'Amature Angler 7', preferred: ['running','still'], disliked: ['estate_lake'], budget: 12, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 35, name: 'Amature Angler 8', preferred: ['estate_lake','still'], disliked: ['gravel_pit'], budget: 29, skill: 3, socialMedia: 0, category: 'Amature' },
+        {id: 36, name: 'Amature Angler 9', preferred: ['gravel_pit','still'], disliked: ['estate_lake'], budget: 13, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 37, name: 'Amature Angler 10', preferred: ['estate_lake','still'], disliked: ['gravel_pit'], budget: 21, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 38, name: 'Amature Angler 11', preferred: ['running','estate_lake'], disliked: ['still'], budget: 17, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 39, name: 'Amature Angler 12', preferred: ['gravel_pit','still'], disliked: ['running'], budget: 22, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 40, name: 'Amature Angler 13', preferred: ['gravel_pit','running'], disliked: ['estate_lake'], budget: 21, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 41, name: 'Amature Angler 14', preferred: ['gravel_pit','still'], disliked: ['estate_lake'], budget: 29, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 42, name: 'Amature Angler 15', preferred: ['running','estate_lake'], disliked: ['still'], budget: 24, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 43, name: 'Amature Angler 16', preferred: ['estate_lake','running'], disliked: ['still'], budget: 11, skill: 3, socialMedia: 0, category: 'Amature' },
+        {id: 44, name: 'Amature Angler 17', preferred: ['running','still'], disliked: ['estate_lake'], budget: 18, skill: 4, socialMedia: 0, category: 'Amature' },
+        {id: 45, name: 'Amature Angler 18', preferred: ['still','running'], disliked: ['estate_lake'], budget: 30, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 46, name: 'Amature Angler 19', preferred: ['estate_lake','running'], disliked: ['gravel_pit'], budget: 18, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 47, name: 'Amature Angler 20', preferred: ['running','still'], disliked: ['estate_lake'], budget: 23, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 48, name: 'Amature Angler 21', preferred: ['estate_lake','running'], disliked: ['still'], budget: 26, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 49, name: 'Amature Angler 22', preferred: ['estate_lake','still'], disliked: ['running'], budget: 14, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 50, name: 'Amature Angler 23', preferred: ['running','estate_lake'], disliked: ['gravel_pit'], budget: 12, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 51, name: 'Amature Angler 24', preferred: ['estate_lake','running'], disliked: ['gravel_pit'], budget: 18, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 52, name: 'Amature Angler 25', preferred: ['still','estate_lake'], disliked: ['running'], budget: 18, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 53, name: 'Amature Angler 26', preferred: ['gravel_pit','still'], disliked: ['estate_lake'], budget: 15, skill: 4, socialMedia: 0, category: 'Amature' },
+        {id: 54, name: 'Amature Angler 27', preferred: ['estate_lake','still'], disliked: ['gravel_pit'], budget: 15, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 55, name: 'Amature Angler 28', preferred: ['still','estate_lake'], disliked: ['gravel_pit'], budget: 29, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 56, name: 'Amature Angler 29', preferred: ['running','still'], disliked: ['estate_lake'], budget: 27, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 57, name: 'Amature Angler 30', preferred: ['still','estate_lake'], disliked: ['gravel_pit'], budget: 10, skill: 4, socialMedia: 0, category: 'Amature' },
+        {id: 58, name: 'Amature Angler 31', preferred: ['still','gravel_pit'], disliked: ['estate_lake'], budget: 11, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 59, name: 'Amature Angler 32', preferred: ['running','estate_lake'], disliked: ['still'], budget: 25, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 60, name: 'Amature Angler 33', preferred: ['still','estate_lake'], disliked: ['running'], budget: 25, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 61, name: 'Amature Angler 34', preferred: ['running','gravel_pit'], disliked: ['estate_lake'], budget: 27, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 62, name: 'Amature Angler 35', preferred: ['running','estate_lake'], disliked: ['gravel_pit'], budget: 30, skill: 4, socialMedia: 0, category: 'Amature' },
+        {id: 63, name: 'Amature Angler 36', preferred: ['gravel_pit','running'], disliked: ['estate_lake'], budget: 17, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 64, name: 'Amature Angler 37', preferred: ['running','still'], disliked: ['estate_lake'], budget: 28, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 65, name: 'Amature Angler 38', preferred: ['running','estate_lake'], disliked: ['still'], budget: 12, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 66, name: 'Amature Angler 39', preferred: ['still','running'], disliked: ['gravel_pit'], budget: 20, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 67, name: 'Amature Angler 40', preferred: ['still','estate_lake'], disliked: ['running'], budget: 25, skill: 3, socialMedia: 0, category: 'Amature' },
+        {id: 68, name: 'Amature Angler 41', preferred: ['running','estate_lake'], disliked: ['still'], budget: 28, skill: 5, socialMedia: 0, category: 'Amature' },
+        {id: 69, name: 'Amature Angler 42', preferred: ['estate_lake','still'], disliked: ['gravel_pit'], budget: 16, skill: 4, socialMedia: 0, category: 'Amature' },
+        {id: 70, name: 'Amature Angler 43', preferred: ['still','running'], disliked: ['estate_lake'], budget: 23, skill: 3, socialMedia: 0, category: 'Amature' },
+        {id: 71, name: 'Amature Angler 44', preferred: ['estate_lake','running'], disliked: ['still'], budget: 11, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 72, name: 'Amature Angler 45', preferred: ['estate_lake','gravel_pit'], disliked: ['running'], budget: 17, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 73, name: 'Amature Angler 46', preferred: ['running','still'], disliked: ['estate_lake'], budget: 23, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 74, name: 'Amature Angler 47', preferred: ['running','gravel_pit'], disliked: ['estate_lake'], budget: 12, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 75, name: 'Amature Angler 48', preferred: ['estate_lake','gravel_pit'], disliked: ['still'], budget: 30, skill: 1, socialMedia: 0, category: 'Amature' },
+        {id: 76, name: 'Amature Angler 49', preferred: ['still','running'], disliked: ['gravel_pit'], budget: 23, skill: 2, socialMedia: 0, category: 'Amature' },
+        {id: 77, name: 'Amature Angler 50', preferred: ['estate_lake','running'], disliked: ['still'], budget: 11, skill: 4, socialMedia: 0, category: 'Amature' },
     ];
 
     /**
@@ -144,7 +194,13 @@ const Anglers = (function () {
         }
 
         var shuffled = availableAnglers.slice().sort(function () { return Math.random() - 0.5; });
-        var selected = shuffled.slice(0, requestCount);
+        var professionals = shuffled.filter(function (a) { return a.category !== 'Amature'; });
+        var amatures = shuffled.filter(function (a) { return a.category === 'Amature'; });
+        var selected = professionals.slice(0, requestCount);
+        var remaining = requestCount - selected.length;
+        if (remaining > 0 && amatures.length > 0) {
+            selected = selected.concat(amatures.slice(0, remaining));
+        }
 
         selected.forEach(function (angler) {
             // Target Hunter anglers prefer lakes with 40lb+ (640oz) fish
@@ -465,7 +521,6 @@ const Anglers = (function () {
      */
     function getLakeColour(lakeId) {
         var colours = {
-            'willow_pool': '#4a9c6d',
             'oakmere_lake': '#3498db',
             'kingfisher_waters': '#2ecc71',
             'linch_hill': '#e67e22',
@@ -600,7 +655,8 @@ const Anglers = (function () {
                 return b.anglerId === angler.id && state.day <= b.endDay;
             });
             html += '<div class="angler-card' + (isBooked ? ' angler-booked' : '') + '">';
-            html += '<div class="angler-card-name">' + angler.name + '</div>';
+            html += '<div class="angler-card-name">' + angler.name + '</div>' +
+                ('<span class="angler-category-badge ' + (angler.category === 'Amature' ? 'cat-amature' : 'cat-professional') + '">' + (angler.category || 'Professional') + '</span>');
             html += '<div class="angler-photo-slot">' + (angler.photo ? '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" loading="lazy"/>' : '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + '</div>') + '</div>';
             html += '<div class="angler-card-info">';
             html += '<span class="angler-skill-badge">Skill ' + angler.skill + '/10</span>';
@@ -1068,7 +1124,7 @@ const Anglers = (function () {
             ANGLER_POOL.forEach(function (a) {
                 var already = sponsored.indexOf(a.id) !== -1;
                 html += '<option value="' + a.id + '"' + (already ? ' disabled' : '') + '>' +
-                    a.name + (already ? ' (sponsored)' : ' \u2014 Skill ' + a.skill + '/10 \u00b7 \uD83D\uDCF1 ' + a.socialMedia + '/10 \u00b7 ' + UI.formatMoney(a.budget) + '/day') +
+                    a.name + ' [' + (a.category || 'Professional') + ']' + (already ? ' (sponsored)' : ' — Skill ' + a.skill + '/10 · 📱 ' + a.socialMedia + '/10 · ' + UI.formatMoney(a.budget) + '/day') +
                     '</option>';
             });
             html += '</select>';
@@ -1218,30 +1274,50 @@ const Anglers = (function () {
     }
 
     function renderRosterTab(state) {
-        var html = '<h3 class="section-heading">Roster</h3>';
-        html += '<div class="angler-pool-grid">';
-        ANGLER_POOL.forEach(function (angler) {
+        var html = "<h3 class='section-heading'>Roster</h3>";
+        var professionals = ANGLER_POOL.filter(function (a) { return a.category !== 'Amature'; });
+        var amatures = ANGLER_POOL.filter(function (a) { return a.category === 'Amature'; });
+
+        function renderAnglerCard(angler, isBooked, suffix) {
+            var c = "<div class='angler-card" + (isBooked ? " angler-booked" : "") + "'>" +
+                "<div class='angler-card-name'>" + angler.name + (suffix || "") + "</div>" +
+                "<div class='angler-photo-slot'>" + (angler.photo ? "<img src='" + angler.photo + "' alt='" + angler.name + "' class='angler-photo-img' loading='lazy'/>" : "<div class='angler-photo-placeholder'>" + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + "</div>") + "</div>" +
+                "<div class='angler-card-info'>" +
+                    "<span class='angler-skill-badge'>Skill " + angler.skill + "/10</span>" +
+                    "<span class='angler-social-badge' style='color:" + (angler.socialMedia >= 8 ? '#f1c40f' : angler.socialMedia >= 6 ? '#2ecc71' : '#aaa') + ";'>" + angler.socialMedia + "/10</span>" +
+                    "<span class='angler-budget-badge'>" + UI.formatMoney(angler.budget) + "/day</span>" +
+                "</div>" +
+                "<div class='angler-card-prefs'>" +
+                    "<span class='pref-label'>Likes:</span> " + angler.preferred.map(formatWaterType).join(', ') +
+                "</div>" +
+                "<div class='angler-card-prefs angler-dislikes'>" +
+                    "<span class='pref-label'>Dislikes:</span> " + angler.disliked.map(formatWaterType).join(', ') +
+                "</div>" +
+                (isBooked ? "<div class='angler-status-tag'>Currently Booked</div>" : "") +
+            "</div>";
+            return c;
+        }
+
+        html += "<h4 class='section-heading'>Professional Anglers</h4>";
+        html += "<div class='angler-pool-grid'>";
+        professionals.forEach(function (angler) {
             var isBooked = (state.anglerBookings || []).some(function (b) {
                 return b.anglerId === angler.id && state.day <= b.endDay;
             });
-            html += '<div class="angler-card' + (isBooked ? ' angler-booked' : '') + '">';
-            html += '<div class="angler-card-name">' + angler.name + '</div>';
-            html += '<div class="angler-photo-slot">' + (angler.photo ? '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" loading="lazy"/>' : '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + '</div>') + '</div>';
-            html += '<div class="angler-card-info">';
-            html += '<span class="angler-skill-badge">Skill ' + angler.skill + '/10</span>';
-            html += '<span class="angler-social-badge" style="color:' + (angler.socialMedia >= 8 ? '#f1c40f' : angler.socialMedia >= 6 ? '#2ecc71' : '#aaa') + ';">\uD83D\uDCF1 ' + angler.socialMedia + '/10</span>';
-            html += '<span class="angler-budget-badge">' + UI.formatMoney(angler.budget) + '/day</span>';
-            html += '</div>';
-            html += '<div class="angler-card-prefs">';
-            html += '<span class="pref-label">Likes:</span> ' + angler.preferred.map(formatWaterType).join(', ');
-            html += '</div>';
-            html += '<div class="angler-card-prefs angler-dislikes">';
-            html += '<span class="pref-label">Dislikes:</span> ' + angler.disliked.map(formatWaterType).join(', ');
-            html += '</div>';
-            if (isBooked) html += '<div class="angler-status-tag">Currently Booked</div>';
-            html += '</div>';
+            html += renderAnglerCard(angler, isBooked, '');
         });
-        html += '</div>';
+        html += "</div>";
+
+        html += "<h4 class='section-heading'>Amature Anglers</h4>";
+        html += "<div class='angler-pool-grid'>";
+        amatures.forEach(function (angler) {
+            var isBooked = (state.anglerBookings || []).some(function (b) {
+                return b.anglerId === angler.id && state.day <= b.endDay;
+            });
+            html += renderAnglerCard(angler, isBooked, isBooked ? ' - BOOKED' : '');
+        });
+        html += "</div>";
+
         return html;
     }
 

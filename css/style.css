@@ -1379,6 +1379,26 @@ body {
     color: var(--colour-gold);
 }
 
+.angler-category-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+}
+.cat-professional {
+    background: rgba(46, 204, 113, 0.18);
+    color: #2ecc71;
+}
+.cat-amature {
+    background: rgba(241, 196, 15, 0.18);
+    color: #f1c40f;
+}
+
 .anglers-card,
 .angler-card {
     background: var(--colour-card);
@@ -8652,7 +8672,6 @@ details[open] > .lake-accordion-summary::before {
     background: linear-gradient(180deg, rgba(60, 130, 80, 0.2) 0%, rgba(30, 80, 50, 0.4) 100%);
 }
 
-.lake-water-effect.willow_pool { background: linear-gradient(180deg, rgba(40, 120, 70, 0.3) 0%, rgba(25, 70, 40, 0.5) 100%); }
 .lake-water-effect.oakmere_lake { background: linear-gradient(180deg, rgba(50, 130, 90, 0.35) 0%, rgba(30, 80, 55, 0.55) 100%); }
 .lake-water-effect.kingfisher_waters { background: linear-gradient(180deg, rgba(60, 140, 110, 0.3) 0%, rgba(35, 90, 70, 0.5) 100%); }
 .lake-water-effect.linch_hill { background: linear-gradient(180deg, rgba(70, 120, 90, 0.25) 0%, rgba(40, 80, 60, 0.45) 100%); }
