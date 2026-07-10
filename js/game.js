@@ -11,8 +11,8 @@ const Game = (function () {
         day: 1,
         money: 50000,
         reputation: 0,
-        ownedLakes: ['willow_pool'],
-        activeLakeId: 'willow_pool',
+        ownedLakes: ['oakmere_lake'],
+        activeLakeId: 'oakmere_lake',
         playerAnglerId: null,
         fish: [],
         anglers: [],
@@ -78,8 +78,11 @@ const Game = (function () {
         _initialFish: (function () {
             var fish = [];
             var nextId = 1;
+            var commonWeights = [16, 32, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 256, 272, 288, 300, 305, 320];
+            var uncommonWeights = [48, 305];
             for (var i = 0; i < 20; i++) {
-                var f = {
+                var w = commonWeights[i] || Math.floor(Math.random() * 305) + 16;
+                fish.push({
                     id: nextId++,
                     name: 'Stock Fish ' + (i + 1),
                     species: 'common',
@@ -91,20 +94,16 @@ const Game = (function () {
                     personality_traits: [],
                     stats: { health: 60, aggression: 50, size: 50, metabolism: 50, curiosity: 50 },
                     parent_ids: [],
-                    lake_id: 'willow_pool',
+                    lake_id: 'oakmere_lake',
                     growth_stage: 'adult',
-                    alive: true
-                };
-                f.weight_oz = Math.floor(Math.random() * 305) + 16;
-                if (f.weight_oz < 16) f.weight_oz = 16;
-                if (f.weight_oz > 320) f.weight_oz = 320;
-                f.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
-                    ? Fish.getFishValue(f)
-                    : Math.round((50 * Math.max(0.4, f.weight_oz / 160)) * (0.6 + (f.stats.size / 250)));
-                fish.push(f);
+                    alive: true,
+                    weight_oz: w,
+                    value: Math.round((50 * Math.max(0.4, w / 160)) * (0.6 + 50/250))
+                });
             }
             for (var j = 0; j < 2; j++) {
-                var f2 = {
+                var w2 = uncommonWeights[j] || Math.floor(Math.random() * 305) + 16;
+                fish.push({
                     id: nextId++,
                     name: 'Stock Uncommon ' + (j + 1),
                     species: 'mirror',
@@ -116,20 +115,16 @@ const Game = (function () {
                     personality_traits: [],
                     stats: { health: 70, aggression: 60, size: 60, metabolism: 55, curiosity: 55 },
                     parent_ids: [],
-                    lake_id: 'willow_pool',
+                    lake_id: 'oakmere_lake',
                     growth_stage: 'adult',
-                    alive: true
-                };
-                f2.weight_oz = Math.floor(Math.random() * 305) + 16;
-                if (f2.weight_oz < 16) f2.weight_oz = 16;
-                if (f2.weight_oz > 320) f2.weight_oz = 320;
-                f2.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
-                    ? Fish.getFishValue(f2)
-                    : Math.round((200 * Math.max(0.4, f2.weight_oz / 160)) * (0.6 + (f2.stats.size / 250)));
-                fish.push(f2);
+                    alive: true,
+                    weight_oz: w2,
+                    value: Math.round((200 * Math.max(0.4, w2 / 160)) * (0.6 + 60/250))
+                });
             }
             return { fish: fish, nextFishId: nextId };
         })()
+
     };
     console.log('[Game] DEFAULT_STATE created');
 
@@ -153,7 +148,7 @@ const Game = (function () {
                 personality_traits: [],
                 stats: { health: 60, aggression: 50, size: 50, metabolism: 50, curiosity: 50 },
                 parent_ids: [],
-                lake_id: 'willow_pool',
+                lake_id: 'oakmere_lake',
                 growth_stage: 'adult',
                 alive: true
             };
@@ -179,7 +174,7 @@ const Game = (function () {
                 personality_traits: [],
                 stats: { health: 70, aggression: 60, size: 60, metabolism: 55, curiosity: 55 },
                 parent_ids: [],
-                lake_id: 'willow_pool',
+                lake_id: 'oakmere_lake',
                 growth_stage: 'adult',
                 alive: true
             };
@@ -253,7 +248,7 @@ const Game = (function () {
             state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             console.log('[Game.init] took ELSE branch, DEFAULT_STATE keys:', Object.keys(state).sort().join(','));
         }
-        // If loaded/created state has no fish, seed Willow Pool stock
+        // If loaded/created state has no fish, seed Oakmere Lake stock
         if (!state.fish || state.fish.length === 0) {
             var initial = DEFAULT_STATE._initialFish || null;
             if (initial) {
