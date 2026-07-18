@@ -233,6 +233,7 @@ const Game = (function () {
             if (!state.fishCreationLog)   state.fishCreationLog   = [];
             if (!state.nextEventId)       state.nextEventId       = 1;
             if (state.lastBreedingOutcome === undefined) state.lastBreedingOutcome = null;
+            if (state.duckHuntDone === undefined) state.duckHuntDone = false;
             if (!state.investorDeals)    state.investorDeals    = [];
             if (!state.marketEquityPct)  state.marketEquityPct  = 0;
             if (!state.dividendsPaid)    state.dividendsPaid    = 0;
@@ -627,6 +628,11 @@ const Game = (function () {
         // Save nextFishId
         if (typeof Fish !== 'undefined') {
             state.nextFishId = Fish.getNextId();
+        }
+
+        // Event-driven mini-games
+        if (typeof DuckHunt !== 'undefined' && typeof DuckHunt.checkTrigger === 'function') {
+            DuckHunt.checkTrigger();
         }
 
         saveToStorage();
