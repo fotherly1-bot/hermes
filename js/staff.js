@@ -111,11 +111,22 @@ const Staff = (function () {
     }
 
     // ── Hire / Fire ───────────────────────────────────────────────────────────
+    function isRoleFilled(role) {
+        initState();
+        var s = Game.getState();
+        return s.hiredStaff.some(function(m){ return m.role === role; });
+    }
+
     function hireStaff(poolId) {
         initState();
-        var s    = Game.getState();
-        var def  = getPoolById(poolId);
+        var s   = Game.getState();
+        var def = getPoolById(poolId);
         if (!def) return;
+        if (isRoleFilled(def.role)) {
+            UI.showToast('Release the current ' + (ROLES[def.role]||{name:def.role}).name + ' first.','warning');
+            renderStaff();
+            return;
+        }
         if (!Game.spendMoney(def.hire)) { UI.showToast('Not enough money.','error'); return; }
         s.hiredStaff.push({
             instanceId: s.nextStaffInstanceId++,
@@ -319,9 +330,9 @@ const Staff = (function () {
         html += '<div>'+traitBadges(def.traits)+'</div>';
         html += '<p style="font-size:0.8rem;color:var(--colour-text-muted);">'+def.bio+'</p>';
         html += '<p style="font-size:0.75rem;color:var(--colour-text-muted);">'+(r.desc||'')+'</p>';
-        html += can
+        html += can && !isRoleFilled(def.role)
             ? '<button class="btn btn-primary" onclick="Staff.hireStaff('+poolId+');UI.hideModal();">Hire Me</button>'
-            : '<p style="color:var(--colour-danger);font-size:0.82rem;">Need '+UI.formatMoney(def.hire-s.money)+' more to hire.</p><button class="btn btn-secondary" disabled>Can\'t Afford</button>';
+            : '<button class="btn btn-secondary" disabled>Can\'t Hire</button>';
         html += '</div>';
         UI.showModal(html);
     }
@@ -466,7 +477,11 @@ const Staff = (function () {
                     html += '<span class="staff-applicant-stat">✨ '+traitNames+'</span>';
                     if (def.bio) html += '<span class="staff-applicant-stat staff-applicant-bio">'+def.bio+'</span>';
                     html += '</div>';
-                    html += '<button class="btn btn-primary" onclick="Staff.hireStaff('+def.id+');UI.showToast(\'Hired '+def.name.split(' ')[0]+'!\', \'success\');">Hire Me</button>';
+                    if (isRoleFilled(def.role)) {
+                        html += '<button class="btn btn-secondary" disabled style="width:100%;opacity:0.55;cursor:not-allowed;">Position Filled</button>';
+                    } else {
+                        html += '<button class="btn btn-primary" onclick="Staff.hireStaff('+def.id+');UI.showToast(\'Hired '+def.name.split(' ')[0]+'!\', \'success\');">Hire Me</button>';
+                    }
                     html += '</div>';
                 });
                 html += '</div></div>';
