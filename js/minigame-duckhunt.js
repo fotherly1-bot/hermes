@@ -225,18 +225,52 @@ var DuckHunt = (function() {
         clearInterval(spawnTimer);
         clearInterval(gameTimer);
         cancelAnimationFrame(animFrame);
-        cleanup();
-        
+
         reward = score * 50;
         var state = Game.getState();
         if (reward > 0) {
             Game.addMoney(reward);
-            Game.addNotification('\uD83C\uDFBF Duck Hunt: £' + reward + ' earned (score ' + score + ').');
-            UI.showToast('Duck Hunt: £' + reward, 'success');
+            Game.addNotification('Duck Hunt: £' + reward + ' earned (score ' + score + ').');
         } else {
-            Game.addNotification('\uD83C\uDFBF Duck Hunt ended. No ducks were shot.');
-            UI.showToast('Duck Hunt: no reward', 'warning');
+            Game.addNotification('Duck Hunt ended. No ducks were shot.');
         }
+
+        showFinishScreen();
+    }
+
+    function showFinishScreen() {
+        var finishOverlay = document.createElement('div');
+        finishOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10002;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;';
+
+        var heading = document.createElement('h2');
+        heading.textContent = 'Game Finished';
+        heading.style.cssText = 'color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:3rem;margin:0;text-shadow:2px 2px 4px #000;';
+
+        var rewardText = document.createElement('div');
+        rewardText.textContent = 'Rewards Earned: £' + reward;
+        rewardText.style.cssText = 'color:#f1c40f;font-family:Arial,Helvetica,sans-serif;font-size:1.8rem;font-weight:bold;text-shadow:1px 1px 3px #000;';
+
+        var scoreText = document.createElement('div');
+        scoreText.textContent = 'Score: ' + score + ' ducks';
+        scoreText.style.cssText = 'color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:1.2rem;opacity:0.9;';
+
+        var backBtn = document.createElement('button');
+        backBtn.textContent = 'Return to Game';
+        backBtn.style.cssText = 'padding:14px 32px;font-size:1.1rem;border-radius:6px;border:none;background:#27ae60;color:#fff;cursor:pointer;font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.4);';
+        backBtn.onclick = function() {
+            if (finishOverlay.parentNode) finishOverlay.parentNode.removeChild(finishOverlay);
+            cleanup();
+            var s = Game.getState();
+            if (s && typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') {
+                Dashboard.renderDashboard();
+            }
+        };
+
+        finishOverlay.appendChild(heading);
+        finishOverlay.appendChild(rewardText);
+        finishOverlay.appendChild(scoreText);
+        finishOverlay.appendChild(backBtn);
+        document.body.appendChild(finishOverlay);
     }
 
     function cleanup() {
@@ -249,14 +283,18 @@ var DuckHunt = (function() {
 
     function checkTrigger() {
         var s = Game.getState();
-        if (s && s.day === 4 && !s.duckHuntDone) {
+        if (!s) return;
+
+        // Every 30 days starting day 10
+        var lastHunt = s.lastDuckHuntDay || 0;
+        if (s.day >= 10 && (!lastHunt || s.day - lastHunt >= 30)) {
             showNotification();
         }
     }
 
     function showNotification() {
         var s = Game.getState();
-        if (s && s.duckHuntDone) return;
+        if (s && s.lastDuckHuntDay && s.day - s.lastDuckHuntDay < 30) return;
 
         var html = '<div style="display:flex;flex-direction:column;gap:1rem;max-width:420px;">' +
             '<div style="font-size:1.6rem;font-weight:800;">🦆 Migratory Ducks Spotted!</div>' +
@@ -268,7 +306,7 @@ var DuckHunt = (function() {
             '</div>' +
             '<div style="display:flex;gap:0.5rem;">' +
             '<button class="btn btn-primary" onclick="DuckHunt.start();UI.hideModal();" style="flex:1;">Play Duck Hunt</button>' +
-            '<button class="btn btn-secondary" onclick="UI.hideModal();" style="flex:1;">Decline</button>' +
+            '<button class="btn btn-secondary" onclick="DuckHunt.decline();UI.hideModal();" style="flex:1;">Decline</button>' +
             '</div></div>';
         UI.showModal(html);
     }
@@ -279,10 +317,18 @@ var DuckHunt = (function() {
         start: function() {
             var s = Game.getState();
             if (s) {
+                s.lastDuckHuntDay = s.day;
                 s.duckHuntDone = true;
                 Game.saveToStorage();
             }
             init();
+        },
+        decline: function() {
+            var s = Game.getState();
+            if (s) {
+                s.lastDuckHuntDay = s.day;
+                Game.saveToStorage();
+            }
         },
         isActive: function() { return active; }
     };

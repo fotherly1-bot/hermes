@@ -234,6 +234,7 @@ const Game = (function () {
             if (!state.nextEventId)       state.nextEventId       = 1;
             if (state.lastBreedingOutcome === undefined) state.lastBreedingOutcome = null;
             if (state.duckHuntDone === undefined) state.duckHuntDone = false;
+            if (state.lastDuckHuntDay === undefined) state.lastDuckHuntDay = 0;
             if (!state.investorDeals)    state.investorDeals    = [];
             if (!state.marketEquityPct)  state.marketEquityPct  = 0;
             if (!state.dividendsPaid)    state.dividendsPaid    = 0;
