@@ -287,7 +287,7 @@ const UI = (function () {
                 Game.setState(JSON.parse(JSON.stringify(Game.DEFAULT_STATE)));
             }
             if (typeof Game.saveToStorage === 'function') Game.saveToStorage();
-            if (typeof UI.renderDashboard === 'function') UI.renderDashboard();
+            if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') Dashboard.renderDashboard();
             if (typeof UI.renderLakes === 'function') UI.renderLakes();
             UI.showToast('Game loaded.', 'success');
         }
@@ -308,7 +308,7 @@ const UI = (function () {
         if (welcome) {
             welcome.style.display = 'block';
         }
-        if (typeof UI.renderDashboard === 'function') UI.renderDashboard();
+        if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') Dashboard.renderDashboard();
         if (typeof Lakes !== 'undefined' && typeof Lakes.renderLakes === 'function') Lakes.renderLakes();
         if (typeof Welcome !== 'undefined' && typeof Welcome.show === 'function') Welcome.show();
         showToast('New game started! Pick your angler.', 'success');

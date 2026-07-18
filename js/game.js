@@ -80,11 +80,13 @@ const Game = (function () {
             var nextId = 1;
             var commonWeights = [16, 32, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 256, 272, 288, 300, 305, 320];
             var uncommonWeights = [48, 305];
+            var commonNames = ['Spotted Dick', 'Big Jenny', 'The Governor', 'Captain Carl', 'Muddy Pete', 'King Elisha', 'Serial Dave', 'Helen of Troy', 'The Sheriffs Special', 'Colin the Crab', "Gordon's Monster", 'Floating Log', 'The Bishop', 'Pirate Pete', 'Dusty Miller', 'The Landlord', 'Sidney Scallop', 'Mojo M', 'The General', 'The Dentist'];
+            var uncommonNames = ['The Ghost of Oakmere', 'Leviathan'];
             for (var i = 0; i < 20; i++) {
-                var w = commonWeights[i] || Math.floor(Math.random() * 305) + 16;
+                var w = commonWeights[i];
                 fish.push({
                     id: nextId++,
-                    name: 'Oakmere Common ' + (i + 1),
+                    name: commonNames[i],
                     species: 'common',
                     speciesName: 'Common Carp',
                     age_days: Math.floor(Math.random() * 200) + 30,
@@ -102,10 +104,10 @@ const Game = (function () {
                 });
             }
             for (var j = 0; j < 2; j++) {
-                var w2 = uncommonWeights[j] || Math.floor(Math.random() * 305) + 16;
+                var w2 = uncommonWeights[j];
                 fish.push({
                     id: nextId++,
-                    name: 'Oakmere Mirror ' + (j + 1),
+                    name: uncommonNames[j],
                     species: 'mirror',
                     speciesName: 'Mirror Carp',
                     age_days: Math.floor(Math.random() * 250) + 60,
@@ -134,11 +136,14 @@ const Game = (function () {
     function _generateInitialFish() {
         var fish = [];
         var nextId = 1;
-        // 20 common fish 1-20lb (16-320oz)
+        var commonNames = ['Spotted Dick', 'Big Jenny', 'The Governor', 'Captain Carl', 'Muddy Pete', 'King Elisha', 'Serial Dave', 'Helen of Troy', 'The Sheriffs Special', 'Colin the Crab', "Gordon's Monster", 'Floating Log', 'The Bishop', 'Pirate Pete', 'Dusty Miller', 'The Landlord', 'Sidney Scallop', 'Mojo M', 'The General', 'The Dentist'];
+        var uncommonNames = ['The Ghost of Oakmere', 'Leviathan'];
+        var commonWeights = [16, 32, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 256, 272, 288, 300, 305, 320];
+        var uncommonWeights = [48, 305];
         for (var i = 0; i < 20; i++) {
             var f = {
                 id: nextId++,
-                name: 'Oakmere Common ' + (i + 1),
+                name: commonNames[i],
                 species: 'common',
                 speciesName: 'Common Carp',
                 age_days: Math.floor(Math.random() * 200) + 30,
@@ -152,9 +157,7 @@ const Game = (function () {
                 growth_stage: 'adult',
                 alive: true
             };
-            f.weight_oz = Math.floor(Math.random() * 305) + 16;
-            if (f.weight_oz < 16) f.weight_oz = 16;
-            if (f.weight_oz > 320) f.weight_oz = 320;
+            f.weight_oz = commonWeights[i];
             f.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
                 ? Fish.getFishValue(f)
                 : Math.round((50 * Math.max(0.4, f.weight_oz / 160)) * (0.6 + (f.stats.size / 250)));
@@ -164,7 +167,7 @@ const Game = (function () {
         for (var j = 0; j < 2; j++) {
             var f2 = {
                 id: nextId++,
-                name: 'Oakmere Mirror ' + (j + 1),
+                name: uncommonNames[j],
                 species: 'mirror',
                 speciesName: 'Mirror Carp',
                 age_days: Math.floor(Math.random() * 250) + 60,
@@ -178,9 +181,7 @@ const Game = (function () {
                 growth_stage: 'adult',
                 alive: true
             };
-            f2.weight_oz = Math.floor(Math.random() * 305) + 16;
-            if (f2.weight_oz < 16) f2.weight_oz = 16;
-            if (f2.weight_oz > 320) f2.weight_oz = 320;
+            f2.weight_oz = uncommonWeights[j];
             f2.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
                 ? Fish.getFishValue(f2)
                 : Math.round((200 * Math.max(0.4, f2.weight_oz / 160)) * (0.6 + (f2.stats.size / 250)));

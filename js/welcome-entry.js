@@ -14,19 +14,21 @@
         if (saved) {
             Game.setState(saved);
             var st = Game.getState();
-            if (!st.fish || st.fish.length === 0) {
-                var initial = Game.DEFAULT_STATE._initialFish || null;
-                if (initial) {
-                    st.fish = initial.fish;
-                    st.nextFishId = initial.nextFishId;
-                }
+            // Always use static starter fish for a fresh welcome flow
+            var initial = Game.DEFAULT_STATE._initialFish || null;
+            if (initial) {
+                st.fish = JSON.parse(JSON.stringify(initial.fish));
+                st.nextFishId = initial.nextFishId;
+            }
+            if (typeof Fish !== 'undefined' && typeof Fish.setNextId === 'function') {
+                Fish.setNextId(st.nextFishId);
             }
         } else {
             Game.setState(JSON.parse(JSON.stringify(Game.DEFAULT_STATE)));
             var initial = Game.DEFAULT_STATE._initialFish || null;
             if (initial) {
                 var st2 = Game.getState();
-                st2.fish = initial.fish;
+                st2.fish = JSON.parse(JSON.stringify(initial.fish));
                 st2.nextFishId = initial.nextFishId;
             }
         }
@@ -47,9 +49,9 @@
         }
         var state = Game.getState();
 
-        if (!state.ownedLakes || state.ownedLakes.indexOf('willow_pool') === -1) {
+        if (!state.ownedLakes || state.ownedLakes.indexOf('oakmere_lake') === -1) {
             if (typeof Lakes !== 'undefined' && typeof Lakes.addOwnedLake === 'function') {
-                Lakes.addOwnedLake('willow_pool');
+                Lakes.addOwnedLake('oakmere_lake');
             }
             state.day = 1;
         }
@@ -68,8 +70,8 @@
         var welcome = document.getElementById('welcome-screen');
         if (welcome) welcome.style.display = 'none';
 
-        if (typeof UI !== 'undefined' && typeof UI.renderDashboard === 'function') {
-            UI.renderDashboard();
+        if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') {
+            Dashboard.renderDashboard();
         }
         if (typeof Lakes !== 'undefined' && typeof Lakes.renderLakes === 'function') {
             Lakes.renderLakes();
@@ -106,11 +108,11 @@
     function _renderLakeCard() {
         var container = document.getElementById('welcome-lake-card');
         if (!container) return;
-        container.innerHTML = '<div class="dashboard-card" style="display:inline-block;min-width:220px;text-align:center;">' +
-            '<h4>Willow Pool</h4>' +
-            '<p>A small, sheltered pool surrounded by willows. Your starting venue.</p>' +
-            '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">' +
-                '<span class="angler-stat-badge">Fish Capacity: 70</span>' +
+        container.innerHTML = '<div class="dashboard-card" style=\"display:inline-block;min-width:220px;text-align:center;\">' +
+            '<h4>Oakmere Lake</h4>' +
+            '<p>A picturesque two-acre lake nestled amongst ancient oak trees. Your starting venue.</p>' +
+            '<div style=\"display:flex;gap:8px;justify-content:center;flex-wrap:wrap;\">' +
+                '<span class="angler-stat-badge">Fish Capacity: 240</span>' +
                 '<span class="angler-stat-badge">Still Water</span>' +
             '</div>' +
             '</div>';
