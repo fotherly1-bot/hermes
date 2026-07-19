@@ -235,8 +235,6 @@ const Game = (function () {
             if (state.lastBreedingOutcome === undefined) state.lastBreedingOutcome = null;
             if (state.duckHuntDone === undefined) state.duckHuntDone = false;
             if (state.lastDuckHuntDay === undefined) state.lastDuckHuntDay = 0;
-            if (state.lakeCleanupDone === undefined) state.lakeCleanupDone = false;
-            if (state.lastLakeCleanupDay === undefined) state.lastLakeCleanupDay = 0;
             if (state.lastDisasterDay === undefined) state.lastDisasterDay = 0;
             if (!state.investorDeals)    state.investorDeals    = [];
             if (!state.marketEquityPct)  state.marketEquityPct  = 0;
@@ -637,9 +635,6 @@ const Game = (function () {
         // Event-driven mini-games
         if (typeof DuckHunt !== 'undefined' && typeof DuckHunt.checkTrigger === 'function') {
             DuckHunt.checkTrigger();
-        }
-        if (typeof LakeCleanup !== 'undefined' && typeof LakeCleanup.checkTrigger === 'function') {
-            LakeCleanup.checkTrigger();
         }
 
         saveToStorage();
