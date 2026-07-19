@@ -211,6 +211,10 @@ const Disasters = (function () {
         if (!state.ownedLakes || state.ownedLakes.length === 0) return;
 
         if (!state.disasterLog) state.disasterLog = [];
+        if (!state.lastDisasterDay) state.lastDisasterDay = 0;
+
+        // Max 1 disaster per 30 days
+        if (state.day - state.lastDisasterDay < 30) return;
 
         // Get today's weather for probability modifiers
         var currentWeather = typeof Weather !== 'undefined' ? Weather.getCurrentWeather() : null;
@@ -223,9 +227,9 @@ const Disasters = (function () {
                 return;
             }
 
-            var hasCamera          = typeof Shop !== 'undefined' && Shop.lakeHasUpgrade(lakeId, 'security_camera');
-            var cameraMultiplier   = hasCamera ? 0.5 : 1.0;
-            var staffMultiplier    = typeof Staff !== 'undefined' ? Staff.getDisasterModifier(lakeId) : 1.0;
+            var hasCamera        = typeof Shop !== 'undefined' && Shop.lakeHasUpgrade(lakeId, 'security_camera');
+            var cameraMultiplier = hasCamera ? 0.5 : 1.0;
+            var staffMultiplier  = typeof Staff !== 'undefined' ? Staff.getDisasterModifier(lakeId) : 1.0;
             // Grounds + security maintenance further reduce disaster chance
             var maintReduction = 0;
             if (typeof Lakes !== 'undefined') {
@@ -295,6 +299,8 @@ const Disasters = (function () {
                     if (state.disasterLog.length > 20) {
                         state.disasterLog = state.disasterLog.slice(-20);
                     }
+
+                    state.lastDisasterDay = state.day;
 
                     Game.addNotification('\u26A0 DISASTER: ' + disaster.name +
                         ' at ' + lakeName + '! ' + result);
