@@ -285,16 +285,16 @@ var DuckHunt = (function() {
         var s = Game.getState();
         if (!s) return;
 
-        // Every 30 days starting day 10
+        // Once per year, first available day 10
         var lastHunt = s.lastDuckHuntDay || 0;
-        if (s.day >= 10 && (!lastHunt || s.day - lastHunt >= 30)) {
+        if (s.day >= 10 && (!lastHunt || s.day - lastHunt >= 365)) {
             showNotification();
         }
     }
 
     function showNotification() {
         var s = Game.getState();
-        if (s && s.lastDuckHuntDay && s.day - s.lastDuckHuntDay < 30) return;
+        if (s && s.lastDuckHuntDay && s.day - s.lastDuckHuntDay < 365) return;
 
         var html = '<div style="display:flex;flex-direction:column;gap:1rem;max-width:420px;">' +
             '<div style="font-size:1.6rem;font-weight:800;">🦆 Migratory Ducks Spotted!</div>' +
