@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carp Fishing Tycoon</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/anglers.css">
+    <link rel="stylesheet" href="css/style.css?v=15">
+    <link rel="stylesheet" href="css/anglers.css?v=15">
 </head>
 <body>
     <!-- Banner -->
@@ -155,8 +155,32 @@
     <!-- Toast Notifications -->
     <div id="toast-container"></div>
 
+    <!-- Footer / Ad Banner -->
+    <footer id="game-footer">
+        <div id="ad-slot" style="min-height:60px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:0.8rem;border-top:1px solid rgba(255,255,255,0.08);padding:0.5rem;">
+            Advertisement
+        </div>
+        <div style="display:flex;justify-content:center;gap:1rem;padding:0.5rem;font-size:0.85rem;">
+            <a href="privacy-policy.html" style="color:#aaa;text-decoration:none;">Privacy Policy</a>
+            <a href="contact.html" style="color:#aaa;text-decoration:none;">Contact</a>
+        </div>
+    </footer>
+
+    <!-- Google AdSense (uncomment and add your client ID when ready) -->
+    <!--
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <script>
+        var adSlot = document.getElementById('ad-slot');
+        if (adSlot && typeof adsbygoogle !== 'undefined') {
+            adSlot.innerHTML = '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+    </script>
+    -->
+
     <style>
         #reset-btn { min-width: 120px; }
+        #game-footer { text-align: center; }
     </style>
 
     <!-- Welcome Screen -->
