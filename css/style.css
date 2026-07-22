@@ -70,6 +70,50 @@ body {
     height: 150px;
 }
 
+/* === Legal Pages === */
+.legal-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    background: #ffffff;
+    color: #1a1a1a;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 18px 42px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+.legal-container h1 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    color: #0f1f18;
+}
+.legal-container h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #1a2e22;
+}
+.legal-container p {
+    margin: 0.5rem 0;
+}
+.legal-container a {
+    color: #0d5c36;
+    text-decoration: underline;
+}
+.legal-container .back-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: #0d5c36;
+    text-decoration: none;
+    font-weight: 700;
+}
+.legal-container .back-link:hover {
+    text-decoration: underline;
+}
+
 /* subtle decorative overlay */
 #game-banner::before {
     content: '';
