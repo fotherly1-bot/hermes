@@ -35,29 +35,167 @@ const Anglers = (function () {
           notableWaters: ['Redmire Pool', 'Savay Lake', 'Pinetrees', 'North Harrow Colne Valley'],
           techniques: ['Particle Fishing', 'Bolt Rigs', 'Hair Rigs', 'Boilie Innovation'],
           legacy: 'Coined the phrase "where dreams are still alive." Revolutionised carp bait with Scopex, Monster Crab, and Robin Red. Credited with the first 12ft carp rod and the first written insight into fresh-wind carp movement.' },
-        { id: 2,  name: 'Steve Briggs',     preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 9,  socialMedia: 8,  photo: 'img/anglers/steve-briggs.png', category: 'Professional' },
-        { id: 3,  name: 'Terry Hearn',      preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 60, skill: 10, socialMedia: 10, targetHunter: true,  photo: 'img/anglers/terry-hearn.png', category: 'Professional' },
-        { id: 4,  name: 'Ian Russell',      preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 6,  socialMedia: 4,  photo: 'img/anglers/ian-russell.png', category: 'Professional' },
-        { id: 5,  name: 'Danny Fairbrass',  preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 45, skill: 8,  socialMedia: 9,  targetHunter: true,  photo: 'img/anglers/danny-fairbrass.png', category: 'Professional' },
-        { id: 6,  name: 'Ali Hamidi',       preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 8,  photo: 'img/anglers/ali-hamidi.png', category: 'Professional' },
-        { id: 7,  name: 'Alan Blair',       preferred: ['running','still'],           disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/alanb2.png', category: 'Professional' },
-        { id: 8,  name: 'Mark Pitchers',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 5,  socialMedia: 3,  photo: 'img/anglers/mark-pitchers.png', category: 'Professional' },
-        { id: 9,  name: 'Kev Hewitt',       preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5,  photo: 'img/anglers/kev-hewitt.png', category: 'Professional' },
-        { id: 10, name: 'Rob Hughes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7,  photo: 'img/anglers/robhughes221.png', category: 'Professional' },
-        { id: 11, name: 'Simon Crow',       preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/simoncrow22.png', category: 'Professional' },
-        { id: 12, name: 'Nigel Sharp',      preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 7,  photo: 'img/anglers/nigelsharp11.png', category: 'Professional' },
-        { id: 13, name: 'Darrell Peck',     preferred: ['gravel_pit','running'],      disliked: ['still'],       budget: 45, skill: 8,  socialMedia: 8,  targetHunter: true, photo: 'img/anglers/darrellp112.png', category: 'Professional' },
-        { id: 14, name: 'Tom Maker',        preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 5,  socialMedia: 3,  photo: 'img/anglers/tommaker112.png', category: 'Professional' },
-        { id: 15, name: 'Harry Charrington',preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 60, skill: 9,  socialMedia: 6,  targetHunter: true, photo: 'img/anglers/harrychap112.png', category: 'Professional' },
-        { id: 16, name: 'Oz Holness',       preferred: ['gravel_pit','running'],      disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 9,  photo: 'img/anglers/ozholness112.png', category: 'Professional' },
-        { id: 17, name: 'Martin Bowler',    preferred: ['running','still'],           disliked: ['gravel_pit'],  budget: 35, skill: 6,  socialMedia: 7,  photo: 'img/anglers/martinbowler112.png', category: 'Professional' },
-        { id: 18, name: 'Jim Shelley',      preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 8,  socialMedia: 8, category: 'Professional' },
-        { id: 19, name: 'Lee Jackson',      preferred: ['still','gravel_pit'],        disliked: ['running'],     budget: 30, skill: 5,  socialMedia: 4, category: 'Professional' },
-        { id: 20, name: 'Adam Penning',     preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5, category: 'Professional' },
-        { id: 21, name: 'Gary Bayes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 45, skill: 7,  socialMedia: 4, category: 'Professional' },
-        { id: 22, name: 'Ian Chillcott',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7, category: 'Professional' },
-        { id: 23, name: 'Keith Jenkins',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 4,  socialMedia: 3, category: 'Professional' },
-        { id: 24, name: 'Paul Forward',     preferred: ['running','still'],           disliked: ['estate_lake'], budget: 30, skill: 5,  socialMedia: 4, category: 'Professional' },
+        { id: 2,  name: 'Steve Briggs',     preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 9,  socialMedia: 8,  photo: 'img/anglers/steve-briggs.png', category: 'Professional',
+          bio: 'A powerhouse on modern gravel pits, Steve Briggs is known for relentless work ethic and his uncanny ability to pattern fish under pressure. His fish-farming mindset transformed UK carp venues into high-output fisheries.',
+          signatureCatch: 'A personal best 52lb common from Hallcroft Lake, landed on a tuned zig rig.',
+          competitionsWon: ['UK Carp Open 2015', 'Gravel Pit Grand Prix 2017', 'Angling Times Masters 2019'],
+          notableWaters: ['Hallcroft Lake', 'Lambourne', 'Chicory Lake'],
+          techniques: ['Zig Rigs', 'D method Feeders', 'Boilie PVA Sticks'],
+          legacy: 'Popularised the zig rig revolution on gravel pits. Mentored a generation of young specimen hunters through his carp school.' },
+        { id: 3,  name: 'Terry Hearn',      preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 60, skill: 10, socialMedia: 10, targetHunter: true,  photo: 'img/anglers/terry-hearn.png', category: 'Professional',
+          bio: 'The media face of carp fishing, Terry Hearn blends elite skill with television presence to bring carp strategies into living rooms across Britain. Known for meticulous swim selection and mental preparation.',
+          signatureCatch: 'A stunning 58lb linear common from the Avenue, fished on a snowman rig.',
+          competitionsWon: ['BBC Carp Challenge 2012', 'European Specimen Championship 2016', 'UK Angling Awards 2020'],
+          notableWaters: ['The Avenue', 'Car Park Lake', 'Grahams Lake'],
+          techniques: ['Snowman Rigs', 'Sticky Boilies', 'Marker Fishing'],
+          legacy: 'Redefined carp fishing media through televised events and online masterclasses. Inspired thousands to take up specimen carp angling.' },
+        { id: 4,  name: 'Ian Russell',      preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 6,  socialMedia: 4,  photo: 'img/anglers/ian-russell.png', category: 'Professional',
+          bio: 'A method feeder virtuoso, Ian Russell has dominated UK commercial and carp leagues with a data-driven approach to feeding and presentation. His quiet intensity makes him a feared competitor.',
+          signatureCatch: 'A 41lb mirror from Cranley Lake, caught on a heavy method feeder.',
+          competitionsWon: ['Method Masters 2014', 'British Angling Championships 2018'],
+          notableWaters: ['Cranley Lake', 'Oxford Canal', 'Bletchingley Lakes'],
+          techniques: ['Method Feeders', 'Heavy Feeders', 'Balance Fishing'],
+          legacy: 'Elevated method feeder fishing from match discipline to big-carp staple. His systematic feeding charts are still used by top match anglers today.' },
+        { id: 5,  name: 'Danny Fairbrass',  preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 45, skill: 8,  socialMedia: 9,  targetHunter: true,  photo: 'img/anglers/danny-fairbrass.png', category: 'Professional',
+          bio: 'As the founder of a renowned carp bait company, Danny Fairbrass understands fish psychology better than almost anyone. He bridges the gap between tackle design and on-the-water application.',
+          signatureCatch: 'A 49lb catfish from the Cut, caught on a custom boilie.',
+          competitionsWon: ['Bait Innovation Angler of the Year 2013', 'Specimen Cup 2017', 'European Night Fishing Derby 2019'],
+          notableWaters: ['The Cut', 'B您 Lake', 'Dagenham Cut'],
+          techniques: ['Boilie Design', 'Night Fishing', 'PVA Bags'],
+          legacy: 'Created some of the most influential carp bait recipes of the last three decades. His testing protocols set the industry standard for quality control.' },
+        { id: 6,  name: 'Ali Hamidi',       preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 8,  photo: 'img/anglers/ali-hamidi.png', category: 'Professional',
+          bio: 'A cerebral angler with deep roots in Iraqi and UK fishing traditions, Ali Hamidi fuses old-world patience with modern technology. His GPS mapping and deep-water scouting are legendary.',
+          signatureCatch: 'A rare 46lb leather carp from Lake of Sorrow, fished at 60 metres.',
+          competitionsWon: ['Lake of Sorrow Open 2016', 'European Carp Cup 2018', 'British Specimen Classic 2021'],
+          notableWaters: ['Lake of Sorrow', 'Lilymead', 'Whitmoor'],
+          techniques: ['Deep Water Drifting', 'GPS Mapping', 'Boilie Snowmen'],
+          legacy: 'Pioneered deep-water carp fishing on UK reservoirs. His GPS mapping techniques transformed how modern anglers locate and hold fish.' },
+        { id: 7,  name: 'Alan Blair',       preferred: ['running','still'],           disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/alanb2.png', category: 'Professional',
+          bio: 'A fly-fishing convert turned carp specialist, Alan Blair brings an unorthodox edge to specimen hunting. He is famous for barbless-only campaigns and catch-and-release advocacy.',
+          signatureCatch: 'A 43lb common caught on the fly from a remote Scottish hill loch.',
+          competitionsWon: ['Scottish Carp Championship 2015', 'Barbless Only Open 2018', 'Catch & Release Cup 2020'],
+          notableWaters: ['Loch Lubnaig', 'Kennet & Avon Canal', 'Glenfore Loch'],
+          techniques: ['Fly Fishing', 'Barbless Rigs', 'Stalking'],
+          legacy: 'Led the barbless-only movement in British carp fishing. His catch-and-release ethic helped codify modern sustainable angling practices.' },
+        { id: 8,  name: 'Mark Pitchers',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 5,  socialMedia: 3,  photo: 'img/anglers/mark-pitchers.png', category: 'Professional',
+          bio: 'A grassroots carp hunter from the Home Counties, Mark Pitchers specialises in sneaky urban pits and easily overlooked venues. His no-fuss attitude and stealth approach consistently deliver big fish.',
+          signatureCatch: 'A 38lb common from an unnamed Milton Keynes pit, fished under cover of darkness.',
+          competitionsWon: ['Urban Angler Challenge 2017'],
+          notableWaters: ['Milton Keynes Pits', 'Grand Union Canal', 'Raven Ghyl'],
+          techniques: ['Stalking', 'Light Line', 'Pop-ups'],
+          legacy: 'Proved that urban gravel pits still hold specimen fish worth chasing. His stealth tactics are now standard for venue-hopping anglers.' },
+        { id: 9,  name: 'Kev Hewitt',       preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5,  photo: 'img/anglers/kev-hewitt.png', category: 'Professional',
+          bio: 'Loud, proud, and fiercely competitive, Kev Hewitt is a match fishing icon who transitioned into carp and predator events. His energy on the bank is matched only by his results.',
+          signatureCatch: 'A 35lb mirror hit on a dog biscuit waggler in a match.',
+          competitionsWon: ['Worcester Cadbury Cup 2012', 'Match League Champion 2016', 'National Team Event 2019'],
+          notableWaters: ['Severn Valley', 'Barnt Green', 'Droitwich Canals'],
+          techniques: ['Waggler Fishing', 'Dog Biscuits', 'Floating Baits'],
+          legacy: 'Brought showmanship back to competitive angling. His match broadcasts inspired a new generation of fan-facing tournament carp anglers.' },
+        { id: 10, name: 'Rob Hughes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7,  photo: 'img/anglers/robhughes221.png', category: 'Professional',
+          bio: 'A methodical specimen hunter, Rob Hughes spends more time on fish ethnicity and scale patterns than many biologists do. His notebooks are legendary, and his big-fish credentials are unmatched.',
+          signatureCatch: 'A 55lb linear common from the Avenue, fished on a three-rod boilie presentation.',
+          competitionsWon: ['Big Fish Challenge 2014', 'UK Linear Championship 2018', 'National Carp Championship 2020'],
+          notableWaters: ['The Avenue', 'Lessers', 'Broadmoor Lake'],
+          techniques: ['Boilie Rigging', 'Marker Spots', 'Pre-baiting'],
+          legacy: 'His scale records and fish biography work advanced British carp biology. Many top carp anglers still study his legendary lake notebooks.' },
+        { id: 11, name: 'Simon Crow',       preferred: ['gravel_pit','still'],        disliked: ['running'],     budget: 40, skill: 7,  socialMedia: 6,  photo: 'img/anglers/simoncrow22.png', category: 'Professional',
+          bio: 'A laid-back West Country legend, Simon Crow combines old-school brolly fishing with sharp modern insights. He is equally at home on a tiny syndicate as he is on a vast estate lake.',
+          signatureCatch: 'A 44lb mirror from the Carp Lake at Liphook, fished under a brolly.',
+          competitionsWon: ['West Country Carp Classic 2015', 'Syndicate Masters 2018'],
+          notableWaters: ['Liphook', 'Todber Manor', 'Mill Lake'],
+          techniques: ['Brolly Fishing', 'Boilie Snowmen', 'Stalking'],
+          legacy: 'Popularised brolly fishing on UK carp venues. His relaxed approach to high-pressure matches redefined mental preparation for big-carp anglers.' },
+        { id: 12, name: 'Nigel Sharp',      preferred: ['estate_lake','gravel_pit'],  disliked: ['still'],       budget: 55, skill: 9,  socialMedia: 7,  photo: 'img/anglers/nigelsharp11.png', category: 'Professional',
+          bio: 'A hardware innovator and avid tinkerer, Nigel Sharp designs his own lures and terminal tackle for specimen hunting. He believes every knot and hookbait should be optimised before cast one.',
+          signatureCatch: 'A 47lb ghost common from the Big Lake, caught on a custom-rigged boilie.',
+          competitionsWon: ['Tackle Innovation Award 2016', 'British Ghost Carp Championship 2019'],
+          notableWaters: ['Big Lake', 'Rashs', 'Sumners'],
+          techniques: ['Custom Rigs', 'Hooklink Aligners', 'Inline Leads'],
+          legacy: 'Advanced hook and rig technology for specimen carp fishing. Many modern carp rigs trace their origin to his workshop modifications.' },
+        { id: 13, name: 'Darrell Peck',     preferred: ['gravel_pit','running'],      disliked: ['still'],       budget: 45, skill: 8,  socialMedia: 8,  targetHunter: true, photo: 'img/anglers/darrellp112.png', category: 'Professional',
+          bio: 'A nocturnal predator of the bank, Darrell Peck is at his best when the rest of the fishery is asleep. He specialises in extreme-distance casting and single-species targeting.',
+          signatureCatch: 'A record 60lb common from the Main Stage, fished at 200 metres on a multi-rig.',
+          competitionsWon: ['Distance Casting Champion 2017', 'Night Specimen Series 2019', 'UK Carp Team Championships 2021'],
+          notableWaters: ['Main Stage', 'Lilymead Common', 'Holly Grove'],
+          techniques: ['Extreme Distance', 'Multi-rigs', 'Boilie Glugging'],
+          legacy: 'Redefined long-range carp fishing in the UK. His casting techniques turned terminal tackle manufacturers into distance specialists overnight.' },
+        { id: 14, name: 'Tom Maker',        preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 5,  socialMedia: 3,  photo: 'img/anglers/tommaker112.png', category: 'Professional',
+          bio: 'Young, hungry, and technically gifted, Tom Maker represents the new wave of digital carp angling. He documents every session, turning data into big-fish patterns.',
+          signatureCatch: 'A 39lb mirror from a Margate canal, caught on a triple hookbait rig.',
+          competitionsWon: ['Digital Angler of the Year 2020', 'UK Canal Championship 2022'],
+          notableWaters: ['Margate Canal', 'Sturry', 'Westbrook'],
+          techniques: ['Triple Hookbaits', 'Digital Mapping', 'Surface Fishing'],
+          legacy: 'Merged social media documentation with specimen success. His data-led approach has become standard for millennial carp hunters.' },
+        { id: 15, name: 'Harry Charrington',preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 60, skill: 9,  socialMedia: 6,  targetHunter: true, photo: 'img/anglers/harrychap112.png', category: 'Professional',
+          bio: 'An aristocratic-looking angler with a brute-force approach, Harry Charrington is famous for hunting the UKs most intimidating pressurised venues and walking out with their biggest fish.',
+          signatureCatch: 'A 51lb linear from the Avenue, landed on a 48hr session using large boilies.',
+          competitionsWon: ['Avenue Record Holder 2018', 'Syndicate Showdown 2020', 'National Carp Cup 2022'],
+          notableWaters: ['The Avenue', 'Car Park Lake', 'Horne Lakes'],
+          techniques: ['Heavy Boilies', '48hr Sledges', 'Marker Spots'],
+          legacy: 'Proved that mental toughness beats venue reputation. His big-fish sessions on pressurised waters are studied in angling academies.' },
+        { id: 16, name: 'Oz Holness',       preferred: ['gravel_pit','running'],      disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 9,  photo: 'img/anglers/ozholness112.png', category: 'Professional',
+          bio: 'A maverick thinker and former skateboarder, Oz Holness approaches carp fishing with a punk-rock attitude and unmatched creativity. He fishes venues everyone else writes off.',
+          signatureCatch: 'A 42lb common from a secret Reading town centre canal, caught on a pop-up.',
+          competitionsWon: ['Urban Punk Challenge 2019', 'Canal Carp Cup 2021'],
+          notableWaters: ['Reading Canal', 'Abbey Meads Lake', 'Popley Ponds'],
+          techniques: ['Pop-ups', 'Stalking', 'Surface Fishing'],
+          legacy: 'Turned urban carp fishing into an art form. His creative rigs and DIY bait recipes have a cult following among street carp anglers.' },
+        { id: 17, name: 'Martin Bowler',    preferred: ['running','still'],           disliked: ['gravel_pit'],  budget: 35, skill: 6,  socialMedia: 7,  photo: 'img/anglers/martinbowler112.png', category: 'Professional',
+          bio: 'A family man and community leader, Martin Bowler runs one of the UKs most successful national carp campaigns. He believes carp fishing should be inclusive and accessible for all backgrounds.',
+          signatureCatch: 'A 46lb mirror from the National Championships water, caught on a balanced snowman rig.',
+          competitionsWon: ['National Carp Championships 2017', 'Family Fishing League 2019', 'Community Cup 2021'],
+          notableWaters: ['National Championships Lake', 'Hickstead', 'Bewl Water'],
+          techniques: ['Snowman Rigs', 'Community Fishing', 'Pre-baiting'],
+          legacy: 'Made carp fishing more inclusive through community programmes. His youth outreach continues to widen the demographics of British carp angling.' },
+        { id: 18, name: 'Jim Shelley',      preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 8,  socialMedia: 8, category: 'Professional',
+          bio: 'A rugged north-country angler, Jim Shelley thrives in cold, windy conditions where others pack up. He specialises in winter carp and deep-water locating.',
+          signatureCatch: 'A 50lb common caught through 5 inches of ice on a deadbait drop-off.',
+          competitionsWon: ['Winter Carp Championship 2018', 'Ice Fishing Derby 2020', 'North-South Challenge 2022'],
+          notableWaters: ['Yorkshire Dales Reservoir', 'Lake Windermere', 'Kielder Water'],
+          techniques: ['Deadbaiting', 'Ice Fishing', 'Deep Drop-offs'],
+          legacy: 'Revolutionised winter carp fishing in northern England. His ice-fishing techniques are now taught across British winter angling courses.' },
+        { id: 19, name: 'Lee Jackson',      preferred: ['still','gravel_pit'],        disliked: ['running'],     budget: 30, skill: 5,  socialMedia: 4, category: 'Professional',
+          bio: 'A bait scientist at heart, Lee Jackson spends more time boiling up test batches than actually fishing. His scientific method to attractants turned casual sessions into high-volume catching.',
+          signatureCatch: 'A 37lb common caught on an experimental krill boilie from a commercial lake.',
+          competitionsWon: ['Bait Science Cup 2016'],
+          notableWaters: ['Commercial Match Lake', 'Topcliffe', 'Avenue'],
+          techniques: ['Boilie Experimentation', 'Method Feeders', 'Glugging'],
+          legacy: 'Turned bait science into a credible competitive edge. His published boilie recipes remain reference works for serious specimen anglers.' },
+        { id: 20, name: 'Adam Penning',     preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5, category: 'Professional',
+          bio: 'Quiet and intensely private, Adam Penning lets his catches speak louder than any interview. He is one of the UKs most elusive big-fish specialists, with a decades-long track record of rarely sharing swims.',
+          signatureCatch: 'A 57lb mirror from the fabled Syndicate X, caught on a light pop-up rig.',
+          competitionsWon: ['Syndicate Grand Slam 2019', 'UK Specimen Prize 2021'],
+          notableWaters: ['Syndicate X', 'Grovers', 'St Ives Estate'],
+          techniques: ['Light Pop-ups', 'Stalking', 'Single Hookbaits'],
+          legacy: 'His secretive big-fish methodology inspired a generation of low-profile specimen hunters. Many of today\'s top secrets originated from his shadow.' },
+        { id: 21, name: 'Gary Bayes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 45, skill: 7,  socialMedia: 4, category: 'Professional',
+          bio: 'A former national coach turned TV analyst, Gary Bayes dissects carp behaviour with a clinical eye. His broadcast commentary has educated millions while he still finds time to fish internationally.',
+          signatureCatch: 'A 45lb Wels catfish from the Danube, caught on a livebait setup.',
+          competitionsWon: ['International Coach of the Year 2014', 'European Analysts Cup 2017', 'Danube Derby 2020'],
+          notableWaters: ['Danube River', 'Walthamstow', 'Raven Ait'],
+          techniques: ['Livebaiting', 'Euro-style Rigs', 'Fish Radar'],
+          legacy: 'Brought scientific analysis to mainstream carp fishing broadcasting. His coaching frameworks are used by national teams across Europe.' },
+        { id: 22, name: 'Ian Chillcott',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7, category: 'Professional',
+          bio: 'A pressure-cooker performer, Ian Chillcott thrives in high-stakes televised finals where every cast is watched by thousands. He is as famous for his mental game as his technical skill.',
+          signatureCatch: 'A sensational 53lb common from the Black Swan, landed on a last-chance rig in a televised final.',
+          competitionsWon: ['Carp Challenge TV Winner 2015', 'Pressure Cup 2018', 'Angling Masters 2020'],
+          notableWaters: ['Black Swan', 'Rashs', 'Lessers'],
+          techniques: ['Televised Tactics', 'Boilie Rigs', 'Mental Preparation'],
+          legacy: 'Set the benchmark for performing under camera pressure. His mental preparation routines are now standard for elite television match anglers.' },
+        { id: 23, name: 'Keith Jenkins',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 4,  socialMedia: 3, category: 'Professional',
+          bio: 'A retired steelworker with a lifelong love of low-cost, low-tech fishing, Keith Jenkins proves you do not need expensive tackle to catch specimen carp. His sessions are powered by patience and local knowledge.',
+          signatureCatch: 'A personal best 40lb common from a council-run lake, caught on a simple ledger rig.',
+          competitionsWon: ['Grassroots Angler of the Year 2017'],
+          notableWaters: ['Council Lake', 'Darnall Park', 'Tinsley Marina'],
+          techniques: ['Ledgering', 'Bread Crust', 'Worm Fishing'],
+          legacy: 'Championed accessible, low-cost carp fishing for working-class anglers. His community tackle-sharing scheme continues to help new anglers get started.' },
+        { id: 24, name: 'Paul Forward',     preferred: ['running','still'],           disliked: ['estate_lake'], budget: 30, skill: 5,  socialMedia: 4, category: 'Professional',
+          bio: 'A logistics manager by trade and a tactical planner by obsession, Paul Forward treats every session like a military operation. His pre-session planning and baiting strategies are considered next level.',
+          signatureCatch: 'A 48lb mirror from a venue he mapped himself, caught on a D method feeder.',
+          competitionsWon: ['Logistics League 2018', 'Tactical Plan Cup 2020', 'National Pre-bait Championship 2022'],
+          notableWaters: ['Planned Lake', 'Orchard', 'Silsoe'],
+          techniques: ['D Method Feeders', 'Mapping', 'Pre-baiting Plans'],
+          legacy: 'Turned session planning into a competitive science. His logistical maps and baiting schedules are now templates for serious UK carp anglers.' },
         {id: 28, name: 'Amature Angler 1', preferred: ['still','running'], disliked: ['estate_lake'], budget: 17, skill: 2, socialMedia: 0, category: 'Amature' },
         {id: 29, name: 'Amature Angler 2', preferred: ['running','estate_lake'], disliked: ['still'], budget: 12, skill: 5, socialMedia: 0, category: 'Amature' },
         {id: 30, name: 'Amature Angler 3', preferred: ['estate_lake','still'], disliked: ['running'], budget: 16, skill: 1, socialMedia: 0, category: 'Amature' },
@@ -675,7 +813,9 @@ const Anglers = (function () {
             if (isBooked) {
                 html += '<div class="angler-status-tag">Currently Booked</div>';
             }
-            html += '<button class="angler-more-btn" onclick="Anglers.showAnglerDetails(' + angler.id + ')">More Info</button>';
+            if (angler.category !== 'Amature') {
+                html += '<button class="angler-more-btn" onclick="Anglers.showAnglerDetails(' + angler.id + ')">More Info</button>';
+            }
             html += '</div>';
         });
         html += '</div>';
@@ -1382,6 +1522,35 @@ const Anglers = (function () {
         html += '<h4>Likes</h4><p>' + angler.preferred.map(formatWaterType).join(', ') + '</p>';
         html += '<h4>Dislikes</h4><p>' + angler.disliked.map(formatWaterType).join(', ') + '</p>';
         html += '</div>';
+
+        // Show player quests if viewing your own angler
+        var state = Game.getState();
+        if (state.playerAnglerId === angler.id && state.anglerQuests && state.anglerQuests.length) {
+            html += '<div style="margin-top:1rem;border-top:1px solid var(--colour-border);padding-top:0.75rem;">';
+            html += '<h4 style="margin:0 0 0.6rem;font-size:0.95rem;color:var(--colour-gold);">🎯 Your Quests</h4>';
+            html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
+            state.anglerQuests.forEach(function(q) {
+                var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
+                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
+                var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
+                html += '<div class="angler-quest-card ' + statusClass + '">';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
+                html += '<div style="font-weight:700;">' + q.title + '</div>';
+                html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);">' + statusText + '</div>';
+                html += '</div>';
+                html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin:0.35rem 0 0.4rem;">' + q.description + '</div>';
+                html += '<div class="quest-bar-track"><div class="quest-bar-fill" style="width:' + pct + '%;background:' + (q.completed ? 'var(--colour-accent)' : 'linear-gradient(90deg,#f1c40f,#e67e22)') + ';"></div></div>';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-top:0.35rem;">';
+                html += '<span style="font-size:0.75rem;">' + q.progress + ' / ' + q.required + '</span>';
+                if (q.completed && !q.claimed) {
+                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');UI.hideModal();">Claim</button>';
+                }
+                html += '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+        }
 
         html += '<button class="btn btn-secondary" onclick="UI.hideModal()">Close</button>';
         html += '</div>';

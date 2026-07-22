@@ -272,3 +272,153 @@
   font-size: 0.82rem;
   color: #fff;
 }
+
+/* === Enhanced Angler Detail Modal === */
+.angler-detail-modal {
+  max-width: 520px;
+  width: 100%;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 40%, transparent 70%),
+    radial-gradient(circle at 50% 20%, rgba(160,200,140,0.18), transparent 55%),
+    radial-gradient(circle at 50% 110%, rgba(0,0,0,0.75), transparent 55%),
+    var(--colour-card, #122818);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 1rem 1.1rem 1.2rem;
+  box-shadow: 0 18px 42px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+  color: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.angler-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+.angler-detail-title h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.angler-detail-photo-wrap {
+  flex: 0 0 auto;
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.angler-detail-photo,
+.angler-detail-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: top center;
+  display: block;
+}
+.angler-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.angler-bio {
+  color: #f6cce0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+  border-left: 3px solid rgba(255,255,255,0.2);
+  padding-left: 0.6rem;
+}
+.angler-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+.angler-stat-box {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.angler-stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f6cce0;
+}
+.angler-stat-val {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #fff;
+}
+.angler-detail-section {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+}
+.angler-detail-section h4 {
+  margin: 0 0 0.3rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f6cce0;
+}
+.angler-detail-section p,
+.angler-detail-section li {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: #fff;
+}
+.angler-detail-section ul {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.angler-legacy {
+  border-color: rgba(241,196,15,0.35);
+  background:
+    linear-gradient(180deg, rgba(241,196,15,0.08), rgba(0,0,0,0.25));
+}
+
+/* === Angler Quest Cards === */
+.angler-quest-card {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 0.6rem 0.7rem;
+  border-left: 4px solid rgba(255,255,255,0.25);
+}
+.angler-quest-card.quest-active {
+  border-left-color: rgba(241,196,15,0.85);
+}
+.angler-quest-card.quest-complete {
+  border-left-color: rgba(46,204,113,0.95);
+}
+.angler-quest-card.quest-claimed {
+  border-left-color: rgba(255,255,255,0.2);
+  opacity: 0.8;
+}
+.quest-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0.35rem 0 0.2rem;
+}
+.quest-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
