@@ -546,6 +546,8 @@ const Dashboard = (function () {
         } else {
             html += '<p class="empty-state">No fish yet.</p>';
         }
+        html += '<h4 style="margin-top:1rem;margin-bottom:0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏞 Lake Summary</h4>';
+        html += renderLakeSummaryTiles(state);
         html += '</div>';
         html += '</div>';
 
@@ -1269,6 +1271,15 @@ const Dashboard = (function () {
     // ── Your Angler card ──────────────────────────────────────────────────────
     function renderYourAnglerCard(state) {
         var html = '<h3 class="section-heading" style="margin-top:0;">🎣 Your Angler</h3>';
+        
+        // Ensure anglerQuests state exists
+        if (!state.anglerQuests) state.anglerQuests = [];
+        
+        // Auto-generate quests if angler selected but no quests yet
+        if (state.playerAnglerId && state.anglerQuests.length === 0 && typeof Anglers !== 'undefined') {
+            Anglers.generateAnglerQuests();
+        }
+        
         var angler = null;
         if (state.playerAnglerId && typeof Anglers !== 'undefined' && typeof Anglers.getAnglerById === 'function') {
             angler = Anglers.getAnglerById(state.playerAnglerId);
@@ -1345,6 +1356,35 @@ const Dashboard = (function () {
         html += '<div class="angler-stat-badge">Leaderboard: ' + leaderboardText + '</div>';
         html += '<div class="angler-stat-badge">Social Media: ' + angler.socialMedia + '/10</div>';
         html += '</div>';
+
+        // Quests section
+        var quests = state.anglerQuests || [];
+        if (quests.length > 0) {
+            html += '<div style="margin-top:1rem;border-top:1px solid var(--colour-border);padding-top:0.75rem;">';
+            html += '<h4 style="margin:0 0 0.6rem;font-size:0.95rem;color:var(--colour-gold);">🎯 Quests</h4>';
+            html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
+            quests.forEach(function(q) {
+                var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
+                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
+                var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
+                html += '<div class="angler-quest-card ' + statusClass + '">';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
+                html += '<div style="font-weight:700;">' + q.title + '</div>';
+                html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);">' + statusText + '</div>';
+                html += '</div>';
+                html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin:0.35rem 0 0.4rem;">' + q.description + '</div>';
+                html += '<div class="quest-bar-track"><div class="quest-bar-fill" style="width:' + pct + '%;background:' + (q.completed ? 'var(--colour-accent)' : 'linear-gradient(90deg,#f1c40f,#e67e22)') + ';"></div></div>';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-top:0.35rem;">';
+                html += '<span style="font-size:0.75rem;">' + q.progress + ' / ' + q.required + '</span>';
+                if (q.completed && !q.claimed) {
+                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');refreshDashboard();">Claim</button>';
+                }
+                html += '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+        }
 
         html += '</div></div>';
         return html;
@@ -2217,11 +2257,41 @@ const Dashboard = (function () {
         return html;
     }
 
+    function renderLakeSummaryTiles(state) {
+        var html = '<div class="lake-summary-grid">';
+        var owned = state.ownedLakes || [];
+        if (owned.length === 0) {
+            html += '<p class="empty-state">No lakes owned yet. Visit Buy Lakes to expand your fishery.</p>';
+            html += '</div>';
+            return html;
+        }
+
+        owned.forEach(function(lakeId) {
+            var lake = (typeof Lakes !== 'undefined' && Lakes.getLakeById) ? Lakes.getLakeById(lakeId) : null;
+            if (!lake) return;
+            var lakeFish = state.fish.filter(function(f){ return f.alive && f.lake_id === lakeId; });
+            var expBonus = (typeof Lakes !== 'undefined' && Lakes.getLakeExpansionBonus) ? Lakes.getLakeExpansionBonus(lakeId) : { capacity:0 };
+            var effectiveCap = lake.capacity + (expBonus.capacity || 0);
+
+            html += '<div class="lake-summary-tile">';
+            html += '<div class="lake-summary-name">' + lake.name + '</div>';
+            html += '<div class="lake-summary-meta">Owned</div>';
+            html += '<div class="lake-summary-stats">';
+            html += '<div><span class="lake-summary-value">' + lakeFish.length + '</span><span class="lake-summary-label">Fish</span></div>';
+            html += '<div><span class="lake-summary-value">' + effectiveCap + '</span><span class="lake-summary-label">Capacity</span></div>';
+            html += '</div>';
+            html += '</div>';
+        });
+
+        html += '</div>';
+        return html;
+    }
 
     return {
         initState: initState,
         checkQuests: checkQuests,
         renderDashboard: renderDashboard,
+        refreshDashboard: renderDashboard,
         renderWeatherCard: renderWeatherCard,
         showDashTab: showDashTab,
         showFinanceTab: showFinanceTab,

@@ -322,6 +322,44 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+/* === Lake Summary Tiles === */
+.lake-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+.lake-summary-tile {
+    background: var(--colour-card);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--colour-border);
+    box-shadow: var(--shadow);
+}
+.lake-summary-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--colour-accent);
+}
+.lake-summary-meta {
+    font-size: 0.78rem;
+    color: var(--colour-text-muted);
+    margin: 0.15rem 0 0.5rem;
+}
+.lake-summary-stats {
+    display: flex;
+    gap: 1rem;
+}
+.lake-summary-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+}
+.lake-summary-label {
+    font-size: 0.75rem;
+    color: var(--colour-text-muted);
+    margin-left: 0.25rem;
+}
+
 .lake-card.owned {
     border-color: var(--colour-accent);
     background: var(--colour-owned);
