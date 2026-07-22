@@ -28,7 +28,13 @@ const Anglers = (function () {
      * UK-style angler names.
      */
     const ANGLER_POOL = [
-        { id: 1,  name: 'Rod Hutchison',    preferred: ['still', 'estate_lake'],     disliked: ['running'],     budget: 35, skill: 7,  socialMedia: 5,  photo: 'img/anglers/rod-hutchison.png', category: 'Professional' },
+        { id: 1,  name: 'Rod Hutchinson',   preferred: ['still', 'estate_lake'],     disliked: ['running'],     budget: 35, skill: 7,  socialMedia: 5,  photo: 'img/anglers/rod-hutchison.png', category: 'Professional',
+          bio: 'One of the true legends of modern carp fishing. Rod pioneered particle fishing, bolt rigs, and synthetic bait flavours in the 1970s, reshaping how carp were targeted across Europe. A prolific writer and storyteller, his books and magazine columns inspired generations of anglers.',
+          signatureCatch: 'A legendary 55lb mirror from Redmire Pool, fished using his own particle approach.',
+          competitionsWon: ['National Angling Champion 1982', 'Redmire Syndicate Memorial 1978', 'European Carp Cup 1991'],
+          notableWaters: ['Redmire Pool', 'Savay Lake', 'Pinetrees', 'North Harrow Colne Valley'],
+          techniques: ['Particle Fishing', 'Bolt Rigs', 'Hair Rigs', 'Boilie Innovation'],
+          legacy: 'Coined the phrase "where dreams are still alive." Revolutionised carp bait with Scopex, Monster Crab, and Robin Red. Credited with the first 12ft carp rod and the first written insight into fresh-wind carp movement.' },
         { id: 2,  name: 'Steve Briggs',     preferred: ['gravel_pit','estate_lake'],  disliked: ['still'],       budget: 50, skill: 9,  socialMedia: 8,  photo: 'img/anglers/steve-briggs.png', category: 'Professional' },
         { id: 3,  name: 'Terry Hearn',      preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 60, skill: 10, socialMedia: 10, targetHunter: true,  photo: 'img/anglers/terry-hearn.png', category: 'Professional' },
         { id: 4,  name: 'Ian Russell',      preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 30, skill: 6,  socialMedia: 4,  photo: 'img/anglers/ian-russell.png', category: 'Professional' },
@@ -52,9 +58,6 @@ const Anglers = (function () {
         { id: 22, name: 'Ian Chillcott',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7, category: 'Professional' },
         { id: 23, name: 'Keith Jenkins',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 4,  socialMedia: 3, category: 'Professional' },
         { id: 24, name: 'Paul Forward',     preferred: ['running','still'],           disliked: ['estate_lake'], budget: 30, skill: 5,  socialMedia: 4, category: 'Professional' },
-        { id: 25, name: 'Jeffrey Curry',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 55, skill: 9,  socialMedia: 6, category: 'Professional' },
-        { id: 26, name: 'Lee Warner',       preferred: ['still','gravel_pit'],        disliked: ['estate_lake'], budget: 40, skill: 7,  socialMedia: 7, category: 'Professional' },
-        { id: 27, name: 'Ste Black',        preferred: ['running','gravel_pit'],      disliked: ['still'],       budget: 45, skill: 8,  socialMedia: 8,  targetHunter: true, category: 'Professional' },
         {id: 28, name: 'Amature Angler 1', preferred: ['still','running'], disliked: ['estate_lake'], budget: 17, skill: 2, socialMedia: 0, category: 'Amature' },
         {id: 29, name: 'Amature Angler 2', preferred: ['running','estate_lake'], disliked: ['still'], budget: 12, skill: 5, socialMedia: 0, category: 'Amature' },
         {id: 30, name: 'Amature Angler 3', preferred: ['estate_lake','still'], disliked: ['running'], budget: 16, skill: 1, socialMedia: 0, category: 'Amature' },
@@ -657,7 +660,7 @@ const Anglers = (function () {
             html += '<div class="angler-card' + (isBooked ? ' angler-booked' : '') + '">';
             html += '<div class="angler-card-name">' + angler.name + '</div>' +
                 ('<span class="angler-category-badge ' + (angler.category === 'Amature' ? 'cat-amature' : 'cat-professional') + '">' + (angler.category || 'Professional') + '</span>');
-            html += '<div class="angler-photo-slot">' + (angler.photo ? '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" loading="lazy"/>' : '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + '</div>') + '</div>';
+            html += '<div class="angler-photo-slot">' + (angler.category !== 'Amature' && angler.photo ? '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" loading="lazy"/>' : angler.category !== 'Amature' ? '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + '</div>' : '') + '</div>';
             html += '<div class="angler-card-info">';
             html += '<span class="angler-skill-badge">Skill ' + angler.skill + '/10</span>';
             html += '<span class="angler-social-badge" style="color:' + (angler.socialMedia >= 8 ? '#f1c40f' : angler.socialMedia >= 6 ? '#2ecc71' : '#aaa') + ';">\uD83D\uDCF1 ' + angler.socialMedia + '/10</span>';
@@ -672,7 +675,7 @@ const Anglers = (function () {
             if (isBooked) {
                 html += '<div class="angler-status-tag">Currently Booked</div>';
             }
-            html += '<button class="angler-more-btn">More Info</button>';
+            html += '<button class="angler-more-btn" onclick="Anglers.showAnglerDetails(' + angler.id + ')">More Info</button>';
             html += '</div>';
         });
         html += '</div>';
@@ -906,6 +909,10 @@ const Anglers = (function () {
                 stats.biggestFishOz = caught.weight_oz;
             }
         }
+
+        if (typeof updateAnglerQuestProgress === 'function') {
+            updateAnglerQuestProgress();
+        }
     }
 
     function recordMatchResult(matchBooking) {
@@ -925,6 +932,10 @@ const Anglers = (function () {
         }
         state.anglerStats[winnerAngler.name].wins++;
         state.anglerStats[winnerAngler.name].winnings += winner;
+
+        if (typeof updateAnglerQuestProgress === 'function') {
+            updateAnglerQuestProgress();
+        }
 
         // Fishery receives cut
         state.money         += fishery;
@@ -1281,7 +1292,7 @@ const Anglers = (function () {
         function renderAnglerCard(angler, isBooked, suffix) {
             var c = "<div class='angler-card" + (isBooked ? " angler-booked" : "") + "'>" +
                 "<div class='angler-card-name'>" + angler.name + (suffix || "") + "</div>" +
-                "<div class='angler-photo-slot'>" + (angler.photo ? "<img src='" + angler.photo + "' alt='" + angler.name + "' class='angler-photo-img' loading='lazy'/>" : "<div class='angler-photo-placeholder'>" + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + "</div>") + "</div>" +
+                (angler.category !== 'Amature' ? ("<div class='angler-photo-slot'>" + (angler.photo ? "<img src='" + angler.photo + "' alt='" + angler.name + "' class='angler-photo-img' loading='lazy'/>" : "<div class='angler-photo-placeholder'>" + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + "</div>") + "</div>" + "\n                ") : "") +
                 "<div class='angler-card-info'>" +
                     "<span class='angler-skill-badge'>Skill " + angler.skill + "/10</span>" +
                     "<span class='angler-social-badge' style='color:" + (angler.socialMedia >= 8 ? '#f1c40f' : angler.socialMedia >= 6 ? '#2ecc71' : '#aaa') + ";'>" + angler.socialMedia + "/10</span>" +
@@ -1321,6 +1332,146 @@ const Anglers = (function () {
         return html;
     }
 
+    function showAnglerDetails(anglerId) {
+        var angler = getAnglerById(anglerId);
+        if (!angler) return;
+
+        var catClass = angler.category === 'Amature' ? 'cat-amature' : 'cat-professional';
+        var photoHtml = '';
+        if (angler.category !== 'Amature' && angler.photo) {
+            photoHtml = '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-detail-photo"/>';
+        } else if (angler.category !== 'Amature') {
+            photoHtml = '<div class="angler-photo-placeholder angler-detail-photo">' + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + '</div>';
+        }
+
+        var html = '<div class="angler-detail-modal">';
+        html += '<div class="angler-detail-header">';
+        html += '<div class="angler-detail-title"><h2>' + angler.name + '</h2><span class="angler-category-badge ' + catClass + '">' + (angler.category || 'Professional') + '</span></div>';
+        html += '<div class="angler-detail-photo-wrap">' + photoHtml + '</div>';
+        html += '</div>';
+
+        html += '<div class="angler-detail-body">';
+
+        if (angler.bio) {
+            html += '<p class="angler-bio">' + angler.bio + '</p>';
+        }
+
+        html += '<div class="angler-stats-grid">';
+        html += '<div class="angler-stat-box"><span class="angler-stat-label">Skill</span><span class="angler-stat-val">' + angler.skill + '/10</span></div>';
+        html += '<div class="angler-stat-box"><span class="angler-stat-label">Social</span><span class="angler-stat-val" style="color:' + (angler.socialMedia >= 8 ? '#f1c40f' : angler.socialMedia >= 6 ? '#2ecc71' : '#aaa') + ';\">' + angler.socialMedia + '/10</span></div>';
+        html += '<div class="angler-stat-box"><span class="angler-stat-label">Budget</span><span class="angler-stat-val">' + UI.formatMoney(angler.budget) + '/day</span></div>';
+        html += '</div>';
+
+        if (angler.signatureCatch) {
+            html += '<div class="angler-detail-section"><h4>Signature Catch</h4><p>' + angler.signatureCatch + '</p></div>';
+        }
+        if (angler.competitionsWon && angler.competitionsWon.length) {
+            html += '<div class="angler-detail-section"><h4>Competitions Won</h4><ul>' + angler.competitionsWon.map(function (c) { return '<li>' + c + '</li>'; }).join('') + '</ul></div>';
+        }
+        if (angler.notableWaters && angler.notableWaters.length) {
+            html += '<div class="angler-detail-section"><h4>Notable Waters</h4><p>' + angler.notableWaters.join(', ') + '</p></div>';
+        }
+        if (angler.techniques && angler.techniques.length) {
+            html += '<div class="angler-detail-section"><h4>Techniques</h4><p>' + angler.techniques.join(', ') + '</p></div>';
+        }
+        if (angler.legacy) {
+            html += '<div class="angler-detail-section angler-legacy"><h4>Legacy</h4><p>' + angler.legacy + '</p></div>';
+        }
+
+        html += '<div class="angler-detail-section">';
+        html += '<h4>Likes</h4><p>' + angler.preferred.map(formatWaterType).join(', ') + '</p>';
+        html += '<h4>Dislikes</h4><p>' + angler.disliked.map(formatWaterType).join(', ') + '</p>';
+        html += '</div>';
+
+        html += '<button class="btn btn-secondary" onclick="UI.hideModal()">Close</button>';
+        html += '</div>';
+        html += '</div>';
+
+        UI.showModal(html);
+    }
+
+    function generateAnglerQuests() {
+        var state = Game.getState();
+        if (!state.playerAnglerId) return;
+        if (!state.anglerQuests) state.anglerQuests = [];
+        if (state.anglerQuests.length > 0) return;
+
+        var angler = getAnglerById(state.playerAnglerId);
+        if (!angler) return;
+
+        var qid = 1;
+        var skill = typeof angler.skill === 'number' ? angler.skill : 5;
+        var baseCatchTarget = 20 + skill * 5;
+        var baseWinTarget = 5 + skill;
+        var prizeTarget = 3000 + skill * 1000;
+
+        state.anglerQuests.push({
+            id: qid++, title: 'Catch ' + baseCatchTarget + ' Fish',
+            description: 'Accumulate ' + baseCatchTarget + ' total catches across your fishery.',
+            target: 'fishCaught', required: baseCatchTarget, progress: 0,
+            rewardMoney: 500, rewardRep: 25, completed: false, claimed: false
+        });
+        state.anglerQuests.push({
+            id: qid++, title: 'Win ' + baseWinTarget + ' Matches',
+            description: 'Win ' + baseWinTarget + ' angling matches to build reputation.',
+            target: 'wins', required: baseWinTarget, progress: 0,
+            rewardMoney: 1000, rewardRep: 50, completed: false, claimed: false
+        });
+        state.anglerQuests.push({
+            id: qid++, title: 'Prize Winner (£' + prizeTarget.toLocaleString() + ')',
+            description: 'Earn £' + prizeTarget.toLocaleString() + ' in tournament winnings.',
+            target: 'winnings', required: prizeTarget, progress: 0,
+            rewardMoney: prizeTarget * 0.1, rewardRep: 35, completed: false, claimed: false
+        });
+        if (angler.skill >= 7) {
+            state.anglerQuests.push({
+                id: qid++, title: '10lb Trophy',
+                description: 'Land a fish over 160 oz as your biggest catch.',
+                target: 'biggestFishOz', required: 160, progress: 0,
+                rewardMoney: 2000, rewardRep: 75, completed: false, claimed: false
+            });
+        }
+
+        // Try to grant immediate progress based on current anglerStats if present
+        updateAnglerQuestProgress();
+    }
+
+    function updateAnglerQuestProgress() {
+        var state = Game.getState();
+        if (!state.anglerQuests || state.anglerQuests.length === 0 || !state.playerAnglerId) return;
+        var angler = getAnglerById(state.playerAnglerId);
+        if (!angler) return;
+        var stats = (state.anglerStats || {})[angler.name] || { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0 };
+        state.anglerQuests.forEach(function(q) {
+            if (q.completed) return;
+            q.progress = stats[q.target] || 0;
+            if (q.progress >= q.required) {
+                q.completed = true;
+            }
+        });
+    }
+
+    function claimAnglerQuest(questId) {
+        var state = Game.getState();
+        if (!state.anglerQuests) return;
+        var quest = state.anglerQuests.find(function(q){ return q.id === questId; });
+        if (!quest || !quest.completed || quest.claimed) return;
+        quest.claimed = true;
+        state.money += quest.rewardMoney;
+        state.reputation += quest.rewardRep;
+        if (typeof Finance !== 'undefined') {
+            var logEntry = {
+                day: state.day,
+                type: 'angler_quest',
+                description: 'Quest reward: ' + quest.title,
+                amount: quest.rewardMoney,
+                balance: state.money
+            };
+            if (!state.financeLog) state.financeLog = [];
+            state.financeLog.push(logEntry);
+        }
+    }
+
     return {
         initState: initState,
         getAnglerById: getAnglerById,
@@ -1345,7 +1496,11 @@ const Anglers = (function () {
             state.tournamentCut = Math.max(0.05, Math.min(0.50, parseInt(pct) / 100));
             Game.saveToStorage();
             renderAnglers();
-        }
+        },
+        showAnglerDetails: showAnglerDetails,
+        generateAnglerQuests: generateAnglerQuests,
+        updateAnglerQuestProgress: updateAnglerQuestProgress,
+        claimAnglerQuest: claimAnglerQuest
     };
 })();
 window.Anglers = Anglers;
