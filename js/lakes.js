@@ -13,22 +13,6 @@ const Lakes = (function () {
      */
     const LAKE_DEFINITIONS = [
         {
-            id: 'willow_pool',
-            name: 'Willow Pool',
-            county: 'Surrey',
-            cost: 0,
-            wealthRequired: 0,
-            capacity: 70,
-            waterType: 'still',
-            biodiversityScore: 5,
-            dailyIncomePerAngler: 25,
-            description: 'A small, sheltered pool surrounded by willows. Your starting venue with modest stock.',
-            buffs: {
-                positive: { growthBonus: 0.05, summary: 'Sheltered waters → +5% fish growth' },
-                negative: { predatorChance: 0.02, summary: 'Shallow margins → +2% predator loss risk' }
-            }
-        },
-        {
             id: 'oakmere_lake',
             name: 'Oakmere Lake',
             county: 'Cheshire',
@@ -1113,7 +1097,6 @@ const Lakes = (function () {
         }
 
         var FISH_PROFILES = {
-            willow_pool:      { count: 20, topRarity: 'Uncommon'  },
             oakmere_lake:     { count: 25, topRarity: 'Uncommon'  },
             kingfisher_waters:{ count: 30, topRarity: 'Rare'      },
             linch_hill:       { count: 35, topRarity: 'Rare'      },
@@ -1165,7 +1148,6 @@ const Lakes = (function () {
         };
 
         var LAKE_FONTS = {
-            willow_pool:       "'Georgia', serif",
             oakmere_lake:      "'Palatino Linotype', 'Palatino', serif",
             kingfisher_waters: "'Trebuchet MS', sans-serif",
             linch_hill:        "'Garamond', 'Book Antiqua', serif",

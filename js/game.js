@@ -64,6 +64,7 @@ const Game = (function () {
         lakeExpansions: {},
         sponsorships: [],
         anglerStats: {},
+        anglerQuests:    [],
         matchResults: [],
         tournamentCut: 0.20,
         nextSponsorshipId: 1,

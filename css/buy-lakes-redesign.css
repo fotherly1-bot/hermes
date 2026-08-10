@@ -175,7 +175,6 @@
     background: linear-gradient(180deg, rgba(60, 130, 80, 0.2) 0%, rgba(30, 80, 50, 0.4) 100%);
 }
 
-.lake-water-effect.willow_pool { background: linear-gradient(180deg, rgba(40, 120, 70, 0.3) 0%, rgba(25, 70, 40, 0.5) 100%); }
 .lake-water-effect.oakmere_lake { background: linear-gradient(180deg, rgba(50, 130, 90, 0.35) 0%, rgba(30, 80, 55, 0.55) 100%); }
 .lake-water-effect.kingfisher_waters { background: linear-gradient(180deg, rgba(60, 140, 110, 0.3) 0%, rgba(35, 90, 70, 0.5) 100%); }
 .lake-water-effect.linch_hill { background: linear-gradient(180deg, rgba(70, 120, 90, 0.25) 0%, rgba(40, 80, 60, 0.45) 100%); }
