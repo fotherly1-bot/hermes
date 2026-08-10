@@ -161,7 +161,7 @@ const Anglers = (function () {
           notableWaters: ['Commercial Match Lake', 'Topcliffe', 'Avenue'],
           techniques: ['Boilie Experimentation', 'Method Feeders', 'Glugging'],
           legacy: 'Turned bait science into a credible competitive edge. His published boilie recipes remain reference works for serious specimen anglers.' },
-        { id: 20, name: 'Adam Penning',     preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5, category: 'Professional',
+        { id: 20, name: 'Adam Penning',     preferred: ['running','gravel_pit'],      disliked: ['estate_lake'], budget: 35, skill: 6,  socialMedia: 5,  photo: 'img/anglers/adampenning12.png', category: 'Professional',
           bio: 'Quiet and intensely private, Adam Penning lets his catches speak louder than any interview. He is one of the UKs most elusive big-fish specialists, with a decades-long track record of rarely sharing swims.',
           signatureCatch: 'A 57lb mirror from the fabled Syndicate X, caught on a light pop-up rig.',
           competitionsWon: ['Syndicate Grand Slam 2019', 'UK Specimen Prize 2021'],
