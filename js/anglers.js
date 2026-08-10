@@ -168,7 +168,7 @@ const Anglers = (function () {
           notableWaters: ['Syndicate X', 'Grovers', 'St Ives Estate'],
           techniques: ['Light Pop-ups', 'Stalking', 'Single Hookbaits'],
           legacy: 'His secretive big-fish methodology inspired a generation of low-profile specimen hunters. Many of today\'s top secrets originated from his shadow.' },
-        { id: 21, name: 'Gary Bayes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 45, skill: 7,  socialMedia: 4, category: 'Professional',
+        { id: 21, name: 'Gary Bayes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 45, skill: 7,  socialMedia: 4,  photo: 'img/anglers/garrybayes112.png', category: 'Professional',
           bio: 'A former national coach turned TV analyst, Gary Bayes dissects carp behaviour with a clinical eye. His broadcast commentary has educated millions while he still finds time to fish internationally.',
           signatureCatch: 'A 45lb Wels catfish from the Danube, caught on a livebait setup.',
           competitionsWon: ['International Coach of the Year 2014', 'European Analysts Cup 2017', 'Danube Derby 2020'],
