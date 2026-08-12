@@ -758,7 +758,7 @@ const Anglers = (function () {
         if (activeBookings.length === 0) {
             html += '<p class="empty-state">No active bookings. Advance a day to generate new ones.</p>';
         } else {
-            html += '<div class="active-bookings-list">';
+            html += '<div class="active-bookings-list" style="max-height:400px;overflow-y:auto;">';
             activeBookings.forEach(function (booking) {
                 var lake     = Lakes.getLakeById(booking.lakeId);
                 var angler   = getAnglerById(booking.anglerId);
@@ -1445,6 +1445,7 @@ const Anglers = (function () {
                     "<span class='pref-label'>Dislikes:</span> " + angler.disliked.map(formatWaterType).join(', ') +
                 "</div>" +
                 (isBooked ? "<div class='angler-status-tag'>Currently Booked</div>" : "") +
+                (angler.category !== 'Amature' ? "<button class='angler-more-btn' onclick=\"Anglers.showAnglerDetails(" + angler.id + ")\">More Info</button>" : "") +
             "</div>";
             return c;
         }
