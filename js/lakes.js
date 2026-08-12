@@ -1264,7 +1264,7 @@ const Lakes = (function () {
                 }
             }
             
-            var t = '<div class="' + cls + '" onclick="Lakes.selectBuyLake(\'' + lake.id + '\')">' +
+            var t = '<div class="' + cls + '" onclick="' + (isOwned ? "UI.switchTab('lakes')" : "Lakes.selectBuyLake('" + lake.id + "')") + '">' +
                 '<div class="lake-card-visual">' +
                     '<div class="lake-water-effect ' + lake.id + '"></div>' +
                     (lake.id === 'monks_mere' ? '<img src="img/lakes/monks_mere.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
@@ -1286,7 +1286,9 @@ const Lakes = (function () {
             t += '<div class="lake-card-footer">';
             t += '<div class="lake-card-description">' + shortDesc + '</div>';
             t += '<span class="lake-card-price">' + (isOwned ? 'Owned' : (lake.cost > 0 ? UI.formatMoney(lake.cost) : 'Free')) + '</span>';
-            if (!isOwned && !isLocked) {
+            if (isOwned) {
+                t += '<button class="btn btn-primary btn-tile-buy" onclick="event.stopPropagation();UI.switchTab(\'lakes\')">Manage Lake</button>';
+            } else if (!isLocked) {
                 t += '<button class="btn btn-primary btn-tile-buy" onclick="event.stopPropagation();Lakes.buyLake(\'' + lake.id + '\')">Buy</button>';
             }
             t += '</div>';
@@ -1346,9 +1348,6 @@ const Lakes = (function () {
             html += '<div class="blv-grid">';
             owned.forEach(function (l) { html += tileHtml(l, false, true); });
             html += '</div>';
-            if (_buyLakeId && owned.some(function (l) { return l.id === _buyLakeId; })) {
-                html += detailHtml(_buyLakeId);
-            }
         }
         if (available.length > 0) {
             html += '<h3 class="lakes-section-heading">Available to Purchase</h3>';
