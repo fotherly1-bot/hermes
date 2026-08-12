@@ -175,7 +175,7 @@ const Anglers = (function () {
           notableWaters: ['Danube River', 'Walthamstow', 'Raven Ait'],
           techniques: ['Livebaiting', 'Euro-style Rigs', 'Fish Radar'],
           legacy: 'Brought scientific analysis to mainstream carp fishing broadcasting. His coaching frameworks are used by national teams across Europe.' },
-        { id: 22, name: 'Ian Chillcott',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7, category: 'Professional',
+        { id: 22, name: 'Ian Chillcott',    preferred: ['gravel_pit','estate_lake'],  disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7,  photo: 'img/anglers/ianchillcott112.png', category: 'Professional',
           bio: 'A pressure-cooker performer, Ian Chillcott thrives in high-stakes televised finals where every cast is watched by thousands. He is as famous for his mental game as his technical skill.',
           signatureCatch: 'A sensational 53lb common from the Black Swan, landed on a last-chance rig in a televised final.',
           competitionsWon: ['Carp Challenge TV Winner 2015', 'Pressure Cup 2018', 'Angling Masters 2020'],
