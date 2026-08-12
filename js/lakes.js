@@ -1261,8 +1261,12 @@ const Lakes = (function () {
                 }
             }
             
-            var t = '<div class="' + cls + '" onclick="Lakes.selectBuyLake(\'' + lake.id + '\')">';
-            t += '<div class="lake-card-header">';
+            var t = '<div class="' + cls + '" onclick="Lakes.selectBuyLake(\'' + lake.id + '\')">' +
+                '<div class="lake-card-visual">' +
+                    '<div class="lake-water-effect ' + lake.id + '"></div>' +
+                    (lake.id === 'monks_mere' ? '<img src="img/lakes/monks_mere.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
+                '</div>' +
+                '<div class="lake-card-header">';
             t += '<div class="lake-card-name-wrapper">';
             t += '<div class="lake-card-name" style="font-family:' + font + ';font-size:1.05rem;">' + wIcon + ' ' + lake.name + '</div>';
             t += '<div class="lake-card-county">' + (lake.county ? '📍 ' + lake.county : '') + '</div>';

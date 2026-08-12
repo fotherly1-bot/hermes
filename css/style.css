@@ -6973,13 +6973,13 @@ details[open] > .lake-accordion-summary::before {
 /* ── Buy Lakes v2 tiles ─────────────────────────────────────── */
 .blv-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
     margin-bottom: 0.5rem;
     align-items: stretch; /* all rows same height */
 }
 
-@media (max-width: 1100px) { .blv-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1100px) { .blv-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width:  750px) { .blv-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width:  480px) { .blv-grid { grid-template-columns: 1fr; } }
 
@@ -8743,12 +8743,23 @@ details[open] > .lake-accordion-summary::before {
 
 /* Card visual - lake illustration */
 .lake-card-visual {
-    height: 120px;
+    height: 160px;
     position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.lake-card-img {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
 }
 
 .lake-water-effect {
