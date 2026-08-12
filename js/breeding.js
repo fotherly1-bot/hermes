@@ -255,7 +255,13 @@ const Breeding = (function () {
                 html += '<span class="breed-parent-card-label" style="color:' + rc + ';">Parent ' + (idx+1) + '</span>';
                 html += '<span class="breed-parent-rarity" style="background:'+rc+'33;color:'+rc+';border:1px solid '+rc+'55;">'+rn+'</span>';
                 html += '</div>';
-                html += '<span style="font-size:2.5rem;opacity:0.85;">\uD83D\uDC1F</span>';
+                html += '<span class="breed-parent-icon">';
+                if (f.species === 'common') {
+                    html += '<img src="img/carp/commoncarp1.png" alt="Common Carp" class="breed-parent-img"/>';
+                } else {
+                    html += '\uD83D\uDC1F';
+                }
+                html += '</span>';
                 html += '</div>';
                 // Body
                 html += '<div class="breed-parent-body">';
