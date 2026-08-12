@@ -1307,7 +1307,8 @@ const Lakes = (function () {
             d += '<div class="lake-detail-header">';
             d += '<div><h3 class="lake-detail-title">' + lake.name + '</h3>';
             d += '<p class="lake-detail-county">' + (COUNTY_EMOJIS[lake.county] || '📍') + ' ' + (lake.county || '') + '</p></div>';
-            d += '<div class="lake-detail-emoji">' + (WATER_EMOJIS[lake.waterType] || '🏞️') + '</div>';
+            d += '<div class="lake-detail-emoji">' + (WATER_TYPE_EMOJIS[lake.waterType] || '🏞️') + '</div>';
+            d += '<button class="lake-detail-close" onclick="event.stopPropagation();Lakes.selectBuyLake(\'' + lakeId + '\')">×</button>';
             d += '</div>';
             d += '<p class="lake-detail-description">' + lake.description + '</p>';
             d += '<div class="lake-detail-grid">';

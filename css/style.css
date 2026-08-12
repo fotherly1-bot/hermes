@@ -8877,6 +8877,22 @@ details[open] > .lake-accordion-summary::before {
     opacity: 0.8;
 }
 
+.lake-detail-close {
+    background: none;
+    border: none;
+    color: var(--colour-text-muted);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+.lake-detail-close:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
 .lake-detail-description {
     font-size: 0.95rem;
     color: var(--colour-text-muted);
