@@ -505,14 +505,15 @@ const Dashboard = (function () {
         renderDashboard();
     }
 
-    function getFishIconHtml(species) {
+    function getFishIconHtml(species, double) {
         var src = '';
         if (species === 'common') src = 'img/carp/commoncarp1.png';
         else if (species === 'grass') src = 'img/carp/grasscarp1.png';
         else if (species === 'mirror') src = 'img/carp/mirrorcarp1.png';
         else if (species === 'leather') src = 'img/carp/leathercarp1.png';
         if (!src) return '';
-        return '<img src="' + src + '" alt="' + (species || 'fish') + '" class="dash-fish-icon" />';
+        var cls = 'dash-fish-icon' + (double ? ' dash-fish-icon--double' : '');
+        return '<img src="' + src + '" alt="' + (species || 'fish') + '" class="' + cls + '" />';
     }
 
     function renderDashboard() {
@@ -1442,7 +1443,7 @@ const Dashboard = (function () {
         return '<div class="dash-fish-feature-card">' +
             '<h4 class="dash-section-subheading">🏆🏆 <span style="font-size:1.4em;">🏆</span> Biggest Fish</h4>' +
             '<div class="dash-fish-feature">' +
-                getFishIconHtml(biggest.species) +
+                getFishIconHtml(biggest.species, true) +
                 '<span class="dash-fish-name">' + biggest.name + '</span>' +
                 '<span class="dash-fish-species">' + sp + '</span>' +
                 '<span class="dash-fish-rarity" style="color:' + rd.colour + ';">' + rd.name + '</span>' +
@@ -1505,7 +1506,7 @@ const Dashboard = (function () {
         return '<div class="dash-fish-feature-card">' +
             '<h4 class="dash-section-subheading">💎💎 <span style="font-size:1.4em;">💎</span> Rarest Fish</h4>' +
             '<div class="dash-fish-feature">' +
-                getFishIconHtml(rarest.species) +
+                getFishIconHtml(rarest.species, true) +
                 '<span class="dash-fish-name">' + rarest.name + '</span>' +
                 '<span class="dash-fish-species">' + sp + '</span>' +
                 '<span class="dash-fish-rarity" style="color:' + rd.colour + ';font-weight:700;font-size:1.1rem;">' + rd.name + '</span>' +

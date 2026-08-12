@@ -9184,6 +9184,9 @@ details[open] > .lake-accordion-summary::before {
     align-self: center;
     margin-bottom: 0.2rem;
 }
+.dash-fish-icon--double {
+    height: 6rem;
+}
 .dash-fish-name {
     font-weight: 700;
     font-size: 1rem;
