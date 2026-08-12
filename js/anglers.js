@@ -182,7 +182,7 @@ const Anglers = (function () {
           notableWaters: ['Black Swan', 'Rashs', 'Lessers'],
           techniques: ['Televised Tactics', 'Boilie Rigs', 'Mental Preparation'],
           legacy: 'Set the benchmark for performing under camera pressure. His mental preparation routines are now standard for elite television match anglers.' },
-        { id: 23, name: 'Keith Jenkins',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 4,  socialMedia: 3, category: 'Professional',
+        { id: 23, name: 'Keith Jenkins',    preferred: ['still','running'],           disliked: ['gravel_pit'],  budget: 25, skill: 4,  socialMedia: 3,  photo: 'img/anglers/keithjenkins1122.png', category: 'Professional',
           bio: 'A retired steelworker with a lifelong love of low-cost, low-tech fishing, Keith Jenkins proves you do not need expensive tackle to catch specimen carp. His sessions are powered by patience and local knowledge.',
           signatureCatch: 'A personal best 40lb common from a council-run lake, caught on a simple ledger rig.',
           competitionsWon: ['Grassroots Angler of the Year 2017'],
