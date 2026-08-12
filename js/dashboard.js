@@ -505,6 +505,16 @@ const Dashboard = (function () {
         renderDashboard();
     }
 
+    function getFishIconHtml(species) {
+        var src = '';
+        if (species === 'common') src = 'img/carp/commoncarp1.png';
+        else if (species === 'grass') src = 'img/carp/grasscarp1.png';
+        else if (species === 'mirror') src = 'img/carp/mirrorcarp1.png';
+        else if (species === 'leather') src = 'img/carp/leathercarp1.png';
+        if (!src) return '';
+        return '<img src="' + src + '" alt="' + (species || 'fish') + '" class="dash-fish-icon" />';
+    }
+
     function renderDashboard() {
         initState();
         var state     = Game.getState();
@@ -674,7 +684,7 @@ const Dashboard = (function () {
         var seasonLabels = { spring: '\uD83C\uDF31 Spring', summer: '\u2600\uFE0F Summer',
                              autumn: '\uD83C\uDF42 Autumn', winter: '\u2744\uFE0F Winter' };
 
-        var html = '<h3>Overview</h3>';
+        var html = '<h3>Overview ' + getFishIconHtml('common') + '</h3>';
 
         html += '<div class="dash-overview-meta">';
         html += '<span>Day <strong>' + state.day + '</strong></span>';
@@ -1432,6 +1442,7 @@ const Dashboard = (function () {
         return '<div class="dash-fish-feature-card">' +
             '<h4 class="dash-section-subheading">🏆🏆 <span style="font-size:1.4em;">🏆</span> Biggest Fish</h4>' +
             '<div class="dash-fish-feature">' +
+                getFishIconHtml(biggest.species) +
                 '<span class="dash-fish-name">' + biggest.name + '</span>' +
                 '<span class="dash-fish-species">' + sp + '</span>' +
                 '<span class="dash-fish-rarity" style="color:' + rd.colour + ';">' + rd.name + '</span>' +
@@ -1494,6 +1505,7 @@ const Dashboard = (function () {
         return '<div class="dash-fish-feature-card">' +
             '<h4 class="dash-section-subheading">💎💎 <span style="font-size:1.4em;">💎</span> Rarest Fish</h4>' +
             '<div class="dash-fish-feature">' +
+                getFishIconHtml(rarest.species) +
                 '<span class="dash-fish-name">' + rarest.name + '</span>' +
                 '<span class="dash-fish-species">' + sp + '</span>' +
                 '<span class="dash-fish-rarity" style="color:' + rd.colour + ';font-weight:700;font-size:1.1rem;">' + rd.name + '</span>' +

@@ -9177,6 +9177,13 @@ details[open] > .lake-accordion-summary::before {
     gap: 0.35rem;
     align-items: flex-start;
 }
+.dash-fish-icon {
+    height: 3rem;
+    width: auto;
+    object-fit: contain;
+    align-self: center;
+    margin-bottom: 0.2rem;
+}
 .dash-fish-name {
     font-weight: 700;
     font-size: 1rem;
