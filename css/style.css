@@ -8749,7 +8749,7 @@ details[open] > .lake-accordion-summary::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
+    background: linear-gradient(135deg, #162210, #1f3016);
 }
 
 .lake-card-img {
