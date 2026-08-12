@@ -258,6 +258,10 @@ const Breeding = (function () {
                 html += '<span class="breed-parent-icon">';
                 if (f.species === 'common') {
                     html += '<img src="img/carp/commoncarp1.png" alt="Common Carp" class="breed-parent-img"/>';
+                } else if (f.species === 'grass') {
+                    html += '<img src="img/carp/grasscarp1.png" alt="Grass Carp" class="breed-parent-img"/>';
+                } else if (f.species === 'mirror') {
+                    html += '<img src="img/carp/mirrorcarp1.png" alt="Mirror Carp" class="breed-parent-img"/>';
                 } else {
                     html += '\uD83D\uDC1F';
                 }
