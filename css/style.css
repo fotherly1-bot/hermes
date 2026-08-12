@@ -8921,6 +8921,90 @@ details[open] > .lake-accordion-summary::before {
     margin-top: 0.25rem;
 }
 
+/* ── Lake Purchase Achievement Modal ─────────────────────────────────────── */
+.lake-achievement-modal {
+    text-align: center;
+    animation: popIn 0.4s ease;
+}
+.lake-achievement-modal .achievement-banner {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    animation: bounceIn 0.6s ease;
+}
+.lake-achievement-modal h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.6rem;
+    color: var(--colour-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.lake-achievement-modal .achievement-subtitle {
+    font-size: 0.95rem;
+    color: var(--colour-text-muted);
+    margin-bottom: 1rem;
+}
+.lake-achievement-modal .achievement-card {
+    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1));
+    border: 2px solid var(--colour-gold);
+    border-radius: 14px;
+    padding: 1.25rem;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+.lake-achievement-modal .achievement-card h3 {
+    margin: 0 0 0.25rem;
+    color: var(--colour-accent);
+    font-size: 1.4rem;
+}
+.lake-achievement-modal .achievement-card .achievement-county {
+    color: var(--colour-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+.lake-achievement-modal .achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+}
+.lake-achievement-modal .achievement-stat {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+}
+.lake-achievement-modal .achievement-stat-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--colour-gold);
+}
+.lake-achievement-modal .achievement-stat-label {
+    font-size: 0.72rem;
+    color: var(--colour-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 0.2rem;
+}
+.lake-achievement-modal .achievement-footer {
+    text-align: center;
+    margin-top: 0.5rem;
+}
+.lake-achievement-modal .achievement-price {
+    font-size: 1.1rem;
+    color: var(--colour-text-muted);
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes bounceIn {
+    0%   { transform: scale(0.3); opacity: 0; }
+    50%  { transform: scale(1.05); opacity: 1; }
+    70%  { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
 /* ── Tournament Styles ──────────────────────────────────────────────────────── */
 .tourney-season-header {
     text-align: center;

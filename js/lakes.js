@@ -873,6 +873,7 @@ const Lakes = (function () {
 
             Game.addReputation(10);
             UI.showToast('You claimed ' + lake.name + ' — pre-stocked with 20 fish!', 'success');
+            showLakeAchievement(lakeId);
             renderLakes();
             UI.renderTopBar();
             return true;
@@ -889,12 +890,77 @@ const Lakes = (function () {
             Game.addReputation(25);
             stockLakeOnPurchase(lakeId, lake);
             UI.showToast('Congratulations! You purchased ' + lake.name + '!', 'success');
+            showLakeAchievement(lakeId);
             renderLakes();
             UI.renderTopBar();
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Show a lake purchase achievement modal.
+     */
+    function showLakeAchievement(lakeId) {
+        var lake = getLakeById(lakeId);
+        if (!lake) return;
+
+        var FISH_PROFILES_LOCAL = {
+            oakmere_lake:      { count: 25, topRarity: 'Uncommon'  },
+            kingfisher_waters: { count: 30, topRarity: 'Rare'      },
+            linch_hill:        { count: 35, topRarity: 'Rare'      },
+            wraysbury:         { count: 45, topRarity: 'Epic'      },
+            yateley:           { count: 55, topRarity: 'Epic'      },
+            redmire_pool:      { count: 45, topRarity: 'Epic'      },
+            savay_lake:        { count: 65, topRarity: 'Legendary' }
+        };
+        var WATER_ICONS_LOCAL = { still: '🪷', running: '🌊', gravel_pit: '⛏️', estate_lake: '🏡' };
+        var LAKE_FONTS_LOCAL = {
+            oakmere_lake:      "'Palatino Linotype', 'Palatino', serif",
+            kingfisher_waters: "'Trebuchet MS', sans-serif",
+            linch_hill:        "'Garamond', 'Book Antiqua', serif",
+            wraysbury:         "'Cambria', 'Times New Roman', serif",
+            yateley:           "'Gill Sans', 'Gill Sans MT', sans-serif",
+            redmire_pool:      "'Baskerville', 'Times New Roman', serif",
+            savay_lake:        "'Impact', 'Arial Black', sans-serif",
+            clearbeck_reservoir:"'Century Gothic', 'Futura', sans-serif",
+            monks_mere:        "'Optima', 'Candara', sans-serif",
+            bradshaw_pits:     "'Arial Narrow', 'Helvetica Neue', sans-serif",
+            cranfield_weir:    "'Perpetua', 'Georgia', serif",
+            harrington_park:   "'Rockwell', 'Courier New', serif",
+            loch_davan:        "'Copperplate', 'Papyrus', fantasy"
+        };
+
+        var fishInfo = FISH_PROFILES_LOCAL[lakeId] || { count: 20, topRarity: 'Common' };
+        var wIcon = WATER_ICONS_LOCAL[lake.waterType] || '🏞️';
+        var font = LAKE_FONTS_LOCAL[lakeId] || "'Georgia', serif";
+        var weekIncome = Math.round(lake.dailyIncomePerAngler * 3 * (lake.biodiversityScore / 10) * 7);
+
+        var html = '<div class="lake-achievement-modal">';
+        html += '<div class="achievement-banner">🏆</div>';
+        html += '<h2>Lake Acquired!</h2>';
+        html += '<p class="achievement-subtitle">You now own ' + lake.name + '</p>';
+        html += '<div class="achievement-card">';
+        html += '<h3 style="font-family:' + font + ';">' + wIcon + ' ' + lake.name + '</h3>';
+        html += '<div class="achievement-county">📍 ' + (lake.county || '') + '</div>';
+        html += '<div class="achievement-grid">';
+        html += '<div class="achievement-stat"><div class="achievement-stat-value">' + lake.capacity + '</div><div class="achievement-stat-label">Capacity</div></div>';
+        html += '<div class="achievement-stat"><div class="achievement-stat-value">' + lake.biodiversityScore + '/10</div><div class="achievement-stat-label">Biodiversity</div></div>';
+        html += '<div class="achievement-stat"><div class="achievement-stat-value">' + fishInfo.count + '</div><div class="achievement-stat-label">Fish Stocked</div></div>';
+        html += '<div class="achievement-stat"><div class="achievement-stat-value">' + UI.formatMoney(weekIncome) + '</div><div class="achievement-stat-label">Weekly Income</div></div>';
+        html += '<div class="achievement-stat"><div class="achievement-stat-value" style="color:#f1c40f;">' + fishInfo.topRarity + '</div><div class="achievement-stat-label">Top Rarity</div></div>';
+        html += '<div class="achievement-stat"><div class="achievement-stat-value">+' + 25 + '</div><div class="achievement-stat-label">Reputation</div></div>';
+        html += '</div>';
+        html += '<p style="font-size:0.9rem;color:var(--colour-text-muted);margin:0.5rem 0 0;">' + lake.description + '</p>';
+        html += '</div>';
+        html += '<div class="achievement-footer">';
+        html += '<div class="achievement-price">' + (lake.cost > 0 ? 'Paid ' + UI.formatMoney(lake.cost) : 'Complimentary Venue') + '</div>';
+        html += '<button class="btn btn-primary" onclick="this.closest(\'.modal-overlay\').remove()" style="margin-top:0.75rem;">Start Fishing</button>';
+        html += '</div>';
+        html += '</div>';
+
+        UI.showModal(html);
     }
 
     /**
