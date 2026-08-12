@@ -956,7 +956,7 @@ const Lakes = (function () {
         html += '</div>';
         html += '<div class="achievement-footer">';
         html += '<div class="achievement-price">' + (lake.cost > 0 ? 'Paid ' + UI.formatMoney(lake.cost) : 'Complimentary Venue') + '</div>';
-        html += '<button class="btn btn-primary" onclick="this.closest(\'.modal-overlay\').remove()" style="margin-top:0.75rem;">Start Fishing</button>';
+        html += '<button class="btn btn-primary" onclick="this.closest(\'.modal-overlay\').remove()" style="margin-top:0.75rem;">Close</button>';
         html += '</div>';
         html += '</div>';
 
