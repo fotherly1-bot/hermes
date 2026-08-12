@@ -1154,11 +1154,12 @@ const Lakes = (function () {
         if (!container) return;
 
         var state     = Game.getState();
+        var owned     = LAKE_DEFINITIONS.filter(function (l) { return getLakeStatus(l) === 'owned'; });
         var available = LAKE_DEFINITIONS.filter(function (l) { return getLakeStatus(l) === 'available'; });
         var locked    = LAKE_DEFINITIONS.filter(function (l) { return getLakeStatus(l) === 'locked'; });
 
-        if (available.length === 0 && locked.length === 0) {
-            container.innerHTML = '<p class="empty-state">\uD83C\uDF89 You own every available lake!</p>';
+        if (owned.length === 0 && available.length === 0 && locked.length === 0) {
+            container.innerHTML = '<p class="empty-state">🎉 You own every available lake!</p>';
             return;
         }
 
@@ -1235,9 +1236,11 @@ const Lakes = (function () {
 
         var BIO_COLS = ['#e74c3c','#e67e22','#f1c40f','#a3cb38','#2ecc71','#1abc9c','#3498db','#9b59b6','#f1c40f','#e74c3c'];
 
-        function tileHtml(lake, isLocked) {
+        function tileHtml(lake, isLocked, isOwned) {
             var isSelected = _buyLakeId === lake.id;
-            var status = isLocked ? 'locked' : 'available';
+            var status = 'locked';
+            if (isOwned) status = 'owned';
+            else if (!isLocked) status = 'available';
             var cls = 'lake-luxury-card ' + status + (isSelected ? ' selected' : '');
             var font    = LAKE_FONTS[lake.id] || "'Georgia', serif";
             var wIcon   = WATER_ICONS[lake.waterType] || '🏞️';
@@ -1282,8 +1285,8 @@ const Lakes = (function () {
             t += buffHtml;
             t += '<div class="lake-card-footer">';
             t += '<div class="lake-card-description">' + shortDesc + '</div>';
-            t += '<span class="lake-card-price">' + (lake.cost > 0 ? UI.formatMoney(lake.cost) : 'Free') + '</span>';
-            if (!isLocked) {
+            t += '<span class="lake-card-price">' + (isOwned ? 'Owned' : (lake.cost > 0 ? UI.formatMoney(lake.cost) : 'Free')) + '</span>';
+            if (!isOwned && !isLocked) {
                 t += '<button class="btn btn-primary btn-tile-buy" onclick="event.stopPropagation();Lakes.buyLake(\'' + lake.id + '\')">Buy</button>';
             }
             t += '</div>';
@@ -1296,6 +1299,7 @@ const Lakes = (function () {
             if (!lake) return '';
             var status    = getLakeStatus(lake);
             var isLocked  = status === 'locked';
+            var isOwned   = status === 'owned';
             var canAfford = state.money >= lake.cost;
             var fishInfo  = FISH_PROFILES[lakeId] || { count: 20, topRarity: 'Common' };
             var weekIncome = Math.round(lake.dailyIncomePerAngler * 3 * (lake.biodiversityScore / 10) * 7);
@@ -1316,10 +1320,12 @@ const Lakes = (function () {
             d += '</div>';
             d += '<div class="lake-income-projection" style="margin-top:1rem;">';
             d += '<span class="value">' + UI.formatMoney(lake.cost) + '</span>';
-            d += '<span class="label">' + (lake.cost === 0 ? 'Complimentary Venue' : 'Purchase Price') + '</span>';
+            d += '<span class="label">' + (isOwned ? 'Owned' : (lake.cost === 0 ? 'Complimentary Venue' : 'Purchase Price')) + '</span>';
             d += '</div>';
             d += '<div style="margin-top:1rem;text-align:right;">';
-            if (isLocked) {
+            if (isOwned) {
+                d += '<button class="btn btn-primary" onclick="event.stopPropagation();UI.switchTab(\'lakes\')">🏡 Manage Lake</button>';
+            } else if (isLocked) {
                 d += '<p class="blv-cta-note">\uD83D\uDCB0 Need ' + UI.formatMoney(lake.wealthRequired - state.money) + ' more in balance</p>';
             } else if (lake.cost === 0) {
                 d += '<button class="btn btn-primary" onclick="event.stopPropagation();Lakes.buyLake(\'' + lake.id + '\')">Claim Free</button>';
@@ -1334,10 +1340,19 @@ const Lakes = (function () {
         }
 
         var html = '';
+        if (owned.length > 0) {
+            html += '<h3 class="lakes-section-heading">Owned Lakes</h3>';
+            html += '<div class="blv-grid">';
+            owned.forEach(function (l) { html += tileHtml(l, false, true); });
+            html += '</div>';
+            if (_buyLakeId && owned.some(function (l) { return l.id === _buyLakeId; })) {
+                html += detailHtml(_buyLakeId);
+            }
+        }
         if (available.length > 0) {
             html += '<h3 class="lakes-section-heading">Available to Purchase</h3>';
             html += '<div class="blv-grid">';
-            available.forEach(function (l) { html += tileHtml(l, false); });
+            available.forEach(function (l) { html += tileHtml(l, false, false); });
             html += '</div>';
             if (_buyLakeId && available.some(function (l) { return l.id === _buyLakeId; })) {
                 html += detailHtml(_buyLakeId);
@@ -1346,7 +1361,7 @@ const Lakes = (function () {
         if (locked.length > 0) {
             html += '<h3 class="lakes-section-heading">Locked Venues</h3>';
             html += '<div class="blv-grid">';
-            locked.forEach(function (l) { html += tileHtml(l, true); });
+            locked.forEach(function (l) { html += tileHtml(l, true, false); });
             html += '</div>';
             if (_buyLakeId && locked.some(function (l) { return l.id === _buyLakeId; })) {
                 html += detailHtml(_buyLakeId);
