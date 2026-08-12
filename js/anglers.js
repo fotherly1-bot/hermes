@@ -189,7 +189,7 @@ const Anglers = (function () {
           notableWaters: ['Council Lake', 'Darnall Park', 'Tinsley Marina'],
           techniques: ['Ledgering', 'Bread Crust', 'Worm Fishing'],
           legacy: 'Championed accessible, low-cost carp fishing for working-class anglers. His community tackle-sharing scheme continues to help new anglers get started.' },
-        { id: 24, name: 'Paul Forward',     preferred: ['running','still'],           disliked: ['estate_lake'], budget: 30, skill: 5,  socialMedia: 4, category: 'Professional',
+        { id: 24, name: 'Paul Forward',     preferred: ['running','still'],           disliked: ['estate_lake'], budget: 30, skill: 5,  socialMedia: 4,  photo: 'img/anglers/paulforward112.png', category: 'Professional',
           bio: 'A logistics manager by trade and a tactical planner by obsession, Paul Forward treats every session like a military operation. His pre-session planning and baiting strategies are considered next level.',
           signatureCatch: 'A 48lb mirror from a venue he mapped himself, caught on a D method feeder.',
           competitionsWon: ['Logistics League 2018', 'Tactical Plan Cup 2020', 'National Pre-bait Championship 2022'],
