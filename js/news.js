@@ -16,7 +16,7 @@ const News = (function () {
     const BYLINES      = ['By Our Fishing Correspondent', 'By Staff Reporter', 'By the Lake Desk', 'Special Report'];
 
     function pick(arr)    { return arr[Math.floor(Math.random() * arr.length)]; }
-    function fmtOz(oz)    { var lb=Math.floor(oz/16),rm=oz%16; return lb+'lb '+(rm>0?rm+'oz':''); }
+    function fmtOz(oz)    { return (oz/16).toFixed(2); }
     function fmtV(n)      { return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1000?(n/1000).toFixed(1)+'K':String(n||0); }
     function getLakeName(id) {
         if (!id) return 'the fishery';
