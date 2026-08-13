@@ -1274,7 +1274,7 @@ const Lakes = (function () {
                 '</div>' +
                 '<div class="lake-card-visual">' +
                     '<div class="lake-water-effect ' + lake.id + '"></div>' +
-                    (lake.id === 'oakmere' ? '<img src="img/lakes/oakmere.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
+                    (lake.id === 'oakmere_lake' ? '<img src="img/lakes/oakmere.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'monks_mere' ? '<img src="img/lakes/monks_mere.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'wraysbury' ? '<img src="img/lakes/wraysbury.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                 '</div>';
