@@ -1353,16 +1353,16 @@ const Dashboard = (function () {
         var quests = state.anglerQuests || [];
 
         var bars = [
-            { label: 'Fish Caught', pct: Math.min(100, stats.fishCaught * 5), colour: 'var(--colour-accent)', icon: '🐟' },
+            { label: 'Fish Caught', pct: Math.min(100, stats.fishCaught * 5), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '🐟' },
             { label: 'Biggest Fish', pct: Math.min(100, Math.round((stats.biggestFishOz / 1200) * 100)), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' },
-            { label: 'Wins', pct: Math.min(100, stats.wins * 10), colour: '#2ecc71', icon: '🏆' },
-            { label: 'Social Media', pct: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia * 10 : 0), colour: '#9b59b6', icon: '📱' },
-            { label: 'Leaderboard', pct: Math.max(5, 100 - ((anglerRank - 1) / Math.max(1, anglersWithCatches.length) * 100)), colour: '#3498db', icon: '📊' }
+            { label: 'Wins', pct: Math.min(100, stats.wins * 10), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '🏆' },
+            { label: 'Social Media', pct: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia * 10 : 0), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📱' },
+            { label: 'Leaderboard', pct: Math.max(5, 100 - ((anglerRank - 1) / Math.max(1, anglersWithCatches.length) * 100)), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📊' }
         ];
 
         var barsHtml = bars.map(function(b) {
             return '<div class="dash-fish-stat-bar">' +
-                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:' + (typeof b.colour === 'string' && b.colour.startsWith('linear') ? 'var(--colour-gold)' : b.colour) + ';">' + b.pct + '%</span></div>' +
+                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:var(--colour-gold);">' + b.pct + '%</span></div>' +
                 '<div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + b.pct + '%;background:' + b.colour + ';"></div></div>' +
             '</div>';
         }).join('');
@@ -1437,15 +1437,15 @@ const Dashboard = (function () {
 
         var bars = [
             { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' },
-            { label: 'Rarity Tier', pct: rarityPct, colour: rd.colour, icon: '💎' },
-            { label: 'Health', pct: health, colour: health >= 70 ? '#2ecc71' : (health >= 40 ? '#f39c12' : '#e74c3c'), icon: '❤️' },
-            { label: 'Age Progress', pct: agePct, colour: '#3498db', icon: '📅' },
-            { label: 'Fleet Value %', pct: valuePct, colour: '#9b59b6', icon: '💰' }
+            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💎' },
+            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '❤️' },
+            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📅' },
+            { label: 'Fleet Value %', pct: valuePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💰' }
         ];
 
         var barsHtml = bars.map(function(b) {
             return '<div class="dash-fish-stat-bar">' +
-                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:' + (typeof b.colour === 'string' && b.colour.startsWith('linear') ? 'var(--colour-gold)' : b.colour) + ';">' + b.pct + '%</span></div>' +
+                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:var(--colour-gold);">' + b.pct + '%</span></div>' +
                 '<div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + b.pct + '%;background:' + b.colour + ';"></div></div>' +
             '</div>';
         }).join('');
@@ -1569,15 +1569,15 @@ const Dashboard = (function () {
 
         var bars = [
             { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' },
-            { label: 'Rarity Tier', pct: rarityPct, colour: rd.colour, icon: '💎' },
-            { label: 'Health', pct: health, colour: health >= 70 ? '#2ecc71' : (health >= 40 ? '#f39c12' : '#e74c3c'), icon: '❤️' },
-            { label: 'Age Progress', pct: agePct, colour: '#3498db', icon: '📅' },
-            { label: 'Fleet Value %', pct: valuePct, colour: '#9b59b6', icon: '💰' }
+            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💎' },
+            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '❤️' },
+            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📅' },
+            { label: 'Fleet Value %', pct: valuePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💰' }
         ];
 
         var barsHtml = bars.map(function(b) {
             return '<div class="dash-fish-stat-bar">' +
-                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:' + (typeof b.colour === 'string' && b.colour.startsWith('linear') ? 'var(--colour-gold)' : b.colour) + ';">' + b.pct + '%</span></div>' +
+                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:var(--colour-gold);">' + b.pct + '%</span></div>' +
                 '<div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + b.pct + '%;background:' + b.colour + ';"></div></div>' +
             '</div>';
         }).join('');
@@ -1620,15 +1620,15 @@ const Dashboard = (function () {
 
         var bars = [
             { label: 'Value vs Fleet', pct: valuePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💰' },
-            { label: 'Rarity Tier', pct: rarityPct, colour: rd.colour, icon: '💎' },
-            { label: 'Health', pct: health, colour: health >= 70 ? '#2ecc71' : (health >= 40 ? '#f39c12' : '#e74c3c'), icon: '❤️' },
-            { label: 'Age Progress', pct: agePct, colour: '#3498db', icon: '📅' },
-            { label: 'Weight vs Max', pct: weightPct, colour: '#9b59b6', icon: '⚖️' }
+            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💎' },
+            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '❤️' },
+            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📅' },
+            { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' }
         ];
 
         var barsHtml = bars.map(function(b) {
             return '<div class="dash-fish-stat-bar">' +
-                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:' + (typeof b.colour === 'string' && b.colour.startsWith('linear') ? 'var(--colour-gold)' : b.colour) + ';">' + b.pct + '%</span></div>' +
+                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:var(--colour-gold);">' + b.pct + '%</span></div>' +
                 '<div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + b.pct + '%;background:' + b.colour + ';"></div></div>' +
             '</div>';
         }).join('');

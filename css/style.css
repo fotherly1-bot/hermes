@@ -9784,23 +9784,13 @@ details[open] > .lake-accordion-summary::before {
 .dash-fish-stat-bars {
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255,255,255,0.08);
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
 }
 .dash-fish-stat-bar {
-    animation: slideInUp 0.5s ease forwards;
-    opacity: 0;
-}
-.dash-fish-stat-bar:nth-child(1) { animation-delay: 0.1s; }
-.dash-fish-stat-bar:nth-child(2) { animation-delay: 0.2s; }
-.dash-fish-stat-bar:nth-child(3) { animation-delay: 0.3s; }
-.dash-fish-stat-bar:nth-child(4) { animation-delay: 0.4s; }
-.dash-fish-stat-bar:nth-child(5) { animation-delay: 0.5s; }
-@keyframes slideInUp {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+    opacity: 1;
 }
 .dash-fish-stat-bar-header {
     display: flex;
@@ -9824,30 +9814,14 @@ details[open] > .lake-accordion-summary::before {
 }
 .dash-fish-stat-bar-track {
     height: 6px;
-    background: rgba(0,0,0,0.3);
+    background: rgba(255,255,255,0.08);
     border-radius: 3px;
     overflow: hidden;
-    position: relative;
 }
 .dash-fish-stat-bar-fill {
     height: 100%;
     border-radius: 3px;
-    transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    position: relative;
-}
-.dash-fish-stat-bar-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    animation: shimmer 2s infinite;
-}
-@keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+    background: linear-gradient(90deg, #f1c40f, #e67e22);
 }
 
 /* ── Angler social media badge & sponsorship ROI ─────────────────────── */
