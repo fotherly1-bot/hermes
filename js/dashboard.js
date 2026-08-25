@@ -567,14 +567,16 @@ const Dashboard = (function () {
         html += '<div class="dashboard-card">' + renderFisheryPulse(state) + '</div>';
         html += '</div>';
 
-        // ── Row 2: Biggest Fish | Rarest Fish ─────────────────────────────────────
+        // ── Row 2: Biggest Fish | Rarest Fish | Most Expensive ───────────────────
         html += '<div class="dash-row dash-row-2">';
         if (aliveFish.length > 0) {
             html += '<div class="dashboard-card dash-feature-fish-card">' + renderBiggestFishCard(state) + '</div>';
             html += '<div class="dashboard-card dash-feature-fish-card">' + renderRarestFishCard(state) + '</div>';
+            html += '<div class="dashboard-card dash-feature-fish-card"><h4 class="dash-section-subheading">💰 Most Expensive Fish</h4>' + renderMostExpensiveFishCard(state) + '</div>';
         } else {
             html += '<div class="dashboard-card">' + renderTodayActivity(state) + '</div>';
             html += '<div class="dashboard-card">' + renderFinanceSnapshot(state) + '</div>';
+            html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
         }
         html += '</div>';
         // ── Row 3: Progression (spans left+middle) | Weather ────────────────────────

@@ -9375,10 +9375,13 @@ details[open] > .lake-accordion-summary::before {
 /* ── Feature Fish Container (top row) ───────────────────────────────────────── */
 .dash-row-2 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
 }
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+    .dash-row-2 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 750px) {
     .dash-row-2 { grid-template-columns: 1fr; }
 }
 .dash-progression-wide {
