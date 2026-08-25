@@ -572,7 +572,7 @@ const Dashboard = (function () {
         if (aliveFish.length > 0) {
             html += '<div class="dashboard-card dash-feature-fish-card">' + renderBiggestFishCard(state) + '</div>';
             html += '<div class="dashboard-card dash-feature-fish-card">' + renderRarestFishCard(state) + '</div>';
-            html += '<div class="dashboard-card dash-feature-fish-card"><h4 class="dash-section-subheading">💰 Most Expensive Fish</h4>' + renderMostExpensiveFishCard(state) + '</div>';
+            html += '<div class="dashboard-card dash-feature-fish-card">' + renderMostExpensiveFishCard(state) + '</div>';
         } else {
             html += '<div class="dashboard-card">' + renderTodayActivity(state) + '</div>';
             html += '<div class="dashboard-card">' + renderFinanceSnapshot(state) + '</div>';
@@ -1518,38 +1518,53 @@ const Dashboard = (function () {
 
     function renderMostExpensiveFishCard(state) {
         var alive = state.fish.filter(function(f){ return f.alive; });
-        if (alive.length === 0 || typeof Fish === 'undefined') return '<p class="empty-state">No fish yet.</p>';
+        if (alive.length === 0 || typeof Fish === 'undefined') return '';
 
-        var RARITY_COLS = typeof Fish !== 'undefined' ? (Fish.RARITY_COLS || { common:'#aaa', uncommon:'#2ecc71', rare:'#3498db', epic:'#9b59b6', legendary:'#f1c40f', mythic:'#e74c3c' }) : { common:'#aaa', uncommon:'#2ecc71', rare:'#3498db', epic:'#9b59b6', legendary:'#f1c40f', mythic:'#e74c3c' };
         var mostExpensive = null, maxVal = 0;
         alive.forEach(function(f){ var v = Fish.getFishValue(f); if (v > maxVal){ maxVal = v; mostExpensive = f; } });
-        if (!mostExpensive) return '<p class="empty-state">No fish yet.</p>';
+        if (!mostExpensive) return '';
 
-        var eSpDef = Fish.SPECIES[mostExpensive.species] || { name: mostExpensive.species };
-        var eRCol  = RARITY_COLS[mostExpensive.rarity] || '#888';
-        var eRName = Fish.RARITIES[mostExpensive.rarity] ? Fish.RARITIES[mostExpensive.rarity].name : mostExpensive.rarity;
+        var rd = typeof Fish !== 'undefined' ? (Fish.RARITIES[mostExpensive.rarity] || { name: mostExpensive.rarity, colour: '#888' }) : { name: mostExpensive.rarity, colour: '#888' };
+        var sp = typeof Fish !== 'undefined' ? (Fish.SPECIES[mostExpensive.species] ? Fish.SPECIES[mostExpensive.species].name : mostExpensive.species) : mostExpensive.species;
+        var speciesMax = typeof Fish !== 'undefined' && Fish.SPECIES[mostExpensive.species] ? Fish.SPECIES[mostExpensive.species].maxWeight : 1200;
+        var weightPct = Math.min(100, Math.round((mostExpensive.weight_oz / speciesMax) * 100));
+        var RARITY_ORDER = ['mythic','legendary','epic','rare','uncommon','common'];
+        var rarityIdx = RARITY_ORDER.indexOf(mostExpensive.rarity);
+        var rarityPct = rarityIdx === -1 ? 0 : Math.round(((RARITY_ORDER.length - 1 - rarityIdx) / (RARITY_ORDER.length - 1)) * 100);
+        var health = mostExpensive.stats ? mostExpensive.stats.health : 0;
+        var age = mostExpensive.age_days || 0;
+        var maxAge = 2000;
+        var agePct = Math.min(100, Math.round((age / maxAge) * 100));
+        var totalValue = typeof Fish !== 'undefined' ? Fish.getTotalStockValue(alive) : 0;
+        var valuePct = totalValue > 0 ? Math.round((maxVal / totalValue) * 100) : 0;
 
-        var html = '<div class="fish-spotlight-card">';
-        html += '<div class="fish-spotlight-name">' + mostExpensive.name + '</div>';
-        html += '<div class="fish-spotlight-meta"><span style="color:' + eRCol + ';font-weight:700;">' + eRName + '</span> &middot; ' + eSpDef.name + '</div>';
-        html += '<div class="fish-spotlight-stats">';
-        html += '<span class="fish-spotlight-stat">⚖️ ' + UI.formatWeight(mostExpensive.weight_oz) + '</span>';
-        html += '<span class="fish-spotlight-stat">❤️ Health:\u00A0' + (mostExpensive.stats ? mostExpensive.stats.health : 0) + '</span>';
-        html += '<span class="fish-spotlight-stat">📅 Age:\u00A0' + (mostExpensive.age_days || 0) + 'd</span>';
-        html += '<span class="fish-spotlight-stat">' + (mostExpensive.growth_stage || '') + '</span>';
-        html += '</div>';
-        if (mostExpensive.personality_traits && mostExpensive.personality_traits.length) {
-            html += '<div class="fish-spotlight-traits">';
-            mostExpensive.personality_traits.slice(0,3).forEach(function(t){
-                var td = Fish.TRAIT_DEFINITIONS ? Fish.TRAIT_DEFINITIONS[t] : null;
-                var tc = td ? td.colour : '#4a9c6d';
-                html += '<span class="trait-badge" style="border-color:' + tc + ';color:' + tc + ';">' + t + '</span>';
-            });
-            html += '</div>';
-        }
-        html += '<div class="fish-spotlight-value">' + UI.formatMoney(maxVal) + '</div>';
-        html += '</div>';
-        return html;
+        var bars = [
+            { label: 'Value vs Fleet', pct: valuePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💰' },
+            { label: 'Rarity Tier', pct: rarityPct, colour: rd.colour, icon: '💎' },
+            { label: 'Health', pct: health, colour: health >= 70 ? '#2ecc71' : (health >= 40 ? '#f39c12' : '#e74c3c'), icon: '❤️' },
+            { label: 'Age Progress', pct: agePct, colour: '#3498db', icon: '📅' },
+            { label: 'Weight vs Max', pct: weightPct, colour: '#9b59b6', icon: '⚖️' }
+        ];
+
+        var barsHtml = bars.map(function(b) {
+            return '<div class="dash-fish-stat-bar">' +
+                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:' + (typeof b.colour === 'string' && b.colour.startsWith('linear') ? 'var(--colour-gold)' : b.colour) + ';">' + b.pct + '%</span></div>' +
+                '<div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + b.pct + '%;background:' + b.colour + ';"></div></div>' +
+            '</div>';
+        }).join('');
+
+        return '<div class="dash-fish-feature-card">' +
+            '<h4 class="dash-section-subheading">💰 Most Expensive Fish</h4>' +
+            '<div class="dash-fish-feature">' +
+                getFishIconHtml(mostExpensive.species, true) +
+                '<span class="dash-fish-name">' + mostExpensive.name + '</span>' +
+                '<span class="dash-fish-species">' + sp + '</span>' +
+                '<span class="dash-fish-rarity" style="color:' + rd.colour + ';">' + rd.name + '</span>' +
+                '<span class="dash-fish-weight" style="color:var(--colour-gold);font-size:1.4rem;font-weight:800;">' + UI.formatWeight(mostExpensive.weight_oz) + '</span>' +
+                '<span class="dash-fish-lake">Lake: ' + (mostExpensive.lake_id ? (typeof Lakes !== 'undefined' && Lakes.getLakeById(mostExpensive.lake_id) ? Lakes.getLakeById(mostExpensive.lake_id).name : mostExpensive.lake_id) : '—') + '</span>' +
+            '</div>' +
+            '<div class="dash-fish-stat-bars">' + barsHtml + '</div>' +
+        '</div>';
     }
 
     function renderRarestFishCardSpotlight(state) {
