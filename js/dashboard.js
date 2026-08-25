@@ -547,7 +547,7 @@ const Dashboard = (function () {
         }
 
         // ── Row 0: Your Angler | Top Catch ──────────────────────────────────────
-        html += '<div class="dash-row" style="grid-template-columns: 1fr 2fr;">';
+        html += '<div class="dash-row dash-row-equal">';
         html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
         html += '<div class="dashboard-card">';
         html += '<h3 class="section-heading">🏆 Top Catch</h3>';
