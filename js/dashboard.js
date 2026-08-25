@@ -554,8 +554,8 @@ const Dashboard = (function () {
         var aliveFish = state.fish.filter(function(f){ return f.alive; });
         if (aliveFish.length > 0) {
             html += '<div class="dash-row-2-2">';
-            html += '<div class="dashboard-card dash-feature-fish-card dash-feature-fish-card--compact">' + renderMostExpensiveFishCard(state) + '</div>';
-            html += '<div class="dashboard-card">' + renderAnglerPBCard(state) + '</div>';
+            html += renderMostExpensiveFishCard(state);
+            html += renderAnglerPBCard(state);
             html += '</div>';
         } else {
             html += '<p class="empty-state">No fish yet.</p>';
