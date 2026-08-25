@@ -2089,7 +2089,6 @@ body {
     border-radius: var(--radius);
     border: 1px solid var(--colour-border);
     display: block;
-    background: rgba(0,0,0,0.15);
 }
 
 .tackle-shop-header {
@@ -2102,6 +2101,8 @@ body {
 .tackle-shop-banner {
     flex: 0 0 260px;
     max-height: 220px;
+    background: transparent;
+    box-shadow: none;
 }
 
 .tackle-shop-info {

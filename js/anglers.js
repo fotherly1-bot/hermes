@@ -258,6 +258,14 @@ const Anglers = (function () {
         if (!state.pendingBookings) state.pendingBookings = [];
         if (!state.incomeHistory) state.incomeHistory = [];
         if (!state.anglerTackle) state.anglerTackle = [];
+        if (!state.anglerStats) state.anglerStats = {};
+        if (!state.lastProcessedSeason) state.lastProcessedSeason = getCurrentSeasonNum(state.day);
+        if (state.playerAnglerId) {
+            var p = (state.anglerStats[state.playerAnglerId] || {});
+            if (typeof p.skill !== 'number') p.skill = 5;
+            if (typeof p.socialMedia !== 'number') p.socialMedia = 5;
+            state.anglerStats[state.playerAnglerId] = p;
+        }
         if (!state.playerAnglerId) {
             var anglers = (typeof Anglers !== 'undefined' && typeof Anglers.getAllAnglers === 'function')
                 ? Anglers.getAllAnglers()
@@ -468,12 +476,49 @@ const Anglers = (function () {
         }
     }
 
+    /**
+     * At the end of each season, anglers with socialMedia=10 who are not in
+     * the top 5 on the leaderboard lose 1 social media point.
+     */
+    function processSeasonalSocialDecay() {
+        initState();
+        var state = Game.getState();
+        var season = getCurrentSeasonNum(state.day);
+        if (state.lastProcessedSeason === season) return;
+        state.lastProcessedSeason = season;
+
+        var stats = state.anglerStats || {};
+        var ranked = Object.entries(stats)
+            .filter(function (e) { return e[1].fishCaught > 0 || e[1].wins > 0; })
+            .sort(function (a, b) { return (b[1].fishCaught || 0) - (a[1].fishCaught || 0); });
+
+        var top5 = ranked.slice(0, 5).map(function (e) { return e[0]; });
+        var affected = [];
+        ranked.forEach(function (entry) {
+            var name = entry[0];
+            var s = entry[1];
+            if (typeof s.socialMedia === 'number' && s.socialMedia >= 10 && top5.indexOf(name) === -1) {
+                s.socialMedia = Math.max(0, s.socialMedia - 1);
+                affected.push(name);
+            }
+        });
+        if (affected.length > 0) {
+            Game.addNotification('📉 Season change: ' + affected.join(', ') + ' lost 1 social media point for not being in the top 5.');
+        }
+    }
+
     function showAnglerView(view) {
         _anglerView = view;
         renderAnglers();
     }
     function getAnglerById(id) {
-        return ANGLER_POOL.find(function (a) { return a.id === id; }) || null;
+        var angler = ANGLER_POOL.find(function (a) { return a.id === id; }) || null;
+        if (!angler) return null;
+        var state = Game.getState();
+        var stored = (state.anglerStats || {})[angler.name] || {};
+        if (typeof stored.skill === 'number') angler.skill = stored.skill;
+        if (typeof stored.socialMedia === 'number') angler.socialMedia = stored.socialMedia;
+        return angler;
     }
 
     /**
@@ -886,6 +931,22 @@ const Anglers = (function () {
     }
 
     /**
+     * Derive a simple season number from the day counter.
+     * Seasons: 1=Spring, 2=Summer, 3=Autumn, 4=Winter
+     */
+    function getCurrentSeasonNum(day) {
+        var doy = ((day - 1) % 365) + 1;
+        if (doy <= 90) return 1;
+        if (doy <= 180) return 2;
+        if (doy <= 270) return 3;
+        return 4;
+    }
+
+    function getSeasonName(num) {
+        return ['', 'Spring', 'Summer', 'Autumn', 'Winter'][num] || 'Spring';
+    }
+
+    /**
      * Format water type for display.
      */
     function formatWaterType(type) {
@@ -1046,6 +1107,20 @@ const Anglers = (function () {
             html += '</div>';
         }
         html += '</div></div>';
+
+        // ── Notifications ──────────────────────────────────────────────────
+        var anglerNotifications = (state.notifications || []).slice().reverse().slice(0, 5);
+        if (anglerNotifications.length > 0) {
+            html += '<div class="your-angler-section">';
+            html += '<h4 class="dash-section-subheading">🔔 Recent Notifications</h4>';
+            html += '<div class="quest-list">';
+            anglerNotifications.forEach(function(n) {
+                html += '<div class="quest-item">';
+                html += '<div class="quest-desc">' + (n.text || n) + '</div>';
+                html += '</div>';
+            });
+            html += '</div></div>';
+        }
 
         // ── Quests ─────────────────────────────────────────────────────────
         var quests = state.anglerQuests || [];
@@ -1525,6 +1600,14 @@ const Anglers = (function () {
             var caught = lakeFish[Math.floor(Math.random() * lakeFish.length)];
             if (caught.weight_oz > stats.biggestFishOz) {
                 stats.biggestFishOz = Math.round(caught.weight_oz * (1 + (tackleEffects.weightBonus || 0)));
+            }
+            // Skill and social media growth from good catches
+            var bigEnough = (caught.weight_oz || 0) >= 400;
+            if (bigEnough) {
+                if (typeof stats.skill !== 'number') stats.skill = 5;
+                if (typeof stats.socialMedia !== 'number') stats.socialMedia = 5;
+                stats.skill = Math.min(10, stats.skill + 1);
+                stats.socialMedia = Math.min(10, stats.socialMedia + 1);
             }
         }
 
@@ -2151,7 +2234,8 @@ const Anglers = (function () {
         claimAnglerQuest: claimAnglerQuest,
         buyTackle: buyTackle,
         getTackleEffects: getTackleEffects,
-        processTackleEffects: processTackleEffects
+        processTackleEffects: processTackleEffects,
+        processSeasonalSocialDecay: processSeasonalSocialDecay
     };
 })();
 window.Anglers = Anglers;

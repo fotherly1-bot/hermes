@@ -362,6 +362,16 @@ const Game = (function () {
             Anglers.processDailyBookings();
         }
 
+        // Apply angler tackle effects
+        if (typeof Anglers !== 'undefined' && Anglers.processTackleEffects) {
+            Anglers.processTackleEffects();
+        }
+
+        // Process angler seasonal social media decay
+        if (typeof Anglers !== 'undefined' && Anglers.processSeasonalSocialDecay) {
+            Anglers.processSeasonalSocialDecay();
+        }
+
         // Roll for disasters
         if (typeof Disasters !== 'undefined') {
             Disasters.rollForDisasters();
