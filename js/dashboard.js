@@ -1534,7 +1534,7 @@ const Dashboard = (function () {
         if (pbWeight === 0) {
             return '<div class="dash-fish-feature-card">' +
                 '<h4 class="dash-section-subheading">🎣 Your Angler PB</h4>' +
-                '<div class="dash-fish-feature"><div class="dash-fish-name">No catches yet</div></div>' +
+                '<div class="dash-fish-feature">' + getFishIconHtml('common', true) + '<div class="dash-fish-name">No catches yet</div></div>' +
                 '</div>';
         }
 
@@ -1580,7 +1580,7 @@ const Dashboard = (function () {
         return '<div class="dash-fish-feature-card">' +
             '<h4 class="dash-section-subheading">🎣 Your Angler PB</h4>' +
             '<div class="dash-fish-feature">' +
-                (pbFish && typeof Fish !== 'undefined' ? getFishIconHtml(pbFish.species, true) : '<div class="dash-fish-icon" style="height:2.5rem;">🐟</div>') +
+                (pbFish && typeof Fish !== 'undefined' ? getFishIconHtml(pbFish.species, true) : getFishIconHtml('common', true)) +
                 '<span class="dash-fish-name">' + (pbFish ? pbFish.name : angler.name + '\'s Best') + '</span>' +
                 '<span class="dash-fish-species">' + sp + '</span>' +
                 '<span class="dash-fish-rarity" style="color:' + rd.colour + ';">' + rd.name + '</span>' +
