@@ -257,6 +257,7 @@ const Anglers = (function () {
         if (!state.anglerSatisfaction) state.anglerSatisfaction = {};
         if (!state.pendingBookings) state.pendingBookings = [];
         if (!state.incomeHistory) state.incomeHistory = [];
+        if (!state.anglerTackle) state.anglerTackle = [];
         if (!state.playerAnglerId) {
             var anglers = (typeof Anglers !== 'undefined' && typeof Anglers.getAllAnglers === 'function')
                 ? Anglers.getAllAnglers()
@@ -265,8 +266,207 @@ const Anglers = (function () {
         }
     }
 
+    /**
+     * Carp fishing tackle catalog.
+     * Each item has an id, name, description, cost, category, icon,
+     * and an effects object that is applied daily to the player's angler.
+     */
+    var TACKLE_CATALOG = [
+        {
+            id: 'carbon_rod',
+            name: 'Carbon Pro Carp Rod',
+            description: 'Lightweight carbon rod with a fighting curve that helps land bigger carp.',
+            cost: 4000,
+            category: 'Rod',
+            icon: '🎣',
+            effects: { weightBonus: 0.05 }
+        },
+        {
+            id: 'distance_rod',
+            name: 'Distance Feeder Rod',
+            description: 'Long-range casting rod that increases your hooking chances.',
+            cost: 3500,
+            category: 'Rod',
+            icon: '🎣',
+            effects: { catchRateBonus: 0.08 }
+        },
+        {
+            id: 'big_pit_reel',
+            name: 'Big Pit Reel',
+            description: 'Large spool reel designed for long casts and strong runs.',
+            cost: 3000,
+            category: 'Reel',
+            icon: '🔄',
+            effects: { weightBonus: 0.03, catchRateBonus: 0.03 }
+        },
+        {
+            id: 'boilies_bait',
+            name: 'Premium Boilies & Pellet',
+            description: 'A proven carp bait mix that draws fish from across the lake.',
+            cost: 1200,
+            category: 'Bait',
+            icon: '🪱',
+            effects: { catchRateBonus: 0.08 }
+        },
+        {
+            id: 'pop_ups_bait',
+            name: 'Pop-ups & Gluggers',
+            description: 'Bright buoyant baits that trigger inquisitive bites.',
+            cost: 1800,
+            category: 'Bait',
+            icon: '🪱',
+            effects: { catchRateBonus: 0.05, reputationBonus: 0.02 }
+        },
+        {
+            id: 'bivvy_2man',
+            name: '2-Man Bivvy',
+            description: 'Weatherproof shelter that keeps you comfortable on long sessions.',
+            cost: 6000,
+            category: 'Bivvy',
+            icon: '⛺',
+            effects: { satisfactionBonus: 5 }
+        },
+        {
+            id: 'session_bivvy',
+            name: 'Session Bivvy',
+            description: 'Compact wrap-around shelter for short overnight sessions.',
+            cost: 3500,
+            category: 'Bivvy',
+            icon: '⛺',
+            effects: { satisfactionBonus: 3, reputationBonus: 0.02 }
+        },
+        {
+            id: 'memory_bedchair',
+            name: 'Memory Foam Bedchair',
+            description: 'Premium comfort for 24-hour sessions and overnight matches.',
+            cost: 2200,
+            category: 'Comfort',
+            icon: '🛏️',
+            effects: { satisfactionBonus: 3 }
+        },
+        {
+            id: 'landing_net',
+            name: 'Carp Landing Net',
+            description: 'Large mesh net designed to protect fish during landing.',
+            cost: 1500,
+            category: 'Net',
+            icon: '🥅',
+            effects: { fishHealthBonus: 0.5 }
+        },
+        {
+            id: 'rod_pod',
+            name: '3-Rod Pod',
+            description: 'Solid aluminium pod for precise bait presentation.',
+            cost: 2800,
+            category: 'Rigging',
+            icon: '📐',
+            effects: { reputationBonus: 0.03 }
+        },
+        {
+            id: 'waders',
+            name: 'Chest Waders',
+            description: 'Waterproof waders for stalking fish in the margins.',
+            cost: 1600,
+            category: 'Clothing',
+            icon: '👢',
+            effects: { catchRateBonus: 0.02 }
+        },
+        {
+            id: 'bait_boat',
+            name: 'Bait Boat',
+            description: 'Remote boat that delivers bait accurately to distant spots.',
+            cost: 7000,
+            category: 'Bait',
+            icon: '⛵',
+            effects: { catchRateBonus: 0.05 }
+        },
+        {
+            id: 'unhooking_mat',
+            name: 'Unhooking Mat',
+            description: 'Padded mat that protects fish while you unhook them.',
+            cost: 900,
+            category: 'Care',
+            icon: '🧤',
+            effects: { fishHealthBonus: 0.3 }
+        },
+        {
+            id: 'weigh_sling',
+            name: 'Scales & Weigh Sling',
+            description: 'Accurate digital scales and a supportive weigh sling.',
+            cost: 2500,
+            category: 'Care',
+            icon: '⚖️',
+            effects: { weightBonus: 0.05 }
+        }
+    ];
+
     /** Sub-tab state */
     var _anglerView = 'your_angler'; // 'your_angler' | 'bookings' | 'roster' | 'sponsorships' | 'leaderboard'
+
+    /**
+     * Get the combined effects from all owned tackle.
+     */
+    function getTackleEffects() {
+        var state = Game.getState();
+        var owned = state.anglerTackle || [];
+        var combined = { weightBonus: 0, catchRateBonus: 0, satisfactionBonus: 0, reputationBonus: 0, fishHealthBonus: 0 };
+        owned.forEach(function (tackleId) {
+            var item = TACKLE_CATALOG.find(function (t) { return t.id === tackleId; });
+            if (!item || !item.effects) return;
+            Object.keys(item.effects).forEach(function (key) {
+                if (combined.hasOwnProperty(key)) {
+                    combined[key] += item.effects[key];
+                }
+            });
+        });
+        return combined;
+    }
+
+    /**
+     * Purchase a tackle item if the player can afford it.
+     */
+    function buyTackle(tackleId) {
+        initState();
+        var state = Game.getState();
+        var item = TACKLE_CATALOG.find(function (t) { return t.id === tackleId; });
+        if (!item) { UI.showToast('Tackle not found.', 'error'); return false; }
+        if ((state.anglerTackle || []).indexOf(tackleId) !== -1) {
+            UI.showToast('You already own ' + item.name + '.', 'warning');
+            return false;
+        }
+        if (!Game.spendMoney(item.cost)) {
+            UI.showToast('Not enough money! You need ' + UI.formatMoney(item.cost) + '.', 'error');
+            return false;
+        }
+        state.anglerTackle.push(tackleId);
+        UI.showToast(item.icon + ' ' + item.name + ' added to your tackle box!', 'success');
+        if (typeof Finance !== 'undefined') {
+            Finance.addFinanceLog('tackle_purchase', -item.cost, item.name);
+        }
+        Game.saveToStorage();
+        renderAnglers();
+        return true;
+    }
+
+    /**
+     * Apply daily tackle effects.
+     * Call this from game.js nextDay() or Anglers.processDailyBookings().
+     */
+    function processTackleEffects() {
+        initState();
+        var state = Game.getState();
+        var effects = getTackleEffects();
+        if (effects.reputationBonus > 0) {
+            addReputation(effects.reputationBonus);
+        }
+        if (effects.fishHealthBonus > 0 && state.fish) {
+            state.fish.forEach(function (fish) {
+                if (fish.alive) {
+                    fish.stats.health = Math.min(100, (fish.stats.health || 0) + effects.fishHealthBonus);
+                }
+            });
+        }
+    }
 
     function showAnglerView(view) {
         _anglerView = view;
@@ -587,6 +787,12 @@ const Anglers = (function () {
                             booking.satisfaction = Math.max(0, Math.min(100, booking.satisfaction + groundsSat));
                         }
                     }
+
+                    // Tackle satisfaction bonus
+                    var tackleEffects = typeof Anglers !== 'undefined' && Anglers.getTackleEffects ? Anglers.getTackleEffects() : { satisfactionBonus: 0 };
+                    if (tackleEffects.satisfactionBonus > 0) {
+                        booking.satisfaction = Math.max(0, Math.min(100, booking.satisfaction + tackleEffects.satisfactionBonus));
+                    }
                 }
             }
         });
@@ -768,6 +974,26 @@ const Anglers = (function () {
         html += '<div class="angler-card-prefs"><span class="pref-label">Dislikes:</span> ' + (dislikes || '—') + '</div>';
         html += '</div></div>';
 
+        // ── Current Booking ────────────────────────────────────────────────
+        var activeBooking = (state.anglerBookings || []).find(function(b){
+            return b.anglerId === state.playerAnglerId && state.day >= b.startDay && state.day <= b.endDay;
+        });
+        if (activeBooking) {
+            var currentLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(activeBooking.lakeId) : null;
+            var lakeImgSrc = currentLake ? ('img/lakes/' + currentLake.id + '.png') : '';
+            html += '<div class="your-angler-section">';
+            html += '<h4 class="dash-section-subheading">📍 Currently Booked At</h4>';
+            html += '<div class="current-booking-card">';
+            if (lakeImgSrc) {
+                html += '<img src="' + lakeImgSrc + '" alt="' + (currentLake ? currentLake.name : activeBooking.lakeId) + '" class="current-lake-img" />';
+            }
+            html += '<div class="current-lake-info">';
+            html += '<div class="current-lake-name">' + (currentLake ? currentLake.name : activeBooking.lakeId) + '</div>';
+            html += '<div class="current-lake-meta">Day ' + activeBooking.startDay + ' – ' + activeBooking.endDay + ' · £' + activeBooking.dailyRate + '/day</div>';
+            html += '<div class="current-lake-meta">Satisfaction: ' + Math.round(activeBooking.satisfaction || 0) + '%</div>';
+            html += '</div></div></div>';
+        }
+
         // ── Stats grid ─────────────────────────────────────────────────────
         html += '<div class="your-angler-section">';
         html += '<h4 class="dash-section-subheading">Career Stats</h4>';
@@ -846,6 +1072,66 @@ const Anglers = (function () {
             });
             html += '</div></div>';
         }
+
+        // ── Tackle Box ─────────────────────────────────────────────────────
+        var ownedTackle = state.anglerTackle || [];
+        var effects = getTackleEffects();
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">🎒 Tackle Box</h4>';
+        if (ownedTackle.length === 0) {
+            html += '<div class="empty-state" style="padding:0.5rem 0;">No tackle yet. Visit the shop to kit out your angler.</div>';
+        } else {
+            html += '<div class="tackle-grid">';
+            ownedTackle.forEach(function(tackleId){
+                var item = TACKLE_CATALOG.find(function(t){ return t.id === tackleId; });
+                if (!item) return;
+                html += '<div class="tackle-card">';
+                html += '<div class="tackle-icon">' + item.icon + '</div>';
+                html += '<div class="tackle-name">' + item.name + '</div>';
+                html += '<div class="tackle-category">' + item.category + '</div>';
+                html += '<div class="tackle-desc">' + item.description + '</div>';
+                if (item.effects) {
+                    html += '<div class="tackle-effects">';
+                    Object.keys(item.effects).forEach(function(key){
+                        var val = item.effects[key];
+                        var label = '';
+                        switch(key){
+                            case 'weightBonus': label = 'Weight +' + Math.round(val*100) + '%'; break;
+                            case 'catchRateBonus': label = 'Catch Rate +' + Math.round(val*100) + '%'; break;
+                            case 'satisfactionBonus': label = 'Satisfaction +' + Math.round(val); break;
+                            case 'reputationBonus': label = 'Reputation +' + Math.round(val*100) + '%'; break;
+                            case 'fishHealthBonus': label = 'Fish Health +' + val.toFixed(1); break;
+                        }
+                        if (label) html += '<span class="tackle-effect-badge">' + label + '</span>';
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        // ── Tackle Shop ────────────────────────────────────────────────────
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">🛒 Tackle Shop</h4>';
+        html += '<div class="tackle-shop-grid">';
+        TACKLE_CATALOG.forEach(function(item){
+            var owned = ownedTackle.indexOf(item.id) !== -1;
+            html += '<div class="tackle-shop-card' + (owned ? ' tackle-owned' : '') + '">';
+            html += '<div class="tackle-icon">' + item.icon + '</div>';
+            html += '<div class="tackle-name">' + item.name + '</div>';
+            html += '<div class="tackle-category">' + item.category + '</div>';
+            html += '<div class="tackle-desc">' + item.description + '</div>';
+            html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
+            if (owned) {
+                html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
+            } else {
+                html += '<button class="btn btn-primary btn-sm" onclick="Anglers.buyTackle(\'' + item.id + '\');Anglers.renderAnglers();">Buy</button>';
+            }
+            html += '</div>';
+        });
+        html += '</div></div>';
 
         html += '</div>';
         return html;
@@ -1213,13 +1499,20 @@ const Anglers = (function () {
         // Simulate fish caught based on lake stock
         var lakeFish = state.fish.filter(function (f) { return f.alive && f.lake_id === lakeId; });
         var catchCount = Math.floor(Math.random() * 3) + (lakeFish.length > 10 ? 1 : 0);
+
+        // Tackle catch rate bonus
+        var tackleEffects = typeof Anglers !== 'undefined' && Anglers.getTackleEffects ? Anglers.getTackleEffects() : { catchRateBonus: 0, weightBonus: 0 };
+        if (tackleEffects.catchRateBonus > 0) {
+            catchCount += Math.floor(catchCount * tackleEffects.catchRateBonus);
+        }
+
         stats.fishCaught += catchCount;
 
         // Simulate biggest fish caught
         if (lakeFish.length > 0 && Math.random() < 0.5) {
             var caught = lakeFish[Math.floor(Math.random() * lakeFish.length)];
             if (caught.weight_oz > stats.biggestFishOz) {
-                stats.biggestFishOz = caught.weight_oz;
+                stats.biggestFishOz = Math.round(caught.weight_oz * (1 + (tackleEffects.weightBonus || 0)));
             }
         }
 
@@ -1843,7 +2136,10 @@ const Anglers = (function () {
         showAnglerDetails: showAnglerDetails,
         generateAnglerQuests: generateAnglerQuests,
         updateAnglerQuestProgress: updateAnglerQuestProgress,
-        claimAnglerQuest: claimAnglerQuest
+        claimAnglerQuest: claimAnglerQuest,
+        buyTackle: buyTackle,
+        getTackleEffects: getTackleEffects,
+        processTackleEffects: processTackleEffects
     };
 })();
 window.Anglers = Anglers;
