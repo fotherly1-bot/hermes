@@ -9699,6 +9699,7 @@ details[open] > .lake-accordion-summary::before {
     border-radius: 14px;
     padding: 1.25rem;
     box-shadow: 0 0 24px rgba(199,165,40,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+    height: 100%;
 }
 .dash-feature-fish-card .dash-section-subheading {
     margin: 0 0 1rem;
