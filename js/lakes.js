@@ -1286,6 +1286,7 @@ const Lakes = (function () {
                     (lake.id === 'cranfield_weir' ? '<img src="img/lakes/cranfield_weir.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'harrington_park' ? '<img src="img/lakes/harrington_park.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'loch_davan' ? '<img src="img/lakes/loch_davan.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
+                    (lake.id === 'clearbeck_reservoir' ? '<img src="img/lakes/clearbeck_reservoir.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                 '</div>';
             t += '<div class="lake-card-stats">';
             t += '<div class="lake-stat-item"><span class="lake-stat-value">' + lake.capacity + '</span><span class="lake-stat-label">Fish</span></div>';
