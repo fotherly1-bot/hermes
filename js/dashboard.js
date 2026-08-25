@@ -1531,10 +1531,16 @@ const Dashboard = (function () {
 
         var stats = (state.anglerStats || {})[angler.name] || { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0 };
         var pbWeight = stats.biggestFishOz || 0;
+        if (pbWeight === 0) {
+            return '<div class="dash-fish-feature-card">' +
+                '<h4 class="dash-section-subheading">🎣 Your Angler PB</h4>' +
+                '<div class="dash-fish-feature"><div class="dash-fish-name">No catches yet</div></div>' +
+                '</div>';
+        }
 
         // Try to find the actual fish object for richer display
         var pbFish = null;
-        if (pbWeight > 0 && state.fish) {
+        if (state.fish) {
             state.fish.forEach(function(f) {
                 if (f.alive && (f.weight_oz || 0) === pbWeight) pbFish = f;
             });
@@ -1542,27 +1548,47 @@ const Dashboard = (function () {
 
         var rd = typeof Fish !== 'undefined' ? (Fish.RARITIES[(pbFish && pbFish.rarity) ? pbFish.rarity : 'common'] || { name: 'Common', colour: '#aaa' }) : { name: 'Common', colour: '#aaa' };
         var sp = typeof Fish !== 'undefined' && pbFish && Fish.SPECIES[pbFish.species] ? Fish.SPECIES[pbFish.species].name : (pbFish ? pbFish.species : '—');
+        var speciesMax = typeof Fish !== 'undefined' && pbFish && Fish.SPECIES[pbFish.species] ? Fish.SPECIES[pbFish.species].maxWeight : 1200;
+        var weightPct = Math.min(100, Math.round((pbWeight / speciesMax) * 100));
+        var RARITY_ORDER = ['mythic','legendary','epic','rare','uncommon','common'];
+        var rarityIdx = RARITY_ORDER.indexOf((pbFish && pbFish.rarity) ? pbFish.rarity : 'common');
+        var rarityPct = rarityIdx === -1 ? 0 : Math.round(((RARITY_ORDER.length - 1 - rarityIdx) / (RARITY_ORDER.length - 1)) * 100);
+        var health = pbFish && pbFish.stats ? (pbFish.stats.health || 0) : 0;
+        var age = pbFish ? (pbFish.age_days || 0) : 0;
+        var maxAge = 2000;
+        var agePct = Math.min(100, Math.round((age / maxAge) * 100));
+        var alive = state.fish ? state.fish.filter(function(f){ return f.alive; }) : [];
+        var totalValue = typeof Fish !== 'undefined' ? Fish.getTotalStockValue(alive) : 0;
+        var pbValue = pbFish && typeof Fish !== 'undefined' ? Fish.getFishValue(pbFish) : 0;
+        var valuePct = totalValue > 0 ? Math.round((pbValue / totalValue) * 100) : 0;
 
-        var html = '<div class="angler-pb-card">';
-        html += '<h4 class="dash-section-subheading">🎣 Your Angler PB</h4>';
-        html += '<div class="angler-pb-fish">';
-        if (pbFish && typeof Fish !== 'undefined') {
-            html += getFishIconHtml(pbFish.species, true);
-        } else {
-            html += '<div class="dash-fish-icon" style="height:2.5rem;">🐟</div>';
-        }
-        html += '<div>';
-        html += '<div class="angler-pb-name">' + angler.name + '</div>';
-        if (pbFish) {
-            html += '<div class="angler-pb-species">' + sp + '</div>';
-            html += '<div class="angler-pb-rarity" style="color:' + rd.colour + ';">' + rd.name + '</div>';
-        }
-        html += '</div>';
-        html += '</div>';
-        html += '<div class="angler-pb-weight">' + (pbWeight > 0 ? UI.formatWeight(pbWeight) : '—') + '</div>';
-        html += '<div class="angler-pb-meta">Biggest fish caught</div>';
-        html += '</div>';
-        return html;
+        var bars = [
+            { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' },
+            { label: 'Rarity Tier', pct: rarityPct, colour: rd.colour, icon: '💎' },
+            { label: 'Health', pct: health, colour: health >= 70 ? '#2ecc71' : (health >= 40 ? '#f39c12' : '#e74c3c'), icon: '❤️' },
+            { label: 'Age Progress', pct: agePct, colour: '#3498db', icon: '📅' },
+            { label: 'Fleet Value %', pct: valuePct, colour: '#9b59b6', icon: '💰' }
+        ];
+
+        var barsHtml = bars.map(function(b) {
+            return '<div class="dash-fish-stat-bar">' +
+                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:' + (typeof b.colour === 'string' && b.colour.startsWith('linear') ? 'var(--colour-gold)' : b.colour) + ';">' + b.pct + '%</span></div>' +
+                '<div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + b.pct + '%;background:' + b.colour + ';"></div></div>' +
+            '</div>';
+        }).join('');
+
+        return '<div class="dash-fish-feature-card">' +
+            '<h4 class="dash-section-subheading">🎣 Your Angler PB</h4>' +
+            '<div class="dash-fish-feature">' +
+                (pbFish && typeof Fish !== 'undefined' ? getFishIconHtml(pbFish.species, true) : '<div class="dash-fish-icon" style="height:2.5rem;">🐟</div>') +
+                '<span class="dash-fish-name">' + (pbFish ? pbFish.name : angler.name + '\'s Best') + '</span>' +
+                '<span class="dash-fish-species">' + sp + '</span>' +
+                '<span class="dash-fish-rarity" style="color:' + rd.colour + ';">' + rd.name + '</span>' +
+                '<span class="dash-fish-weight" style="color:var(--colour-gold);font-size:1.4rem;font-weight:800;">' + UI.formatWeight(pbWeight) + '</span>' +
+                '<span class="dash-fish-lake">Lake: ' + (pbFish && pbFish.lake_id ? (typeof Lakes !== 'undefined' && Lakes.getLakeById(pbFish.lake_id) ? Lakes.getLakeById(pbFish.lake_id).name : pbFish.lake_id) : '—') + '</span>' +
+            '</div>' +
+            '<div class="dash-fish-stat-bars">' + barsHtml + '</div>' +
+        '</div>';
     }
 
     function renderMostExpensiveFishCard(state) {
