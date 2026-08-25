@@ -9703,13 +9703,16 @@ details[open] > .lake-accordion-summary::before {
 }
 .dash-feature-fish-card .dash-section-subheading {
     margin: 0 0 1rem;
-    font-size: 0.9rem;
+    font-size: 1.15rem;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 .dash-feature-fish-card .dash-fish-feature {
     align-items: center;
+    text-align: center;
+}
+.dash-feature-fish-card .dash-fish-feature > * {
     text-align: center;
 }
 .dash-feature-fish-card .dash-fish-name {
