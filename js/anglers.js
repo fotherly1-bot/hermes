@@ -1120,7 +1120,13 @@ const Anglers = (function () {
         // ── Tackle Shop ────────────────────────────────────────────────────
         html += '<div class="your-angler-section">';
         html += '<h4 class="dash-section-subheading">🛒 Tackle Shop</h4>';
+        html += '<div class="tackle-shop-header">';
         html += '<img src="img/tackleshop11.png" alt="Tackle Shop" class="tackle-shop-banner" />';
+        html += '<div class="tackle-shop-info">';
+        html += '<h5>The Tackle Box</h5>';
+        html += '<p>Here you can buy upgrades for your angler from the tackle shop. Browse rods, reels, bait, bivvies, and more to improve your performance on the water.</p>';
+        html += '</div>';
+        html += '</div>';
         html += '<div class="tackle-shop-grid">';
         TACKLE_CATALOG.forEach(function(item){
             var owned = ownedTackle.indexOf(item.id) !== -1;
