@@ -1659,6 +1659,43 @@ const Lakes = (function () {
             html += '</div></div>';
         }
 
+        // ── Standout fish cards ─────────────────────────────────────────────
+        if (lakeFish.length > 0 && typeof Fish !== 'undefined') {
+            var RARITY_ORDER = ['common','uncommon','rare','epic','legendary','mythic'];
+            function rarityRank(r) { var i = RARITY_ORDER.indexOf(r); return i === -1 ? 0 : i; }
+            function fmtWeight(oz) { return (oz / 16).toFixed(2); }
+            function fmtValue(v)  { return UI.formatMoney(v); }
+            var biggest = lakeFish.slice().sort(function(a,b){ return b.weight_oz - a.weight_oz; })[0];
+            var rarest  = lakeFish.slice().sort(function(a,b){ return rarityRank(b.rarity) - rarityRank(a.rarity); })[0];
+            var priciest= lakeFish.slice().sort(function(a,b){ return Fish.getFishValue(b) - Fish.getFishValue(a); })[0];
+
+            html += '<div class="lake-fish-highlight-grid">';
+            html += '<div class="lake-fish-highlight-card">';
+            html += '<div class="lake-fish-highlight-title">🐟 Biggest Fish</div>';
+            html += '<div class="lake-fish-highlight-name">' + (biggest.name || 'Unnamed') + '</div>';
+            html += '<div class="lake-fish-highlight-meta"><span>' + (biggest.species || '').replace(/\b\w/g,function(l){return l.toUpperCase();}) + '</span><span>•</span><span>' + fmtWeight(biggest.weight_oz) + ' lb</span></div>';
+            html += '<div class="lake-fish-highlight-value">' + fmtValue(Fish.getFishValue(biggest)) + '</div>';
+            html += '</div>';
+
+            html += '<div class="lake-fish-highlight-card">';
+            html += '<div class="lake-fish-highlight-title">💎 Rarest Fish</div>';
+            html += '<div class="lake-fish-highlight-name">' + (rarest.name || 'Unnamed') + '</div>';
+            html += '<div class="lake-fish-highlight-meta"><span style="color:' + (Fish.RARITIES[rarest.rarity] ? Fish.RARITIES[rarest.rarity].colour : '#fff') + '">' + (rarest.rarity || '').replace(/\b\w/g,function(l){return l.toUpperCase();}) + '</span><span>•</span><span>' + fmtWeight(rarest.weight_oz) + ' lb</span></div>';
+            html += '<div class="lake-fish-highlight-value">' + fmtValue(Fish.getFishValue(rarest)) + '</div>';
+            html += '</div>';
+
+            html += '<div class="lake-fish-highlight-card">';
+            html += '<div class="lake-fish-highlight-title">💰 Most Expensive</div>';
+            html += '<div class="lake-fish-highlight-name">' + (priciest.name || 'Unnamed') + '</div>';
+            html += '<div class="lake-fish-highlight-meta"><span>' + (priciest.species || '').replace(/\b\w/g,function(l){return l.toUpperCase();}) + '</span><span>•</span><span>' + (priciest.rarity || '').replace(/\b\w/g,function(l){return l.toUpperCase();}) + '</span></div>';
+            html += '<div class="lake-fish-highlight-value">' + fmtValue(Fish.getFishValue(priciest)) + '</div>';
+            html += '</div>';
+
+            html += '</div>';
+        } else {
+            html += '<div class="lake-fish-highlight-grid"><div class="lake-fish-highlight-empty">No fish in this lake yet.</div></div>';
+        }
+
         // ── Visiting anglers chips ────────────────────────────────────────────
         if (visiting.length > 0) {
             html += '<div class="lake-chips-row"><span class="lake-chips-label">\uD83C\uDFA3 Visiting</span>';

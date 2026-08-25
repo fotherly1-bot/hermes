@@ -7312,6 +7312,58 @@ details[open] > .lake-accordion-summary::before {
     opacity: 0.5; border-color: var(--colour-accent);
 }
 
+/* ── Lake standout fish cards ─────────────────────────────────────────── */
+.lake-fish-highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.55rem;
+    margin-top: 0.6rem;
+}
+@media (max-width: 900px) { .lake-fish-highlight-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .lake-fish-highlight-grid { grid-template-columns: 1fr; } }
+
+.lake-fish-highlight-card {
+    background: rgba(0,0,0,0.18);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.22rem;
+}
+.lake-fish-highlight-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--colour-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.lake-fish-highlight-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--colour-text);
+    word-break: break-word;
+}
+.lake-fish-highlight-meta {
+    font-size: 0.68rem;
+    color: var(--colour-text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+.lake-fish-highlight-meta span {
+    white-space: nowrap;
+}
+.lake-fish-highlight-value {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--colour-gold);
+}
+.lake-fish-highlight-empty {
+    font-size: 0.72rem;
+    color: var(--colour-text-muted);
+    font-style: italic;
+}
 
 /* ── Angler social media badge & sponsorship ROI ─────────────────────── */
 .angler-social-badge {
