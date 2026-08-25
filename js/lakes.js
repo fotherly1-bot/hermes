@@ -1281,6 +1281,7 @@ const Lakes = (function () {
                     (lake.id === 'linch_hill' ? '<img src="img/lakes/linch_hill.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'yateley' ? '<img src="img/lakes/yateley.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'redmire_pool' ? '<img src="img/lakes/redmire_pool.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
+                    (lake.id === 'savay_lake' ? '<img src="img/lakes/savay_lake.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                 '</div>';
             t += '<div class="lake-card-stats">';
             t += '<div class="lake-stat-item"><span class="lake-stat-value">' + lake.capacity + '</span><span class="lake-stat-label">Fish</span></div>';
