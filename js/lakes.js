@@ -1283,6 +1283,7 @@ const Lakes = (function () {
                     (lake.id === 'redmire_pool' ? '<img src="img/lakes/redmire_pool.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'savay_lake' ? '<img src="img/lakes/savay_lake.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'bradshaw_pits' ? '<img src="img/lakes/bradshaw_pits.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
+                    (lake.id === 'cranfield_weir' ? '<img src="img/lakes/cranfield_weir.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                 '</div>';
             t += '<div class="lake-card-stats">';
             t += '<div class="lake-stat-item"><span class="lake-stat-value">' + lake.capacity + '</span><span class="lake-stat-label">Fish</span></div>';
