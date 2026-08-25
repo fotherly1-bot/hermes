@@ -1451,9 +1451,6 @@ const Dashboard = (function () {
                 '<span class="dash-fish-lake">Lake: ' + (biggest.lake_id ? (typeof Lakes !== 'undefined' && Lakes.getLakeById(biggest.lake_id) ? Lakes.getLakeById(biggest.lake_id).name : biggest.lake_id) : '—') + '</span>' +
             '</div>' +
             '<div class="dash-fish-stat-bars">' + barsHtml + '</div>' +
-            '<div class="dash-fish-lineage-btn-wrap">' +
-                '<button class="btn btn-primary btn-sm dash-lineage-btn" onclick="Dashboard.showFishLineage(\'' + biggest.uid + '\')">🧬 Lineage</button>' +
-            '</div>' +
         '</div>';
     }
 
@@ -1514,9 +1511,6 @@ const Dashboard = (function () {
                 '<span class="dash-fish-lake">Lake: ' + (rarest.lake_id ? (typeof Lakes !== 'undefined' && Lakes.getLakeById(rarest.lake_id) ? Lakes.getLakeById(rarest.lake_id).name : rarest.lake_id) : '—') + '</span>' +
             '</div>' +
             '<div class="dash-fish-stat-bars">' + barsHtml + '</div>' +
-            '<div class="dash-fish-lineage-btn-wrap">' +
-                '<button class="btn btn-primary btn-sm dash-lineage-btn" onclick="Dashboard.showFishLineage(\'' + rarest.uid + '\')">🧬 Lineage</button>' +
-            '</div>' +
         '</div>';
     }
 

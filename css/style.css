@@ -9497,30 +9497,7 @@ details[open] > .lake-accordion-summary::before {
     100% { transform: translateX(100%); }
 }
 
-/* ── Lineage Button ─────────────────────────────────────────────────────────── */
-.dash-fish-lineage-btn-wrap {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    text-align: center;
-}
-.dash-lineage-btn {
-    background: linear-gradient(135deg, #8e44ad, #9b59b6);
-    border: none;
-    color: white;
-    font-weight: 700;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.75rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(142,68,173,0.3);
-}
-.dash-lineage-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(142,68,173,0.5);
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
-}
-
-/* ── Lineage Tree ───────────────────────────────────────────────────────────── */
+/* ── Angler social media badge & sponsorship ROI ─────────────────────── */
 .fish-lineage { font-family: inherit; }
 .lineage-title {
     font-size: 0.85rem;
