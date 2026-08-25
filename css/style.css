@@ -1626,6 +1626,12 @@ body {
     gap: 0.5rem;
 }
 
+.your-angler-section-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
 .your-angler-section {
     background: var(--colour-card);
     border: 1px solid var(--colour-border);

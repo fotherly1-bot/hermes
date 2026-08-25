@@ -960,39 +960,44 @@ const Anglers = (function () {
         html += '</div>';
         html += '</div>';
 
-        // ── Preferences ────────────────────────────────────────────────────
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">Preferences</h4>';
-        html += '<div class="your-angler-prefs">';
+        // ── Preferences + Current Booking row ─────────────────────────────
         var likes = (angler.preferred || []).map(function(t){
             switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
         }).join(', ');
         var dislikes = (angler.disliked || []).map(function(t){
             switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
         }).join(', ');
+
+        var activeBooking = (state.anglerBookings || []).find(function(b){
+            return b.anglerId === state.playerAnglerId && state.day >= b.startDay && state.day <= b.endDay;
+        });
+        var currentLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(activeBooking ? activeBooking.lakeId : null) : null;
+        var lakeImgSrc = activeBooking && currentLake ? ('img/lakes/' + currentLake.id + '.png') : '';
+
+        html += '<div class="your-angler-section-row">';
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">Preferences</h4>';
+        html += '<div class="your-angler-prefs">';
         html += '<div class="angler-card-prefs"><span class="pref-label">Likes:</span> ' + (likes || '—') + '</div>';
         html += '<div class="angler-card-prefs"><span class="pref-label">Dislikes:</span> ' + (dislikes || '—') + '</div>';
         html += '</div></div>';
 
-        // ── Current Booking ────────────────────────────────────────────────
-        var activeBooking = (state.anglerBookings || []).find(function(b){
-            return b.anglerId === state.playerAnglerId && state.day >= b.startDay && state.day <= b.endDay;
-        });
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">📍 Currently Booked At</h4>';
+        html += '<div class="current-booking-card">';
+        if (lakeImgSrc) {
+            html += '<img src="' + lakeImgSrc + '" alt="' + (currentLake ? currentLake.name : 'Unknown Lake') + '" class="current-lake-img" />';
+        }
+        html += '<div class="current-lake-info">';
+        html += '<div class="current-lake-name">' + (currentLake ? currentLake.name : (activeBooking ? activeBooking.lakeId : '—')) + '</div>';
         if (activeBooking) {
-            var currentLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(activeBooking.lakeId) : null;
-            var lakeImgSrc = currentLake ? ('img/lakes/' + currentLake.id + '.png') : '';
-            html += '<div class="your-angler-section">';
-            html += '<h4 class="dash-section-subheading">📍 Currently Booked At</h4>';
-            html += '<div class="current-booking-card">';
-            if (lakeImgSrc) {
-                html += '<img src="' + lakeImgSrc + '" alt="' + (currentLake ? currentLake.name : activeBooking.lakeId) + '" class="current-lake-img" />';
-            }
-            html += '<div class="current-lake-info">';
-            html += '<div class="current-lake-name">' + (currentLake ? currentLake.name : activeBooking.lakeId) + '</div>';
             html += '<div class="current-lake-meta">Day ' + activeBooking.startDay + ' – ' + activeBooking.endDay + ' · £' + activeBooking.dailyRate + '/day</div>';
             html += '<div class="current-lake-meta">Satisfaction: ' + Math.round(activeBooking.satisfaction || 0) + '%</div>';
-            html += '</div></div></div>';
+        } else {
+            html += '<div class="current-lake-meta">No active booking</div>';
         }
+        html += '</div></div></div>';
+        html += '</div>';
 
         // ── Stats grid ─────────────────────────────────────────────────────
         html += '<div class="your-angler-section">';
