@@ -1499,6 +1499,7 @@ const Finance = (function () {
         },
         getMarketingTypes:           function(){ return MARKETING_TYPES; },
         makeExtraPayment:            makeExtraPayment,
+        payOffLoan:                  payOffLoan,
         processDailyFinance:         processDailyFinance,
         getMarketingBookingModifier: getMarketingBookingModifier,
         getNetProfit:                getNetProfit,
@@ -1516,3 +1517,4 @@ const Finance = (function () {
         renderFinance:               renderFinance
     };
 })();
+window.Finance = Finance;
