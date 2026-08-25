@@ -3639,17 +3639,30 @@ body {
     grid-template-columns: 1fr 1fr;
 }
 
+.dash-row-equal-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.dash-row-2-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
 .dash-row-wide-narrow {
     grid-template-columns: 2fr 1fr;
 }
 
 @media (max-width: 1100px) {
-    .dash-row-3           { grid-template-columns: 1fr 1fr; }
+    .dash-row-3,
+    .dash-row-equal-3 { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 750px) {
     .dash-row-3,
     .dash-row-equal,
+    .dash-row-equal-3,
     .dash-row-wide-narrow { grid-template-columns: 1fr; }
+    .dash-row-2-2 { grid-template-columns: 1fr; }
 }
 
 /* ── Section sub-heading inside a card ─────────────────── */
@@ -9717,6 +9730,93 @@ details[open] > .lake-accordion-summary::before {
     padding-top: 0.5rem;
     border-top: 1px solid rgba(255,255,255,0.1);
     width: 100%;
+}
+
+/* ── Compact feature card for Top Catch row ───────────────────── */
+.dash-feature-fish-card--compact {
+    padding: 0.75rem;
+}
+.dash-feature-fish-card--compact .dash-section-subheading {
+    font-size: 0.78rem;
+    margin-bottom: 0.5rem;
+}
+.dash-feature-fish-card--compact .dash-fish-feature {
+    gap: 0.2rem;
+}
+.dash-feature-fish-card--compact .dash-fish-icon {
+    height: 2rem;
+}
+.dash-feature-fish-card--compact .dash-fish-name {
+    font-size: 0.95rem;
+}
+.dash-feature-fish-card--compact .dash-fish-weight {
+    font-size: 1.15rem;
+}
+.dash-feature-fish-card--compact .dash-fish-rarity {
+    font-size: 0.8rem;
+}
+.dash-feature-fish-card--compact .dash-fish-species {
+    font-size: 0.75rem;
+}
+.dash-feature-fish-card--compact .dash-fish-lake {
+    font-size: 0.7rem;
+    margin-top: 0.3rem;
+    padding-top: 0.3rem;
+}
+.dash-feature-fish-card--compact .dash-fish-stat-bars {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    gap: 0.35rem;
+}
+.dash-feature-fish-card--compact .dash-fish-stat-bar-header {
+    font-size: 0.7rem;
+}
+.dash-feature-fish-card--compact .dash-fish-stat-bar-fill {
+    height: 6px;
+}
+
+/* ── Angler Personal Best Card ───────────────────────────────── */
+.angler-pb-card {
+    background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.15));
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.angler-pb-fish {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.angler-pb-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--colour-text);
+}
+.angler-pb-species {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+}
+.angler-pb-rarity {
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.angler-pb-weight {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--colour-gold);
+    text-align: center;
+}
+.angler-pb-meta {
+    font-size: 0.75rem;
+    color: var(--colour-text-muted);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* ── Fish Stat Bars ─────────────────────────────────────────────────────────── */
