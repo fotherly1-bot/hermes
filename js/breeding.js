@@ -262,8 +262,12 @@ const Breeding = (function () {
                     html += '<img src="img/carp/grasscarp1.png" alt="Grass Carp" class="breed-parent-img"/>';
                 } else if (f.species === 'mirror') {
                     html += '<img src="img/carp/mirrorcarp1.png" alt="Mirror Carp" class="breed-parent-img"/>';
+                } else if (f.species === 'leather') {
+                    html += '<img src="img/carp/leathercarp1.png" alt="Leather Carp" class="breed-parent-img"/>';
+                } else if (f.species === 'ghost') {
+                    html += '<img src="img/carp/ghostcarp1.png" alt="Ghost Carp" class="breed-parent-img"/>';
                 } else {
-                    html += '\uD83D\uDC1F';
+                    html += '🐟';
                 }
                 html += '</span>';
                 html += '</div>';

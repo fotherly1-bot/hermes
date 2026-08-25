@@ -511,6 +511,7 @@ const Dashboard = (function () {
         else if (species === 'grass') src = 'img/carp/grasscarp1.png';
         else if (species === 'mirror') src = 'img/carp/mirrorcarp1.png';
         else if (species === 'leather') src = 'img/carp/leathercarp1.png';
+        else if (species === 'ghost') src = 'img/carp/ghostcarp1.png';
         if (!src) return '';
         var cls = 'dash-fish-icon' + (double ? ' dash-fish-icon--double' : '');
         return '<img src="' + src + '" alt="' + (species || 'fish') + '" class="' + cls + '" />';
