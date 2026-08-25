@@ -257,10 +257,16 @@ const Anglers = (function () {
         if (!state.anglerSatisfaction) state.anglerSatisfaction = {};
         if (!state.pendingBookings) state.pendingBookings = [];
         if (!state.incomeHistory) state.incomeHistory = [];
+        if (!state.playerAnglerId) {
+            var anglers = (typeof Anglers !== 'undefined' && typeof Anglers.getAllAnglers === 'function')
+                ? Anglers.getAllAnglers()
+                : [];
+            if (anglers.length) state.playerAnglerId = anglers[0].id;
+        }
     }
 
     /** Sub-tab state */
-    var _anglerView = 'bookings'; // 'bookings' | 'roster' | 'sponsorships' | 'leaderboard'
+    var _anglerView = 'your_angler'; // 'your_angler' | 'bookings' | 'roster' | 'sponsorships' | 'leaderboard'
 
     function showAnglerView(view) {
         _anglerView = view;
@@ -687,6 +693,165 @@ const Anglers = (function () {
     }
 
     /**
+     * Render the Your Angler tab with profile, stats, quests, and personal bests.
+     */
+    function renderYourAnglerTab(state) {
+        initState();
+        var angler = null;
+        if (state.playerAnglerId && typeof Anglers !== 'undefined' && typeof Anglers.getAnglerById === 'function') {
+            angler = Anglers.getAnglerById(state.playerAnglerId);
+        }
+        if (!angler) {
+            return '<div class="empty-state">Select an angler from the Welcome screen first.</div>';
+        }
+
+        var stats = (state.anglerStats || {})[angler.name] || { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0 };
+        if (!state.anglerQuests) state.anglerQuests = [];
+        if (state.anglerQuests.length === 0 && typeof Anglers !== 'undefined') {
+            Anglers.generateAnglerQuests();
+        }
+
+        // Compute overall personal bests
+        var alive = (state.fish || []).filter(function(f){ return f.alive; });
+        var biggest = null, rarest = null, mostExpensive = null;
+        var maxWeight = 0, bestRarityIdx = 999, maxValue = 0;
+        var RARITY_ORDER = ['mythic','legendary','epic','rare','uncommon','common'];
+        alive.forEach(function(f){
+            if (!biggest || (f.weight_oz || 0) > maxWeight) { biggest = f; maxWeight = f.weight_oz || 0; }
+            var ridx = RARITY_ORDER.indexOf(f.rarity);
+            if (ridx === -1) ridx = RARITY_ORDER.length;
+            if (ridx < bestRarityIdx) { bestRarityIdx = ridx; rarest = f; }
+            else if (ridx === bestRarityIdx && typeof Fish !== 'undefined' && Fish.getFishValue(f) > maxValue) { rarest = f; }
+            if (typeof Fish !== 'undefined') {
+                var v = Fish.getFishValue(f);
+                if (v > maxValue) { maxValue = v; mostExpensive = f; }
+            }
+        });
+
+        var html = '<div class="your-angler-root">';
+
+        // ── Profile header ─────────────────────────────────────────────────
+        html += '<div class="your-angler-profile">';
+        html += '<div class="your-angler-photo">';
+        if (angler.photo) {
+            html += '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" />';
+        } else {
+            html += '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="your-angler-meta">';
+        html += '<div class="your-angler-name">' + angler.name + '</div>';
+        html += '<div class="your-angler-category" style="color:var(--colour-text-muted);font-size:0.9rem;">' + (angler.category || 'Angler') + '</div>';
+        html += '<div class="angler-stats-row" style="gap:8px;flex-wrap:wrap;margin-top:0.5rem;">';
+        html += '<span class="angler-stat-badge">Skill ' + angler.skill + '/10</span>';
+        html += '<span class="angler-stat-badge">Social Media ' + (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—') + '</span>';
+        html += '</div>';
+        html += '<div class="angler-stats-row" style="gap:8px;flex-wrap:wrap;margin-top:0.4rem;">';
+        html += '<span class="angler-budget-badge">Budget £' + (angler.budget || 0) + '</span>';
+        html += '<span class="angler-skill-badge">Fish Caught ' + stats.fishCaught + '</span>';
+        html += '<span class="angler-skill-badge">Wins ' + stats.wins + '</span>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        // ── Preferences ────────────────────────────────────────────────────
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">Preferences</h4>';
+        html += '<div class="your-angler-prefs">';
+        var likes = (angler.preferred || []).map(function(t){
+            switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
+        }).join(', ');
+        var dislikes = (angler.disliked || []).map(function(t){
+            switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
+        }).join(', ');
+        html += '<div class="angler-card-prefs"><span class="pref-label">Likes:</span> ' + (likes || '—') + '</div>';
+        html += '<div class="angler-card-prefs"><span class="pref-label">Dislikes:</span> ' + (dislikes || '—') + '</div>';
+        html += '</div></div>';
+
+        // ── Stats grid ─────────────────────────────────────────────────────
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">Career Stats</h4>';
+        html += '<div class="your-angler-stats-grid">';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.fishCaught + '</span><span class="your-angler-stat-lbl">Fish Caught</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</span><span class="your-angler-stat-lbl">Biggest Fish</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.wins + '</span><span class="your-angler-stat-lbl">Wins</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + UI.formatMoney(stats.winnings) + '</span><span class="your-angler-stat-lbl">Winnings</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.visits + '</span><span class="your-angler-stat-lbl">Visits</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—') + '</span><span class="your-angler-stat-lbl">Social Media</span></div>';
+        html += '</div></div>';
+
+        // ── Personal bests ─────────────────────────────────────────────────
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">Personal Bests</h4>';
+        html += '<div class="your-angler-bests-grid">';
+        if (biggest) {
+            html += '<div class="your-angler-best-card">';
+            html += '<div class="your-angler-best-label">🏆 Biggest Fish</div>';
+            html += '<div class="your-angler-best-name">' + biggest.name + '</div>';
+            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[biggest.species] ? Fish.SPECIES[biggest.species].name : biggest.species) + '</div>';
+            html += '<div class="your-angler-best-val" style="color:var(--colour-gold);">' + UI.formatWeight(biggest.weight_oz) + '</div>';
+            html += '</div>';
+        }
+        if (rarest) {
+            var rRDef = typeof Fish !== 'undefined' && Fish.RARITIES && Fish.RARITIES[rarest.rarity] ? Fish.RARITIES[rarest.rarity] : null;
+            var rRCol = rRDef ? (rRDef.colour || '#888') : '#888';
+            var rRName = rRDef ? rRDef.name : rarest.rarity;
+            html += '<div class="your-angler-best-card">';
+            html += '<div class="your-angler-best-label">💎 Rarest Fish</div>';
+            html += '<div class="your-angler-best-name">' + rarest.name + '</div>';
+            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[rarest.species] ? Fish.SPECIES[rarest.species].name : rarest.species) + '</div>';
+            html += '<div class="your-angler-best-val" style="color:' + rRCol + ';">' + rRName + '</div>';
+            html += '</div>';
+        }
+        if (mostExpensive) {
+            var eRDef = typeof Fish !== 'undefined' && Fish.RARITIES && Fish.RARITIES[mostExpensive.rarity] ? Fish.RARITIES[mostExpensive.rarity] : null;
+            var eRCol = eRDef ? (eRDef.colour || '#888') : '#888';
+            var eRName = eRDef ? eRDef.name : mostExpensive.rarity;
+            html += '<div class="your-angler-best-card">';
+            html += '<div class="your-angler-best-label">💰 Most Valuable</div>';
+            html += '<div class="your-angler-best-name">' + mostExpensive.name + '</div>';
+            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[mostExpensive.species] ? Fish.SPECIES[mostExpensive.species].name : mostExpensive.species) + '</div>';
+            html += '<div class="your-angler-best-val" style="color:' + eRCol + ';">' + UI.formatMoney(Fish.getFishValue(mostExpensive)) + '</div>';
+            html += '</div>';
+        }
+        html += '</div></div>';
+
+        // ── Quests ─────────────────────────────────────────────────────────
+        var quests = state.anglerQuests || [];
+        if (quests.length > 0) {
+            html += '<div class="your-angler-section">';
+            html += '<h4 class="dash-section-subheading">🎯 Active Quests</h4>';
+            html += '<div class="quest-list">';
+            quests.forEach(function(q){
+                var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
+                var statusClass = q.claimed ? 'quest-completed' : (q.completed ? 'quest-completed' : '');
+                var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
+                html += '<div class="quest-item ' + statusClass + '">';
+                html += '<div class="quest-header">';
+                html += '<div class="quest-title">' + q.title + '</div>';
+                html += '<div class="quest-reward">' + (q.reward || '') + '</div>';
+                html += '</div>';
+                html += '<div class="quest-desc">' + q.description + '</div>';
+                html += '<div class="quest-progress">';
+                html += '<div class="quest-progress-track"><div class="quest-progress-fill' + (q.completed ? ' complete' : '') + '" style="width:' + pct + '%;"></div></div>';
+                html += '<span class="quest-progress-text">' + q.progress + ' / ' + q.required + '</span>';
+                html += '</div>';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.4rem;">';
+                html += '<span style="font-size:0.75rem;color:var(--colour-text-muted);">' + statusText + '</span>';
+                if (q.completed && !q.claimed) {
+                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');Anglers.renderAnglers();">Claim</button>';
+                }
+                html += '</div>';
+                html += '</div>';
+            });
+            html += '</div></div>';
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    /**
      * Render the Anglers panel — fully automated booking system.
      */
     function renderAnglers() {
@@ -698,15 +863,23 @@ const Anglers = (function () {
 
         // Sub-tab bar
         html += '<div class="dash-subtabs">';
+        html += '<button class="dash-subtab' + (_anglerView === 'your_angler' ? ' dash-subtab-active' : '') +
+                '" onclick="Anglers.showAnglerView(\'your_angler\')">🎣 Your Angler</button>';
         html += '<button class="dash-subtab' + (_anglerView === 'bookings' ? ' dash-subtab-active' : '') +
-                '" onclick="Anglers.showAnglerView(\'bookings\')">\uD83C\uDFA3 Bookings</button>';
+                '" onclick="Anglers.showAnglerView(\'bookings\')">🏞️ Bookings</button>';
         html += '<button class="dash-subtab' + (_anglerView === 'roster' ? ' dash-subtab-active' : '') +
-                '" onclick="Anglers.showAnglerView(\'roster\')">\uD83D\uDCCB Roster</button>';
+                '" onclick="Anglers.showAnglerView(\'roster\')">📋 Roster</button>';
         html += '<button class="dash-subtab' + (_anglerView === 'sponsorships' ? ' dash-subtab-active' : '') +
-                '" onclick="Anglers.showAnglerView(\'sponsorships\')">\uD83E\uDD1D Sponsorships</button>';
+                '" onclick="Anglers.showAnglerView(\'sponsorships\')">🤝 Sponsorships</button>';
         html += '<button class="dash-subtab' + (_anglerView === 'leaderboard' ? ' dash-subtab-active' : '') +
-                '" onclick="Anglers.showAnglerView(\'leaderboard\')">\uD83C\uDFC6 Leaderboard</button>';
+                '" onclick="Anglers.showAnglerView(\'leaderboard\')">🏆 Leaderboard</button>';
         html += '</div>';
+
+        if (_anglerView === 'your_angler') {
+            html += renderYourAnglerTab(state);
+            container.innerHTML = html;
+            return;
+        }
 
         if (_anglerView === 'roster') {
             html += renderRosterTab(state);

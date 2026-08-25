@@ -287,6 +287,7 @@ const UI = (function () {
                 Game.setState(JSON.parse(JSON.stringify(Game.DEFAULT_STATE)));
             }
             if (typeof Game.saveToStorage === 'function') Game.saveToStorage();
+            if (typeof Anglers !== 'undefined' && typeof Anglers.initState === 'function') Anglers.initState();
             if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') Dashboard.renderDashboard();
             if (typeof UI.renderLakes === 'function') UI.renderLakes();
             UI.showToast('Game loaded.', 'success');
