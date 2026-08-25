@@ -1277,6 +1277,7 @@ const Lakes = (function () {
                     (lake.id === 'oakmere_lake' ? '<img src="img/lakes/oakmere.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'monks_mere' ? '<img src="img/lakes/monks_mere.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                     (lake.id === 'wraysbury' ? '<img src="img/lakes/wraysbury.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
+                    (lake.id === 'kingfisher_waters' ? '<img src="img/lakes/kingfisher_waters.png" alt="' + lake.name + '" class="lake-card-img">' : '') +
                 '</div>';
             t += '<div class="lake-card-stats">';
             t += '<div class="lake-stat-item"><span class="lake-stat-value">' + lake.capacity + '</span><span class="lake-stat-label">Fish</span></div>';
