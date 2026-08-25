@@ -1120,6 +1120,7 @@ const Anglers = (function () {
         // ── Tackle Shop ────────────────────────────────────────────────────
         html += '<div class="your-angler-section">';
         html += '<h4 class="dash-section-subheading">🛒 Tackle Shop</h4>';
+        html += '<img src="img/tackleshop11.png" alt="Tackle Shop" class="tackle-shop-banner" />';
         html += '<div class="tackle-shop-grid">';
         TACKLE_CATALOG.forEach(function(item){
             var owned = ownedTackle.indexOf(item.id) !== -1;

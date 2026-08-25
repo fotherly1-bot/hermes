@@ -2081,6 +2081,17 @@ body {
     margin-top: 0.2rem;
 }
 
+.tackle-shop-banner {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: var(--radius);
+    border: 1px solid var(--colour-border);
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
 /* ── Current Booking ──────────────────────────────────────────── */
 .current-booking-card {
     display: flex;
