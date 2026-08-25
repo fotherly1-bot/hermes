@@ -1287,15 +1287,13 @@ const Dashboard = (function () {
     // ── Your Angler card ──────────────────────────────────────────────────────
     function renderYourAnglerCard(state) {
         var html = '<h3 class="section-heading" style="margin-top:0;">🎣 Your Angler</h3>';
-        
-        // Ensure anglerQuests state exists
+
         if (!state.anglerQuests) state.anglerQuests = [];
-        
-        // Auto-generate quests if angler selected but no quests yet
+
         if (state.playerAnglerId && state.anglerQuests.length === 0 && typeof Anglers !== 'undefined') {
             Anglers.generateAnglerQuests();
         }
-        
+
         var angler = null;
         if (state.playerAnglerId && typeof Anglers !== 'undefined' && typeof Anglers.getAnglerById === 'function') {
             angler = Anglers.getAnglerById(state.playerAnglerId);
@@ -1306,11 +1304,12 @@ const Dashboard = (function () {
             });
             var poolSize = (typeof ANGLER_POOL !== 'undefined' ? ANGLER_POOL.length : 0);
             var onSite = activeBookings.length;
-            html += '<div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">';
-            html += '<div><strong>Pool</strong><br/><span style="font-size:1.4rem;">' + poolSize + '</span></div>';
-            html += '<div><strong>On Site</strong><br/><span style="font-size:1.4rem;color:var(--colour-accent);">' + onSite + '</span></div>';
-            html += '</div>';
-            html += '<p style="margin-top:0.6rem;color:var(--colour-text-muted);">This section will expand with your primary angler stats and progression.</p>';
+            html += '<div class="dash-fish-feature-card">';
+            html += '<div class="dash-fish-feature"><div class="dash-fish-name">No angler selected</div></div>';
+            html += '<div class="dash-fish-stat-bars">';
+            html += '<div class="dash-fish-stat-bar"><div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-label">Pool</span><span class="dash-fish-stat-pct">' + poolSize + '</span></div><div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + Math.min(100, poolSize * 5) + '%;background:var(--colour-accent);"></div></div></div>';
+            html += '<div class="dash-fish-stat-bar"><div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-label">On Site</span><span class="dash-fish-stat-pct">' + onSite + '</span></div><div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + Math.min(100, onSite * 20) + '%;background:var(--colour-gold);"></div></div></div>';
+            html += '</div></div>';
             return html;
         }
 
@@ -1325,25 +1324,13 @@ const Dashboard = (function () {
             ? 'No stats yet'
             : '#' + anglerRank + ' of ' + anglersWithCatches.length;
 
-        html += '<div style="display:flex;gap:1.5rem;align-items:flex-start;justify-content:center;flex-wrap:wrap;">';
-
-        // Left column — photo + name + basic badges
-        html += '<div class="angler-card" style="width:320px;height:320px;box-sizing:content-box;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:visible;flex-shrink:0;">';
-        html += '<div class="angler-photo-slot" style="width:220px;height:220px;">';
+        var photoHtml = '';
         if (angler.photo) {
-            html += '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" style="width:100%;height:100%;object-fit:contain;"/>';
+            photoHtml = '<img src="' + angler.photo + '" alt="' + angler.name + '" class="dash-fish-icon dash-fish-icon--double" style="object-fit:contain;" />';
         } else {
-            html += '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + '</div>';
+            photoHtml = getFishIconHtml('common', true);
         }
-        html += '</div>';
-        html += '<div class="angler-name" style="margin-top:10px;color:#2563eb;">' + angler.name + '</div>';
-        html += '<div class="angler-stats-row" style="justify-content:center;gap:8px;flex-wrap:wrap;"><span class="angler-stat-badge">Skill ' + angler.skill + '/10</span><span class="angler-stat-badge">Social Media ' + (typeof angler.socialMedia !== 'undefined' ? '' + angler.socialMedia + '/10' : '—') + '</span></div>';
-        html += '</div>';
 
-        // Right column — description + stats
-        html += '<div style="flex:1;min-width:220px;max-width:320px;text-align:left;">';
-
-        // Short written description from likes / dislikes
         var likes = (angler.preferred || []).map(function (t) {
             switch (t) {
                 case 'still': return 'Still Water';
@@ -1362,21 +1349,40 @@ const Dashboard = (function () {
                 default: return t;
             }
         }).join(', ');
-        html += '<p style="color:var(--colour-text-muted);margin:0 0 0.6rem;"><strong>Likes:</strong> ' + (likes || '—') + '</p>';
-        html += '<p style="color:var(--colour-text-muted);margin:0 0 0.8rem;"><strong>Dislikes:</strong> ' + (dislikes || '—') + '</p>';
 
-        // Stats rows
-        html += '<div style="display:flex;flex-direction:column;gap:0.35rem;">';
-        html += '<div class="angler-stat-badge">Fish caught: ' + stats.fishCaught + '</div>';
-        html += '<div class="angler-stat-badge">Biggest fish: ' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</div>';
-        html += '<div class="angler-stat-badge">Leaderboard: ' + leaderboardText + '</div>';
-        html += '<div class="angler-stat-badge">Social Media: ' + angler.socialMedia + '/10</div>';
+        var quests = state.anglerQuests || [];
+
+        var bars = [
+            { label: 'Fish Caught', pct: Math.min(100, stats.fishCaught * 5), colour: 'var(--colour-accent)', icon: '🐟' },
+            { label: 'Biggest Fish', pct: Math.min(100, Math.round((stats.biggestFishOz / 1200) * 100)), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' },
+            { label: 'Wins', pct: Math.min(100, stats.wins * 10), colour: '#2ecc71', icon: '🏆' },
+            { label: 'Social Media', pct: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia * 10 : 0), colour: '#9b59b6', icon: '📱' },
+            { label: 'Leaderboard', pct: Math.max(5, 100 - ((anglerRank - 1) / Math.max(1, anglersWithCatches.length) * 100)), colour: '#3498db', icon: '📊' }
+        ];
+
+        var barsHtml = bars.map(function(b) {
+            return '<div class="dash-fish-stat-bar">' +
+                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:' + (typeof b.colour === 'string' && b.colour.startsWith('linear') ? 'var(--colour-gold)' : b.colour) + ';">' + b.pct + '%</span></div>' +
+                '<div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + b.pct + '%;background:' + b.colour + ';"></div></div>' +
+            '</div>';
+        }).join('');
+
+        html += '<div class="dash-fish-feature-card">';
+        html += '<h4 class="dash-section-subheading">🎣 Your Angler</h4>';
+        html += '<div class="dash-fish-feature">';
+        html += photoHtml;
+        html += '<span class="dash-fish-name">' + angler.name + '</span>';
+        html += '<span class="dash-fish-species">' + (angler.category || 'Angler') + '</span>';
+        html += '<span class="dash-fish-rarity" style="color:var(--colour-accent);">Skill ' + angler.skill + '/10</span>';
+        html += '<span class="dash-fish-weight" style="color:var(--colour-gold);font-size:1.2rem;font-weight:800;">' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</span>';
+        html += '<span class="dash-fish-lake">Likes: ' + (likes || '—') + '</span>';
+        html += '<span class="dash-fish-lake" style="color:#e74c3c;">Dislikes: ' + (dislikes || '—') + '</span>';
+        html += '</div>';
+        html += '<div class="dash-fish-stat-bars">' + barsHtml + '</div>';
         html += '</div>';
 
-        // Quests section
-        var quests = state.anglerQuests || [];
         if (quests.length > 0) {
-            html += '<div style="margin-top:1rem;border-top:1px solid var(--colour-border);padding-top:0.75rem;">';
+            html += '<div class="dashboard-card" style="margin-top:1rem;">';
             html += '<h4 style="margin:0 0 0.6rem;font-size:0.95rem;color:var(--colour-gold);">🎯 Quests</h4>';
             html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
             quests.forEach(function(q) {
@@ -1402,7 +1408,6 @@ const Dashboard = (function () {
             html += '</div>';
         }
 
-        html += '</div></div>';
         return html;
     }
 
