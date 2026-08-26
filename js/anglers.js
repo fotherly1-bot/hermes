@@ -1049,7 +1049,8 @@ const Anglers = (function () {
             return b.anglerId === state.playerAnglerId && state.day >= b.startDay && state.day <= b.endDay;
         });
         var currentLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(activeBooking ? activeBooking.lakeId : null) : null;
-        var lakeImgSrc = activeBooking && currentLake ? ('img/lakes/' + currentLake.id + '.png') : '';
+        var lakeIdForImage = currentLake ? currentLake.id.replace(/_lake$/, '') : '';
+        var lakeImgSrc = activeBooking && currentLake ? ('img/lakes/' + lakeIdForImage + '.png') : '';
 
         html += '<div class="your-angler-section-row">';
         html += '<div class="your-angler-section">';
