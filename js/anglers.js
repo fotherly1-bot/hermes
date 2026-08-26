@@ -1132,6 +1132,8 @@ const Anglers = (function () {
         // ── Right column: about, career stats, personal bests, actions ──────
         html += '<div class="your-angler-right">';
 
+        html += '<button class="btn btn-primary" style="margin-top:0;background:#c0392b;border-color:#c0392b;color:#fff;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
+
         // ── About / Bio ─────────────────────────────────────────────────────
         html += '<div class="your-angler-section">';
         html += '<h4 class="dash-section-subheading">About ' + angler.name.split(' ').pop() + '</h4>';
@@ -1189,8 +1191,6 @@ const Anglers = (function () {
             html += '</div>';
         }
         html += '</div></div>';
-
-        html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
 
         // ── Quests ─────────────────────────────────────────────────────────
         var quests = state.anglerQuests || [];
