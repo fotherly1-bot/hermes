@@ -33,7 +33,7 @@
             {
                 id: 'inline_ronnie',
                 name: 'Inline Ronnie Rig',
-                description: 'Teardrop sinker with inline connector, black leader, yellow bead spacer and upward-facing hook. Excellent for wary fish.',
+                description: 'Teardrop sinker with inline connector, black leader, yellow bead and right-curving hook. Excellent for wary fish.',
                 icon: '🪝',
                 category: 'Rig',
                 cost: 3800,
