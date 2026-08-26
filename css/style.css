@@ -11002,28 +11002,23 @@ details[open] > .lake-accordion-summary::before {
     height: var(--popup-offset, 50px);
 }
 
-.tank-rig-group.tank-rig-dropped .tank-rig-hook {
+.tank-rig-hook,
+.tank-rig-bait {
+    position: absolute;
     right: 0;
-    top: auto;
-    bottom: 0;
     left: auto;
-    transform: none;
+    transform: translateX(50%);
     transition: bottom 0.6s ease 0.3s;
 }
 
-.tank-rig-group.tank-rig-risen .tank-rig-hook {
-    bottom: var(--popup-offset, 50px);
-}
-
+.tank-rig-group.tank-rig-dropped .tank-rig-hook,
 .tank-rig-group.tank-rig-dropped .tank-rig-bait {
-    right: -6px;
     top: auto;
     bottom: 0;
-    left: auto;
-    transform: none;
-    transition: bottom 0.6s ease 0.3s;
 }
 
+.tank-rig-group.tank-rig-risen .tank-rig-hook,
 .tank-rig-group.tank-rig-risen .tank-rig-bait {
+    top: auto;
     bottom: var(--popup-offset, 50px);
 }
