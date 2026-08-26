@@ -1015,7 +1015,6 @@ const Anglers = (function () {
             html += '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
         }
         html += '</div>'; // close your-angler-photo
-        html += '<button class="btn btn-primary" style="margin-top:0.5rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
         html += '<div class="your-angler-meta">';
         html += '<div class="your-angler-name">' + angler.name + '</div>';
         html += '<div class="your-angler-category" style="color:var(--colour-text-muted);font-size:0.9rem;">' + (angler.category || 'Angler') + '</div>';
@@ -1028,8 +1027,9 @@ const Anglers = (function () {
         html += '<span class="angler-skill-badge">Fish Caught ' + stats.fishCaught + '</span>';
         html += '<span class="angler-skill-badge">Wins ' + stats.wins + '</span>';
         html += '</div>';
-        html += '</div>';
-        html += '</div>';
+        html += '</div>'; // close your-angler-meta
+        html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
+        html += '</div>'; // close your-angler-profile
 
         // ── Preferences + Current Booking row ─────────────────────────────
         var likes = (angler.preferred || []).map(function(t){
