@@ -796,7 +796,7 @@
             var isPopup = c.bait === 'popup' || c.bait === 'popup_corn';
             var popupPx = isPopup && c.popupHeight > 0 ? Math.min(120, c.popupHeight * 4) : 0;
 
-            var el = document.getElementById('tank-rig-' + rodIndex);
+            var el = document.getElementById('tank-rig-0');
             if (!el) return;
             el.setAttribute('data-popup', popupPx);
             el.className = 'tank-rig-group';
@@ -811,10 +811,10 @@
             }
 
             // Trigger drop animation
-            dropRigAnimation(rodIndex);
+            dropRigAnimation(0);
 
             // Update info panel
-            var info = document.getElementById('tank-info-' + rodIndex);
+            var info = document.getElementById('tank-info-0');
             if (info) {
                 var html = '<strong>Rod ' + (rodIndex + 1) + ' Test</strong><br/>';
                 html += '<strong>Rig:</strong> ' + (rigDef ? rigDef.name : 'None') + '<br/>';
