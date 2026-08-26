@@ -1434,9 +1434,9 @@ const Anglers = (function () {
                     lakeBookings.forEach(function (b) {
                         if (dayNum2 < b.startDay || dayNum2 > b.endDay) return;
                         var isMatch   = b.isMatch;
-                        var firstName = b.anglerName.split(' ')[0];
+                        var fullName = b.anglerName;
                         html += '<span class="cal-chip' + (isMatch ? ' cal-chip-match' : '') + '">' +
-                                (isMatch ? '\uD83C\uDFC6 ' : '') + firstName + '</span>';
+                                (isMatch ? '\uD83C\uDFC6 ' : '') + fullName + '</span>';
                     });
                 }
                 html += '</div>';
