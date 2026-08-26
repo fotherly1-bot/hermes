@@ -1353,11 +1353,11 @@ const Dashboard = (function () {
         var quests = state.anglerQuests || [];
 
         var bars = [
-            { label: 'Fish Caught', pct: Math.min(100, stats.fishCaught * 5), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '🐟' },
-            { label: 'Biggest Fish', pct: Math.min(100, Math.round((stats.biggestFishOz / 1200) * 100)), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' },
-            { label: 'Wins', pct: Math.min(100, stats.wins * 10), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '🏆' },
-            { label: 'Social Media', pct: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia * 10 : 0), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📱' },
-            { label: 'Leaderboard', pct: Math.max(5, 100 - ((anglerRank - 1) / Math.max(1, anglersWithCatches.length) * 100)), colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📊' }
+            { label: 'Fish Caught', pct: Math.min(100, stats.fishCaught * 5), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '🐟' },
+            { label: 'Biggest Fish', pct: Math.min(100, Math.round((stats.biggestFishOz / 1200) * 100)), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '⚖️' },
+            { label: 'Wins', pct: Math.min(100, stats.wins * 10), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '🏆' },
+            { label: 'Social Media', pct: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia * 10 : 0), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '📱' },
+            { label: 'Leaderboard', pct: Math.max(5, 100 - ((anglerRank - 1) / Math.max(1, anglersWithCatches.length) * 100)), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '📊' }
         ];
 
         var barsHtml = bars.map(function(b) {
@@ -1436,11 +1436,11 @@ const Dashboard = (function () {
         var valuePct = totalValue > 0 ? Math.round((value / totalValue) * 100) : 0;
 
         var bars = [
-            { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' },
-            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💎' },
-            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '❤️' },
-            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📅' },
-            { label: 'Fleet Value %', pct: valuePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💰' }
+            { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #f39c12, #f1c40f)', icon: '⚖️' },
+            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #f39c12, #f1c40f)', icon: '💎' },
+            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #f39c12, #f1c40f)', icon: '❤️' },
+            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #f39c12, #f1c40f)', icon: '📅' },
+            { label: 'Fleet Value %', pct: valuePct, colour: 'linear-gradient(90deg, #f39c12, #f1c40f)', icon: '💰' }
         ];
 
         var barsHtml = bars.map(function(b) {
@@ -1568,11 +1568,11 @@ const Dashboard = (function () {
         var valuePct = totalValue > 0 ? Math.round((pbValue / totalValue) * 100) : 0;
 
         var bars = [
-            { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' },
-            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💎' },
-            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '❤️' },
-            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📅' },
-            { label: 'Fleet Value %', pct: valuePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💰' }
+            { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '⚖️' },
+            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '💎' },
+            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '❤️' },
+            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '📅' },
+            { label: 'Fleet Value %', pct: valuePct, colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '💰' }
         ];
 
         var barsHtml = bars.map(function(b) {
@@ -1619,11 +1619,11 @@ const Dashboard = (function () {
         var valuePct = totalValue > 0 ? Math.round((maxVal / totalValue) * 100) : 0;
 
         var bars = [
-            { label: 'Value vs Fleet', pct: valuePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💰' },
-            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '💎' },
-            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '❤️' },
-            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '📅' },
-            { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #f1c40f, #e67e22)', icon: '⚖️' }
+            { label: 'Value vs Fleet', pct: valuePct, colour: 'linear-gradient(90deg, #8e44ad, #9b59b6)', icon: '💰' },
+            { label: 'Rarity Tier', pct: rarityPct, colour: 'linear-gradient(90deg, #8e44ad, #9b59b6)', icon: '💎' },
+            { label: 'Health', pct: health, colour: 'linear-gradient(90deg, #8e44ad, #9b59b6)', icon: '❤️' },
+            { label: 'Age Progress', pct: agePct, colour: 'linear-gradient(90deg, #8e44ad, #9b59b6)', icon: '📅' },
+            { label: 'Weight vs Max', pct: weightPct, colour: 'linear-gradient(90deg, #8e44ad, #9b59b6)', icon: '⚖️' }
         ];
 
         var barsHtml = bars.map(function(b) {
