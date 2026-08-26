@@ -889,11 +889,27 @@
         }
 
         function buyRigFromShop(rigId) {
-            if (typeof Rigs !== 'undefined' && Rigs.buyRig) {
-                Rigs.buyRig(rigId);
-            } else if (typeof Anglers !== 'undefined' && typeof Anglers.buyRig === 'function') {
-                Anglers.buyRig(rigId);
+            var state = Game.getState();
+            initState();
+            var def = (typeof Rigs !== 'undefined' ? Rigs.getRigById(rigId) : null);
+            if (!def) { UI.showToast('Rig not found.', 'error'); return; }
+            var inv = state.rigInventory || [];
+            if (inv.indexOf(rigId) !== -1) {
+                UI.showToast('You already own ' + def.name + '.', 'warning');
+                renderRigs();
+                return;
             }
+            var cost = def.cost || 2500;
+            if (!Game.spendMoney(cost)) {
+                UI.showToast('Not enough money! You need ' + UI.formatMoney(cost) + '.', 'error');
+                return;
+            }
+            inv.push(rigId);
+            UI.showToast(def.icon + ' ' + def.name + ' added to your tackle box!', 'success');
+            if (typeof Finance !== 'undefined') {
+                Finance.addFinanceLog('rig_purchase', -cost, def.name);
+            }
+            Game.saveToStorage();
             renderRigs();
         }
 
