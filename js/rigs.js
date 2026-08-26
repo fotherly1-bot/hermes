@@ -146,6 +146,9 @@
             if (inv.indexOf(rigId) === -1) return false;
             if (!LEAD_TYPES[leadType]) leadType = 'inline';
             state.rigEquipped[rodIndex] = { rigId: rigId, leadType: leadType };
+            // Instant feedback
+            var fx = getEquippedRigEffects();
+            UI.showToast('Rod ' + (rodIndex + 1) + ' equipped. +' + (fx.catchRateBonus * 100).toFixed(0) + '% catch | +' + (fx.weightBonus * 100).toFixed(0) + '% weight', 'success');
             return true;
         }
 
@@ -154,6 +157,7 @@
             initState();
             if (rodIndex < 0 || rodIndex > 2) return;
             state.rigEquipped[rodIndex] = null;
+            UI.showToast('Rod ' + (rodIndex + 1) + ' unequipped.', 'warning');
         }
 
         function getEquippedRigEffects() {
@@ -225,11 +229,16 @@
                         html += '<div class="rig-rod-icon">' + def.icon + '</div>';
                         html += '<div class="rig-rod-name">' + def.name + '</div>';
                         html += '<div class="rig-rod-lead">' + lead.icon + ' ' + lead.name + '</div>';
+                        // Live bonus preview
+                        var fx = getEquippedRigEffects();
+                        var cBonus = (fx.catchRateBonus * 100).toFixed(0);
+                        var wBonus = (fx.weightBonus * 100).toFixed(0);
+                        html += '<div class="rig-rod-bonus">+' + cBonus + '% catch | +' + wBonus + '% weight</div>';
                     } else {
                         html += '<div class="rig-rod-icon">🎣</div>';
                         html += '<div class="rig-rod-name">Empty</div>';
                     }
-                    html += '<button class="btn btn-sm btn-muted" onclick="Rigs.unequipRig(' + i + ');Rigs.renderRigs();">Unequip</button>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.unequipRig(' + i + ');Rigs.renderRigs();">Unequip</button>';
                     html += '<button class="btn btn-sm btn-primary" onclick="Rigs.openEquipModal(' + i + ')">Swap</button>';
                     html += '</div>';
                 } else {

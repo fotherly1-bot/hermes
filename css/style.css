@@ -10798,3 +10798,10 @@ details[open] > .lake-accordion-summary::before {
     color: var(--colour-gold);
     margin-right: 0.5rem;
 }
+
+.rig-rod-bonus {
+    font-size: 0.75rem;
+    color: var(--colour-gold);
+    font-weight: 700;
+    margin-top: 0.25rem;
+}
