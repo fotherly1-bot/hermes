@@ -1014,7 +1014,8 @@ const Anglers = (function () {
         } else {
             html += '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
         }
-        html += '</div>';
+        html += '</div>'; // close your-angler-photo
+        html += '<button class="btn btn-primary btn-sm" style="margin-top:0.5rem;width:100%;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
         html += '<div class="your-angler-meta">';
         html += '<div class="your-angler-name">' + angler.name + '</div>';
         html += '<div class="your-angler-category" style="color:var(--colour-text-muted);font-size:0.9rem;">' + (angler.category || 'Angler') + '</div>';
@@ -2244,7 +2245,45 @@ const Anglers = (function () {
         buyTackle: buyTackle,
         getTackleEffects: getTackleEffects,
         processTackleEffects: processTackleEffects,
-        processSeasonalSocialDecay: processSeasonalSocialDecay
+        processSeasonalSocialDecay: processSeasonalSocialDecay,
+        openAnglerSelector: openAnglerSelector,
+        selectAngler: selectAngler
     };
+
+    function openAnglerSelector() {
+        var state = Game.getState();
+        var professionals = (ANGLER_POOL || []).filter(function(a){ return a.category === 'Professional'; });
+
+        var carouselHtml = '<div class="angler-selector-carousel">';
+        professionals.forEach(function(a) {
+            var isSelected = state.playerAnglerId === a.id;
+            carouselHtml += '<div class="angler-selector-card">';
+            if (a.photo) {
+                carouselHtml += '<img src="' + a.photo + '" alt="' + a.name + '" />';
+            } else {
+                carouselHtml += '<div class="angler-photo-placeholder">' + a.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
+            }
+            carouselHtml += '<div class="angler-selector-name">' + a.name + '</div>';
+            carouselHtml += '<div class="angler-selector-meta">' + (a.category || 'Professional') + ' · Skill ' + (a.skill || 0) + '/10 · £' + (a.budget || 0) + '/day</div>';
+            if (isSelected) {
+                carouselHtml += '<button class="btn btn-secondary btn-sm angler-selector-btn" disabled>Current Angler</button>';
+            } else {
+                carouselHtml += '<button class="btn btn-primary btn-sm angler-selector-btn" onclick="Anglers.selectAngler(' + a.id + ')">Select Angler</button>';
+            }
+            carouselHtml += '</div>';
+        });
+        carouselHtml += '</div>';
+
+        UI.showModal('<h3 style="margin-top:0;color:var(--colour-gold);">Select Angler</h3>' + carouselHtml + '<button class="btn btn-secondary" style="margin-top:1rem;width:100%;" onclick="UI.hideModal()">Close</button>');
+    }
+
+    function selectAngler(anglerId) {
+        var state = Game.getState();
+        state.playerAnglerId = anglerId;
+        Game.saveToStorage();
+        UI.hideModal();
+        UI.renderAll();
+        UI.showToast('Angler changed successfully!', 'success');
+    }
 })();
 window.Anglers = Anglers;
