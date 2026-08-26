@@ -1130,8 +1130,18 @@ const Anglers = (function () {
 
         html += '</div>'; // .your-angler-left
 
-        // ── Right column: career stats, personal bests, actions ────────────
+        // ── Right column: about, career stats, personal bests, actions ──────
         html += '<div class="your-angler-right">';
+
+        // ── About / Bio ─────────────────────────────────────────────────────
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">About ' + angler.name.split(' ').pop() + '</h4>';
+        if (hasBio) {
+            html += '<p class="your-angler-bio">' + bioText + '</p>';
+        } else {
+            html += '<p class="your-angler-bio">No biography recorded for this angler yet.</p>';
+        }
+        html += '</div>';
 
         // ── Career Stats ───────────────────────────────────────────────────
         html += '<div class="your-angler-section your-angler-stats-right">';
@@ -1182,16 +1192,6 @@ const Anglers = (function () {
         html += '</div></div>';
 
         html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
-
-        // ── About / Bio ────────────────────────────────────────────────────
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">About ' + angler.name.split(' ').pop() + '</h4>';
-        if (hasBio) {
-            html += '<p class="your-angler-bio">' + bioText + '</p>';
-        } else {
-            html += '<p class="your-angler-bio">No biography recorded for this angler yet.</p>';
-        }
-        html += '</div>';
 
         // ── Notifications ──────────────────────────────────────────────────
         var anglerNotifications = (state.notifications || []).slice().reverse().slice(0, 5);
