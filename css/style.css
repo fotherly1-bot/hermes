@@ -10666,3 +10666,135 @@ details[open] > .lake-accordion-summary::before {
     60% { transform: translateX(-50%) translateY(180px); opacity: 0.7; }
     100% { transform: translateX(-50%) translateY(220px); opacity: 0.85; }
 }
+
+/* ── Custom Rig Creator + Persistent Tank ─────────────────────────────── */
+.rigs-custom-section {
+    margin-top: 1.5rem;
+}
+
+.rigs-custom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.rigs-custom-form {
+    background: rgba(0,0,0,0.15);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+
+.rigs-custom-tank {
+    background: rgba(0,0,0,0.15);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+
+.rig-tank-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.tank-test-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.rig-saved-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.rig-saved-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.75rem;
+}
+
+@media (max-width: 900px) {
+    .rigs-custom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Tackle Box Shop ─────────────────────────────────────────────────── */
+.rigs-shop-root {
+    margin-top: 1.5rem;
+}
+
+.rigs-shop-intro {
+    color: var(--colour-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.rigs-shop-section {
+    margin-bottom: 1.25rem;
+}
+
+.rigs-shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+.rigs-shop-card {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.rigs-shop-card.rig-owned {
+    opacity: 0.85;
+    border-color: rgba(255,255,255,0.15);
+}
+
+.rigs-shop-card-icon {
+    font-size: 1.6rem;
+}
+
+.rigs-shop-card-name {
+    font-weight: 700;
+    color: var(--colour-text);
+}
+
+.rigs-shop-card-desc {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+    line-height: 1.4;
+    flex: 1;
+}
+
+.rig-badge {
+    display: inline-block;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.rig-badge-owned {
+    background: #1b5e20;
+    color: #a5d6a7;
+}
+
+.rig-badge-cost {
+    background: rgba(0,0,0,0.4);
+    color: var(--colour-gold);
+    margin-right: 0.5rem;
+}

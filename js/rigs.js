@@ -231,8 +231,6 @@
                     }
                     html += '<button class="btn btn-sm btn-muted" onclick="Rigs.unequipRig(' + i + ');Rigs.renderRigs();">Unequip</button>';
                     html += '<button class="btn btn-sm btn-primary" onclick="Rigs.openEquipModal(' + i + ')">Swap</button>';
-                    html += '<button class="btn btn-sm btn-secondary" onclick="Rigs.renderCustomizationModal(' + i + ')">Customise</button>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.openFishTank(' + i + ')">🐟 Test</button>';
                     html += '</div>';
                 } else {
                     html += '<div class="rig-rod-card rig-rod-empty">';
@@ -243,6 +241,19 @@
                     html += '</div>';
                 }
             }
+            html += '</div>'; // close rigs-rod-row
+
+            // ── Custom Rig Creator + Fish Tank ────────────────────────────
+            html += '<div class="rigs-custom-section">';
+            html += '<h3 class="rigs-section-heading">🎣 Custom Rig Creator</h3>';
+            html += '<div class="rigs-custom-grid">';
+            html += '<div class="rigs-custom-form">';
+            html += renderCustomRigForm();
+            html += '</div>';
+            html += '<div class="rigs-custom-tank">';
+            html += renderPersistentFishTank();
+            html += '</div>';
+            html += '</div>';
             html += '</div>';
 
             // Tackle box inventory
@@ -266,7 +277,10 @@
                     html += '</div>';
                 });
             }
-            html += '</div>';
+            html += '</div>'; // close rigs-inventory-grid
+
+            // Tackle Box Shop
+            html += renderTackleBoxShop();
 
             // Weather preview
             if (typeof Weather !== 'undefined') {
@@ -294,7 +308,29 @@
             var html = '<div class="rig-equip-modal">';
             html += '<h4>Equip Rod ' + (rodIndex + 1) + '</h4>';
 
-            // Rig carousel
+            // Custom rigs first
+            var customRigs = state.customRigs || [];
+            if (customRigs.length > 0) {
+                html += '<h5 style="color:var(--colour-gold);margin-bottom:0.5rem;">Custom Rigs</h5>';
+                html += '<div class="rig-equip-carousel">';
+                customRigs.forEach(function (rig) {
+                    var isEquipped = equipped[rodIndex] && equipped[rodIndex].rigId === 'custom' && equipped[rodIndex].customRigId === rig.id;
+                    html += '<div class="rig-equip-card">';
+                    html += '<div class="rig-equip-icon">🎣</div>';
+                    html += '<div class="rig-equip-name">' + rig.name + '</div>';
+                    html += '<div class="rig-equip-desc">Custom rig</div>';
+                    if (isEquipped) {
+                        html += '<button class="btn btn-sm btn-muted" disabled>In use</button>';
+                    } else {
+                        html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(' + rodIndex + ',\'' + rig.id + '\')">Equip</button>';
+                    }
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            // Preset rigs
+            html += '<h5 style="color:var(--colour-text-muted);margin-top:1rem;margin-bottom:0.5rem;">Preset Rigs</h5>';
             html += '<div class="rig-equip-carousel">';
             RIG_CATALOG.forEach(function (def) {
                 var owned = inventory.indexOf(def.id) !== -1;
@@ -332,6 +368,10 @@
         function selectLead(rodIndex, rigId, leadType) {
             var ok = equipRig(rodIndex, rigId, leadType);
             if (ok) {
+                // Reset custom rig config when a preset rig is selected
+                if (rigId !== 'custom') {
+                    resetCustomRigConfig();
+                }
                 UI.hideModal();
                 renderRigs();
                 var def = getRigById(rigId);
@@ -470,6 +510,318 @@
             }, 1200);
         }
 
+        /* ── CUSTOM RIG CREATOR ───────────────────────────────────────────── */
+        function getActiveCustomRigConfig() {
+            var state = Game.getState();
+            if (!state.customRigs) return null;
+            if (!state.activeCustomRigId) return null;
+            return state.customRigs.find(function (r) { return r.id === state.activeCustomRigId; }) || null;
+        }
+
+        function saveCustomRig(name) {
+            var state = Game.getState();
+            if (!state.customRigs) state.customRigs = [];
+            if (!state.activeCustomRigId) {
+                var newId = state.nextCustomRigId || 1;
+                if (!state.nextCustomRigId) state.nextCustomRigId = 1;
+                var newRig = {
+                    id: 'custom_' + newId,
+                    name: name || 'Custom Rig ' + newId,
+                    hookType: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hookType : 'standard'),
+                    leadType: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].leadType : 'lead_clip'),
+                    tubing: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].tubing : 'none'),
+                    weight: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].weight : 2),
+                    bait: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].bait : 'bottom_boilie'),
+                    flavour: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].flavour : 'natural'),
+                    rigLength: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].rigLength : 45),
+                    popupHeight: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].popupHeight : 0),
+                    hairLength: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hairLength : 2)
+                };
+                state.customRigs.push(newRig);
+                state.activeCustomRigId = newRig.id;
+                state.nextCustomRigId = newId + 1;
+                Game.saveToStorage();
+                return newRig;
+            } else {
+                var existing = state.customRigs.find(function (r) { return r.id === state.activeCustomRigId; });
+                if (existing) {
+                    existing.name = name || existing.name;
+                    existing.hookType = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hookType : existing.hookType);
+                    existing.leadType = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].leadType : existing.leadType);
+                    existing.tubing = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].tubing : existing.tubing);
+                    existing.weight = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].weight : existing.weight);
+                    existing.bait = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].bait : existing.bait);
+                    existing.flavour = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].flavour : existing.flavour);
+                    existing.rigLength = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].rigLength : existing.rigLength);
+                    existing.popupHeight = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].popupHeight : existing.popupHeight);
+                    existing.hairLength = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hairLength : existing.hairLength);
+                    Game.saveToStorage();
+                    return existing;
+                }
+            }
+            return null;
+        }
+
+        function selectCustomRig(customRigId) {
+            var state = Game.getState();
+            state.activeCustomRigId = customRigId;
+            var rig = state.customRigs.find(function (r) { return r.id === customRigId; });
+            if (rig && state.rigCustomizations && state.rigCustomizations[0]) {
+                state.rigCustomizations[0].hookType = rig.hookType;
+                state.rigCustomizations[0].leadType = rig.leadType;
+                state.rigCustomizations[0].tubing = rig.tubing;
+                state.rigCustomizations[0].weight = rig.weight;
+                state.rigCustomizations[0].bait = rig.bait;
+                state.rigCustomizations[0].flavour = rig.flavour;
+                state.rigCustomizations[0].rigLength = rig.rigLength;
+                state.rigCustomizations[0].popupHeight = rig.popupHeight;
+                state.rigCustomizations[0].hairLength = rig.hairLength;
+            }
+            Game.saveToStorage();
+            renderRigs();
+            UI.showToast('Selected custom rig: ' + (rig ? rig.name : customRigId), 'success');
+        }
+
+        function deleteCustomRig(customRigId) {
+            var state = Game.getState();
+            state.customRigs = (state.customRigs || []).filter(function (r) { return r.id !== customRigId; });
+            if (state.activeCustomRigId === customRigId) state.activeCustomRigId = null;
+            Game.saveToStorage();
+            renderRigs();
+            UI.showToast('Custom rig deleted.', 'warning');
+        }
+
+        function equipCustomRig(rodIndex, customRigId) {
+            var state = Game.getState();
+            var rig = (state.customRigs || []).find(function (r) { return r.id === customRigId; });
+            if (!rig) return;
+            state.rigEquipped[rodIndex] = { rigId: 'custom', customRigId: customRigId };
+            state.activeCustomRigId = customRigId;
+            Game.saveToStorage();
+            renderRigs();
+            UI.showToast('Equipped custom rig: ' + rig.name, 'success');
+        }
+
+        function resetCustomRigConfig() {
+            var state = Game.getState();
+            state.activeCustomRigId = null;
+            if (state.rigCustomizations && state.rigCustomizations[0]) {
+                state.rigCustomizations[0] = { hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 };
+            }
+            Game.saveToStorage();
+            renderRigs();
+        }
+
+        /* ── CUSTOM RIG FORM / TANK RENDERERS ─────────────────────────────── */
+        function renderCustomRigForm() {
+            var state = Game.getState();
+            var c = (state.rigCustomizations && state.rigCustomizations[0]) ? state.rigCustomizations[0] : { hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 };
+            var html = '<div class="rig-customize-modal">';
+            html += '<h4 style="margin-top:0;color:var(--colour-gold);">Custom Rig Creator</h4>';
+
+            function selectorRow(label, options, current, key) {
+                var row = '<div class="rig-customize-row"><label>' + label + '</label><div class="rig-customize-options">';
+                options.forEach(function (opt) {
+                    var active = opt.id === current ? ' rig-opt-active' : '';
+                    var owned = RigComponents.isOwned(opt.id);
+                    if (!owned) {
+                        row += '<button class="btn btn-sm btn-muted" disabled title="Not owned">' + (opt.icon || '') + ' ' + opt.name + '</button>';
+                    } else {
+                        row += '<button class="btn btn-sm btn-secondary' + active + '" onclick="Rigs.setCustomization(0,\'' + key + '\',\'' + opt.id + '\');Rigs.renderRigs();">' + (opt.icon || '') + ' ' + opt.name + '</button>';
+                    }
+                });
+                row += '</div></div>';
+                return row;
+            }
+
+            function sliderRow(label, key, min, max, unit) {
+                return '<div class="rig-customize-row"><label>' + label + ': <strong>' + c[key] + unit + '</strong></label>' +
+                    '<input type="range" min="' + min + '" max="' + max + '" value="' + c[key] + '" onchange="Rigs.setCustomization(0,\'' + key + '\', parseInt(this.value));Rigs.renderRigs();" style="width:100%;"/></div>';
+            }
+
+            html += selectorRow('Hook', RigComponents.HOOKS, c.hookType, 'hookType');
+            html += selectorRow('Lead Type', RigComponents.LEADS, c.leadType, 'leadType');
+            html += selectorRow('Tubing', RigComponents.TUBING, c.tubing, 'tubing');
+            html += selectorRow('Weight', RigComponents.WEIGHTS, 'weight_' + c.weight + 'oz', 'weight');
+            html += selectorRow('Bait', RigComponents.BAITS, c.bait, 'bait');
+            html += selectorRow('Flavour', RigComponents.FLAVOURS, c.flavour, 'flavour');
+            html += sliderRow('Rig Length', 'rigLength', 20, 80, 'cm');
+            html += sliderRow('Popup Height', 'popupHeight', 0, 30, 'cm');
+            html += sliderRow('Hair Length', 'hairLength', 0, 8, 'cm');
+
+            html += '<div class="rig-customize-actions">';
+            html += '<button class="btn btn-primary" onclick="var n=prompt(\'Name your custom rig:\'); if(n){ Rigs.saveCustomRig(n); Rigs.renderRigs(); }">💾 Save Custom Rig</button>';
+            html += '</div>';
+
+            // Saved custom rigs
+            var customRigs = state.customRigs || [];
+            if (customRigs.length > 0) {
+                html += '<div class="rig-saved-list">';
+                html += '<h5 style="color:var(--colour-text-muted);margin-bottom:0.5rem;">Saved Custom Rigs</h5>';
+                customRigs.forEach(function (rig) {
+                    var isActive = state.activeCustomRigId === rig.id;
+                    html += '<div class="rig-saved-row">';
+                    html += '<span style="flex:1;">' + (isActive ? '✅ ' : '') + rig.name + '</span>';
+                    html += '<button class="btn btn-sm btn-secondary" onclick="Rigs.selectCustomRig(\'' + rig.id + '\')">Load</button>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(0,\'' + rig.id + '\')">Equip</button>';
+                    html += '<button class="btn btn-sm btn-muted" onclick="Rigs.deleteCustomRig(\'' + rig.id + '\')">Delete</button>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        function renderPersistentFishTank() {
+            var state = Game.getState();
+            var html = '<div class="rig-tank-panel">';
+            html += '<h4 style="margin-top:0;color:var(--colour-gold);">Fish Tank</h4>';
+            html += '<div class="tank-container">';
+            html += '<div class="tank-water">';
+            html += '<div class="tank-surface"></div>';
+            html += '<div class="tank-bed"></div>';
+            html += '<div class="tank-rig-anim" id="tank-rig-0">';
+            html += '<div class="tank-rig-line"></div>';
+            html += '<div class="tank-rig-lead"></div>';
+            html += '<div class="tank-rig-hook">🪝</div>';
+            html += '<div class="tank-rig-bait">🟤</div>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="tank-glass"></div>';
+            html += '</div>';
+
+            // Test buttons for each rod
+            html += '<div class="tank-test-buttons">';
+            for (var i = 0; i < 3; i++) {
+                html += '<button class="btn btn-primary" style="flex:1;" onclick="Rigs.openFishTank(' + i + ')">Test Rig ' + (i + 1) + '</button>';
+            }
+            html += '</div>';
+
+            html += '<div class="tank-info" id="tank-info-0">';
+            html += '<em>Press Test Rig to see how your rig sits in the water.</em>';
+            html += '</div>';
+            html += '</div>';
+            return html;
+        }
+
+        /* ── TACKLE BOX SHOP ──────────────────────────────────────────────── */
+        function renderTackleBoxShop() {
+            var state = Game.getState();
+            var owned = state.rigComponentsOwned || [];
+            var html = '<div class="rigs-shop-root">';
+            html += '<h3 class="rigs-section-heading">🎒 Tackle Box Shop</h3>';
+            html += '<p class="rigs-shop-intro">Buy rigs, leads, hooks, tubing, weights, baits and flavours. Unlocked items appear in the Customise Rig section.</p>';
+
+            function shopSection(title, items, renderItem) {
+                html += '<div class="rigs-shop-section">';
+                html += '<h4 style="color:var(--colour-gold);margin-bottom:0.5rem;">' + title + '</h4>';
+                html += '<div class="rigs-shop-grid">';
+                items.forEach(function (item) {
+                    var isOwned = owned.indexOf(item.id) !== -1;
+                    html += '<div class="rigs-shop-card' + (isOwned ? ' rig-owned' : '') + '">';
+                    html += '<div class="rigs-shop-card-icon">' + (item.icon || '') + '</div>';
+                    html += '<div class="rigs-shop-card-name">' + item.name + '</div>';
+                    html += '<div class="rigs-shop-card-desc">' + item.desc + '</div>';
+                    if (renderItem) renderItem(item, isOwned);
+                    html += '</div>';
+                });
+                html += '</div></div>';
+            }
+
+            // Rig Types
+            shopSection('Rig Types', RIG_CATALOG, function (item, isOwned) {
+                var inv = state.rigInventory || [];
+                var alreadyOwned = inv.indexOf(item.id) !== -1;
+                if (alreadyOwned || isOwned) {
+                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                } else {
+                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyRigFromShop(\'' + item.id + '\')">Buy</button>';
+                }
+            });
+
+            // Lead Types
+            shopSection('Lead Types', RigComponents.LEADS, function (item, isOwned) {
+                if (isOwned) {
+                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                } else {
+                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
+                }
+            });
+
+            // Hooks & Sizes
+            shopSection('Hooks & Sizes', RigComponents.HOOKS, function (item, isOwned) {
+                if (isOwned) {
+                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                } else {
+                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
+                }
+            });
+
+            // Hooklink Materials
+            shopSection('Hooklink Materials', RigComponents.TUBING, function (item, isOwned) {
+                if (isOwned) {
+                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                } else {
+                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
+                }
+            });
+
+            // Weights
+            shopSection('Weights', RigComponents.WEIGHTS, function (item, isOwned) {
+                if (isOwned) {
+                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                } else {
+                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
+                }
+            });
+
+            // Baits
+            shopSection('Baits', RigComponents.BAITS, function (item, isOwned) {
+                if (isOwned) {
+                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                } else {
+                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
+                }
+            });
+
+            // Flavours
+            shopSection('Flavours', RigComponents.FLAVOURS, function (item, isOwned) {
+                if (isOwned) {
+                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                } else {
+                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
+                }
+            });
+
+            html += '</div>';
+            return html;
+        }
+
+        function buyRigFromShop(rigId) {
+            if (typeof Rigs !== 'undefined' && Rigs.buyRig) {
+                Rigs.buyRig(rigId);
+            } else if (typeof Anglers !== 'undefined' && typeof Anglers.buyRig === 'function') {
+                Anglers.buyRig(rigId);
+            }
+            renderRigs();
+        }
+
+        function buyComponentFromShop(componentId) {
+            if (typeof RigComponents !== 'undefined' && RigComponents.buyComponent) {
+                RigComponents.buyComponent(componentId);
+            }
+            renderRigs();
+        }
+
         /* ── PUBLIC API ───────────────────────────────────────────────────── */
         return {
             RIG_CATALOG: RIG_CATALOG,
@@ -483,7 +835,24 @@
             getRigWeatherBonus: getRigWeatherBonus,
             renderRigs: renderRigs,
             openEquipModal: openEquipModal,
-            selectLead: selectLead
+            selectLead: selectLead,
+            setCustomization: setCustomization,
+            renderCustomizationModal: renderCustomizationModal,
+            buyComponentAndRerender: buyComponentAndRerender,
+            openFishTank: openFishTank,
+            dropRigAnimation: dropRigAnimation,
+            getCustomization: getCustomization,
+            saveCustomRig: saveCustomRig,
+            selectCustomRig: selectCustomRig,
+            deleteCustomRig: deleteCustomRig,
+            equipCustomRig: equipCustomRig,
+            resetCustomRigConfig: resetCustomRigConfig,
+            renderCustomRigForm: renderCustomRigForm,
+            renderPersistentFishTank: renderPersistentFishTank,
+            renderTackleBoxShop: renderTackleBoxShop,
+            buyRigFromShop: buyRigFromShop,
+            buyComponentFromShop: buyComponentFromShop,
+            getActiveCustomRigConfig: getActiveCustomRigConfig
         };
     })();
     window.Rigs = Rigs;
