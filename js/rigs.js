@@ -349,6 +349,9 @@
                 var inv = state.rigInventory || [];
                 var alreadyOwned = inv.indexOf(def.id) !== -1;
                 html += '<div class="rigs-shop-card' + (alreadyOwned ? ' rig-owned' : '') + '">';
+                html += '<div class="rigs-shop-card-img-wrap">';
+                html += '<img class="rigs-shop-card-img" src="img/rigs/' + def.id + '.png" alt="' + def.name + '" loading="lazy" onerror="this.style.display=\'none\'"/>';
+                html += '</div>';
                 html += '<div class="rigs-shop-card-icon">' + def.icon + '</div>';
                 html += '<div class="rigs-shop-card-name">' + def.name + '</div>';
                 html += '<div class="rigs-shop-card-desc">' + def.description + '</div>';
