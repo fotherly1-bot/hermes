@@ -505,7 +505,10 @@
             html += selectorRow('Bait', RigComponents.BAITS, c.bait, 'bait');
             html += selectorRow('Flavour', RigComponents.FLAVOURS, c.flavour, 'flavour');
             html += sliderRow('Rig Length', 'rigLength', 20, 80, 'cm');
-            html += sliderRow('Popup Height', 'popupHeight', 0, 30, 'cm');
+            var isPopupBait = c.bait === 'popup' || c.bait === 'popup_corn';
+            html += '<div class="rig-customize-row" id="popup-height-row-' + rodIndex + '" style="opacity:' + (isPopupBait ? '1' : '0.4') + ';pointer-events:' + (isPopupBait ? 'auto' : 'none') + ';">';
+            html += '<label>Popup Height: <strong>' + c.popupHeight + 'cm</strong></label>';
+            html += '<input type="range" min="0" max="30" value="' + c.popupHeight + '" ' + (isPopupBait ? '' : 'disabled') + ' onchange="Rigs.setCustomization(' + rodIndex + ',\'popupHeight\', parseInt(this.value));Rigs.renderCustomizationModal(' + rodIndex + ');" style="width:100%;"/></div>';
             html += sliderRow('Hair Length', 'hairLength', 0, 8, 'cm');
 
             html += '<div class="rig-customize-section">';
@@ -657,7 +660,10 @@
             html += selectorRow('Bait', RigComponents.BAITS, c.bait, 'bait');
             html += selectorRow('Flavour', RigComponents.FLAVOURS, c.flavour, 'flavour');
             html += sliderRow('Rig Length', 'rigLength', 20, 80, 'cm');
-            html += sliderRow('Popup Height', 'popupHeight', 0, 30, 'cm');
+            var isPopupBait2 = c.bait === 'popup' || c.bait === 'popup_corn';
+            html += '<div class="rig-customize-row" id="popup-height-row-0" style="opacity:' + (isPopupBait2 ? '1' : '0.4') + ';pointer-events:' + (isPopupBait2 ? 'auto' : 'none') + ';">';
+            html += '<label>Popup Height: <strong>' + c.popupHeight + 'cm</strong></label>';
+            html += '<input type="range" min="0" max="30" value="' + c.popupHeight + '" ' + (isPopupBait2 ? '' : 'disabled') + ' onchange="Rigs.setCustomization(0,\'popupHeight\', parseInt(this.value));Rigs.renderRigs();" style="width:100%;"/></div>';
             html += sliderRow('Hair Length', 'hairLength', 0, 8, 'cm');
 
             html += '<div class="rig-customize-actions">';
