@@ -318,23 +318,27 @@
             html += '<h4>Equip Rod ' + (rodIndex + 1) + '</h4>';
 
             // Custom rigs first
-            var customRigs = state.customRigs || [];
-            if (customRigs.length > 0) {
+            var customRigs = state.customRigs || [null, null, null];
+            var hasCustom = customRigs.some(function(r){ return r !== null; });
+            if (hasCustom) {
                 html += '<h5 style="color:var(--colour-gold);margin-bottom:0.5rem;">Custom Rigs</h5>';
                 html += '<div class="rig-equip-carousel">';
-                customRigs.forEach(function (rig) {
-                    var isEquipped = equipped[rodIndex] && equipped[rodIndex].rigId === 'custom' && equipped[rodIndex].customRigId === rig.id;
+                for (var s = 0; s < 3; s++) {
+                    var rig = customRigs[s];
+                    var slotId = 'custom_' + (s + 1);
+                    if (!rig) continue;
+                    var isEquipped = equipped[rodIndex] && equipped[rodIndex].rigId === 'custom' && equipped[rodIndex].customRigId === slotId;
                     html += '<div class="rig-equip-card">';
                     html += '<div class="rig-equip-icon">🎣</div>';
-                    html += '<div class="rig-equip-name">' + rig.name + '</div>';
+                    html += '<div class="rig-equip-name">Slot ' + (s + 1) + ' - ' + rig.name + '</div>';
                     html += '<div class="rig-equip-desc">Custom rig</div>';
                     if (isEquipped) {
                         html += '<button class="btn btn-sm btn-muted" disabled>In use</button>';
                     } else {
-                        html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(' + rodIndex + ',\'' + rig.id + '\')">Equip</button>';
+                        html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(' + rodIndex + ',\'' + slotId + '\')">Equip</button>';
                     }
                     html += '</div>';
-                });
+                }
                 html += '</div>';
             }
 
@@ -475,15 +479,16 @@
             var c = getCustomization(rodIndex);
             var slot = (Game.getState().rigEquipped || [])[rodIndex];
             var rigDef = slot ? getRigById(slot.rigId) : null;
+            var popupOffset = c.popupHeight > 0 ? Math.min(50, c.popupHeight * 1.5) : 0;
             var html = '<div class="rig-fish-tank">';
             html += '<h4 style="margin-top:0;color:var(--colour-gold);">Fish Tank - Rod ' + (rodIndex + 1) + '</h4>';
             html += '<div class="tank-container">';
             html += '<div class="tank-water">';
             html += '<div class="tank-surface"></div>';
             html += '<div class="tank-bed"></div>';
-            html += '<div class="tank-rig-anim" id="tank-rig-' + rodIndex + '">';
+            html += '<div class="tank-rig-anim" id="tank-rig-' + rodIndex + '" data-popup="' + popupOffset + '">';
             html += '<div class="tank-rig-line"></div>';
-            html += '<div class="tank-rig-lead" style="background:' + (c.weight >= 3 ? '#444' : '#666') + ';width:' + (8 + c.weight * 2) + 'px;"></div>';
+            html += '<div class="tank-rig-lead"></div>';
             html += '<div class="tank-rig-hook">🪝</div>';
             html += '<div class="tank-rig-bait">' + (RigComponents.getBait(c.bait) ? RigComponents.getBait(c.bait).icon : '🟤') + '</div>';
             html += '</div>';
@@ -510,10 +515,15 @@
         function dropRigAnimation(rodIndex) {
             var el = document.getElementById('tank-rig-' + rodIndex);
             if (!el) return;
-            el.classList.remove('tank-rig-dropped');
+            el.classList.remove('tank-rig-dropped', 'tank-rig-popped');
             // Trigger reflow
             void el.offsetWidth;
             el.classList.add('tank-rig-dropped');
+            var popup = parseFloat(el.getAttribute('data-popup') || '0');
+            if (popup > 0) {
+                el.classList.add('tank-rig-popped');
+                el.style.setProperty('--popup-offset', popup + 'px');
+            }
             setTimeout(function () {
                 UI.showToast('Rig settled on the bottom.', 'success');
             }, 1200);
@@ -522,60 +532,40 @@
         /* ── CUSTOM RIG CREATOR ───────────────────────────────────────────── */
         function getActiveCustomRigConfig() {
             var state = Game.getState();
-            if (!state.customRigs) return null;
-            if (!state.activeCustomRigId) return null;
-            return state.customRigs.find(function (r) { return r.id === state.activeCustomRigId; }) || null;
+            if (!state.customRigs || state.customRigs.length !== 3) return null;
+            return state.customRigs[0] || null;
         }
 
-        function saveCustomRig(name) {
+        function saveCustomRig(slotIndex) {
+            slotIndex = slotIndex || 0;
             var state = Game.getState();
-            if (!state.customRigs) state.customRigs = [];
-            if (!state.activeCustomRigId) {
-                var newId = state.nextCustomRigId || 1;
-                if (!state.nextCustomRigId) state.nextCustomRigId = 1;
-                var newRig = {
-                    id: 'custom_' + newId,
-                    name: name || 'Custom Rig ' + newId,
-                    hookType: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hookType : 'standard'),
-                    leadType: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].leadType : 'lead_clip'),
-                    tubing: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].tubing : 'none'),
-                    weight: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].weight : 2),
-                    bait: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].bait : 'bottom_boilie'),
-                    flavour: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].flavour : 'natural'),
-                    rigLength: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].rigLength : 45),
-                    popupHeight: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].popupHeight : 0),
-                    hairLength: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hairLength : 2)
-                };
-                state.customRigs.push(newRig);
-                state.activeCustomRigId = newRig.id;
-                state.nextCustomRigId = newId + 1;
-                Game.saveToStorage();
-                return newRig;
-            } else {
-                var existing = state.customRigs.find(function (r) { return r.id === state.activeCustomRigId; });
-                if (existing) {
-                    existing.name = name || existing.name;
-                    existing.hookType = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hookType : existing.hookType);
-                    existing.leadType = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].leadType : existing.leadType);
-                    existing.tubing = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].tubing : existing.tubing);
-                    existing.weight = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].weight : existing.weight);
-                    existing.bait = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].bait : existing.bait);
-                    existing.flavour = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].flavour : existing.flavour);
-                    existing.rigLength = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].rigLength : existing.rigLength);
-                    existing.popupHeight = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].popupHeight : existing.popupHeight);
-                    existing.hairLength = (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hairLength : existing.hairLength);
-                    Game.saveToStorage();
-                    return existing;
-                }
-            }
-            return null;
+            if (!state.customRigs) state.customRigs = [null, null, null];
+            var newRig = {
+                id: 'custom_' + (slotIndex + 1),
+                name: 'Custom Rig ' + (slotIndex + 1),
+                hookType: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hookType : 'standard'),
+                leadType: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].leadType : 'lead_clip'),
+                tubing: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].tubing : 'none'),
+                weight: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].weight : 2),
+                bait: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].bait : 'bottom_boilie'),
+                flavour: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].flavour : 'natural'),
+                rigLength: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].rigLength : 45),
+                popupHeight: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].popupHeight : 0),
+                hairLength: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hairLength : 2)
+            };
+            state.customRigs[slotIndex] = newRig;
+            Game.saveToStorage();
+            return newRig;
         }
 
         function selectCustomRig(customRigId) {
             var state = Game.getState();
+            var slotIndex = parseInt(customRigId.split('_')[1], 10) - 1;
+            if (isNaN(slotIndex) || slotIndex < 0 || slotIndex > 2) return;
+            var rig = state.customRigs[slotIndex];
+            if (!rig) return;
             state.activeCustomRigId = customRigId;
-            var rig = state.customRigs.find(function (r) { return r.id === customRigId; });
-            if (rig && state.rigCustomizations && state.rigCustomizations[0]) {
+            if (state.rigCustomizations && state.rigCustomizations[0]) {
                 state.rigCustomizations[0].hookType = rig.hookType;
                 state.rigCustomizations[0].leadType = rig.leadType;
                 state.rigCustomizations[0].tubing = rig.tubing;
@@ -588,27 +578,31 @@
             }
             Game.saveToStorage();
             renderRigs();
-            UI.showToast('Selected custom rig: ' + (rig ? rig.name : customRigId), 'success');
+            UI.showToast('Selected custom rig ' + (slotIndex + 1) + ': ' + rig.name, 'success');
         }
 
         function deleteCustomRig(customRigId) {
             var state = Game.getState();
-            state.customRigs = (state.customRigs || []).filter(function (r) { return r.id !== customRigId; });
+            var slotIndex = parseInt(customRigId.split('_')[1], 10) - 1;
+            if (isNaN(slotIndex) || slotIndex < 0 || slotIndex > 2) return;
+            state.customRigs[slotIndex] = null;
             if (state.activeCustomRigId === customRigId) state.activeCustomRigId = null;
             Game.saveToStorage();
             renderRigs();
-            UI.showToast('Custom rig deleted.', 'warning');
+            UI.showToast('Custom rig ' + (slotIndex + 1) + ' cleared.', 'warning');
         }
 
         function equipCustomRig(rodIndex, customRigId) {
             var state = Game.getState();
-            var rig = (state.customRigs || []).find(function (r) { return r.id === customRigId; });
+            var slotIndex = parseInt(customRigId.split('_')[1], 10) - 1;
+            if (isNaN(slotIndex) || slotIndex < 0 || slotIndex > 2) return;
+            var rig = state.customRigs[slotIndex];
             if (!rig) return;
             state.rigEquipped[rodIndex] = { rigId: 'custom', customRigId: customRigId };
             state.activeCustomRigId = customRigId;
             Game.saveToStorage();
             renderRigs();
-            UI.showToast('Equipped custom rig: ' + rig.name, 'success');
+            UI.showToast('Equipped custom rig ' + (slotIndex + 1) + ': ' + rig.name, 'success');
         }
 
         function resetCustomRigConfig() {
@@ -659,25 +653,31 @@
             html += sliderRow('Hair Length', 'hairLength', 0, 8, 'cm');
 
             html += '<div class="rig-customize-actions">';
-            html += '<button class="btn btn-primary" onclick="var n=prompt(\'Name your custom rig:\'); if(n){ Rigs.saveCustomRig(n); Rigs.renderRigs(); }">💾 Save Custom Rig</button>';
+            html += '<button class="btn btn-primary" onclick="Rigs.saveCustomRig(0);Rigs.renderRigs();">💾 Save to Slot 1</button>';
+            html += '<button class="btn btn-primary" onclick="Rigs.saveCustomRig(1);Rigs.renderRigs();">💾 Save to Slot 2</button>';
+            html += '<button class="btn btn-primary" onclick="Rigs.saveCustomRig(2);Rigs.renderRigs();">💾 Save to Slot 3</button>';
             html += '</div>';
 
             // Saved custom rigs
-            var customRigs = state.customRigs || [];
-            if (customRigs.length > 0) {
-                html += '<div class="rig-saved-list">';
-                html += '<h5 style="color:var(--colour-text-muted);margin-bottom:0.5rem;">Saved Custom Rigs</h5>';
-                customRigs.forEach(function (rig) {
-                    var isActive = state.activeCustomRigId === rig.id;
-                    html += '<div class="rig-saved-row">';
-                    html += '<span style="flex:1;">' + (isActive ? '✅ ' : '') + rig.name + '</span>';
-                    html += '<button class="btn btn-sm btn-secondary" onclick="Rigs.selectCustomRig(\'' + rig.id + '\')">Load</button>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(0,\'' + rig.id + '\')">Equip</button>';
-                    html += '<button class="btn btn-sm btn-muted" onclick="Rigs.deleteCustomRig(\'' + rig.id + '\')">Delete</button>';
-                    html += '</div>';
-                });
+            var customRigs = state.customRigs || [null, null, null];
+            html += '<div class="rig-saved-list">';
+            html += '<h5 style="color:var(--colour-text-muted);margin-bottom:0.5rem;">Custom Rig Slots</h5>';
+            for (var s = 0; s < 3; s++) {
+                var rig = customRigs[s];
+                var slotId = 'custom_' + (s + 1);
+                var isActive = state.activeCustomRigId === slotId;
+                html += '<div class="rig-saved-row">';
+                html += '<span style="flex:1;">' + (isActive ? '✅ ' : '') + 'Slot ' + (s + 1) + (rig ? ' - ' + rig.name : ' (Empty)') + '</span>';
+                if (rig) {
+                    html += '<button class="btn btn-sm btn-secondary" onclick="Rigs.selectCustomRig(\'' + slotId + '\')">Load</button>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(0,\'' + slotId + '\')">Equip</button>';
+                    html += '<button class="btn btn-sm btn-muted" onclick="Rigs.deleteCustomRig(\'' + slotId + '\')">Clear</button>';
+                } else {
+                    html += '<span style="color:var(--colour-text-muted);font-size:0.8rem;">Empty</span>';
+                }
                 html += '</div>';
             }
+            html += '</div>';
 
             html += '</div>';
             return html;

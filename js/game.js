@@ -71,9 +71,7 @@ const Game = (function () {
         rigEquipped: [null, null, null],
         rigCustomizations: [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }],
         rigComponentsOwned: ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'],
-        customRigs: [],
-        nextCustomRigId: 1,
-        activeCustomRigId: null,
+        customRigs: [null, null, null],
         nextSponsorshipId: 1,
         cardInventory:    [],
         cardPacksBought:  {},
@@ -260,9 +258,9 @@ const Game = (function () {
             if (!state.rigEquipped)      state.rigEquipped      = [null, null, null];
             if (!state.rigCustomizations) state.rigCustomizations = [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }];
             if (!state.rigComponentsOwned) state.rigComponentsOwned = ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'];
-            if (!state.customRigs) state.customRigs = [];
-            if (state.nextCustomRigId === undefined) state.nextCustomRigId = 1;
-            if (state.activeCustomRigId === undefined) state.activeCustomRigId = null;
+            if (!Array.isArray(state.customRigs) || state.customRigs.length !== 3) {
+                state.customRigs = [null, null, null];
+            }
         } else {
             state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             console.log('[Game.init] took ELSE branch, DEFAULT_STATE keys:', Object.keys(state).sort().join(','));

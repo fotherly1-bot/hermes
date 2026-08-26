@@ -10656,17 +10656,6 @@ details[open] > .lake-accordion-summary::before {
     line-height: 1.6;
 }
 
-@keyframes tankRigFloat {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
-}
-
-@keyframes tankRigDrop {
-    0% { transform: translateX(-50%) translateY(0); opacity: 0.9; }
-    60% { transform: translateX(-50%) translateY(180px); opacity: 0.7; }
-    100% { transform: translateX(-50%) translateY(220px); opacity: 0.85; }
-}
-
 /* ── Custom Rig Creator + Persistent Tank ─────────────────────────────── */
 .rigs-custom-section {
     margin-top: 1.5rem;
@@ -10804,4 +10793,64 @@ details[open] > .lake-accordion-summary::before {
     color: var(--colour-gold);
     font-weight: 700;
     margin-top: 0.25rem;
+}
+
+/* ── Fish Tank Rig Horizontal Drop ───────────────────────────────────── */
+.tank-rig-anim {
+    position: absolute;
+    left: 50%;
+    top: 6%;
+    width: 2px;
+    height: 54%;
+    background: rgba(255,255,255,0.55);
+    z-index: 5;
+    transform: translateX(-50%);
+    animation: tankRigFloat 2.2s ease-in-out infinite;
+}
+
+.tank-rig-anim.tank-rig-dropped {
+    top: auto;
+    bottom: 18%;
+    left: 15%;
+    width: 70%;
+    height: 3px;
+    background: rgba(255,255,255,0.7);
+    transform: none;
+    animation: none;
+    border-radius: 2px;
+}
+
+.tank-rig-anim.tank-rig-dropped .tank-rig-lead {
+    left: 4px;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 6px;
+    background: #444;
+}
+
+.tank-rig-anim.tank-rig-dropped .tank-rig-hook {
+    left: auto;
+    right: 0;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    transition: top 0.3s ease;
+}
+
+.tank-rig-anim.tank-rig-dropped .tank-rig-bait {
+    left: auto;
+    right: -6px;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    transition: top 0.3s ease;
+}
+
+.tank-rig-anim.tank-rig-popped .tank-rig-hook,
+.tank-rig-anim.tank-rig-popped .tank-rig-bait {
+    top: calc(50% - var(--popup-offset, 0px));
 }
