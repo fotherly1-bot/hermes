@@ -362,6 +362,11 @@ const Game = (function () {
             Anglers.processDailyBookings();
         }
 
+        // Update angler leaderboard rankings
+        if (typeof Anglers !== 'undefined' && Anglers.updateDailyLeaderboard) {
+            Anglers.updateDailyLeaderboard();
+        }
+
         // Apply angler tackle effects
         if (typeof Anglers !== 'undefined' && Anglers.processTackleEffects) {
             Anglers.processTackleEffects();

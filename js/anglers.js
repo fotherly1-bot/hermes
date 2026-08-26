@@ -1927,70 +1927,46 @@ const Anglers = (function () {
         var stats    = state.anglerStats || {};
         var results  = (state.matchResults || []).slice().reverse();
         var cut      = Math.round((state.tournamentCut || 0.20) * 100);
-        var RARITY_MEDAL = ['\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'];
 
-        function topN(sortFn, n) {
-            return Object.entries(stats).filter(function (e) { return e[1].fishCaught > 0 || e[1].wins > 0; })
-                   .sort(sortFn).slice(0, n);
-        }
+        // Build ranked list of all anglers
+        var ranked = Object.keys(stats).map(function(name){
+            var s = stats[name];
+            var score = (s.wins || 0) * 1000 + (s.fishCaught || 0) * 10 + (s.biggestFishOz || 0) * 0.1 + (s.winnings || 0) * 0.01;
+            return { name: name, score: score, wins: s.wins || 0, fishCaught: s.fishCaught || 0, biggestFishOz: s.biggestFishOz || 0, winnings: s.winnings || 0, visits: s.visits || 0 };
+        }).sort(function(a,b){ return b.score - a.score; });
 
         var html = '';
+        html += '<h3 class="section-heading">🏆 Overall Angler Rankings</h3>';
+        html += '<p style="color:var(--colour-muted);margin-bottom:1rem;">Rankings update daily based on wins, catches, and earnings.</p>';
 
-        // Tournament cut setting
-        html += '<div class="spon-cut-row">';
-        html += '<span class="spon-cut-label">\uD83C\uDFC6 Fishery tournament cut:</span>';
-        html += '<select class="shop-lake-select" style="width:120px;" onchange="Anglers.setTournamentCut(this.value)">';
-        [10, 15, 20, 25, 30].forEach(function (pct) {
-            html += '<option value="' + pct + '"' + (pct === cut ? ' selected' : '') + '>' + pct + '%</option>';
-        });
-        html += '</select>';
-        html += '<span class="spon-cut-earned">Earned from matches: <strong>' +
-                UI.formatMoney(results.reduce(function(s,r){ return s+r.fisheryGot; }, 0)) + '</strong></span>';
-        html += '</div>';
-
-        // Most Fish Caught + Biggest Fish side by side
-        html += '<div class="lb-two-col">';
-
-        html += '<div>';
-        html += '<h3 class="section-heading">\uD83D\uDC1F Most Fish Caught</h3>';
-        var topFish = topN(function (a, b) { return b[1].fishCaught - a[1].fishCaught; }, 3);
-        if (topFish.length === 0) {
-            html += '<p class="empty-state">No stats yet.</p>';
+        if (ranked.length === 0) {
+            html += '<p class="empty-state">No angler stats recorded yet. Rankings will appear as anglers catch fish and win matches.</p>';
         } else {
-            html += '<div class="lb-list">';
-            topFish.forEach(function (e, i) {
-                html += '<div class="lb-row">';
-                html += '<span class="lb-medal">' + (RARITY_MEDAL[i] || '#' + (i+1)) + '</span>';
-                html += '<span class="lb-name">' + e[0] + '</span>';
-                html += '<span class="lb-val">' + e[1].fishCaught + ' fish</span>';
-                html += '<span class="lb-sub">' + e[1].visits + ' visits</span>';
+            html += '<div class="leaderboard-list">';
+            ranked.forEach(function(entry, idx){
+                var rank = idx + 1;
+                var total = ranked.length;
+                var prevRank = entry.prevRank;
+                var movement = '';
+                if (prevRank !== undefined && prevRank !== null) {
+                    var diff = prevRank - rank;
+                    if (diff > 0) movement = '<span class="lb-move lb-up" title="Moved up">▲</span>';
+                    else if (diff < 0) movement = '<span class="lb-move lb-down" title="Moved down">▼</span>';
+                    else movement = '<span class="lb-move lb-same" title="No change">-</span>';
+                }
+                var rankClass = rank === 1 ? 'lb-rank-1' : rank === 2 ? 'lb-rank-2' : rank === 3 ? 'lb-rank-3' : '';
+                html += '<div class="lb-row lb-rank-row">';
+                html += '<span class="lb-rank ' + rankClass + '">' + rank + '/' + total + '</span>';
+                html += '<span class="lb-name">' + entry.name + '</span>';
+                html += '<span class="lb-val">' + entry.wins + ' wins</span>';
+                html += '<span class="lb-val">' + entry.fishCaught + ' fish</span>';
+                html += '<span class="lb-val">' + (typeof UI !== 'undefined' ? UI.formatWeight(entry.biggestFishOz) : entry.biggestFishOz + 'oz') + '</span>';
+                html += '<span class="lb-val">' + UI.formatMoney(entry.winnings) + '</span>';
+                html += '<span class="lb-movement">' + movement + '</span>';
                 html += '</div>';
             });
             html += '</div>';
         }
-        html += '</div>';
-
-        html += '<div>';
-        html += '<h3 class="section-heading">\uD83D\uDC1F Biggest Fish</h3>';
-        var topBig = topN(function (a, b) { return b[1].biggestFishOz - a[1].biggestFishOz; }, 3)
-                     .filter(function (e) { return e[1].biggestFishOz > 0; });
-        if (topBig.length === 0) {
-            html += '<p class="empty-state">No catches recorded yet.</p>';
-        } else {
-            html += '<div class="lb-list">';
-            topBig.forEach(function (e, i) {
-                var wt = typeof UI !== 'undefined' ? UI.formatWeight(e[1].biggestFishOz) : e[1].biggestFishOz + 'oz';
-                html += '<div class="lb-row">';
-                html += '<span class="lb-medal">' + (RARITY_MEDAL[i] || '#' + (i+1)) + '</span>';
-                html += '<span class="lb-name">' + e[0] + '</span>';
-                html += '<span class="lb-val">' + wt + '</span>';
-                html += '</div>';
-            });
-            html += '</div>';
-        }
-        html += '</div>';
-
-        html += '</div>'; // lb-two-col
 
         // Match/tournament results
         html += '<h3 class="section-heading">\uD83C\uDFC6 Recent Match Results</h3>';
@@ -2230,6 +2206,28 @@ const Anglers = (function () {
         }
     }
 
+    function updateDailyLeaderboard() {
+        initState();
+        var state = Game.getState();
+        if (!state.anglerStats) state.anglerStats = {};
+
+        var ranked = Object.keys(state.anglerStats).map(function(name){
+            var s = state.anglerStats[name];
+            var score = (s.wins || 0) * 1000 + (s.fishCaught || 0) * 10 + (s.biggestFishOz || 0) * 0.1 + (s.winnings || 0) * 0.01;
+            return { name: name, score: score };
+        }).sort(function(a,b){ return b.score - a.score; });
+
+        // Store previous ranks for movement arrows
+        if (!state.leaderboardHistory) state.leaderboardHistory = {};
+        var history = state.leaderboardHistory;
+        ranked.forEach(function(entry, idx){
+            if (history[entry.name] !== undefined) {
+                entry.prevRank = history[entry.name];
+            }
+            history[entry.name] = idx + 1;
+        });
+    }
+
     return {
         initState: initState,
         getAnglerById: getAnglerById,
@@ -2237,8 +2235,6 @@ const Anglers = (function () {
         generateBookingRequests: generateBookingRequests,
         processDailyBookings: processDailyBookings,
         renderAnglers: renderAnglers,
-        render: renderAnglers,
-        renderRosterTab: renderRosterTab,
         getLakeColour: getLakeColour,
         showAnglerView: showAnglerView,
         renderRosterTab: renderRosterTab,
@@ -2263,6 +2259,7 @@ const Anglers = (function () {
         getTackleEffects: getTackleEffects,
         processTackleEffects: processTackleEffects,
         processSeasonalSocialDecay: processSeasonalSocialDecay,
+        updateDailyLeaderboard: updateDailyLeaderboard,
         openAnglerSelector: openAnglerSelector,
         selectAngler: selectAngler
     };

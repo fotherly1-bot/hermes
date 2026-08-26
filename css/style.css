@@ -6924,6 +6924,19 @@ details[open] > .lake-accordion-summary::before {
 .lb-val   { font-weight: 700; color: var(--colour-gold); }
 .lb-sub   { font-size: 0.7rem; color: var(--colour-text-muted); }
 
+/* Overall ranking list */
+.leaderboard-list { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.5rem; }
+.lb-rank-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.75rem; background: rgba(0,0,0,0.12); border-radius: var(--radius); font-size: 0.85rem; }
+.lb-rank { font-weight: 700; color: var(--colour-text-muted); min-width: 52px; }
+.lb-rank-1 { color: #f1c40f; }
+.lb-rank-2 { color: #bdc3c7; }
+.lb-rank-3 { color: #d35400; }
+.lb-move { font-size: 0.8rem; min-width: 18px; text-align: center; }
+.lb-up { color: #2ecc71; }
+.lb-down { color: #e74c3c; }
+.lb-same { color: var(--colour-text-muted); }
+.lb-movement { margin-left: auto; }
+
 .lb-match-list { display: flex; flex-direction: column; gap: 0.3rem; }
 
 .lb-match-row {
