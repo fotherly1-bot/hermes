@@ -1755,6 +1755,10 @@ body {
     gap: 0.75rem;
 }
 
+.your-angler-stats-right .your-angler-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .your-angler-stat {
     background: rgba(0,0,0,0.15);
     border-radius: var(--radius);
@@ -1784,6 +1788,11 @@ body {
     gap: 0.9rem;
 }
 
+.your-angler-bests-right .your-angler-bests-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+}
+
 .your-angler-best-card {
     background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.05));
     border: 1px solid var(--colour-border);
@@ -1792,6 +1801,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
+}
+
+.your-angler-bests-right .your-angler-best-card {
+    padding: 0.6rem 0.8rem;
 }
 
 .your-angler-best-label {
@@ -2278,12 +2291,12 @@ body {
     background: rgba(0, 0, 0, 0.15);
     border: 1px solid var(--colour-border);
     border-radius: var(--radius);
-    padding: 0.75rem;
+    padding: 1rem;
 }
 
 .current-lake-img {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
     border-radius: var(--radius);
     border: 1px solid var(--colour-border);

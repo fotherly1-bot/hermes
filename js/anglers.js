@@ -1042,6 +1042,7 @@ const Anglers = (function () {
         }
         html += '</div>';
         html += '</div>'; // close your-angler-profile
+        html += '<button class="btn" style="margin-top:0.75rem;background:#e74c3c;border-color:#e74c3c;color:#fff;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
 
         // ── Preferences + Current Booking row ─────────────────────────────
         var activeBooking = (state.anglerBookings || []).find(function(b){
@@ -1131,8 +1132,6 @@ const Anglers = (function () {
 
         // ── Right column: about, career stats, personal bests, actions ──────
         html += '<div class="your-angler-right">';
-
-        html += '<button class="btn btn-primary" style="margin-top:0;background:#c0392b;border-color:#c0392b;color:#fff;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
 
         // ── About / Bio ─────────────────────────────────────────────────────
         html += '<div class="your-angler-section">';
