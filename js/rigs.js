@@ -269,53 +269,6 @@
             }
             html += '</div>'; // close rigs-rod-row
 
-            // ── Custom Rig Slots Summary ───────────────────────────────────
-            html += '<div class="rigs-custom-slots-summary">';
-            html += '<h3 class="rigs-section-heading">🎣 Custom Rig Slots</h3>';
-            html += '<div class="rigs-custom-slots-grid">';
-            var customRigs = state.customRigs || [null, null, null];
-            for (var s = 0; s < 3; s++) {
-                var rig = customRigs[s];
-                var slotId = 'custom_' + (s + 1);
-                html += '<div class="rig-custom-slot-card">';
-                html += '<div class="rig-slot-header">';
-                html += '<span class="rig-slot-number">Slot ' + (s + 1) + '</span>';
-                if (rig) {
-                    html += '<span class="rig-slot-name">' + rig.name + '</span>';
-                } else {
-                    html += '<span class="rig-slot-empty">Empty</span>';
-                }
-                html += '</div>';
-                if (rig) {
-                    html += '<div class="rig-slot-details">';
-                    html += '<div><strong>Hook:</strong> ' + (RigComponents.getHook(rig.hookType) ? RigComponents.getHook(rig.hookType).name : rig.hookType) + '</div>';
-                    html += '<div><strong>Lead:</strong> ' + (RigComponents.getLead(rig.leadType) ? RigComponents.getLead(rig.leadType).name : rig.leadType) + '</div>';
-                    html += '<div><strong>Tubing:</strong> ' + (RigComponents.getTubing(rig.tubing) ? RigComponents.getTubing(rig.tubing).name : rig.tubing) + '</div>';
-                    html += '<div><strong>Weight:</strong> ' + rig.weight + 'oz</div>';
-                    html += '<div><strong>Bait:</strong> ' + (RigComponents.getBait(rig.bait) ? RigComponents.getBait(rig.bait).name : rig.bait) + '</div>';
-                    html += '<div><strong>Flavour:</strong> ' + (RigComponents.getFlavour(rig.flavour) ? RigComponents.getFlavour(rig.flavour).name : rig.flavour) + '</div>';
-                    html += '<div><strong>Length:</strong> ' + rig.rigLength + 'cm</div>';
-                    if (rig.popupHeight > 0) html += '<div><strong>Popup:</strong> ' + rig.popupHeight + 'cm</div>';
-                    html += '<div><strong>Hair:</strong> ' + rig.hairLength + 'cm</div>';
-                    html += '</div>';
-                    // Calculate and show buffs
-                    var slotFx = getRigEffectsFromConfig(rig);
-                    var slotCatch = (slotFx.catchRateBonus * 100).toFixed(0);
-                    var slotWeight = (slotFx.weightBonus * 100).toFixed(0);
-                    html += '<div class="rig-slot-buffs">+' + slotCatch + '% catch | +' + slotWeight + '% weight</div>';
-                    html += '<div class="rig-slot-actions">';
-                    html += '<button class="btn btn-sm btn-secondary" onclick="Rigs.selectCustomRig(\'' + slotId + '\')">Load</button>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(0,\'' + slotId + '\')">Equip</button>';
-                    html += '<button class="btn btn-sm btn-muted" onclick="Rigs.deleteCustomRig(\'' + slotId + '\')">Clear</button>';
-                    html += '</div>';
-                } else {
-                    html += '<div class="rig-slot-empty-state">Not configured</div>';
-                }
-                html += '</div>';
-            }
-            html += '</div>';
-            html += '</div>';
-
             // Tackle box inventory
             html += '<h3 class="rigs-section-heading">Tackle Box Inventory</h3>';
             html += '<div class="rigs-inventory-grid">';
@@ -367,31 +320,6 @@
 
             var html = '<div class="rig-equip-modal">';
             html += '<h4>Equip Rod ' + (rodIndex + 1) + '</h4>';
-
-            // Custom rigs first
-            var customRigs = state.customRigs || [null, null, null];
-            var hasCustom = customRigs.some(function(r){ return r !== null; });
-            if (hasCustom) {
-                html += '<h5 style="color:var(--colour-gold);margin-bottom:0.5rem;">Custom Rigs</h5>';
-                html += '<div class="rig-equip-carousel">';
-                for (var s = 0; s < 3; s++) {
-                    var rig = customRigs[s];
-                    var slotId = 'custom_' + (s + 1);
-                    if (!rig) continue;
-                    var isEquipped = equipped[rodIndex] && equipped[rodIndex].rigId === 'custom' && equipped[rodIndex].customRigId === slotId;
-                    html += '<div class="rig-equip-card">';
-                    html += '<div class="rig-equip-icon">🎣</div>';
-                    html += '<div class="rig-equip-name">Slot ' + (s + 1) + ' - ' + rig.name + '</div>';
-                    html += '<div class="rig-equip-desc">Custom rig</div>';
-                    if (isEquipped) {
-                        html += '<button class="btn btn-sm btn-muted" disabled>In use</button>';
-                    } else {
-                        html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(' + rodIndex + ',\'' + slotId + '\')">Equip</button>';
-                    }
-                    html += '</div>';
-                }
-                html += '</div>';
-            }
 
             // Preset rigs
             html += '<h5 style="color:var(--colour-text-muted);margin-top:1rem;margin-bottom:0.5rem;">Preset Rigs</h5>';
@@ -528,91 +456,6 @@
         }
 
         /* ── CUSTOM RIG CREATOR ───────────────────────────────────────────── */
-        function getActiveCustomRigConfig() {
-            var state = Game.getState();
-            if (!state.customRigs || state.customRigs.length !== 3) return null;
-            return state.customRigs[0] || null;
-        }
-
-        function saveCustomRig(slotIndex) {
-            slotIndex = slotIndex || 0;
-            var state = Game.getState();
-            if (!state.customRigs) state.customRigs = [null, null, null];
-            var newRig = {
-                id: 'custom_' + (slotIndex + 1),
-                name: 'Custom Rig ' + (slotIndex + 1),
-                hookType: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hookType : 'standard'),
-                leadType: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].leadType : 'lead_clip'),
-                tubing: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].tubing : 'none'),
-                weight: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].weight : 2),
-                bait: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].bait : 'bottom_boilie'),
-                flavour: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].flavour : 'natural'),
-                rigLength: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].rigLength : 45),
-                popupHeight: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].popupHeight : 0),
-                hairLength: (state.rigCustomizations && state.rigCustomizations[0] ? state.rigCustomizations[0].hairLength : 2)
-            };
-            state.customRigs[slotIndex] = newRig;
-            Game.saveToStorage();
-            return newRig;
-        }
-
-        function selectCustomRig(customRigId) {
-            var state = Game.getState();
-            var slotIndex = parseInt(customRigId.split('_')[1], 10) - 1;
-            if (isNaN(slotIndex) || slotIndex < 0 || slotIndex > 2) return;
-            var rig = state.customRigs[slotIndex];
-            if (!rig) return;
-            state.activeCustomRigId = customRigId;
-            if (state.rigCustomizations && state.rigCustomizations[0]) {
-                state.rigCustomizations[0].hookType = rig.hookType;
-                state.rigCustomizations[0].leadType = rig.leadType;
-                state.rigCustomizations[0].tubing = rig.tubing;
-                state.rigCustomizations[0].weight = rig.weight;
-                state.rigCustomizations[0].bait = rig.bait;
-                state.rigCustomizations[0].flavour = rig.flavour;
-                state.rigCustomizations[0].rigLength = rig.rigLength;
-                state.rigCustomizations[0].popupHeight = rig.popupHeight;
-                state.rigCustomizations[0].hairLength = rig.hairLength;
-            }
-            Game.saveToStorage();
-            renderRigs();
-            UI.showToast('Selected custom rig ' + (slotIndex + 1) + ': ' + rig.name, 'success');
-        }
-
-        function deleteCustomRig(customRigId) {
-            var state = Game.getState();
-            var slotIndex = parseInt(customRigId.split('_')[1], 10) - 1;
-            if (isNaN(slotIndex) || slotIndex < 0 || slotIndex > 2) return;
-            state.customRigs[slotIndex] = null;
-            if (state.activeCustomRigId === customRigId) state.activeCustomRigId = null;
-            Game.saveToStorage();
-            renderRigs();
-            UI.showToast('Custom rig ' + (slotIndex + 1) + ' cleared.', 'warning');
-        }
-
-        function equipCustomRig(rodIndex, customRigId) {
-            var state = Game.getState();
-            var slotIndex = parseInt(customRigId.split('_')[1], 10) - 1;
-            if (isNaN(slotIndex) || slotIndex < 0 || slotIndex > 2) return;
-            var rig = state.customRigs[slotIndex];
-            if (!rig) return;
-            state.rigEquipped[rodIndex] = { rigId: 'custom', customRigId: customRigId };
-            state.activeCustomRigId = customRigId;
-            Game.saveToStorage();
-            renderRigs();
-            UI.showToast('Equipped custom rig ' + (slotIndex + 1) + ': ' + rig.name, 'success');
-        }
-
-        function resetCustomRigConfig() {
-            var state = Game.getState();
-            state.activeCustomRigId = null;
-            if (state.rigCustomizations && state.rigCustomizations[0]) {
-                state.rigCustomizations[0] = { hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 };
-            }
-            Game.saveToStorage();
-            renderRigs();
-        }
-
         /* ── TACKLE BOX SHOP ──────────────────────────────────────────────── */
         function renderTackleBoxShop() {
             var state = Game.getState();
@@ -763,11 +606,6 @@
             renderCustomizationModal: renderCustomizationModal,
             buyComponentAndRerender: buyComponentAndRerender,
             getCustomization: getCustomization,
-            saveCustomRig: saveCustomRig,
-            selectCustomRig: selectCustomRig,
-            deleteCustomRig: deleteCustomRig,
-            equipCustomRig: equipCustomRig,
-            resetCustomRigConfig: resetCustomRigConfig,
             renderTackleBoxShop: renderTackleBoxShop,
             buyRigFromShop: buyRigFromShop,
             buyComponentFromShop: buyComponentFromShop,
