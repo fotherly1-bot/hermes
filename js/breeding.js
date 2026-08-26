@@ -266,6 +266,8 @@ const Breeding = (function () {
                     html += '<img src="img/carp/leathercarp1.png" alt="Leather Carp" class="breed-parent-img"/>';
                 } else if (f.species === 'ghost') {
                     html += '<img src="img/carp/ghostcarp1.png" alt="Ghost Carp" class="breed-parent-img"/>';
+                } else if (f.species === 'koi') {
+                    html += '<img src="img/carp/koicarp1.png" alt="Koi Carp" class="breed-parent-img"/>';
                 } else {
                     html += '🐟';
                 }
