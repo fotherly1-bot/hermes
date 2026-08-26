@@ -1813,6 +1813,49 @@ body {
     color: var(--colour-text-muted);
 }
 
+/* ── Right-column career stats / bests restyle ─────────────────────────── */
+.your-angler-stats-right .your-angler-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.your-angler-stats-right .your-angler-stat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.6rem;
+    padding: 0.65rem 0.8rem;
+}
+
+.your-angler-stats-right .your-angler-stat-val {
+    font-size: 1.05rem;
+    color: var(--colour-accent);
+}
+
+.your-angler-stats-right .your-angler-stat-lbl {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+}
+
+.your-angler-bests-right .your-angler-best-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.6rem;
+    padding: 0.75rem 0.9rem;
+}
+
+.your-angler-bests-right .your-angler-best-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--colour-text-muted);
+}
+
+.your-angler-bests-right .your-angler-best-name {
+    font-size: 0.95rem;
+}
+
+.your-angler-bests-right .your-angler-best-val {
+    font-size: 0.9rem;
+}
+
 .your-angler-best-val {
     font-size: 1.3rem;
     font-weight: 800;

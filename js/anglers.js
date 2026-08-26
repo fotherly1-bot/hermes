@@ -1041,9 +1041,7 @@ const Anglers = (function () {
             html += '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
         }
         html += '</div>';
-        html += '</div>';
-
-        html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
+        html += '</div>'; // close your-angler-profile
 
         // ── Preferences + Current Booking row ─────────────────────────────
         var activeBooking = (state.anglerBookings || []).find(function(b){
@@ -1076,54 +1074,6 @@ const Anglers = (function () {
         }
         html += '</div></div></div>';
         html += '</div>';
-
-        // ── Stats grid ─────────────────────────────────────────────────────
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">Career Stats</h4>';
-        html += '<div class="your-angler-stats-grid">';
-        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.fishCaught + '</span><span class="your-angler-stat-lbl">Fish Caught</span></div>';
-        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</span><span class="your-angler-stat-lbl">Biggest Fish</span></div>';
-        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.wins + '</span><span class="your-angler-stat-lbl">Wins</span></div>';
-        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + UI.formatMoney(stats.winnings) + '</span><span class="your-angler-stat-lbl">Winnings</span></div>';
-        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.visits + '</span><span class="your-angler-stat-lbl">Visits</span></div>';
-        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—') + '</span><span class="your-angler-stat-lbl">Social Media</span></div>';
-        html += '</div></div>';
-
-        // ── Personal bests ─────────────────────────────────────────────────
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">Personal Bests</h4>';
-        html += '<div class="your-angler-bests-grid">';
-        if (biggest) {
-            html += '<div class="your-angler-best-card">';
-            html += '<div class="your-angler-best-label">🏆 Biggest Fish</div>';
-            html += '<div class="your-angler-best-name">' + biggest.name + '</div>';
-            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[biggest.species] ? Fish.SPECIES[biggest.species].name : biggest.species) + '</div>';
-            html += '<div class="your-angler-best-val" style="color:var(--colour-gold);">' + UI.formatWeight(biggest.weight_oz) + '</div>';
-            html += '</div>';
-        }
-        if (rarest) {
-            var rRDef = typeof Fish !== 'undefined' && Fish.RARITIES && Fish.RARITIES[rarest.rarity] ? Fish.RARITIES[rarest.rarity] : null;
-            var rRCol = rRDef ? (rRDef.colour || '#888') : '#888';
-            var rRName = rRDef ? rRDef.name : rarest.rarity;
-            html += '<div class="your-angler-best-card">';
-            html += '<div class="your-angler-best-label">💎 Rarest Fish</div>';
-            html += '<div class="your-angler-best-name">' + rarest.name + '</div>';
-            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[rarest.species] ? Fish.SPECIES[rarest.species].name : rarest.species) + '</div>';
-            html += '<div class="your-angler-best-val" style="color:' + rRCol + ';">' + rRName + '</div>';
-            html += '</div>';
-        }
-        if (mostExpensive) {
-            var eRDef = typeof Fish !== 'undefined' && Fish.RARITIES && Fish.RARITIES[mostExpensive.rarity] ? Fish.RARITIES[mostExpensive.rarity] : null;
-            var eRCol = eRDef ? (eRDef.colour || '#888') : '#888';
-            var eRName = eRDef ? eRDef.name : mostExpensive.rarity;
-            html += '<div class="your-angler-best-card">';
-            html += '<div class="your-angler-best-label">💰 Most Valuable</div>';
-            html += '<div class="your-angler-best-name">' + mostExpensive.name + '</div>';
-            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[mostExpensive.species] ? Fish.SPECIES[mostExpensive.species].name : mostExpensive.species) + '</div>';
-            html += '<div class="your-angler-best-val" style="color:' + eRCol + ';">' + UI.formatMoney(Fish.getFishValue(mostExpensive)) + '</div>';
-            html += '</div>';
-        }
-        html += '</div></div>';
 
         // ── Tackle Box ─────────────────────────────────────────────────────
         var ownedTackle = (state.anglerTackle || []);
@@ -1180,8 +1130,60 @@ const Anglers = (function () {
 
         html += '</div>'; // .your-angler-left
 
-        // ── Right column: bio ──────────────────────────────────────────────
+        // ── Right column: career stats, personal bests, actions ────────────
         html += '<div class="your-angler-right">';
+
+        // ── Career Stats ───────────────────────────────────────────────────
+        html += '<div class="your-angler-section your-angler-stats-right">';
+        html += '<h4 class="dash-section-subheading">Career Stats</h4>';
+        html += '<div class="your-angler-stats-grid your-angler-stats-grid--right">';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.fishCaught + '</span><span class="your-angler-stat-lbl">Fish Caught</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</span><span class="your-angler-stat-lbl">Biggest Fish</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.wins + '</span><span class="your-angler-stat-lbl">Wins</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + UI.formatMoney(stats.winnings) + '</span><span class="your-angler-stat-lbl">Winnings</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.visits + '</span><span class="your-angler-stat-lbl">Visits</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—') + '</span><span class="your-angler-stat-lbl">Social Media</span></div>';
+        html += '</div></div>';
+
+        // ── Personal Bests ─────────────────────────────────────────────────
+        html += '<div class="your-angler-section your-angler-bests-right">';
+        html += '<h4 class="dash-section-subheading">Personal Bests</h4>';
+        html += '<div class="your-angler-bests-grid">';
+        if (biggest) {
+            html += '<div class="your-angler-best-card">';
+            html += '<div class="your-angler-best-label">🏆 Biggest Fish</div>';
+            html += '<div class="your-angler-best-name">' + biggest.name + '</div>';
+            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[biggest.species] ? Fish.SPECIES[biggest.species].name : biggest.species) + '</div>';
+            html += '<div class="your-angler-best-val" style="color:var(--colour-gold);">' + UI.formatWeight(biggest.weight_oz) + '</div>';
+            html += '</div>';
+        }
+        if (rarest) {
+            var rRDef = typeof Fish !== 'undefined' && Fish.RARITIES && Fish.RARITIES[rarest.rarity] ? Fish.RARITIES[rarest.rarity] : null;
+            var rRCol = rRDef ? (rRDef.colour || '#888') : '#888';
+            var rRName = rRDef ? rRDef.name : rarest.rarity;
+            html += '<div class="your-angler-best-card">';
+            html += '<div class="your-angler-best-label">💎 Rarest Fish</div>';
+            html += '<div class="your-angler-best-name">' + rarest.name + '</div>';
+            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[rarest.species] ? Fish.SPECIES[rarest.species].name : rarest.species) + '</div>';
+            html += '<div class="your-angler-best-val" style="color:' + rRCol + ';">' + rRName + '</div>';
+            html += '</div>';
+        }
+        if (mostExpensive) {
+            var eRDef = typeof Fish !== 'undefined' && Fish.RARITIES && Fish.RARITIES[mostExpensive.rarity] ? Fish.RARITIES[mostExpensive.rarity] : null;
+            var eRCol = eRDef ? (eRDef.colour || '#888') : '#888';
+            var eRName = eRDef ? eRDef.name : mostExpensive.rarity;
+            html += '<div class="your-angler-best-card">';
+            html += '<div class="your-angler-best-label">💰 Most Valuable</div>';
+            html += '<div class="your-angler-best-name">' + mostExpensive.name + '</div>';
+            html += '<div class="your-angler-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[mostExpensive.species] ? Fish.SPECIES[mostExpensive.species].name : mostExpensive.species) + '</div>';
+            html += '<div class="your-angler-best-val" style="color:' + eRCol + ';">' + UI.formatMoney(Fish.getFishValue(mostExpensive)) + '</div>';
+            html += '</div>';
+        }
+        html += '</div></div>';
+
+        html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
+
+        // ── About / Bio ────────────────────────────────────────────────────
         html += '<div class="your-angler-section">';
         html += '<h4 class="dash-section-subheading">About ' + angler.name.split(' ').pop() + '</h4>';
         if (hasBio) {
@@ -2221,6 +2223,7 @@ const Anglers = (function () {
         generateBookingRequests: generateBookingRequests,
         processDailyBookings: processDailyBookings,
         renderAnglers: renderAnglers,
+        render: renderAnglers,
         getLakeColour: getLakeColour,
         showAnglerView: showAnglerView,
         renderRosterTab: renderRosterTab,
