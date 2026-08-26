@@ -209,6 +209,23 @@
             return bonus;
         }
 
+        function getRigEffectsFromConfig(cfg) {
+            cfg = cfg || {};
+            var catchMod = 0;
+            var weightMod = 0;
+            if (typeof RigComponents !== 'undefined') {
+                var h = RigComponents.getHook(cfg.hookType);
+                if (h) { catchMod += h.catchMod || 0; weightMod += h.weightMod || 0; }
+                var l = RigComponents.getLead(cfg.leadType);
+                if (l) { catchMod += l.catchMod || 0; weightMod += l.weightMod || 0; }
+                var t = RigComponents.getTubing(cfg.tubing);
+                if (t) { catchMod += t.catchMod || 0; weightMod += t.weightMod || 0; }
+                var b = RigComponents.getBait(cfg.bait);
+                if (b) { catchMod += b.catchMod || 0; weightMod += b.weightMod || 0; }
+            }
+            return { catchRateBonus: catchMod, weightBonus: weightMod };
+        }
+
         /* ── RENDER ───────────────────────────────────────────────────────── */
         function renderRigs() {
             initState();
@@ -251,6 +268,53 @@
                 }
             }
             html += '</div>'; // close rigs-rod-row
+
+            // ── Custom Rig Slots Summary ───────────────────────────────────
+            html += '<div class="rigs-custom-slots-summary">';
+            html += '<h3 class="rigs-section-heading">🎣 Custom Rig Slots</h3>';
+            html += '<div class="rigs-custom-slots-grid">';
+            var customRigs = state.customRigs || [null, null, null];
+            for (var s = 0; s < 3; s++) {
+                var rig = customRigs[s];
+                var slotId = 'custom_' + (s + 1);
+                html += '<div class="rig-custom-slot-card">';
+                html += '<div class="rig-slot-header">';
+                html += '<span class="rig-slot-number">Slot ' + (s + 1) + '</span>';
+                if (rig) {
+                    html += '<span class="rig-slot-name">' + rig.name + '</span>';
+                } else {
+                    html += '<span class="rig-slot-empty">Empty</span>';
+                }
+                html += '</div>';
+                if (rig) {
+                    html += '<div class="rig-slot-details">';
+                    html += '<div><strong>Hook:</strong> ' + (RigComponents.getHook(rig.hookType) ? RigComponents.getHook(rig.hookType).name : rig.hookType) + '</div>';
+                    html += '<div><strong>Lead:</strong> ' + (RigComponents.getLead(rig.leadType) ? RigComponents.getLead(rig.leadType).name : rig.leadType) + '</div>';
+                    html += '<div><strong>Tubing:</strong> ' + (RigComponents.getTubing(rig.tubing) ? RigComponents.getTubing(rig.tubing).name : rig.tubing) + '</div>';
+                    html += '<div><strong>Weight:</strong> ' + rig.weight + 'oz</div>';
+                    html += '<div><strong>Bait:</strong> ' + (RigComponents.getBait(rig.bait) ? RigComponents.getBait(rig.bait).name : rig.bait) + '</div>';
+                    html += '<div><strong>Flavour:</strong> ' + (RigComponents.getFlavour(rig.flavour) ? RigComponents.getFlavour(rig.flavour).name : rig.flavour) + '</div>';
+                    html += '<div><strong>Length:</strong> ' + rig.rigLength + 'cm</div>';
+                    if (rig.popupHeight > 0) html += '<div><strong>Popup:</strong> ' + rig.popupHeight + 'cm</div>';
+                    html += '<div><strong>Hair:</strong> ' + rig.hairLength + 'cm</div>';
+                    html += '</div>';
+                    // Calculate and show buffs
+                    var slotFx = getRigEffectsFromConfig(rig);
+                    var slotCatch = (slotFx.catchRateBonus * 100).toFixed(0);
+                    var slotWeight = (slotFx.weightBonus * 100).toFixed(0);
+                    html += '<div class="rig-slot-buffs">+' + slotCatch + '% catch | +' + slotWeight + '% weight</div>';
+                    html += '<div class="rig-slot-actions">';
+                    html += '<button class="btn btn-sm btn-secondary" onclick="Rigs.selectCustomRig(\'' + slotId + '\')">Load</button>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.equipCustomRig(0,\'' + slotId + '\')">Equip</button>';
+                    html += '<button class="btn btn-sm btn-muted" onclick="Rigs.deleteCustomRig(\'' + slotId + '\')">Clear</button>';
+                    html += '</div>';
+                } else {
+                    html += '<div class="rig-slot-empty-state">Not configured</div>';
+                }
+                html += '</div>';
+            }
+            html += '</div>';
+            html += '</div>';
 
             // ── Custom Rig Creator + Fish Tank ────────────────────────────
             html += '<div class="rigs-custom-section">';

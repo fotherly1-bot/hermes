@@ -10854,3 +10854,100 @@ details[open] > .lake-accordion-summary::before {
 .tank-rig-anim.tank-rig-popped .tank-rig-bait {
     top: calc(50% - var(--popup-offset, 0px));
 }
+
+/* ── Custom Rig Slots Summary ───────────────────────────────────────── */
+.rigs-custom-slots-summary {
+    margin-top: 1.5rem;
+}
+
+.rigs-custom-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.rig-custom-slot-card {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.rig-slot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.rig-slot-number {
+    font-weight: 800;
+    color: var(--colour-gold);
+    font-size: 0.9rem;
+}
+
+.rig-slot-name {
+    font-weight: 700;
+    color: var(--colour-text);
+    font-size: 0.9rem;
+}
+
+.rig-slot-empty {
+    color: var(--colour-text-muted);
+    font-size: 0.85rem;
+}
+
+.rig-slot-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    color: var(--colour-text);
+    line-height: 1.4;
+}
+
+.rig-slot-details strong {
+    color: var(--colour-text-muted);
+    font-weight: 700;
+}
+
+.rig-slot-buffs {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--colour-gold);
+    text-align: center;
+}
+
+.rig-slot-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.rig-slot-actions .btn {
+    flex: 1;
+    font-size: 0.8rem;
+}
+
+.rig-slot-empty-state {
+    color: var(--colour-text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+@media (max-width: 900px) {
+    .rigs-custom-slots-grid {
+        grid-template-columns: 1fr;
+    }
+}
