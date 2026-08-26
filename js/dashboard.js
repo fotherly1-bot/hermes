@@ -1353,16 +1353,16 @@ const Dashboard = (function () {
         var quests = state.anglerQuests || [];
 
         var bars = [
-            { label: 'Fish Caught', pct: Math.min(100, stats.fishCaught * 5), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '🐟' },
-            { label: 'Biggest Fish', pct: Math.min(100, Math.round((stats.biggestFishOz / 1200) * 100)), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '⚖️' },
-            { label: 'Wins', pct: Math.min(100, stats.wins * 10), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '🏆' },
-            { label: 'Social Media', pct: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia * 10 : 0), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '📱' },
-            { label: 'Leaderboard', pct: Math.max(5, 100 - ((anglerRank - 1) / Math.max(1, anglersWithCatches.length) * 100)), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '📊' }
+            { label: 'Fish Caught', pct: Math.min(100, stats.fishCaught * 5), value: stats.fishCaught, colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '🐟' },
+            { label: 'Biggest Fish', pct: Math.min(100, Math.round((stats.biggestFishOz / 1200) * 100)), value: stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—', colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '⚖️' },
+            { label: 'Wins', pct: Math.min(100, stats.wins * 10), value: stats.wins, colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '🏆' },
+            { label: 'Social Media', pct: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia * 10 : 0), value: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—'), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '📱' },
+            { label: 'Leaderboard', pct: Math.max(5, 100 - ((anglerRank - 1) / Math.max(1, anglersWithCatches.length) * 100)), value: '#' + anglerRank + ' of ' + anglersWithCatches.length, colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '📊' }
         ];
 
         var barsHtml = bars.map(function(b) {
             return '<div class="dash-fish-stat-bar">' +
-                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:var(--colour-gold);">' + b.pct + '%</span></div>' +
+                '<div class="dash-fish-stat-bar-header"><span class="dash-fish-stat-icon">' + b.icon + '</span><span class="dash-fish-stat-label">' + b.label + '</span><span class="dash-fish-stat-pct" style="color:var(--colour-gold);">' + b.value + '</span></div>' +
                 '<div class="dash-fish-stat-bar-track"><div class="dash-fish-stat-bar-fill" style="width:' + b.pct + '%;background:' + b.colour + ';"></div></div>' +
             '</div>';
         }).join('');
