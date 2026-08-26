@@ -1451,7 +1451,7 @@ const Dashboard = (function () {
         }).join('');
 
         return '<div class="dash-fish-feature-card">' +
-            '<h4 class="dash-section-subheading">🏆🏆 <span style="font-size:1.4em;">🏆</span> Biggest Fish</h4>' +
+            '<h4 class="dash-section-subheading">🏆 Biggest Fish</h4>' +
             '<div class="dash-fish-feature">' +
                 getFishIconHtml(biggest.species, true) +
                 '<span class="dash-fish-name">' + biggest.name + '</span>' +
@@ -1511,7 +1511,7 @@ const Dashboard = (function () {
         }).join('');
 
         return '<div class="dash-fish-feature-card">' +
-            '<h4 class="dash-section-subheading">💎💎 <span style="font-size:1.4em;">💎</span> Rarest Fish</h4>' +
+            '<h4 class="dash-section-subheading">💎 Rarest Fish</h4>' +
             '<div class="dash-fish-feature">' +
                 getFishIconHtml(rarest.species, true) +
                 '<span class="dash-fish-name">' + rarest.name + '</span>' +
