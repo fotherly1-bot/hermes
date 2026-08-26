@@ -1730,56 +1730,6 @@ body {
     color: var(--colour-text);
 }
 
-.your-angler-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    margin-top: 0.75rem;
-}
-
-.ya-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.ya-bar-icon {
-    font-size: 1.1rem;
-    width: 1.5rem;
-    text-align: center;
-}
-
-.ya-bar-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--colour-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    width: 7.5rem;
-}
-
-.ya-bar-value {
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: var(--colour-text);
-    width: 6rem;
-    text-align: right;
-}
-
-.ya-bar-track {
-    flex: 1 1 auto;
-    height: 0.55rem;
-    background: rgba(0,0,0,0.25);
-    border-radius: 999px;
-    overflow: hidden;
-}
-
-.ya-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #00b4d8, #0077b6);
-    border-radius: 999px;
-}
-
 .your-angler-section-row {
     display: grid;
     grid-template-columns: 1fr 1fr;

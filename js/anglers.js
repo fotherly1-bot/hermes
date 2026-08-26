@@ -1043,24 +1043,6 @@ const Anglers = (function () {
         html += '</div>';
         html += '</div>';
 
-        // ── Horizontal stat bars ────────────────────────────────────────────
-        var fishPct = Math.min(100, Math.round((stats.fishCaught / 200) * 100));
-        var weightPct = Math.min(100, Math.round(((stats.biggestFishOz || 0) / 1200) * 100));
-        html += '<div class="your-angler-bars">';
-        html += '<div class="ya-bar">';
-        html += '<span class="ya-bar-icon">🐟</span>';
-        html += '<span class="ya-bar-label">FISH CAUGHT</span>';
-        html += '<span class="ya-bar-value">' + stats.fishCaught + '</span>';
-        html += '<div class="ya-bar-track"><div class="ya-bar-fill" style="width:' + fishPct + '%;"></div></div>';
-        html += '</div>';
-        html += '<div class="ya-bar">';
-        html += '<span class="ya-bar-icon">🏆</span>';
-        html += '<span class="ya-bar-label">BIGGEST FISH</span>';
-        html += '<span class="ya-bar-value">' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</span>';
-        html += '<div class="ya-bar-track"><div class="ya-bar-fill" style="width:' + weightPct + '%;"></div></div>';
-        html += '</div>';
-        html += '</div>';
-
         html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
 
         // ── Preferences + Current Booking row ─────────────────────────────
