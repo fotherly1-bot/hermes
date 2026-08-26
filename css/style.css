@@ -1631,6 +1631,10 @@ body {
     border-color: #c0392b;
     color: #fff;
 }
+.your-angler-profile .btn-primary {
+    width: auto;
+    margin-top: 0.5rem;
+}
 
 /* ── Your Angler tab ─────────────────────────────────────────────────── */
 .your-angler-root {
@@ -9756,7 +9760,7 @@ details[open] > .lake-accordion-summary::before {
     text-align: center;
 }
 .dash-feature-fish-card .dash-fish-name {
-    font-size: 1.15rem;
+    font-size: 1.4rem;
 }
 .dash-feature-fish-card .dash-fish-weight {
     font-size: 1.75rem;
