@@ -1015,7 +1015,7 @@ const Anglers = (function () {
             html += '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
         }
         html += '</div>'; // close your-angler-photo
-        html += '<button class="btn btn-primary btn-sm" style="margin-top:0.5rem;width:100%;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
+        html += '<button class="btn btn-primary" style="margin-top:0.5rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
         html += '<div class="your-angler-meta">';
         html += '<div class="your-angler-name">' + angler.name + '</div>';
         html += '<div class="your-angler-category" style="color:var(--colour-text-muted);font-size:0.9rem;">' + (angler.category || 'Angler') + '</div>';
