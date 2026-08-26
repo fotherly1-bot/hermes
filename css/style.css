@@ -532,18 +532,18 @@ body {
 /* ── Angler Selector Carousel ─────────────────────────────────────────────── */
 .angler-selector-carousel {
     display: flex;
-    gap: 1rem;
+    gap: 1.25rem;
     overflow-x: auto;
-    padding: 0.5rem 0.25rem 1rem;
+    padding: 0.75rem 0.25rem 1.25rem;
     scroll-snap-type: x mandatory;
 }
 .angler-selector-card {
-    flex: 0 0 220px;
+    flex: 0 0 280px;
     scroll-snap-align: start;
     background: var(--colour-card);
     border: 1px solid var(--colour-border);
     border-radius: var(--radius);
-    padding: 1rem;
+    padding: 1.25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2291,12 +2291,13 @@ body {
     background: rgba(0, 0, 0, 0.15);
     border: 1px solid var(--colour-border);
     border-radius: var(--radius);
-    padding: 1rem;
+    padding: 1.25rem;
+    min-height: 160px;
 }
 
 .current-lake-img {
-    width: 120px;
-    height: 120px;
+    width: 160px;
+    height: 160px;
     object-fit: cover;
     border-radius: var(--radius);
     border: 1px solid var(--colour-border);
