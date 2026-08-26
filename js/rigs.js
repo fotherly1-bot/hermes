@@ -31,6 +31,19 @@
                 weatherBonus: { sunny: 0.02, cloudy: 0.03, overcast: 0.01, rainy: 0.00, stormy: -0.03, foggy: 0.01, frost: -0.02, snowfall: -0.05, heatwave: 0.01 }
             },
             {
+                id: 'inline_ronnie',
+                name: 'Inline Ronnie Rig',
+                description: 'Teardrop sinker with inline connector, black leader, yellow bead spacer and upward-facing hook. Excellent for wary fish.',
+                icon: '🪝',
+                category: 'Rig',
+                cost: 3800,
+                leadTypes: ['inline', 'heli', 'lead_clip'],
+                bestLead: 'inline',
+                baseCatchMod: 0.025,
+                baseWeightMod: 0.015,
+                weatherBonus: { sunny: 0.03, cloudy: 0.02, overcast: 0.01, rainy: -0.01, stormy: -0.04, foggy: 0.01, frost: -0.03, snowfall: -0.06, heatwave: 0.02 }
+            },
+            {
                 id: 'hair',
                 name: 'Hair Rig',
                 description: 'The iconic carp rig. Hookbait sits away from the lead for natural presentation.',
@@ -178,15 +191,6 @@
                     weightBonus += 0.01;
                 }
             });
-            // Component bonuses
-            if (typeof RigComponents !== 'undefined' && RigComponents.getCustomizationEffects) {
-                equipped.forEach(function (slot, idx) {
-                    if (!slot) return;
-                    var fx = RigComponents.getCustomizationEffects(idx);
-                    catchBonus += fx.catchMod || 0;
-                    weightBonus += fx.weightMod || 0;
-                });
-            }
             return { catchRateBonus: catchBonus, weightBonus: weightBonus };
         }
 
@@ -209,34 +213,18 @@
             return bonus;
         }
 
-        function getRigEffectsFromConfig(cfg) {
-            cfg = cfg || {};
-            var catchMod = 0;
-            var weightMod = 0;
-            if (typeof RigComponents !== 'undefined') {
-                var h = RigComponents.getHook(cfg.hookType);
-                if (h) { catchMod += h.catchMod || 0; weightMod += h.weightMod || 0; }
-                var l = RigComponents.getLead(cfg.leadType);
-                if (l) { catchMod += l.catchMod || 0; weightMod += l.weightMod || 0; }
-                var t = RigComponents.getTubing(cfg.tubing);
-                if (t) { catchMod += t.catchMod || 0; weightMod += t.weightMod || 0; }
-                var b = RigComponents.getBait(cfg.bait);
-                if (b) { catchMod += b.catchMod || 0; weightMod += b.weightMod || 0; }
-            }
-            return { catchRateBonus: catchMod, weightBonus: weightMod };
-        }
-
         /* ── RENDER ───────────────────────────────────────────────────────── */
         function renderRigs() {
             initState();
             var state = Game.getState();
             var html = '<div class="rigs-root">';
 
-            // Rod slots row
+            // Rod slots row with selectors below each
             html += '<div class="rigs-rod-row">';
             for (var i = 0; i < 3; i++) {
                 var slot = (state.rigEquipped || [])[i];
                 var slotLabel = 'Rod ' + (i + 1);
+                html += '<div class="rig-rod-col">';
                 if (slot) {
                     var def = getRigById(slot.rigId);
                     var lead = getLeadDef(slot.leadType);
@@ -256,20 +244,33 @@
                         html += '<div class="rig-rod-name">Empty</div>';
                     }
                     html += '<button class="btn btn-sm btn-primary" onclick="Rigs.unequipRig(' + i + ');Rigs.renderRigs();">Unequip</button>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.openEquipModal(' + i + ')">Swap</button>';
                     html += '</div>';
                 } else {
                     html += '<div class="rig-rod-card rig-rod-empty">';
                     html += '<div class="rig-rod-label">' + slotLabel + '</div>';
                     html += '<div class="rig-rod-icon">🎣</div>';
                     html += '<div class="rig-rod-name">Empty Slot</div>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.openEquipModal(' + i + ')">Equip Rig</button>';
                     html += '</div>';
                 }
+
+                // Rig selector below rod
+                html += '<div class="rig-rod-selector">';
+                html += '<div class="rig-selector-label">Select Rig for ' + slotLabel + '</div>';
+                html += '<div class="rig-selector-grid">';
+                (state.rigInventory || []).forEach(function (rigId) {
+                    var rDef = getRigById(rigId);
+                    if (!rDef) return;
+                    var isActive = slot && slot.rigId === rigId;
+                    html += '<button class="btn btn-sm ' + (isActive ? 'btn-primary' : 'btn-secondary') + '" onclick="Rigs.equipRig(' + i + ',\'' + rigId + '\',\'' + (rDef.leadTypes[0] || 'inline') + '\');Rigs.renderRigs();">' + rDef.icon + ' ' + rDef.name + '</button>';
+                });
+                html += '</div>';
+                html += '</div>';
+
+                html += '</div>'; // close rig-rod-col
             }
             html += '</div>'; // close rigs-rod-row
 
-            // Tackle box inventory
+            // Tackle Box Inventory
             html += '<h3 class="rigs-section-heading">Tackle Box Inventory</h3>';
             html += '<div class="rigs-inventory-grid">';
             var inventory = state.rigInventory || [];
@@ -315,35 +316,26 @@
             initState();
             var state = Game.getState();
             var inventory = state.rigInventory || [];
-            var equipped = state.rigEquipped || [null, null, null];
-            var usedRigIds = equipped.filter(function(s){ return s; }).map(function(s){ return s.rigId; });
 
             var html = '<div class="rig-equip-modal">';
             html += '<h4>Equip Rod ' + (rodIndex + 1) + '</h4>';
 
             // Preset rigs
-            html += '<h5 style="color:var(--colour-text-muted);margin-top:1rem;margin-bottom:0.5rem;">Preset Rigs</h5>';
+            html += '<h5 style="color:var(--colour-text-muted);margin-top:1rem;margin-bottom:0.5rem;">Rigs</h5>';
             html += '<div class="rig-equip-carousel">';
             RIG_CATALOG.forEach(function (def) {
                 var owned = inventory.indexOf(def.id) !== -1;
-                var isEquipped = usedRigIds.indexOf(def.id) !== -1 && equipped[rodIndex] && equipped[rodIndex].rigId !== def.id;
                 html += '<div class="rig-equip-card' + (owned ? '' : ' rig-disabled') + '">';
                 html += '<div class="rig-equip-icon">' + def.icon + '</div>';
                 html += '<div class="rig-equip-name">' + def.name + '</div>';
                 html += '<div class="rig-equip-desc">' + def.description + '</div>';
                 if (owned) {
-                    // Lead selector
                     html += '<div class="rig-lead-selector">';
                     def.leadTypes.forEach(function (lt) {
                         var lead = getLeadDef(lt);
                         html += '<button class="btn btn-sm ' + (lt === def.bestLead ? 'btn-primary' : 'btn-secondary') + '" onclick="Rigs.selectLead(' + rodIndex + ', \'' + def.id + '\', \'' + lt + '\')" title="' + lead.desc + '">' + lead.icon + ' ' + lead.name + '</button>';
                     });
                     html += '</div>';
-                    if (isEquipped) {
-                        html += '<button class="btn btn-sm btn-muted" disabled>In use</button>';
-                    } else {
-                        html += '<button class="btn btn-sm btn-primary" onclick="Rigs.selectLead(' + rodIndex + ', \'' + def.id + '\', \'' + (def.leadTypes[0] || 'inline') + '\')">Equip</button>';
-                    }
                 } else {
                     html += '<button class="btn btn-sm btn-muted" disabled>Not Owned</button>';
                 }
@@ -360,10 +352,6 @@
         function selectLead(rodIndex, rigId, leadType) {
             var ok = equipRig(rodIndex, rigId, leadType);
             if (ok) {
-                // Reset custom rig config when a preset rig is selected
-                if (rigId !== 'custom') {
-                    resetCustomRigConfig();
-                }
                 UI.hideModal();
                 renderRigs();
                 var def = getRigById(rigId);
@@ -372,185 +360,30 @@
             }
         }
 
-        /* ── CUSTOMIZATION ─────────────────────────────────────────────────── */
-        function ensureCustomizationDefaults() {
-            var state = Game.getState();
-            if (!state.rigCustomizations) state.rigCustomizations = [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }];
-        }
-
-        function getCustomization(rodIndex) {
-            ensureCustomizationDefaults();
-            var state = Game.getState();
-            return state.rigCustomizations[rodIndex] || { hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 };
-        }
-
-        function setCustomization(rodIndex, key, value) {
-            ensureCustomizationDefaults();
-            var state = Game.getState();
-            if (!state.rigCustomizations[rodIndex]) state.rigCustomizations[rodIndex] = {};
-            state.rigCustomizations[rodIndex][key] = value;
-            Game.saveToStorage();
-        }
-
-        function renderCustomizationModal(rodIndex) {
-            ensureCustomizationDefaults();
-            var c = getCustomization(rodIndex);
-            var html = '<div class="rig-customize-modal">';
-            html += '<h4 style="margin-top:0;color:var(--colour-gold);">Customise Rod ' + (rodIndex + 1) + '</h4>';
-
-            function selectorRow(label, options, current, key) {
-                var row = '<div class="rig-customize-row"><label>' + label + '</label><div class="rig-customize-options">';
-                options.forEach(function (opt) {
-                    var active = opt.id === current ? ' rig-opt-active' : '';
-                    row += '<button class="btn btn-sm btn-secondary' + active + '" onclick="Rigs.setCustomization(' + rodIndex + ',\'' + key + '\',\'' + opt.id + '\');Rigs.renderCustomizationModal(' + rodIndex + ');">' + (opt.icon || '') + ' ' + opt.name + '</button>';
-                });
-                row += '</div></div>';
-                return row;
-            }
-
-            function sliderRow(label, key, min, max, unit) {
-                return '<div class="rig-customize-row"><label>' + label + ': <strong>' + c[key] + unit + '</strong></label>' +
-                    '<input type="range" min="' + min + '" max="' + max + '" value="' + c[key] + '" onchange="Rigs.setCustomization(' + rodIndex + ',\'' + key + '\', parseInt(this.value));Rigs.renderCustomizationModal(' + rodIndex + ');" style="width:100%;"/></div>';
-            }
-
-            html += selectorRow('Hook', RigComponents.HOOKS, c.hookType, 'hookType');
-            html += selectorRow('Lead Type', RigComponents.LEADS, c.leadType, 'leadType');
-            html += selectorRow('Tubing', RigComponents.TUBING, c.tubing, 'tubing');
-            html += selectorRow('Weight', RigComponents.WEIGHTS, 'weight_' + c.weight + 'oz', 'weight');
-            html += selectorRow('Bait', RigComponents.BAITS, c.bait, 'bait');
-            html += selectorRow('Flavour', RigComponents.FLAVOURS, c.flavour, 'flavour');
-            html += sliderRow('Rig Length', 'rigLength', 20, 80, 'cm');
-            var isPopupBait = c.bait === 'popup' || c.bait === 'popup_corn';
-            html += '<div class="rig-customize-row" id="popup-height-row-' + rodIndex + '" style="opacity:' + (isPopupBait ? '1' : '0.4') + ';pointer-events:' + (isPopupBait ? 'auto' : 'none') + ';">';
-            html += '<label>Popup Height: <strong>' + c.popupHeight + 'cm</strong></label>';
-            html += '<input type="range" min="0" max="30" value="' + c.popupHeight + '" ' + (isPopupBait ? '' : 'disabled') + ' onchange="Rigs.setCustomization(' + rodIndex + ',\'popupHeight\', parseInt(this.value));Rigs.renderCustomizationModal(' + rodIndex + ');" style="width:100%;"/></div>';
-            html += sliderRow('Hair Length', 'hairLength', 0, 8, 'cm');
-
-            html += '<div class="rig-customize-section">';
-            html += '<h5 style="color:var(--colour-text-muted);">Buy Components</h5>';
-            var all = RigComponents.HOOKS.concat(RigComponents.LEADS, RigComponents.TUBING, RigComponents.WEIGHTS, RigComponents.BAITS, RigComponents.FLAVOURS);
-            all.forEach(function (item) {
-                if (RigComponents.isOwned(item.id)) return;
-                html += '<div class="rig-component-row">';
-                html += '<span>' + (item.icon || '') + ' ' + item.name + '</span>';
-                html += '<span style="color:var(--colour-text-muted);font-size:0.8rem;">' + item.desc + '</span>';
-                html += '<span style="font-weight:700;">£' + UI.formatMoney(item.cost) + '</span>';
-                html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentAndRerender(\'' + item.id + '\',' + rodIndex + ')">Buy</button>';
-                html += '</div>';
-            });
-            html += '</div>';
-
-            html += '<div class="rig-customize-actions">';
-            html += '<button class="btn btn-secondary" onclick="UI.hideModal()">Close</button>';
-            html += '</div>';
-
-            html += '</div>';
-            UI.showModal(html);
-        }
-
-        function buyComponentAndRerender(componentId, rodIndex) {
-            if (typeof RigComponents !== 'undefined' && RigComponents.buyComponent) {
-                RigComponents.buyComponent(componentId);
-            }
-            renderCustomizationModal(rodIndex);
-        }
-
-        /* ── CUSTOM RIG CREATOR ───────────────────────────────────────────── */
         /* ── TACKLE BOX SHOP ──────────────────────────────────────────────── */
         function renderTackleBoxShop() {
             var state = Game.getState();
-            var owned = state.rigComponentsOwned || [];
             var html = '<div class="rigs-shop-root">';
-            html += '<h3 class="rigs-section-heading">🎒 Tackle Box Shop</h3>';
-            html += '<p class="rigs-shop-intro">Buy rigs, leads, hooks, tubing, weights, baits and flavours. Unlocked items appear in the Customise Rig section.</p>';
+            html += '<h3 class="rigs-section-heading">🎒 Rig Shop</h3>';
+            html += '<p class="rigs-shop-intro">Buy and unlock new rigs. Owned rigs appear below and can be equipped on any rod.</p>';
 
-            function shopSection(title, items, renderItem) {
-                html += '<div class="rigs-shop-section">';
-                html += '<h4 style="color:var(--colour-gold);margin-bottom:0.5rem;">' + title + '</h4>';
-                html += '<div class="rigs-shop-grid">';
-                items.forEach(function (item) {
-                    var isOwned = owned.indexOf(item.id) !== -1;
-                    html += '<div class="rigs-shop-card' + (isOwned ? ' rig-owned' : '') + '">';
-                    html += '<div class="rigs-shop-card-icon">' + (item.icon || '') + '</div>';
-                    html += '<div class="rigs-shop-card-name">' + item.name + '</div>';
-                    html += '<div class="rigs-shop-card-desc">' + item.desc + '</div>';
-                    if (renderItem) renderItem(item, isOwned);
-                    html += '</div>';
-                });
-                html += '</div></div>';
-            }
-
-            // Rig Types
-            shopSection('Rig Types', RIG_CATALOG, function (item, isOwned) {
+            html += '<div class="rigs-shop-grid">';
+            RIG_CATALOG.forEach(function (def) {
                 var inv = state.rigInventory || [];
-                var alreadyOwned = inv.indexOf(item.id) !== -1;
-                if (alreadyOwned || isOwned) {
+                var alreadyOwned = inv.indexOf(def.id) !== -1;
+                html += '<div class="rigs-shop-card' + (alreadyOwned ? ' rig-owned' : '') + '">';
+                html += '<div class="rigs-shop-card-icon">' + def.icon + '</div>';
+                html += '<div class="rigs-shop-card-name">' + def.name + '</div>';
+                html += '<div class="rigs-shop-card-desc">' + def.description + '</div>';
+                if (alreadyOwned) {
                     html += '<span class="rig-badge rig-badge-owned">Owned</span>';
                 } else {
-                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyRigFromShop(\'' + item.id + '\')">Buy</button>';
+                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(def.cost) + '</span>';
+                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyRigFromShop(\'' + def.id + '\')">Buy</button>';
                 }
+                html += '</div>';
             });
-
-            // Lead Types
-            shopSection('Lead Types', RigComponents.LEADS, function (item, isOwned) {
-                if (isOwned) {
-                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
-                } else {
-                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
-                }
-            });
-
-            // Hooks & Sizes
-            shopSection('Hooks & Sizes', RigComponents.HOOKS, function (item, isOwned) {
-                if (isOwned) {
-                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
-                } else {
-                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
-                }
-            });
-
-            // Hooklink Materials
-            shopSection('Hooklink Materials', RigComponents.TUBING, function (item, isOwned) {
-                if (isOwned) {
-                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
-                } else {
-                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
-                }
-            });
-
-            // Weights
-            shopSection('Weights', RigComponents.WEIGHTS, function (item, isOwned) {
-                if (isOwned) {
-                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
-                } else {
-                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
-                }
-            });
-
-            // Baits
-            shopSection('Baits', RigComponents.BAITS, function (item, isOwned) {
-                if (isOwned) {
-                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
-                } else {
-                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
-                }
-            });
-
-            // Flavours
-            shopSection('Flavours', RigComponents.FLAVOURS, function (item, isOwned) {
-                if (isOwned) {
-                    html += '<span class="rig-badge rig-badge-owned">Owned</span>';
-                } else {
-                    html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(item.cost) + '</span>';
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyComponentFromShop(\'' + item.id + '\')">Buy</button>';
-                }
-            });
+            html += '</div>';
 
             html += '</div>';
             return html;
@@ -559,7 +392,7 @@
         function buyRigFromShop(rigId) {
             var state = Game.getState();
             initState();
-            var def = (typeof Rigs !== 'undefined' ? Rigs.getRigById(rigId) : null);
+            var def = getRigById(rigId);
             if (!def) { UI.showToast('Rig not found.', 'error'); return; }
             var inv = state.rigInventory || [];
             if (inv.indexOf(rigId) !== -1) {
@@ -581,13 +414,6 @@
             renderRigs();
         }
 
-        function buyComponentFromShop(componentId) {
-            if (typeof RigComponents !== 'undefined' && RigComponents.buyComponent) {
-                RigComponents.buyComponent(componentId);
-            }
-            renderRigs();
-        }
-
         /* ── PUBLIC API ───────────────────────────────────────────────────── */
         return {
             RIG_CATALOG: RIG_CATALOG,
@@ -602,14 +428,7 @@
             renderRigs: renderRigs,
             openEquipModal: openEquipModal,
             selectLead: selectLead,
-            setCustomization: setCustomization,
-            renderCustomizationModal: renderCustomizationModal,
-            buyComponentAndRerender: buyComponentAndRerender,
-            getCustomization: getCustomization,
-            renderTackleBoxShop: renderTackleBoxShop,
-            buyRigFromShop: buyRigFromShop,
-            buyComponentFromShop: buyComponentFromShop,
-            getActiveCustomRigConfig: getActiveCustomRigConfig
+            buyRigFromShop: buyRigFromShop
         };
     })();
     window.Rigs = Rigs;
