@@ -1192,20 +1192,6 @@ const Anglers = (function () {
 
         html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
 
-        // ── Notifications ──────────────────────────────────────────────────
-        var anglerNotifications = (state.notifications || []).slice().reverse().slice(0, 5);
-        if (anglerNotifications.length > 0) {
-            html += '<div class="your-angler-section">';
-            html += '<h4 class="dash-section-subheading">🔔 Recent Notifications</h4>';
-            html += '<div class="quest-list">';
-            anglerNotifications.forEach(function(n) {
-                html += '<div class="quest-item">';
-                html += '<div class="quest-desc">' + (n.text || n) + '</div>';
-                html += '</div>';
-            });
-            html += '</div></div>';
-        }
-
         // ── Quests ─────────────────────────────────────────────────────────
         var quests = state.anglerQuests || [];
         if (quests.length > 0) {
