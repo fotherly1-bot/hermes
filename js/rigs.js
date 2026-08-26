@@ -764,11 +764,10 @@
             html += '<div class="tank-water">';
             html += '<div class="tank-surface"></div>';
             html += '<div class="tank-bed"></div>';
-            html += '<div class="tank-rig-anim" id="tank-rig-0">';
-            html += '<div class="tank-rig-line"></div>';
-            html += '<div class="tank-rig-lead"></div>';
-            html += '<div class="tank-rig-hook">🪝</div>';
-            html += '<div class="tank-rig-bait">🟤</div>';
+            html += '<div class="tank-rig-group" id="tank-rig-0" data-popup="0">';
+            html += '<div class="tank-rig-horizontal"></div>';
+            html += '<div class="tank-rig-hook" style="right:0;top:auto;bottom:0;">🪝</div>';
+            html += '<div class="tank-rig-bait" style="right:-6px;top:auto;bottom:0;">🟤</div>';
             html += '</div>';
             html += '</div>';
             html += '<div class="tank-glass"></div>';
@@ -777,7 +776,7 @@
             // Test buttons for each rod
             html += '<div class="tank-test-buttons">';
             for (var i = 0; i < 3; i++) {
-                html += '<button class="btn btn-primary" style="flex:1;" onclick="Rigs.openFishTank(' + i + ')">Test Rig ' + (i + 1) + '</button>';
+                html += '<button class="btn btn-primary" style="flex:1;" onclick="Rigs.testRigInTank(' + i + ')">Test Rig ' + (i + 1) + '</button>';
             }
             html += '</div>';
 
@@ -786,6 +785,49 @@
             html += '</div>';
             html += '</div>';
             return html;
+        }
+
+        function testRigInTank(rodIndex) {
+            var state = Game.getState();
+            initState();
+            var c = getCustomization(rodIndex);
+            var slot = (state.rigEquipped || [])[rodIndex];
+            var rigDef = slot ? getRigById(slot.rigId) : null;
+            var isPopup = c.bait === 'popup' || c.bait === 'popup_corn';
+            var popupPx = isPopup && c.popupHeight > 0 ? Math.min(120, c.popupHeight * 4) : 0;
+
+            var el = document.getElementById('tank-rig-' + rodIndex);
+            if (!el) return;
+            el.setAttribute('data-popup', popupPx);
+            el.className = 'tank-rig-group';
+            el.innerHTML = '<div class="tank-rig-horizontal"></div>';
+            if (isPopup && popupPx > 0) {
+                el.innerHTML += '<div class="tank-rig-vertical"></div>';
+                el.innerHTML += '<div class="tank-rig-hook">🪝</div>';
+                el.innerHTML += '<div class="tank-rig-bait">' + (RigComponents.getBait(c.bait) ? RigComponents.getBait(c.bait).icon : '🟤') + '</div>';
+            } else {
+                el.innerHTML += '<div class="tank-rig-hook" style="right:0;top:auto;bottom:0;">🪝</div>';
+                el.innerHTML += '<div class="tank-rig-bait" style="right:-6px;top:auto;bottom:0;">' + (RigComponents.getBait(c.bait) ? RigComponents.getBait(c.bait).icon : '🟤') + '</div>';
+            }
+
+            // Trigger drop animation
+            dropRigAnimation(rodIndex);
+
+            // Update info panel
+            var info = document.getElementById('tank-info-' + rodIndex);
+            if (info) {
+                var html = '<strong>Rod ' + (rodIndex + 1) + ' Test</strong><br/>';
+                html += '<strong>Rig:</strong> ' + (rigDef ? rigDef.name : 'None') + '<br/>';
+                html += '<strong>Hook:</strong> ' + (RigComponents.getHook(c.hookType) ? RigComponents.getHook(c.hookType).name : c.hookType) + '<br/>';
+                html += '<strong>Bait:</strong> ' + (RigComponents.getBait(c.bait) ? RigComponents.getBait(c.bait).name : c.bait) + (isPopup ? ' (Popup)' : ' (Bottom)') + '<br/>';
+                html += '<strong>Flavour:</strong> ' + (RigComponents.getFlavour(c.flavour) ? RigComponents.getFlavour(c.flavour).name : c.flavour) + '<br/>';
+                html += '<strong>Weight:</strong> ' + c.weight + 'oz<br/>';
+                html += '<strong>Rig Length:</strong> ' + c.rigLength + 'cm<br/>';
+                if (isPopup && c.popupHeight > 0) html += '<strong>Popup Height:</strong> ' + c.popupHeight + 'cm<br/>';
+                info.innerHTML = html;
+            }
+
+            UI.showToast('Testing Rod ' + (rodIndex + 1) + ' rig in fish tank.', 'success');
         }
 
         /* ── TACKLE BOX SHOP ──────────────────────────────────────────────── */
@@ -939,6 +981,7 @@
             buyComponentAndRerender: buyComponentAndRerender,
             openFishTank: openFishTank,
             dropRigAnimation: dropRigAnimation,
+            testRigInTank: testRigInTank,
             getCustomization: getCustomization,
             saveCustomRig: saveCustomRig,
             selectCustomRig: selectCustomRig,
