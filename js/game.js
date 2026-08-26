@@ -649,9 +649,7 @@ const Game = (function () {
         }
 
         // Event-driven mini-games
-        if (typeof DuckHunt !== 'undefined' && typeof DuckHunt.checkTrigger === 'function') {
-            DuckHunt.checkTrigger();
-        }
+        // Duck Hunt mini-game disabled
 
         saveToStorage();
         return state;
