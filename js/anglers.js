@@ -1126,7 +1126,6 @@ const Anglers = (function () {
             });
         }
         html += '</div></div>';
-        html += '</div>';
 
         html += '</div>'; // .your-angler-left
 
