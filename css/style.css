@@ -1644,6 +1644,32 @@ body {
     gap: 1.1rem;
 }
 
+.your-angler-main-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.your-angler-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.your-angler-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.your-angler-bio {
+    color: var(--colour-text);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
 .your-angler-profile {
     display: flex;
     gap: 1.5rem;

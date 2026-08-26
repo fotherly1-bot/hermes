@@ -1006,6 +1006,15 @@ const Anglers = (function () {
 
         var html = '<div class="your-angler-root">';
 
+        var bioText = (angler.bio || '').trim();
+        var hasBio = bioText.length > 0;
+
+        // ── Main two-column layout ───────────────────────────────────────────
+        html += '<div class="your-angler-main-row">';
+
+        // ── Left column: details, image, bars, sections ─────────────────────
+        html += '<div class="your-angler-left">';
+
         // ── Profile section ─────────────────────────────────────────────────
         var likes = (angler.preferred || []).map(function(t){
             switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
@@ -1055,7 +1064,6 @@ const Anglers = (function () {
         html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
 
         // ── Preferences + Current Booking row ─────────────────────────────
-
         var activeBooking = (state.anglerBookings || []).find(function(b){
             return b.anglerId === state.playerAnglerId && state.day >= b.startDay && state.day <= b.endDay;
         });
@@ -1135,6 +1143,72 @@ const Anglers = (function () {
         }
         html += '</div></div>';
 
+        // ── Tackle Box ─────────────────────────────────────────────────────
+        var ownedTackle = (state.anglerTackle || []);
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">🎒 Tackle Box</h4>';
+        if (ownedTackle.length === 0) {
+            html += '<div class="empty-state" style="padding:0.5rem 0;">No tackle yet. Visit the shop to kit out your angler.</div>';
+        } else {
+            html += '<div class="tackle-grid">';
+            ownedTackle.forEach(function(tackleId){
+                var item = (typeof TACKLE_CATALOG !== 'undefined' ? TACKLE_CATALOG : []).find(function(t){ return t.id === tackleId; });
+                if (!item) return;
+                html += '<div class="tackle-card">';
+                html += '<div class="tackle-icon">' + item.icon + '</div>';
+                html += '<div class="tackle-name">' + item.name + '</div>';
+                html += '<div class="tackle-category">' + item.category + '</div>';
+                html += '<div class="tackle-desc">' + item.description + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        // ── Tackle Shop ────────────────────────────────────────────────────
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">🛒 Tackle Shop</h4>';
+        html += '<div class="tackle-shop-header">';
+        html += '<img src="img/tackleshop11.png" alt="Tackle Shop" class="tackle-shop-banner" />';
+        html += '<div class="tackle-shop-info">';
+        html += '<h5>The Tackle Box</h5>';
+        html += '<p>Here you can buy upgrades for your angler from the tackle shop. Browse rods, reels, bait, bivvies, and more to improve your performance on the water.</p>';
+        html += '</div>';
+        html += '</div>';
+        html += '<div class="tackle-shop-grid">';
+        if (typeof TACKLE_CATALOG !== 'undefined') {
+            TACKLE_CATALOG.forEach(function(item){
+                var owned = ownedTackle.indexOf(item.id) !== -1;
+                html += '<div class="tackle-shop-card' + (owned ? ' tackle-owned' : '') + '">';
+                html += '<div class="tackle-icon">' + item.icon + '</div>';
+                html += '<div class="tackle-name">' + item.name + '</div>';
+                html += '<div class="tackle-category">' + item.category + '</div>';
+                html += '<div class="tackle-desc">' + item.description + '</div>';
+                html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
+                if (owned) {
+                    html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
+                } else {
+                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.buyTackle(\'' + item.id + '\');Anglers.renderAnglers();">Buy</button>';
+                }
+                html += '</div>';
+            });
+        }
+        html += '</div></div>';
+        html += '</div>';
+
+        html += '</div>'; // .your-angler-left
+
+        // ── Right column: bio ──────────────────────────────────────────────
+        html += '<div class="your-angler-right">';
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">About ' + angler.name.split(' ').pop() + '</h4>';
+        if (hasBio) {
+            html += '<p class="your-angler-bio">' + bioText + '</p>';
+        } else {
+            html += '<p class="your-angler-bio">No biography recorded for this angler yet.</p>';
+        }
+        html += '</div>';
+
         // ── Notifications ──────────────────────────────────────────────────
         var anglerNotifications = (state.notifications || []).slice().reverse().slice(0, 5);
         if (anglerNotifications.length > 0) {
@@ -1157,97 +1231,27 @@ const Anglers = (function () {
             html += '<div class="quest-list">';
             quests.forEach(function(q){
                 var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
-                var statusClass = q.claimed ? 'quest-completed' : (q.completed ? 'quest-completed' : '');
+                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
                 var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
-                html += '<div class="quest-item ' + statusClass + '">';
+                html += '<div class="angler-quest-card ' + statusClass + '">';
                 html += '<div class="quest-header">';
-                html += '<div class="quest-title">' + q.title + '</div>';
-                html += '<div class="quest-reward">' + (q.reward || '') + '</div>';
+                html += '<span class="quest-title">' + q.title + '</span>';
+                html += '<span class="quest-status ' + statusClass + '">' + statusText + '</span>';
                 html += '</div>';
-                html += '<div class="quest-desc">' + q.description + '</div>';
-                html += '<div class="quest-progress">';
-                html += '<div class="quest-progress-track"><div class="quest-progress-fill' + (q.completed ? ' complete' : '') + '" style="width:' + pct + '%;"></div></div>';
-                html += '<span class="quest-progress-text">' + q.progress + ' / ' + q.required + '</span>';
+                html += '<div class="quest-bar-wrap">';
+                html += '<div class="quest-bar" style="width:' + pct + '%;"></div>';
                 html += '</div>';
-                html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.4rem;">';
-                html += '<span style="font-size:0.75rem;color:var(--colour-text-muted);">' + statusText + '</span>';
-                if (q.completed && !q.claimed) {
-                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');Anglers.renderAnglers();">Claim</button>';
-                }
-                html += '</div>';
+                html += '<div class="quest-meta">' + q.progress + ' / ' + q.required + ' · Reward: £' + (q.rewardMoney || 0) + '</div>';
                 html += '</div>';
             });
             html += '</div></div>';
         }
 
-        // ── Tackle Box ─────────────────────────────────────────────────────
-        var ownedTackle = state.anglerTackle || [];
-        var effects = getTackleEffects();
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">🎒 Tackle Box</h4>';
-        if (ownedTackle.length === 0) {
-            html += '<div class="empty-state" style="padding:0.5rem 0;">No tackle yet. Visit the shop to kit out your angler.</div>';
-        } else {
-            html += '<div class="tackle-grid">';
-            ownedTackle.forEach(function(tackleId){
-                var item = TACKLE_CATALOG.find(function(t){ return t.id === tackleId; });
-                if (!item) return;
-                html += '<div class="tackle-card">';
-                html += '<div class="tackle-icon">' + item.icon + '</div>';
-                html += '<div class="tackle-name">' + item.name + '</div>';
-                html += '<div class="tackle-category">' + item.category + '</div>';
-                html += '<div class="tackle-desc">' + item.description + '</div>';
-                if (item.effects) {
-                    html += '<div class="tackle-effects">';
-                    Object.keys(item.effects).forEach(function(key){
-                        var val = item.effects[key];
-                        var label = '';
-                        switch(key){
-                            case 'weightBonus': label = 'Weight +' + Math.round(val*100) + '%'; break;
-                            case 'catchRateBonus': label = 'Catch Rate +' + Math.round(val*100) + '%'; break;
-                            case 'satisfactionBonus': label = 'Satisfaction +' + Math.round(val); break;
-                            case 'reputationBonus': label = 'Reputation +' + Math.round(val*100) + '%'; break;
-                            case 'fishHealthBonus': label = 'Fish Health +' + val.toFixed(1); break;
-                        }
-                        if (label) html += '<span class="tackle-effect-badge">' + label + '</span>';
-                    });
-                    html += '</div>';
-                }
-                html += '</div>';
-            });
-            html += '</div>';
-        }
-        html += '</div>';
+        html += '</div>'; // .your-angler-right
+        html += '</div>'; // .your-angler-main-row
 
-        // ── Tackle Shop ────────────────────────────────────────────────────
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">🛒 Tackle Shop</h4>';
-        html += '<div class="tackle-shop-header">';
-        html += '<img src="img/tackleshop11.png" alt="Tackle Shop" class="tackle-shop-banner" />';
-        html += '<div class="tackle-shop-info">';
-        html += '<h5>The Tackle Box</h5>';
-        html += '<p>Here you can buy upgrades for your angler from the tackle shop. Browse rods, reels, bait, bivvies, and more to improve your performance on the water.</p>';
-        html += '</div>';
-        html += '</div>';
-        html += '<div class="tackle-shop-grid">';
-        TACKLE_CATALOG.forEach(function(item){
-            var owned = ownedTackle.indexOf(item.id) !== -1;
-            html += '<div class="tackle-shop-card' + (owned ? ' tackle-owned' : '') + '">';
-            html += '<div class="tackle-icon">' + item.icon + '</div>';
-            html += '<div class="tackle-name">' + item.name + '</div>';
-            html += '<div class="tackle-category">' + item.category + '</div>';
-            html += '<div class="tackle-desc">' + item.description + '</div>';
-            html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
-            if (owned) {
-                html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
-            } else {
-                html += '<button class="btn btn-primary btn-sm" onclick="Anglers.buyTackle(\'' + item.id + '\');Anglers.renderAnglers();">Buy</button>';
-            }
-            html += '</div>';
-        });
-        html += '</div></div>';
+        html += '</div>'; // .your-angler-root
 
-        html += '</div>';
         return html;
     }
 
