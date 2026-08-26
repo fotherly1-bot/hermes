@@ -456,6 +456,30 @@ const Anglers = (function () {
         return true;
     }
 
+    function buyRig(rigId) {
+        initState();
+        var state = Game.getState();
+        var def = (typeof Rigs !== 'undefined' ? Rigs.getRigById(rigId) : null);
+        if (!def) { UI.showToast('Rig not found.', 'error'); return false; }
+        if ((state.rigInventory || []).indexOf(rigId) !== -1) {
+            UI.showToast('You already own ' + def.name + '.', 'warning');
+            return false;
+        }
+        var cost = def.cost || 2500;
+        if (!Game.spendMoney(cost)) {
+            UI.showToast('Not enough money! You need ' + UI.formatMoney(cost) + '.', 'error');
+            return false;
+        }
+        state.rigInventory.push(rigId);
+        UI.showToast(def.icon + ' ' + def.name + ' added to your tackle box!', 'success');
+        if (typeof Finance !== 'undefined') {
+            Finance.addFinanceLog('rig_purchase', -cost, def.name);
+        }
+        Game.saveToStorage();
+        renderAnglers();
+        return true;
+    }
+
     /**
      * Apply daily tackle effects.
      * Call this from game.js nextDay() or Anglers.processDailyBookings().
@@ -1129,6 +1153,30 @@ const Anglers = (function () {
         }
         html += '</div></div>';
 
+        // ── Rig Shop ──────────────────────────────────────────────────────
+        html += '<div class="your-angler-section">';
+        html += '<h4 class="dash-section-subheading">🎣 Rig Shop</h4>';
+        html += '<p style="font-size:0.85rem;color:var(--colour-text-muted);margin-bottom:0.75rem;">Buy carp rigs for your tackle box. Equip up to 3 rigs on My Rigs.</p>';
+        html += '<div class="tackle-shop-grid">';
+        if (typeof Rigs !== 'undefined' && Rigs.RIG_CATALOG) {
+            Rigs.RIG_CATALOG.forEach(function(def){
+                var owned = (state.rigInventory || []).indexOf(def.id) !== -1;
+                html += '<div class="tackle-shop-card' + (owned ? ' tackle-owned' : '') + '">';
+                html += '<div class="tackle-icon">' + def.icon + '</div>';
+                html += '<div class="tackle-name">' + def.name + '</div>';
+                html += '<div class="tackle-category">' + def.category + '</div>';
+                html += '<div class="tackle-desc">' + def.description + '</div>';
+                html += '<div class="tackle-cost">£' + (def.cost || 2500) + '</div>';
+                if (owned) {
+                    html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
+                } else {
+                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.buyRig(\'' + def.id + '\');Anglers.renderAnglers();">Buy</button>';
+                }
+                html += '</div>';
+            });
+        }
+        html += '</div></div>';
+
         html += '</div>'; // .your-angler-left
 
         // ── Right column: about, career stats, personal bests, actions ──────
@@ -1596,13 +1644,32 @@ const Anglers = (function () {
             catchCount += Math.floor(catchCount * tackleEffects.catchRateBonus);
         }
 
+        // Rig weather bonus
+        var rigBonus = 0;
+        var rigWeightBonus = 0;
+        if (typeof Rigs !== 'undefined' && Rigs.getEquippedRigEffects) {
+            var rigEffects = Rigs.getEquippedRigEffects();
+            rigBonus = rigEffects.catchRateBonus || 0;
+            rigWeightBonus = rigEffects.weightBonus || 0;
+            if (typeof Weather !== 'undefined' && Weather.getCurrentWeather) {
+                var currentWeather = Weather.getCurrentWeather();
+                if (currentWeather && currentWeather.current && Rigs.getRigWeatherBonus) {
+                    rigBonus += Rigs.getRigWeatherBonus(currentWeather.current);
+                }
+            }
+        }
+        if (rigBonus > 0) {
+            catchCount += Math.floor(catchCount * rigBonus);
+        }
+
         stats.fishCaught += catchCount;
 
         // Simulate biggest fish caught
         if (lakeFish.length > 0 && Math.random() < 0.5) {
             var caught = lakeFish[Math.floor(Math.random() * lakeFish.length)];
             if (caught.weight_oz > stats.biggestFishOz) {
-                stats.biggestFishOz = Math.round(caught.weight_oz * (1 + (tackleEffects.weightBonus || 0)));
+                var totalWeightMod = (tackleEffects.weightBonus || 0) + rigWeightBonus;
+                stats.biggestFishOz = Math.round(caught.weight_oz * (1 + totalWeightMod));
             }
             // Skill and social media growth from good catches
             var bigEnough = (caught.weight_oz || 0) >= 400;

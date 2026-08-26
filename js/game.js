@@ -67,6 +67,10 @@ const Game = (function () {
         anglerQuests:    [],
         matchResults: [],
         tournamentCut: 0.20,
+        rigInventory: [],
+        rigEquipped: [null, null, null],
+        rigCustomizations: [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }],
+        rigComponentsOwned: ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'],
         nextSponsorshipId: 1,
         cardInventory:    [],
         cardPacksBought:  {},
@@ -249,6 +253,10 @@ const Game = (function () {
             if (!state.sponsorships)     state.sponsorships     = [];
             if (!state.anglerStats)      state.anglerStats      = {};
             if (!state.matchResults)     state.matchResults     = [];
+            if (!state.rigInventory)     state.rigInventory     = [];
+            if (!state.rigEquipped)      state.rigEquipped      = [null, null, null];
+            if (!state.rigCustomizations) state.rigCustomizations = [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }];
+            if (!state.rigComponentsOwned) state.rigComponentsOwned = ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'];
         } else {
             state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             console.log('[Game.init] took ELSE branch, DEFAULT_STATE keys:', Object.keys(state).sort().join(','));

@@ -10312,3 +10312,357 @@ details[open] > .lake-accordion-summary::before {
     font-weight: 700;
     color: var(--colour-text);
 }
+/* ── My Rigs Page ─────────────────────────────────────────────────────── */
+.rigs-root {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.rigs-rod-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.rig-rod-card {
+    background: var(--colour-card);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.rig-rod-card.rig-rod-empty {
+    opacity: 0.7;
+    border-style: dashed;
+}
+
+.rig-rod-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--colour-text-muted);
+    font-weight: 700;
+}
+
+.rig-rod-icon {
+    font-size: 2.5rem;
+}
+
+.rig-rod-name {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--colour-text);
+}
+
+.rig-rod-lead {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+}
+
+.rigs-section-heading {
+    margin: 0.5rem 0 0.25rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--colour-text);
+}
+
+.rigs-inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.rig-inventory-card {
+    background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.05));
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+    text-align: center;
+}
+
+.rig-inv-icon {
+    font-size: 2rem;
+}
+
+.rig-inv-name {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--colour-text);
+}
+
+.rig-inv-desc {
+    font-size: 0.85rem;
+    color: var(--colour-text-muted);
+    line-height: 1.35;
+}
+
+.rig-inv-meta {
+    font-size: 0.75rem;
+    color: var(--colour-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.rigs-weather-bonus {
+    background: rgba(0,0,0,0.15);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: var(--colour-text);
+}
+
+/* Equip modal inside existing modal layout */
+.rig-equip-modal .rig-equip-carousel {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 0.5rem 0.25rem 1rem;
+    scroll-snap-type: x mandatory;
+}
+
+.rig-equip-card {
+    flex: 0 0 240px;
+    scroll-snap-align: start;
+    background: var(--colour-card);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.rig-equip-card.rig-disabled {
+    opacity: 0.45;
+}
+
+.rig-equip-icon {
+    font-size: 2rem;
+}
+
+.rig-equip-name {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--colour-text);
+}
+
+.rig-equip-desc {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+    line-height: 1.3;
+}
+
+.rig-lead-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+}
+
+.rig-lead-selector .btn {
+    font-size: 0.75rem;
+}
+
+/* ── Rig Customization ───────────────────────────────────────────────── */
+.rig-customize-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.rig-customize-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.rig-customize-row label {
+    font-weight: 700;
+    color: var(--colour-text);
+    font-size: 0.9rem;
+}
+
+.rig-customize-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.rig-customize-options .btn {
+    font-size: 0.8rem;
+}
+
+.rig-opt-active {
+    outline: 2px solid var(--colour-gold);
+    outline-offset: 1px;
+}
+
+.rig-customize-section {
+    background: rgba(0,0,0,0.15);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+}
+
+.rig-component-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.rig-customize-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.rig-customize-actions .btn {
+    flex: 1;
+}
+
+/* ── Fish Tank ────────────────────────────────────────────────────────── */
+.rig-fish-tank {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tank-container {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    background: linear-gradient(180deg, #0a3d62 0%, #1e6091 35%, #0f4c75 65%, #0b3d5c 100%);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 4px solid #2a2a2a;
+}
+
+.tank-water::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 28%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+    z-index: 2;
+    pointer-events: none;
+}
+
+.tank-surface {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 18%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    z-index: 3;
+}
+
+.tank-bed {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 18%;
+    background: linear-gradient(180deg, #3e2723, #4e342e);
+    border-top: 2px solid #5d4037;
+    z-index: 3;
+}
+
+.tank-bed::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 6px);
+}
+
+.tank-glass {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.00) 25%, rgba(255,255,255,0.00) 75%, rgba(255,255,255,0.06));
+    pointer-events: none;
+    z-index: 4;
+}
+
+.tank-rig-anim {
+    position: absolute;
+    left: 50%;
+    top: 6%;
+    width: 2px;
+    height: 54%;
+    background: rgba(255,255,255,0.55);
+    z-index: 5;
+    transform: translateX(-50%);
+    animation: tankRigFloat 2.2s ease-in-out infinite;
+}
+
+.tank-rig-anim.tank-rig-dropped {
+    animation: tankRigDrop 0.8s ease-in forwards;
+}
+
+.tank-rig-lead {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 10px;
+    border-radius: 2px;
+}
+
+.tank-rig-hook {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+}
+
+.tank-rig-bait {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1rem;
+}
+
+.tank-info {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: var(--colour-text);
+    line-height: 1.6;
+}
+
+@keyframes tankRigFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+}
+
+@keyframes tankRigDrop {
+    0% { transform: translateX(-50%) translateY(0); opacity: 0.9; }
+    60% { transform: translateX(-50%) translateY(180px); opacity: 0.7; }
+    100% { transform: translateX(-50%) translateY(220px); opacity: 0.85; }
+}
