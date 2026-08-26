@@ -9684,7 +9684,7 @@ details[open] > .lake-accordion-summary::before {
     align-items: flex-start;
 }
 .dash-fish-icon {
-    height: 3rem;
+    height: 2rem;
     width: auto;
     object-fit: contain;
     align-self: center;
