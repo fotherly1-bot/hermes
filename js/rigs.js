@@ -270,29 +270,6 @@
             }
             html += '</div>'; // close rigs-rod-row
 
-            // Tackle Box Inventory
-            html += '<h3 class="rigs-section-heading">Tackle Box Inventory</h3>';
-            html += '<div class="rigs-inventory-grid">';
-            var inventory = state.rigInventory || [];
-            if (inventory.length === 0) {
-                html += '<p class="empty-state">No rigs yet. Buy rigs from the shop!</p>';
-            } else {
-                var seen = {};
-                inventory.forEach(function (rigId) {
-                    if (seen[rigId]) return;
-                    seen[rigId] = true;
-                    var def = getRigById(rigId);
-                    if (!def) return;
-                    html += '<div class="rig-inventory-card">';
-                    html += '<div class="rig-inv-icon">' + def.icon + '</div>';
-                    html += '<div class="rig-inv-name">' + def.name + '</div>';
-                    html += '<div class="rig-inv-desc">' + def.description + '</div>';
-                    html += '<div class="rig-inv-meta">Category: ' + def.category + '</div>';
-                    html += '</div>';
-                });
-            }
-            html += '</div>'; // close rigs-inventory-grid
-
             // Tackle Box Shop
             html += renderTackleBoxShop();
 

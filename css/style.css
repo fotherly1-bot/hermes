@@ -10406,47 +10406,6 @@ details[open] > .lake-accordion-summary::before {
     color: var(--colour-text);
 }
 
-.rigs-inventory-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-}
-
-.rig-inventory-card {
-    background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.05));
-    border: 1px solid var(--colour-border);
-    border-radius: var(--radius);
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    align-items: center;
-    text-align: center;
-}
-
-.rig-inv-icon {
-    font-size: 2rem;
-}
-
-.rig-inv-name {
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--colour-text);
-}
-
-.rig-inv-desc {
-    font-size: 0.85rem;
-    color: var(--colour-text-muted);
-    line-height: 1.35;
-}
-
-.rig-inv-meta {
-    font-size: 0.75rem;
-    color: var(--colour-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
 .rigs-weather-bonus {
     background: rgba(0,0,0,0.15);
     border: 1px solid var(--colour-border);
