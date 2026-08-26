@@ -10465,14 +10465,16 @@ details[open] > .lake-accordion-summary::before {
 
 .rigs-shop-card-img-wrap {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     border-radius: calc(var(--radius) - 0.25rem);
-    background: rgba(0,0,0,0.25);
+    background: #ffffff;
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0.5rem;
+    border: 1px solid var(--colour-border);
 }
 
 .rigs-shop-card-img {
