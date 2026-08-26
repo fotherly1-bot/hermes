@@ -1006,38 +1006,55 @@ const Anglers = (function () {
 
         var html = '<div class="your-angler-root">';
 
-        // ── Profile header ─────────────────────────────────────────────────
-        html += '<div class="your-angler-profile">';
-        html += '<div class="your-angler-photo">';
-        if (angler.photo) {
-            html += '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" />';
-        } else {
-            html += '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
-        }
-        html += '</div>'; // close your-angler-photo
-        html += '<div class="your-angler-meta">';
-        html += '<div class="your-angler-name">' + angler.name + '</div>';
-        html += '<div class="your-angler-category" style="color:var(--colour-text-muted);font-size:0.9rem;">' + (angler.category || 'Angler') + '</div>';
-        html += '<div class="angler-stats-row" style="gap:8px;flex-wrap:wrap;margin-top:0.5rem;">';
-        html += '<span class="angler-stat-badge">Skill ' + angler.skill + '/10</span>';
-        html += '<span class="angler-stat-badge">Social Media ' + (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—') + '</span>';
-        html += '</div>';
-        html += '<div class="angler-stats-row" style="gap:8px;flex-wrap:wrap;margin-top:0.4rem;">';
-        html += '<span class="angler-budget-badge">Budget £' + (angler.budget || 0) + '</span>';
-        html += '<span class="angler-skill-badge">Fish Caught ' + stats.fishCaught + '</span>';
-        html += '<span class="angler-skill-badge">Wins ' + stats.wins + '</span>';
-        html += '</div>';
-        html += '</div>'; // close your-angler-meta
-        html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
-        html += '</div>'; // close your-angler-profile
-
-        // ── Preferences + Current Booking row ─────────────────────────────
+        // ── Profile section ─────────────────────────────────────────────────
         var likes = (angler.preferred || []).map(function(t){
             switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
         }).join(', ');
         var dislikes = (angler.disliked || []).map(function(t){
             switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
         }).join(', ');
+
+        html += '<div class="your-angler-profile">';
+        html += '<div class="your-angler-info">';
+        html += '<div class="your-angler-name">' + angler.name + '</div>';
+        html += '<div class="your-angler-category">' + (angler.category || 'Angler') + '</div>';
+        html += '<div class="your-angler-skill">Skill ' + angler.skill + '/10</div>';
+        html += '<div class="your-angler-weight">' + UI.formatWeight(stats.biggestFishOz || 0) + '</div>';
+        html += '<div class="your-angler-prefs">';
+        html += '<div><span class="pref-label">Likes:</span> ' + (likes || '—') + '</div>';
+        html += '<div><span class="pref-label" style="color:#e67e22;">Dislikes:</span> ' + (dislikes || '—') + '</div>';
+        html += '</div>';
+        html += '</div>';
+        html += '<div class="your-angler-photo">';
+        if (angler.photo) {
+            html += '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" />';
+        } else {
+            html += '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
+        }
+        html += '</div>';
+        html += '</div>';
+
+        // ── Horizontal stat bars ────────────────────────────────────────────
+        var fishPct = Math.min(100, Math.round((stats.fishCaught / 200) * 100));
+        var weightPct = Math.min(100, Math.round(((stats.biggestFishOz || 0) / 1200) * 100));
+        html += '<div class="your-angler-bars">';
+        html += '<div class="ya-bar">';
+        html += '<span class="ya-bar-icon">🐟</span>';
+        html += '<span class="ya-bar-label">FISH CAUGHT</span>';
+        html += '<span class="ya-bar-value">' + stats.fishCaught + '</span>';
+        html += '<div class="ya-bar-track"><div class="ya-bar-fill" style="width:' + fishPct + '%;"></div></div>';
+        html += '</div>';
+        html += '<div class="ya-bar">';
+        html += '<span class="ya-bar-icon">🏆</span>';
+        html += '<span class="ya-bar-label">BIGGEST FISH</span>';
+        html += '<span class="ya-bar-value">' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</span>';
+        html += '<div class="ya-bar-track"><div class="ya-bar-fill" style="width:' + weightPct + '%;"></div></div>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '<button class="btn btn-primary" style="margin-top:1rem;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
+
+        // ── Preferences + Current Booking row ─────────────────────────────
 
         var activeBooking = (state.anglerBookings || []).find(function(b){
             return b.anglerId === state.playerAnglerId && state.day >= b.startDay && state.day <= b.endDay;
