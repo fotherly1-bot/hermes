@@ -610,8 +610,12 @@ const Anglers = (function () {
             }
 
             if (!targetLake) {
-            // Find a matching lake (normal logic)
-            var matchingLakes = state.ownedLakes.filter(function (lakeId) {
+            // Find a matching lake (normal logic), skip closed lakes
+            var openLakes = state.ownedLakes.filter(function (lakeId) {
+                return !(state.lakeClosures && state.lakeClosures[lakeId] && state.lakeClosures[lakeId] >= state.day);
+            });
+
+            var matchingLakes = openLakes.filter(function (lakeId) {
                 var lake = Lakes.getLakeById(lakeId);
                 if (!lake) return false;
                 return angler.preferred.indexOf(lake.waterType) !== -1;
@@ -619,11 +623,16 @@ const Anglers = (function () {
 
             // If no preferred lake, try non-disliked
             if (matchingLakes.length === 0) {
-                matchingLakes = state.ownedLakes.filter(function (lakeId) {
+                matchingLakes = openLakes.filter(function (lakeId) {
                     var lake = Lakes.getLakeById(lakeId);
                     if (!lake) return false;
                     return angler.disliked.indexOf(lake.waterType) === -1;
                 });
+            }
+
+            // If still nothing, book any open lake
+            if (matchingLakes.length === 0 && openLakes.length > 0) {
+                matchingLakes = openLakes;
             }
 
             if (matchingLakes.length === 0) return;
