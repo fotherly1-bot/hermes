@@ -2335,6 +2335,270 @@ const Anglers = (function () {
         UI.showModal('<h3 style="margin-top:0;color:var(--colour-gold);">Select Angler</h3>' + carouselHtml + '<button class="btn btn-secondary" style="margin-top:1rem;width:100%;" onclick="UI.hideModal()">Close</button>');
     }
 
+    function renderTestTab() {
+        initState();
+        var state = Game.getState();
+        var angler = null;
+        if (state.playerAnglerId && typeof Anglers !== 'undefined' && typeof Anglers.getAnglerById === 'function') {
+            angler = Anglers.getAnglerById(state.playerAnglerId);
+        }
+        if (!angler) {
+            return '<div class="empty-state">Select an angler from the Welcome screen first.</div>';
+        }
+
+        var stats = (state.anglerStats || {})[angler.name] || { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0 };
+        if (!state.anglerQuests) state.anglerQuests = [];
+        if (state.anglerQuests.length === 0 && typeof Anglers !== 'undefined') {
+            Anglers.generateAnglerQuests();
+        }
+
+        var likes = (angler.preferred || []).map(function(t){
+            switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
+        }).join(', ');
+        var dislikes = (angler.disliked || []).map(function(t){
+            switch(t){ case 'still': return 'Still Water'; case 'running': return 'Running Water'; case 'gravel_pit': return 'Gravel Pit'; case 'estate_lake': return 'Estate Lake'; default: return t; }
+        }).join(', ');
+
+        var activeBooking = (state.anglerBookings || []).find(function(b){
+            return b.anglerId === state.playerAnglerId && state.day >= b.startDay && state.day <= b.endDay;
+        });
+        var currentLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(activeBooking ? activeBooking.lakeId : null) : null;
+        var lakeIdForImage = currentLake ? currentLake.id.replace(/_lake$/, '') : '';
+        var lakeImgSrc = activeBooking && currentLake ? ('img/lakes/' + lakeIdForImage + '.png') : '';
+
+        var ownedTackle = state.anglerTackle || [];
+        var rigInventory = state.rigInventory || [];
+
+        var html = '<div class="test-root">';
+
+        // Angler selector
+        html += '<div class="test-angler-selector">';
+        html += '<label for="test-angler-select" style="font-weight:700;margin-right:0.5rem;">Select Angler:</label>';
+        html += '<select id="test-angler-select" onchange="Anglers.selectAngler(this.value)" style="padding:0.4rem 0.6rem;border-radius:var(--radius);background:var(--colour-card);color:var(--colour-text);border:1px solid var(--colour-border);">';
+        var anglers = typeof Anglers !== 'undefined' ? Anglers.getAllAnglers() : [];
+        anglers.forEach(function(a){
+            var sel = a.id === state.playerAnglerId ? ' selected' : '';
+            html += '<option value="' + a.id + '"' + sel + '>' + a.name + '</option>';
+        });
+        html += '</select>';
+        html += '<button class="btn btn-sm" style="margin-left:0.5rem;background:#e74c3c;border-color:#e74c3c;color:#fff;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
+        html += '</div>';
+
+        // Profile card
+        html += '<div class="test-card test-profile-card">';
+        html += '<div class="test-profile-left">';
+        if (angler.photo) {
+            html += '<img src="' + angler.photo + '" alt="' + angler.name + '" class="test-angler-photo" />';
+        } else {
+            html += '<div class="angler-photo-placeholder test-angler-photo">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="test-profile-right">';
+        html += '<div class="test-angler-name">' + angler.name + '</div>';
+        html += '<div class="test-angler-meta">' + (angler.category || 'Angler') + ' · Skill ' + angler.skill + '/10</div>';
+        html += '<div class="test-angler-biggest">Biggest Fish: ' + UI.formatWeight(stats.biggestFishOz || 0) + '</div>';
+        html += '<div class="test-angler-prefs"><span class="pref-label">Likes:</span> ' + (likes || '—') + '</div>';
+        html += '<div class="test-angler-prefs"><span class="pref-label" style="color:#e67e22;">Dislikes:</span> ' + (dislikes || '—') + '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        // Booking card
+        html += '<div class="test-card test-booking-card">';
+        html += '<div class="test-card-title">📍 Currently Booked At</div>';
+        if (activeBooking && currentLake) {
+            html += '<div class="test-booking-lake-name">' + currentLake.name + '</div>';
+            html += '<div class="test-booking-meta">Day ' + activeBooking.startDay + ' – ' + activeBooking.endDay + ' · £' + activeBooking.dailyRate + '/day</div>';
+            html += '<div class="test-booking-meta">Satisfaction: ' + Math.round(activeBooking.satisfaction || 0) + '%</div>';
+            if (lakeImgSrc) {
+                html += '<img src="' + lakeImgSrc + '" alt="' + currentLake.name + '" class="test-lake-img" />';
+            }
+        } else {
+            html += '<div class="empty-state" style="padding:0.5rem 0;">No active booking</div>';
+        }
+        html += '</div>';
+
+        // Shop sections in a grid
+        html += '<div class="test-shop-grid">';
+
+        // Tackle Box
+        html += '<div class="test-card">';
+        html += '<div class="test-card-title">🎒 Tackle Box</div>';
+        if (ownedTackle.length === 0) {
+            html += '<div class="empty-state" style="padding:0.5rem 0;">No tackle yet. Visit the shop to kit out your angler.</div>';
+        } else {
+            html += '<div class="test-tackle-list">';
+            ownedTackle.forEach(function(tackleId){
+                var item = (typeof TACKLE_CATALOG !== 'undefined' ? TACKLE_CATALOG : []).find(function(t){ return t.id === tackleId; });
+                if (!item) return;
+                html += '<div class="test-tackle-item">';
+                html += '<span class="test-tackle-icon">' + item.icon + '</span>';
+                html += '<div>';
+                html += '<div class="test-tackle-name">' + item.name + '</div>';
+                html += '<div class="test-tackle-cat">' + item.category + '</div>';
+                html += '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        // Tackle Shop
+        html += '<div class="test-card">';
+        html += '<div class="test-card-title">🛒 Tackle Shop</div>';
+        html += '<img src="img/tackleshop11.png" alt="Tackle Shop" class="test-shop-banner" />';
+        if (typeof TACKLE_CATALOG !== 'undefined') {
+            html += '<div class="test-shop-list">';
+            TACKLE_CATALOG.forEach(function(item){
+                var owned = ownedTackle.indexOf(item.id) !== -1;
+                html += '<div class="test-shop-item' + (owned ? ' test-owned' : '') + '">';
+                html += '<span class="test-tackle-icon">' + item.icon + '</span>';
+                html += '<div style="flex:1;min-width:0;">';
+                html += '<div class="test-tackle-name">' + item.name + '</div>';
+                html += '<div class="test-tackle-cat">' + UI.formatMoney(item.cost) + '</div>';
+                html += '</div>';
+                if (owned) {
+                    html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
+                } else {
+                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.buyTackle(\'' + item.id + '\');Anglers.renderTestTab();">Buy</button>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        // Rig Shop
+        html += '<div class="test-card">';
+        html += '<div class="test-card-title">🎣 Rig Shop</div>';
+        if (typeof Rigs !== 'undefined' && Rigs.RIG_CATALOG) {
+            html += '<div class="test-shop-list">';
+            Rigs.RIG_CATALOG.forEach(function(def){
+                var owned = rigInventory.indexOf(def.id) !== -1;
+                html += '<div class="test-shop-item' + (owned ? ' test-owned' : '') + '">';
+                html += '<span class="test-tackle-icon">' + def.icon + '</span>';
+                html += '<div style="flex:1;min-width:0;">';
+                html += '<div class="test-tackle-name">' + def.name + '</div>';
+                html += '<div class="test-tackle-cat">£' + (def.cost || 2500) + '</div>';
+                html += '</div>';
+                if (owned) {
+                    html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
+                } else {
+                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.buyRig(\'' + def.id + '\');Anglers.renderTestTab();">Buy</button>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        html += '</div>'; // test-shop-grid
+
+        // Stats + Bests grid
+        html += '<div class="test-stats-grid">';
+
+        html += '<div class="test-card">';
+        html += '<div class="test-card-title">📊 Career Stats</div>';
+        html += '<div class="test-stats-list">';
+        html += '<div class="test-stat-row"><span>Fish Caught</span><span class="test-stat-val">' + stats.fishCaught + '</span></div>';
+        html += '<div class="test-stat-row"><span>Biggest Fish</span><span class="test-stat-val">' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</span></div>';
+        html += '<div class="test-stat-row"><span>Wins</span><span class="test-stat-val">' + stats.wins + '</span></div>';
+        html += '<div class="test-stat-row"><span>Winnings</span><span class="test-stat-val">' + UI.formatMoney(stats.winnings) + '</span></div>';
+        html += '<div class="test-stat-row"><span>Visits</span><span class="test-stat-val">' + stats.visits + '</span></div>';
+        html += '<div class="test-stat-row"><span>Social Media</span><span class="test-stat-val">' + (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—') + '</span></div>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '<div class="test-card">';
+        html += '<div class="test-card-title">🏆 Personal Bests</div>';
+        html += '<div class="test-bests-list">';
+        var alive2 = (state.fish || []).filter(function(f){ return f.alive; });
+        var biggest2 = null, rarest2 = null, mostExpensive2 = null;
+        var maxWeight2 = 0, bestRarityIdx2 = 999, maxValue2 = 0;
+        var RARITY_ORDER2 = ['mythic','legendary','epic','rare','uncommon','common'];
+        alive2.forEach(function(f){
+            if (!biggest2 || (f.weight_oz || 0) > maxWeight2) { biggest2 = f; maxWeight2 = f.weight_oz || 0; }
+            var ridx = RARITY_ORDER2.indexOf(f.rarity);
+            if (ridx === -1) ridx = RARITY_ORDER2.length;
+            if (ridx < bestRarityIdx2) { bestRarityIdx2 = ridx; rarest2 = f; }
+            else if (ridx === bestRarityIdx2 && typeof Fish !== 'undefined' && Fish.getFishValue(f) > maxValue2) { rarest2 = f; }
+            if (typeof Fish !== 'undefined') {
+                var v2 = Fish.getFishValue(f);
+                if (v2 > maxValue2) { maxValue2 = v2; mostExpensive2 = f; }
+            }
+        });
+        if (biggest2) {
+            html += '<div class="test-best-item">';
+            html += '<div class="test-best-label">Biggest Fish</div>';
+            html += '<div class="test-best-name">' + biggest2.name + '</div>';
+            html += '<div class="test-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[biggest2.species] ? Fish.SPECIES[biggest2.species].name : biggest2.species) + '</div>';
+            html += '<div class="test-best-val" style="color:var(--colour-gold);">' + UI.formatWeight(biggest2.weight_oz) + '</div>';
+            html += '</div>';
+        }
+        if (rarest2) {
+            var rRDef = typeof Fish !== 'undefined' && Fish.RARITIES && Fish.RARITIES[rarest2.rarity] ? Fish.RARITIES[rarest2.rarity] : null;
+            var rRCol = rRDef ? (rRDef.colour || '#888') : '#888';
+            var rRName = rRDef ? rRDef.name : rarest2.rarity;
+            html += '<div class="test-best-item">';
+            html += '<div class="test-best-label">Rarest Fish</div>';
+            html += '<div class="test-best-name">' + rarest2.name + '</div>';
+            html += '<div class="test-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[rarest2.species] ? Fish.SPECIES[rarest2.species].name : rarest2.species) + '</div>';
+            html += '<div class="test-best-val" style="color:' + rRCol + ';">' + rRName + '</div>';
+            html += '</div>';
+        }
+        if (mostExpensive2) {
+            var eRDef = typeof Fish !== 'undefined' && Fish.RARITIES && Fish.RARITIES[mostExpensive2.rarity] ? Fish.RARITIES[mostExpensive2.rarity] : null;
+            var eRCol = eRDef ? (eRDef.colour || '#888') : '#888';
+            var eRName = eRDef ? eRDef.name : mostExpensive2.rarity;
+            html += '<div class="test-best-item">';
+            html += '<div class="test-best-label">Most Valuable</div>';
+            html += '<div class="test-best-name">' + mostExpensive2.name + '</div>';
+            html += '<div class="test-best-meta">' + (typeof Fish !== 'undefined' && Fish.SPECIES[mostExpensive2.species] ? Fish.SPECIES[mostExpensive2.species].name : mostExpensive2.species) + '</div>';
+            html += '<div class="test-best-val" style="color:' + eRCol + ';">' + UI.formatMoney(Fish.getFishValue(mostExpensive2)) + '</div>';
+            html += '</div>';
+        }
+        html += '</div>';
+        html += '</div>';
+
+        html += '</div>'; // test-stats-grid
+
+        // About
+        html += '<div class="test-card">';
+        html += '<div class="test-card-title">About ' + angler.name.split(' ').pop() + '</div>';
+        if (hasBio) {
+            html += '<p class="test-bio">' + bioText + '</p>';
+        } else {
+            html += '<p class="empty-state" style="padding:0.5rem 0;">No biography recorded for this angler yet.</p>';
+        }
+        html += '</div>';
+
+        // Quests
+        var quests = state.anglerQuests || [];
+        if (quests.length > 0) {
+            html += '<div class="test-card">';
+            html += '<div class="test-card-title">🎯 Active Quests</div>';
+            html += '<div class="test-quest-list">';
+            quests.forEach(function(q){
+                var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
+                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
+                var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
+                html += '<div class="test-quest-item ' + statusClass + '">';
+                html += '<div class="test-quest-header">';
+                html += '<span class="test-quest-title">' + q.title + '</span>';
+                html += '<span class="test-quest-status ' + statusClass + '">' + statusText + '</span>';
+                html += '</div>';
+                html += '<div class="test-quest-bar-wrap"><div class="test-quest-bar" style="width:' + pct + '%;"></div></div>';
+                html += '<div class="test-quest-meta">' + q.progress + ' / ' + q.required + ' · Reward: £' + (q.rewardMoney || 0) + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+        }
+
+        html += '</div>'; // test-root
+
+        return html;
+    }
+
     function selectAngler(anglerId) {
         var state = Game.getState();
         state.playerAnglerId = anglerId;

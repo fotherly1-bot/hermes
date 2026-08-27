@@ -10558,3 +10558,312 @@ details[open] > .lake-accordion-summary::before {
     font-size: 0.75rem;
 }
 
+/* ── Test Tab: Redesigned Your Angler ─────────────────────────────────── */
+.test-root {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.test-angler-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.test-card {
+    background: var(--colour-card);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+}
+
+.test-profile-card {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.test-profile-left {
+    flex: 0 0 auto;
+}
+
+.test-angler-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    border: 1px solid var(--colour-border);
+}
+
+.test-profile-right {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.test-angler-name {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #ffffff;
+    margin-bottom: 0.3rem;
+}
+
+.test-angler-meta {
+    font-size: 1rem;
+    color: var(--colour-text-muted);
+    margin-bottom: 0.4rem;
+}
+
+.test-angler-biggest {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--colour-gold);
+    margin-bottom: 0.4rem;
+}
+
+.test-angler-prefs {
+    font-size: 0.9rem;
+    color: var(--colour-text);
+    margin-bottom: 0.2rem;
+}
+
+.test-card-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--colour-accent);
+    margin-bottom: 0.75rem;
+}
+
+.test-booking-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.test-booking-lake-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.test-booking-meta {
+    font-size: 0.9rem;
+    color: var(--colour-text-muted);
+}
+
+.test-lake-img {
+    margin-top: 0.5rem;
+    max-height: 160px;
+    border-radius: var(--radius);
+    border: 1px solid var(--colour-border);
+}
+
+.test-shop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.test-shop-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+    object-position: top center;
+    border-radius: var(--radius);
+    border: 1px solid var(--colour-border);
+    margin-bottom: 0.75rem;
+}
+
+.test-tackle-list,
+.test-shop-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.test-tackle-item,
+.test-shop-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.test-tackle-item:last-child,
+.test-shop-item:last-child {
+    border-bottom: none;
+}
+
+.test-tackle-icon {
+    font-size: 1.2rem;
+    width: 1.8rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.test-tackle-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--colour-text);
+}
+
+.test-tackle-cat {
+    font-size: 0.75rem;
+    color: var(--colour-text-muted);
+}
+
+.test-shop-item.test-owned {
+    opacity: 0.7;
+}
+
+.test-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.test-stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.test-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.9rem;
+}
+
+.test-stat-row:last-child {
+    border-bottom: none;
+}
+
+.test-stat-val {
+    font-weight: 800;
+    color: var(--colour-gold);
+}
+
+.test-bests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.test-best-item {
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.15);
+    border-radius: calc(var(--radius) - 0.25rem);
+    border: 1px solid var(--colour-border);
+}
+
+.test-best-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--colour-text-muted);
+    margin-bottom: 0.15rem;
+}
+
+.test-best-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--colour-text);
+}
+
+.test-best-meta {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+}
+
+.test-best-val {
+    font-size: 1rem;
+    font-weight: 900;
+    margin-top: 0.2rem;
+}
+
+.test-bio {
+    font-size: 0.95rem;
+    color: var(--colour-text);
+    line-height: 1.65;
+    margin: 0;
+}
+
+.test-quest-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.test-quest-item {
+    padding: 0.6rem;
+    background: rgba(0,0,0,0.15);
+    border-radius: calc(var(--radius) - 0.25rem);
+    border: 1px solid var(--colour-border);
+}
+
+.test-quest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+
+.test-quest-title {
+    font-weight: 700;
+    color: var(--colour-text);
+    font-size: 0.9rem;
+}
+
+.test-quest-status {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 999px;
+}
+
+.quest-active { background: rgba(52, 152, 219, 0.15); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.3); }
+.quest-complete { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
+.quest-claimed { background: rgba(149, 165, 166, 0.15); color: #95a5a6; border: 1px solid rgba(149, 165, 166, 0.3); }
+
+.test-quest-bar-wrap {
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.35rem;
+}
+
+.test-quest-bar {
+    height: 100%;
+    background: var(--colour-accent);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.test-quest-meta {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+}
+
+@media (max-width: 900px) {
+    .test-shop-grid {
+        grid-template-columns: 1fr;
+    }
+    .test-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .test-profile-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .test-angler-photo {
+        width: 100px;
+        height: 100px;
+    }
+}
+

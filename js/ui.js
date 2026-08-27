@@ -406,6 +406,12 @@ const UI = (function () {
                     window.Anglers.render();
                 }
                 break;
+            case 'rigs':
+                if (window.Rigs && typeof window.Rigs.renderRigs === 'function') {
+                    var rigsContainer = document.getElementById('rigs-content');
+                    if (rigsContainer) rigsContainer.innerHTML = Rigs.renderRigs();
+                }
+                break;
             case 'shop':
                 if (typeof Shop !== 'undefined') Shop.renderShop();
                 break;
@@ -418,6 +424,11 @@ const UI = (function () {
             case 'staff':
                 if (typeof Staff !== 'undefined') {
                     Staff.renderStaff();
+                }
+                break;
+            case 'test':
+                if (window.Anglers && typeof window.Anglers.renderTestTab === 'function') {
+                    window.Anglers.renderTestTab();
                 }
                 break;
             case 'finance':
