@@ -1098,9 +1098,8 @@ const Anglers = (function () {
         } else {
             html += '<div class="current-lake-meta">No active booking</div>';
         }
-        html += '</div></div>'; // close current booking section + section-row
-
-        html += '</div>'; // close .your-angler-left
+        html += '</div></div></div>';
+        html += '</div>';
 
         // ── Tackle Box ─────────────────────────────────────────────────────
         var ownedTackle = (state.anglerTackle || []);

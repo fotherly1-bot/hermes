@@ -1743,10 +1743,6 @@ body {
     padding: 1rem 1.25rem;
 }
 
-.your-angler-main-row > .your-angler-section {
-    grid-column: 1 / -1;
-}
-
 .your-angler-prefs {
     display: flex;
     flex-direction: column;
