@@ -428,7 +428,8 @@ const UI = (function () {
                 break;
             case 'test':
                 if (window.Anglers && typeof window.Anglers.renderTestTab === 'function') {
-                    window.Anglers.renderTestTab();
+                    var testContainer = document.getElementById('test-content');
+                    if (testContainer) testContainer.innerHTML = window.Anglers.renderTestTab();
                 }
                 break;
             case 'finance':

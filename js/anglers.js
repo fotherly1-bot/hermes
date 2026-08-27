@@ -2305,7 +2305,8 @@ const Anglers = (function () {
         processSeasonalSocialDecay: processSeasonalSocialDecay,
         updateDailyLeaderboard: updateDailyLeaderboard,
         openAnglerSelector: openAnglerSelector,
-        selectAngler: selectAngler
+        selectAngler: selectAngler,
+        renderTestTab: renderTestTab
     };
 
     function openAnglerSelector() {
@@ -2560,6 +2561,9 @@ const Anglers = (function () {
         html += '</div>';
 
         html += '</div>'; // test-stats-grid
+
+        var bioText = (angler.bio || '').trim();
+        var hasBio = bioText.length > 0;
 
         // About
         html += '<div class="test-card">';
