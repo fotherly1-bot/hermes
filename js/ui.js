@@ -426,12 +426,6 @@ const UI = (function () {
                     Staff.renderStaff();
                 }
                 break;
-            case 'test':
-                if (window.Anglers && typeof window.Anglers.renderTestTab === 'function') {
-                    var testContainer = document.getElementById('test-content');
-                    if (testContainer) testContainer.innerHTML = window.Anglers.renderTestTab();
-                }
-                break;
             case 'finance':
                 if (typeof Finance !== 'undefined') {
                     Finance.renderFinance();
