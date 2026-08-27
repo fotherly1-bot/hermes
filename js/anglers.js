@@ -2372,8 +2372,9 @@ const Anglers = (function () {
 
         var html = '<div class="test-root">';
 
-        // Top bar: angler selector
+        // Angler selector bar
         html += '<div class="test-topbar">';
+        html += '<label style="font-weight:800;color:var(--colour-accent);">Angler:</label>';
         html += '<select id="test-angler-select" onchange="Anglers.selectAngler(this.value)" class="test-select">';
         var anglers = typeof Anglers !== 'undefined' ? Anglers.getAllAnglers() : [];
         anglers.forEach(function(a){
@@ -2384,42 +2385,47 @@ const Anglers = (function () {
         html += '<button class="btn btn-sm" style="background:#e74c3c;border-color:#e74c3c;color:#fff;" onclick="Anglers.openAnglerSelector()">Change Angler</button>';
         html += '</div>';
 
-        // Compact profile row
-        html += '<div class="test-row">';
-        html += '<div class="test-card test-profile">';
-        html += '<div class="test-photo-wrap">';
+        // Profile + Booking in one row
+        html += '<div class="test-row-2">';
+
+        // Profile
+        html += '<div class="test-card test-compact">';
+        html += '<div class="test-card-title">Profile</div>';
+        html += '<div class="test-profile-inline">';
         if (angler.photo) {
-            html += '<img src="' + angler.photo + '" alt="' + angler.name + '" class="test-photo" />';
+            html += '<img src="' + angler.photo + '" alt="' + angler.name + '" class="test-photo-sm" />';
         } else {
-            html += '<div class="angler-photo-placeholder test-photo">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
+            html += '<div class="angler-photo-placeholder test-photo-sm">' + angler.name.split(' ').map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() + '</div>';
         }
-        html += '</div>';
-        html += '<div class="test-profile-info">';
-        html += '<div class="test-name">' + angler.name + '</div>';
-        html += '<div class="test-meta">' + (angler.category || 'Angler') + ' · Skill ' + angler.skill + '/10</div>';
+        html += '<div class="test-profile-text">';
+        html += '<div class="test-name-sm">' + angler.name + ' <span class="test-meta">' + (angler.category || 'Angler') + ' · Skill ' + angler.skill + '/10</span></div>';
         html += '<div class="test-meta">Biggest: ' + UI.formatWeight(stats.biggestFishOz || 0) + '</div>';
         html += '<div class="test-meta"><span class="pref-label">Likes:</span> ' + (likes || '—') + '</div>';
         html += '<div class="test-meta"><span class="pref-label" style="color:#e67e22;">Dislikes:</span> ' + (dislikes || '—') + '</div>';
         html += '</div>';
         html += '</div>';
+        html += '</div>';
 
         // Booking
-        html += '<div class="test-card test-booking">';
+        html += '<div class="test-card test-compact">';
         html += '<div class="test-card-title">📍 Currently Booked At</div>';
         if (activeBooking && currentLake) {
-            html += '<div class="test-booking-main">' + currentLake.name + '</div>';
-            html += '<div class="test-booking-sub">Day ' + activeBooking.startDay + '–' + activeBooking.endDay + ' · £' + activeBooking.dailyRate + '/day · Satisfaction ' + Math.round(activeBooking.satisfaction || 0) + '%</div>';
+            html += '<div class="test-booking-main-sm">' + currentLake.name + '</div>';
+            html += '<div class="test-meta">Day ' + activeBooking.startDay + '–' + activeBooking.endDay + ' · £' + activeBooking.dailyRate + '/day · Satisfaction ' + Math.round(activeBooking.satisfaction || 0) + '%</div>';
             if (lakeImgSrc) {
-                html += '<img src="' + lakeImgSrc + '" alt="' + currentLake.name + '" class="test-lake-img" />';
+                html += '<img src="' + lakeImgSrc + '" alt="' + currentLake.name + '" class="test-lake-img-sm" />';
             }
         } else {
             html += '<div class="empty-state" style="padding:0.25rem 0;">No active booking</div>';
         }
         html += '</div>';
-        html += '</div>';
 
-        // Shop + Rig + Stats row
-        html += '<div class="test-row">';
+        html += '</div>'; // test-row-2
+
+        // Shops in one row
+        html += '<div class="test-row-3">';
+
+        // Tackle Box
         html += '<div class="test-card test-compact">';
         html += '<div class="test-card-title">🎒 Tackle Box</div>';
         if (ownedTackle.length === 0) {
@@ -2435,9 +2441,10 @@ const Anglers = (function () {
         }
         html += '</div>';
 
+        // Tackle Shop
         html += '<div class="test-card test-compact">';
         html += '<div class="test-card-title">🛒 Tackle Shop</div>';
-        html += '<img src="img/tackleshop11.png" alt="Tackle Shop" class="test-banner" />';
+        html += '<img src="img/tackleshop11.png" alt="Tackle Shop" class="test-banner-sm" />';
         if (typeof TACKLE_CATALOG !== 'undefined') {
             html += '<div class="test-dense-list">';
             TACKLE_CATALOG.forEach(function(item){
@@ -2454,6 +2461,7 @@ const Anglers = (function () {
         }
         html += '</div>';
 
+        // Rig Shop
         html += '<div class="test-card test-compact">';
         html += '<div class="test-card-title">🎣 Rig Shop</div>';
         if (typeof Rigs !== 'undefined' && Rigs.RIG_CATALOG) {
@@ -2471,10 +2479,12 @@ const Anglers = (function () {
             html += '</div>';
         }
         html += '</div>';
-        html += '</div>';
 
-        // Stats + Bests + Quests row
-        html += '<div class="test-row">';
+        html += '</div>'; // test-row-3
+
+        // Stats + Bests + Quests
+        html += '<div class="test-row-3">';
+
         html += '<div class="test-card test-compact">';
         html += '<div class="test-card-title">📊 Career Stats</div>';
         html += '<div class="test-stats-grid">';
@@ -2523,12 +2533,12 @@ const Anglers = (function () {
         html += '</div>';
         html += '</div>';
 
-        // Quests + About row
-        html += '<div class="test-row">';
+        html += '<div class="test-card test-compact">';
+        html += '<div class="test-card-title">🎯 Active Quests</div>';
         var quests = state.anglerQuests || [];
-        if (quests.length > 0) {
-            html += '<div class="test-card test-compact">';
-            html += '<div class="test-card-title">🎯 Active Quests</div>';
+        if (quests.length === 0) {
+            html += '<div class="empty-state" style="padding:0.25rem 0;">No active quests.</div>';
+        } else {
             html += '<div class="test-quest-list">';
             quests.forEach(function(q){
                 var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
@@ -2544,9 +2554,12 @@ const Anglers = (function () {
                 html += '</div>';
             });
             html += '</div>';
-            html += '</div>';
         }
+        html += '</div>';
 
+        html += '</div>'; // test-row-3
+
+        // About
         var bioText = (angler.bio || '').trim();
         var hasBio = bioText.length > 0;
         html += '<div class="test-card test-compact">';
@@ -2556,7 +2569,6 @@ const Anglers = (function () {
         } else {
             html += '<p class="empty-state" style="padding:0.25rem 0;">No biography recorded yet.</p>';
         }
-        html += '</div>';
         html += '</div>';
 
         html += '</div>'; // test-root
