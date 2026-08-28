@@ -665,7 +665,9 @@ const Dashboard = (function () {
             { label: 'Pending',       value: pending + (pending === 1 ? ' booking' : ' bookings'),
               colour: pending > 0 ? 'var(--colour-gold)' : 'var(--colour-text-muted)' },
             { label: 'Lake Invest',   value: dailyInvest > 0 ? UI.formatMoney(dailyInvest) + '/d' : 'None',
-              colour: dailyInvest > 0 ? '#16a085' : 'var(--colour-text-muted)' }
+              colour: dailyInvest > 0 ? '#16a085' : 'var(--colour-text-muted)' },
+            { label: 'Daily Burn',     value: UI.formatMoney(staffWages + loanDaily + dashMaint) + '/d',
+              colour: 'var(--colour-danger)' }
         ];
 
         var html = '<div class="dash-stat-bar">';

@@ -195,7 +195,7 @@ const Staff = (function () {
             m.happiness = Math.max(0, Math.min(100, (m.happiness||70) + d));
 
             // Quit check
-            if (m.happiness < 20 && m.traits.indexOf('dedicated') === -1 && Math.random() < 0.15) {
+            if (m.happiness < 15 && m.traits.indexOf('dedicated') === -1 && Math.random() < 0.15) {
                 toFire.push(m.instanceId);
                 Game.addNotification('\uD83D\uDC64 ' + m.name + ' resigned due to low morale!');
                 return;

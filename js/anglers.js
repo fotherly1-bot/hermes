@@ -911,8 +911,15 @@ const Anglers = (function () {
                 );
                 UI.showToast(booking.matchName + ' completed! +' + repGain + ' rep', 'success');
             } else if (booking.satisfaction >= 70) {
-                Game.addReputation(5);
-                Game.addNotification(booking.anglerName + ' left very satisfied! (+5 reputation)');
+                var bookingRep = 5;
+                if (typeof Lakes !== 'undefined') {
+                    var lake = Lakes.getLakeById(booking.lakeId);
+                    if (lake && lake.dailyIncomePerAngler) {
+                        bookingRep = Math.max(1, Math.round(5 * (lake.dailyIncomePerAngler / 40)));
+                    }
+                }
+                Game.addReputation(bookingRep);
+                Game.addNotification(booking.anglerName + ' left very satisfied! (+' + bookingRep + ' reputation)');
                 // Record visit stats for leaderboard
                 if (booking.lakeId) recordAnglerVisit(booking.anglerName, booking.lakeId, 1);
             } else if (booking.satisfaction >= 40) {
