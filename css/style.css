@@ -10626,4 +10626,85 @@ details[open] > .lake-accordion-summary::before {
     font-size: 0.75rem;
 }
 
+.tackle-shop-root {
+    margin-top: 0.5rem;
+}
+.tackle-hero-img {
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+    border-radius: var(--radius);
+    border: 1px solid var(--colour-border);
+    background: rgba(0,0,0,0.25);
+    margin-bottom: 0.75rem;
+}
+.tackle-heading {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin: 0.5rem 0 0.25rem;
+}
+.tackle-subtitle {
+    color: var(--colour-text-muted);
+    margin-bottom: 1rem;
+}
+.section-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 1.25rem 0 0.5rem;
+    color: var(--colour-text);
+}
+.tackle-section-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+}
+.tackle-card {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.tackle-card.tackle-owned {
+    opacity: 0.85;
+    border-color: rgba(255,255,255,0.15);
+}
+.tackle-icon {
+    font-size: 1.5rem;
+}
+.tackle-name {
+    font-weight: 700;
+    color: var(--colour-text);
+    font-size: 0.95rem;
+}
+.tackle-category {
+    font-size: 0.75rem;
+    color: var(--colour-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.tackle-desc {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+    line-height: 1.35;
+    flex: 1;
+}
+.tackle-cost {
+    font-weight: 700;
+    color: var(--colour-accent);
+}
+
+@media (max-width: 980px) {
+    .tackle-section-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 560px) {
+    .tackle-section-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 

@@ -388,36 +388,84 @@ const Shop = (function () {
         }
 
         if (_shopView === 'tackle') {
-            html += '<p class="empty-state">Buy and unlock new rigs. Owned rigs can be equipped on any rod from <strong>My Rigs</strong>.</p>';
-            html += '<div class="rigs-shop-root">';
-            html += '<div class="rigs-shop-grid">';
-            if (typeof Rigs !== 'undefined' && Rigs.RIG_CATALOG) {
-                Rigs.RIG_CATALOG.forEach(function (def) {
-                    var owned = (state.rigInventory || []).indexOf(def.id) !== -1;
-                    html += '<div class="rigs-shop-card' + (owned ? ' rig-owned' : '') + '">';
-                    html += '<div class="rigs-shop-card-img-wrap rigs-shop-card-emoji-wrap" aria-hidden="true">🎣</div>';
-                    html += '<div class="rigs-shop-card-name">' + def.name + '</div>';
-                    html += '<div class="rigs-shop-card-desc">' + def.description + '</div>';
-                    if (owned) {
-                        html += '<span class="rig-badge rig-badge-owned">Owned</span>';
-                    } else {
-                        html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(def.cost) + '</span>';
-                        html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyRigFromShop(\'' + def.id + '\');Shop.renderShop();">Buy</button>';
-                    }
-                    html += '</div>';
-                });
-            }
-            html += '</div>';
-            html += '</div>';
+            html += '<div class="tackle-shop-root">';
+            html += '<img class="tackle-hero-img" src="img/tackleshop11.png" alt="Tackle Shop">';
+            html += '<h3 class="tackle-heading">The Tackle Box</h3>';
+            html += '<p class="tackle-subtitle">Upgrade your kit — rods, reels, lines, bivvys, alarms, and more.</p>';
 
-            html += '<h3 class="section-heading" style="margin-top:1.5rem;">Tackle Shop</h3>';
-            html += '<p style="font-size:0.85rem;color:var(--colour-text-muted);margin-bottom:0.75rem;">Browse rods, reels, bait, and more.</p>';
-            html += '<div class="tackle-shop-grid">';
-            if (typeof TACKLE_CATALOG !== 'undefined') {
-                var ownedTackle = (state.anglerTackle || []);
-                TACKLE_CATALOG.forEach(function(item){
+            var sections = [
+              { key:'Rods', label:'Rods', items:[
+                  {id:'carbon_pro_rod', name:'Carbon Pro Carp Rod', cost:4000, icon:'🎣', category:'Rod', description:'Lightweight carbon rod with a fighting curve.', effects:{castRangeBonus:0.12}},
+                  {id:'distance_feeder_rod', name:'Distance Feeder Rod', cost:3500, icon:'🎣', category:'Rod', description:'Long-range feeder rod for extra distance.', effects:{castRangeBonus:0.10}},
+                  {id:'waggler_pole', name:'Waggler Pole', cost:2500, icon:'🎣', category:'Rod', description:'Tuned pole for accurate presentation.', effects:{catchRateBonus:0.03, castRangeBonus:0.04}},
+                  {id:'spod_rod', name:'Spod Rod', cost:3000, icon:'🎣', category:'Rod', description:'Heavy spod rod for bait delivery.', effects:{castRangeBonus:0.05}},
+                  {id:'float_rod', name:'Match Float Rod', cost:2200, icon:'🎣', category:'Rod', description:'Sensitive tip for bite detection.', effects:{catchRateBonus:0.04, castRangeBonus:0.02}}
+              ]},
+              { key:'Reels', label:'Reels', items:[
+                  {id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}},
+                  {id:'feeder_reel', name:'Feeder Reel', cost:1800, icon:'🔄', category:'Reel', description:'Smooth drag for steady feeder fishing.', effects:{catchRateBonus:0.02, castRangeBonus:0.03}},
+                  {id:'multipler_reel', name:'Multiplier Reel', cost:2600, icon:'🔄', category:'Reel', description:'Fast retrieve multiplier for quick line pickup.', effects:{catchRateBonus:0.03}},
+                  {id:'fly_reel', name:'Fly Reel', cost:1500, icon:'🔄', category:'Reel', description:'Light fly reel with smooth arbor.', effects:{castRangeBonus:0.02}},
+                  {id:'spinning_reel', name:'Spinning Reel', cost:1700, icon:'🔄', category:'Reel', description:'Compact spinning reel for all-day use.', effects:{catchRateBonus:0.02}}
+              ]},
+              { key:'Main Line', label:'Main Line', items:[
+                  {id:'mono_10lb', name:'10lb Mono Mainline', cost:800, icon:'🧵', category:'Main Line', description:'Stretchy mono that absorbs shock.', effects:{breakStrengthBonus:0.05}},
+                  {id:'fluoro_12lb', name:'12lb Fluorocarbon', cost:1200, icon:'🧵', category:'Main Line', description:'Low-visibility fluorocarbon mainline.', effects:{breakStrengthBonus:0.07, catchRateBonus:0.01}},
+                  {id:'braid_20lb', name:'20lb Braided Mainline', cost:1600, icon:'🧵', category:'Main Line', description:'Ultra-thin braid with zero stretch.', effects:{castRangeBonus:0.04, breakStrengthBonus:0.03}},
+                  {id:'titanium_15lb', name:'15lb Titanium Leader Line', cost:1400, icon:'🧵', category:'Main Line', description:'Abrasion-resistant leader material.', effects:{breakStrengthBonus:0.08}},
+                  {id:' copolymer_12lb', name:'12lb Copolymer Line', cost:1000, icon:'🧵', category:'Main Line', description:'Sinking copolymer for bottom fishing.', effects:{catchRateBonus:0.02}}
+              ]},
+              { key:'Leads', label:'Leads', items:[
+                  {id:'inline_lead_2oz', name:'2oz Inline Lead', cost:500, icon:'🪨', category:'Leads', description:'Classic inline lead for distance.', effects:{castRangeBonus:0.03, hookSetBonus:0.02}},
+                  {id:'method_lead_3oz', name:'3oz Method Lead', cost:700, icon:'🪨', category:'Leads', description:'Method lead with open insert.', effects:{catchRateBonus:0.03, hookSetBonus:0.01}},
+                  {id:'helicopter_lead', name:'Helicopter Lead', cost:900, icon:'🪨', category:'Leads', description:'Helicopter system for rocky lakes.', effects:{breakStrengthBonus:0.04}},
+                  {id:'backlead_1oz', name:'1oz Backlead', cost:400, icon:'🪨', category:'Leads', description:'Light backlead for slip presentations.', effects:{castRangeBonus:0.02}},
+                  {id:'window_lead_2oz', name:'2oz Window Lead', cost:650, icon:'🪨', category:'Leads', description:'Window lead for hard lake beds.', effects:{hookSetBonus:0.03}}
+              ]},
+              { key:'Bivvys', label:'Bivvys', items:[
+                  {id:'bivvy_1man', name:'1-Man Bivvy', cost:1200, icon:'⛺', category:'Bivvys', description:'Compact shelter for solo sessions.', effects:{fishHealthBonus:0.02, satisfactionBonus:2}},
+                  {id:'bivvy_2man', name:'2-Man Bivvy', cost:2200, icon:'⛺', category:'Bivvys', description:'Roomier shelter with storage pockets.', effects:{fishHealthBonus:0.03, satisfactionBonus:3}},
+                  {id:'bivvy_overwrap', name:'Bivvy Overwrap', cost:1600, icon:'⛺', category:'Bivvys', description:'Weatherproof overwrap for cold nights.', effects:{fishHealthBonus:0.02, satisfactionBonus:2}},
+                  {id:'bivvy_brolly', name:'Brolly System', cost:900, icon:'⛺', category:'Bivvys', description:'Quick-deploy umbrella shelter.', effects:{fishHealthBonus:0.01, satisfactionBonus:1}},
+                  {id:'bivvy_groundsheet', name:'Insulated Groundsheet', cost:700, icon:'⛺', category:'Bivvys', description:'Keeps moisture out and warmth in.', effects:{fishHealthBonus:0.02}}
+              ]},
+              { key:'Alarms', label:'Alarms', items:[
+                  {id:'bite_alarm_single', name:'Single Bite Alarm', cost:700, icon:'🔔', category:'Alarms', description:'Reliable single-channel alarm.', effects:{catchRateBonus:0.04}},
+                  {id:'bite_alarm_set', name:'3-Rod Alarm Set', cost:1800, icon:'🔔', category:'Alarms', description:'Set of three with LED indicators.', effects:{catchRateBonus:0.06}},
+                  {id:'swinger_kit', name:'Swinger Kit', cost:1100, icon:'🔔', category:'Alarms', description:'Rod-mounted swingers for quick bites.', effects:{catchRateBonus:0.05}},
+                  {id:'siren_deluxe', name:'Deluxe Siren Alarm', cost:1400, icon:'🔔', category:'Alarms', description:'Loud siren alarm for noisy lakes.', effects:{catchRateBonus:0.05}},
+                  {id:'wireless_receiver', name:'Wireless Receiver', cost:900, icon:'🔔', category:'Alarms', description:'Receiver for wireless bite alarms.', effects:{catchRateBonus:0.03}}
+              ]},
+              { key:'Landing Nets', label:'Landing Nets', items:[
+                  {id:'landing_net_standard', name:'Standard Landing Net', cost:800, icon:'🥅', category:'Landing Nets', description:'Durable net with soft mesh.', effects:{fishHealthBonus:0.03}},
+                  {id:'landing_net_carp', name:'Carp Landing Net', cost:1200, icon:'🥅', category:'Landing Nets', description:'Large carp net with rubber mesh.', effects:{fishHealthBonus:0.04, breakStrengthBonus:0.02}},
+                  {id:'landing_net_triangle', name:'Triangle Keepnet', cost:1500, icon:'🥅', category:'Landing Nets', description:'Triangle keepnet for temporary holding.', effects:{fishHealthBonus:0.05}},
+                  {id:'landing_net_speci', name:'Specimen Net', cost:2000, icon:'🥅', category:'Landing Nets', description:'Wide-mesh net for big specimens.', effects:{fishHealthBonus:0.06}},
+                  {id:'landing_net_retainer', name:'Retainer Sling', cost:600, icon:'🥅', category:'Landing Nets', description:'Retainer sling for unhooking safely.', effects:{fishHealthBonus:0.03}}
+              ]},
+              { key:'Fish Care', label:'Fish Care', items:[
+                  {id:'unhooking_mat', name:'Unhooking Mat', cost:700, icon:'🛟', category:'Fish Care', description:'Padded mat for safe unhooking.', effects:{fishHealthBonus:0.04}},
+                  {id:'fish_slime', name:'Fish Slime Revival', cost:500, icon:'🛟', category:'Fish Care', description:'Revives slime coat after handling.', effects:{fishHealthBonus:0.03}},
+                  {id:'weigh_sling', name:'Weigh Sling', cost:900, icon:'🛟', category:'Fish Care', description:'Support sling for accurate weighing.', effects:{fishHealthBonus:0.03}},
+                  {id:'carp_cradle', name:'Carp Cradle', cost:1400, icon:'🛟', category:'Fish Care', description:'Cradle cradle for unhooking on mat.', effects:{fishHealthBonus:0.05}},
+                  {id:'first_aid_kit', name:'Angler First Aid Kit', cost:400, icon:'🛟', category:'Fish Care', description:'Small kit for hook and nick care.', effects:{fishHealthBonus:0.02}}
+              ]},
+              { key:'Extras', label:'Extras', items:[
+                  {id:'stool', name:'Fishing Stool', cost:500, icon:'🪑', category:'Extras', description:'Comfortable padded seat.', effects:{satisfactionBonus:2}},
+                  {id:'bucket', name:'Bait Bucket', cost:300, icon:'🪣', category:'Extras', description:'Insulated bucket for live bait.', effects:{catchRateBonus:0.02}},
+                  {id:'scale', name:'Digital Scales', cost:800, icon:'⚖️', category:'Extras', description:'Digital scales to 120lb capacity.', effects:{fishHealthBonus:0.02}},
+                  {id:'landing_forceps', name:'Forceps & Pliers', cost:350, icon:'🛠️', category:'Extras', description:'Forceps for safe hook removal.', effects:{fishHealthBonus:0.02}},
+                  {id:'rod_rest', name:'Rod Rest Kit', cost:450, icon:'🛠️', category:'Extras', description:'Adjustable rod rest for steady holds.', effects:{catchRateBonus:0.02}}
+              ]}
+            ];
+
+            var ownedTackle = (state.anglerTackle || []);
+            sections.forEach(function(sec){
+                html += '<h3 class="section-heading">' + sec.label + '</h3>';
+                html += '<div class="tackle-section-grid">';
+                sec.items.forEach(function(item){
                     var owned = ownedTackle.indexOf(item.id) !== -1;
-                    html += '<div class="tackle-shop-card' + (owned ? ' tackle-owned' : '') + '">';
+                    html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
                     html += '<div class="tackle-icon">' + item.icon + '</div>';
                     html += '<div class="tackle-name">' + item.name + '</div>';
                     html += '<div class="tackle-category">' + item.category + '</div>';
@@ -430,9 +478,10 @@ const Shop = (function () {
                     }
                     html += '</div>';
                 });
-            }
-            html += '</div>';
+                html += '</div>';
+            });
 
+            html += '</div>';
             container.innerHTML = html;
             return;
         }
