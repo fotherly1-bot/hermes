@@ -402,11 +402,11 @@ const Shop = (function () {
                   {id:'float_rod', name:'Match Float Rod', cost:2200, icon:'🎣', category:'Rod', description:'Sensitive tip for bite detection.', effects:{catchRateBonus:0.04, castRangeBonus:0.02}}
               ]},
               { key:'Reels', label:'Reels', items:[
-                  {id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}},
-                  {id:'feeder_reel', name:'Feeder Reel', cost:1800, icon:'🔄', category:'Reel', description:'Smooth drag for steady feeder fishing.', effects:{catchRateBonus:0.02, castRangeBonus:0.03}},
-                  {id:'multipler_reel', name:'Multiplier Reel', cost:2600, icon:'🔄', category:'Reel', description:'Fast retrieve multiplier for quick line pickup.', effects:{catchRateBonus:0.03}},
-                  {id:'fly_reel', name:'Fly Reel', cost:1500, icon:'🔄', category:'Reel', description:'Light fly reel with smooth arbor.', effects:{castRangeBonus:0.02}},
-                  {id:'spinning_reel', name:'Spinning Reel', cost:1700, icon:'🔄', category:'Reel', description:'Compact spinning reel for all-day use.', effects:{catchRateBonus:0.02}}
+                  {id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, unlocks:['big_pit_reel']},
+                  {id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}, unlocks:['big_pit_12k_reel']},
+                  {id:'big_pit_12k_reel', name:'Big Pit 12k Reel', cost:4200, icon:'🔄', category:'Reel', description:'12k bearing system with extra smooth retrieve.', effects:{castRangeBonus:0.08, catchRateBonus:0.02}, unlocks:['big_pit_14k_reel']},
+                  {id:'big_pit_14k_reel', name:'Big Pit 14k Reel', cost:5500, icon:'🔄', category:'Reel', description:'14k high-speed retrieve for instant line pickup.', effects:{castRangeBonus:0.09, catchRateBonus:0.03}, unlocks:['tournament_reel']},
+                  {id:'tournament_reel', name:'Tournament Reel', cost:7000, icon:'🔄', category:'Reel', description:'Match-spec reel with carbon drag and longcast spool.', effects:{castRangeBonus:0.11, catchRateBonus:0.04}, unlocks:[]}
               ]},
               { key:'Main Line', label:'Main Line', items:[
                   {id:'mono_10lb', name:'10lb Mono Mainline', cost:800, icon:'🧵', category:'Main Line', description:'Stretchy mono that absorbs shock.', effects:{breakStrengthBonus:0.05}},
@@ -463,18 +463,44 @@ const Shop = (function () {
             sections.forEach(function(sec){
                 html += '<h3 class="section-heading">' + sec.label + '</h3>';
                 html += '<div class="tackle-section-grid">';
+                sec.items.sort(function(a,b){ return a.cost - b.cost; });
                 sec.items.forEach(function(item){
                     var owned = ownedTackle.indexOf(item.id) !== -1;
-                    html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
+                    var locked = !owned && item.unlocks && item.unlocks.length && item.unlocks.some(function(u){ return (state.anglerTackle || []).indexOf(u) === -1; });
+                    html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + (locked ? ' tackle-locked' : '') + '">';
                     html += '<div class="tackle-icon">' + item.icon + '</div>';
                     html += '<div class="tackle-name">' + item.name + '</div>';
                     html += '<div class="tackle-category">' + item.category + '</div>';
                     html += '<div class="tackle-desc">' + item.description + '</div>';
-                    html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
+                    if (item.effects) {
+                        html += '<div class="tackle-buffs">';
+                        Object.keys(item.effects).forEach(function(k){
+                            var v = item.effects[k];
+                            if (!v) return;
+                            var label = k;
+                            if (k === 'castRangeBonus') label = 'Cast Range +' + (v*100).toFixed(0) + '%';
+                            else if (k === 'catchRateBonus') label = 'Catch Chance +' + (v*100).toFixed(0) + '%';
+                            else if (k === 'weightBonus') label = 'Weight +' + (v*100).toFixed(0) + '%';
+                            else if (k === 'breakStrengthBonus') label = 'Break Strength +' + (v*100).toFixed(0) + '%';
+                            else if (k === 'hookSetBonus') label = 'Hook Set +' + (v*100).toFixed(0) + '%';
+                            else if (k === 'fishHealthBonus') label = 'Fish Health +' + (v*100).toFixed(0) + '%';
+                            else if (k === 'satisfactionBonus') label = 'Satisfaction +' + v;
+                            else if (k === 'reputationBonus') label = 'Reputation +' + (v*100).toFixed(0) + '%';
+                            html += '<span class="tackle-buff">' + label + '</span>';
+                        });
+                        html += '</div>';
+                    }
+                    if (locked) {
+                        html += '<div class="tackle-lock">🔒 Locked</div>';
+                    } else {
+                        html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
+                    }
                     if (owned) {
                         html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
-                    } else {
+                    } else if (!locked) {
                         html += '<button class="btn btn-sm btn-primary" onclick="Anglers.buyTackle(\'' + item.id + '\');Shop.renderShop();">Buy</button>';
+                    } else {
+                        html += '<button class="btn btn-sm btn-muted" disabled>Locked</button>';
                     }
                     html += '</div>';
                 });
