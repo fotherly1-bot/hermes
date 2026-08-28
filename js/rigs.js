@@ -346,7 +346,6 @@
                 var inv = state.rigInventory || [];
                 var alreadyOwned = inv.indexOf(def.id) !== -1;
                 html += '<div class="rigs-shop-card' + (alreadyOwned ? ' rig-owned' : '') + '">';
-                html += '<div class="rigs-shop-card-img-wrap rigs-shop-card-emoji-wrap" aria-hidden="true">🎣</div>';
                 html += '<div class="rigs-shop-card-name">' + def.name + '</div>';
                 html += '<div class="rigs-shop-card-desc">' + def.description + '</div>';
                 if (alreadyOwned) {
