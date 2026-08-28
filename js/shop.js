@@ -459,7 +459,7 @@ const Shop = (function () {
                     var owned = ownedTackle.indexOf(item.id) !== -1;
                     var locked = !owned && item.unlocks && item.unlocks.length && item.unlocks.some(function(u){ return (state.anglerTackle || []).indexOf(u) === -1; });
                     locked = locked || (!owned && item.crossUnlocks && item.crossUnlocks.length && item.crossUnlocks.some(function(u){ return (state.anglerTackle || []).indexOf(u) === -1; }));
-                    if (idx > 0) html += '<div class="tackle-arrow" aria-hidden="true">➡️</div>';
+                    if (idx > 0) html += '<div class="tackle-arrow" aria-hidden="true">👉</div>';
                     html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + (locked ? ' tackle-locked' : '') + '">';
                     html += '<div class="tackle-icon">' + item.icon + '</div>';
                     html += '<div class="tackle-name">' + item.name + '</div>';
@@ -494,6 +494,12 @@ const Shop = (function () {
                         html += '<button class="btn btn-sm btn-primary" onclick="Anglers.buyTackle(\'' + item.id + '\');Shop.renderShop();">Buy</button>';
                     } else {
                         html += '<button class="btn btn-sm btn-muted" disabled>Locked</button>';
+                    }
+                    if (item.unlocks && item.unlocks.length || item.crossUnlocks && item.crossUnlocks.length) {
+                        var nextNames = [];
+                        (item.unlocks || []).forEach(function(u){ var it = TACKLE_CATALOG.find(function(t){return t.id===u;}); if (it) nextNames.push(it.name); });
+                        (item.crossUnlocks || []).forEach(function(u){ var it = TACKLE_CATALOG.find(function(t){return t.id===u;}); if (it && nextNames.indexOf(it.name)===-1) nextNames.push(it.name); });
+                        if (nextNames.length) html += '<div class="tackle-upgrade">👉 Unlocks: ' + nextNames.join(', ') + '</div>';
                     }
                     html += '</div>';
                 });
