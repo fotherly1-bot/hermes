@@ -823,3 +823,5 @@ const Shop = (function () {
         renderShop: renderShop
     };
 })();
+
+window.Shop = Shop;
