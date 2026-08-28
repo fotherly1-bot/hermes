@@ -118,9 +118,9 @@ const Shop = (function () {
 
     /** Currently selected lake in the shop UI (module-level, not persisted). */
     var _shopLakeId = null;
-    var _shopView   = 'buy'; // 'buy' | 'sell'
+    var _shopView   = 'buy-fish'; // 'buy-fish' | 'sell' | 'bait' | 'tackle'
 
-    /** Switch between Buy and Sell views. */
+    /** Switch between shop views. */
     function showShopView(view) {
         _shopView = view;
         renderShop();
@@ -365,14 +365,30 @@ const Shop = (function () {
 
         // ── Tab switcher ─────────────────────────────────────────────────────
         html += '<div class="shop-tabs">';
-        html += '<button class="shop-tab' + (_shopView === 'buy' ? ' shop-tab-active' : '') +
-                '" onclick="Shop.showShopView(\'buy\')">\uD83D\uDED2 Buy</button>';
+        html += '<button class="shop-tab' + (_shopView === 'buy-fish' ? ' shop-tab-active' : '') +
+                '" onclick="Shop.showShopView(\'buy-fish\')">🐟 Buy Fish</button>';
         html += '<button class="shop-tab' + (_shopView === 'sell' ? ' shop-tab-active' : '') +
-                '" onclick="Shop.showShopView(\'sell\')">\uD83D\uDCB8 Sell Fish</button>';
+                '" onclick="Shop.showShopView(\'sell\')">💰 Sell Fish</button>';
+        html += '<button class="shop-tab' + (_shopView === 'bait' ? ' shop-tab-active' : '') +
+                '" onclick="Shop.showShopView(\'bait\')">🪱 Bait</button>';
+        html += '<button class="shop-tab' + (_shopView === 'tackle' ? ' shop-tab-active' : '') +
+                '" onclick="Shop.showShopView(\'tackle\')">🎣 Tackle</button>';
         html += '</div>';
 
         if (_shopView === 'sell') {
             html += renderSellTab(state);
+            container.innerHTML = html;
+            return;
+        }
+
+        if (_shopView === 'bait') {
+            html += '<p class="empty-state">Bait shop coming soon — groundbait, boilies, and hookbait options will be available here.</p>';
+            container.innerHTML = html;
+            return;
+        }
+
+        if (_shopView === 'tackle') {
+            html += '<p class="empty-state">Tackle shop coming soon — leaders, hooks, swivels, and rig components will be available here.</p>';
             container.innerHTML = html;
             return;
         }
