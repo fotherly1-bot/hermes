@@ -122,7 +122,6 @@ const Shop = (function () {
 
     /** Switch between shop views. */
     function showShopView(view) {
-        console.log('[Shop] showShopView called with:', view);
         _shopView = view;
         renderShop();
     }
@@ -492,14 +491,16 @@ const Shop = (function () {
                     if (owned) {
                         html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
                     } else if (!locked) {
-                        html += '<button class="btn btn-sm btn-primary" onclick="Anglers.buyTackle(\'' + item.id + '\');Shop.renderShop();">Buy</button>';
+                        html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyTackle(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
                     } else {
                         html += '<button class="btn btn-sm btn-muted" disabled>Locked</button>';
                     }
                     if (item.unlocks && item.unlocks.length || item.crossUnlocks && item.crossUnlocks.length) {
                         var nextNames = [];
-                        (item.unlocks || []).forEach(function(u){ var it = TACKLE_CATALOG.find(function(t){return t.id===u;}); if (it) nextNames.push(it.name); });
-                        (item.crossUnlocks || []).forEach(function(u){ var it = TACKLE_CATALOG.find(function(t){return t.id===u;}); if (it && nextNames.indexOf(it.name)===-1) nextNames.push(it.name); });
+                        try {
+                            (item.unlocks || []).forEach(function(u){ var it = (typeof TACKLE_CATALOG !== 'undefined' ? TACKLE_CATALOG : []).find(function(t){return t.id===u;}); if (it) nextNames.push(it.name); });
+                            (item.crossUnlocks || []).forEach(function(u){ var it = (typeof TACKLE_CATALOG !== 'undefined' ? TACKLE_CATALOG : []).find(function(t){return t.id===u;}); if (it && nextNames.indexOf(it.name)===-1) nextNames.push(it.name); });
+                        } catch(e) { /* ignore lookup errors */ }
                         if (nextNames.length) html += '<div class="tackle-upgrade">👉 Unlocks: ' + nextNames.join(', ') + '</div>';
                     }
                     html += '</div>';
@@ -833,7 +834,6 @@ window.Shop = Shop;
         var tab = e.target.closest('.shop-tab[data-view]');
         if (!tab) return;
         var view = tab.getAttribute('data-view');
-        console.log('[Shop] tab clicked:', view, 'Shop?', typeof Shop, 'showShopView?', typeof Shop !== 'undefined' && typeof Shop.showShopView === 'function');
         if (view && typeof Shop !== 'undefined' && typeof Shop.showShopView === 'function') {
             try {
                 Shop.showShopView(view);
