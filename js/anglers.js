@@ -258,6 +258,7 @@ const Anglers = (function () {
         if (!state.pendingBookings) state.pendingBookings = [];
         if (!state.incomeHistory) state.incomeHistory = [];
         if (!state.anglerTackle) state.anglerTackle = [];
+        if (!state.anglerBait) state.anglerBait = [];
         if (!state.anglerStats) state.anglerStats = {};
         if (!state.lastProcessedSeason) state.lastProcessedSeason = getCurrentSeasonNum(state.day);
         if (state.playerAnglerId) {
@@ -284,7 +285,7 @@ const Anglers = (function () {
         { id:'rod_12ft_carp', name:'12ft Carp Rod', cost:1800, icon:'🎣', category:'Rod', description:'Versatile 12ft rod for general carp fishing.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['rod_carbon_carp']},
         { id:'rod_carbon_carp', name:'Carbon Carp Rod', cost:2600, icon:'🎣', category:'Rod', description:'Lightweight carbon blank with responsive action.', effects:{catchRateBonus:0.03, castRangeBonus:0.02}, prerequisite:'rod_12ft_carp', unlocks:['rod_13ft_carp']},
         { id:'rod_13ft_carp', name:'13ft Carp Rod', cost:3400, icon:'🎣', category:'Rod', description:'Extra length for longer casts and better leverage.', effects:{castRangeBonus:0.05, catchRateBonus:0.02}, prerequisite:'rod_carbon_carp', unlocks:['rod_custom_carp']},
-        { id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'rod_13ft_carp', unlocks:[], crossUnlocks:['standard_reel']},
+        { id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'rod_13ft_carp', unlocks:[]},
         // Reels
         { id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['big_pit_reel']},
         { id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}, prerequisite:'standard_reel', unlocks:['big_pit_12k_reel']},
@@ -293,8 +294,8 @@ const Anglers = (function () {
         // Main Line
         { id:'mono_10lb', name:'10lb Mono Mainline', cost:800, icon:'🧵', category:'Main Line', description:'Stretchy mono that absorbs shock.', effects:{breakStrengthBonus:0.05}, prerequisite:null, unlocks:['fluoro_12lb']},
         { id:'fluoro_12lb', name:'12lb Fluorocarbon', cost:1200, icon:'🧵', category:'Main Line', description:'Low-visibility fluorocarbon mainline.', effects:{breakStrengthBonus:0.07, catchRateBonus:0.01}, prerequisite:'mono_10lb', unlocks:['copolymer_12lb']},
-        { id:'copolymer_12lb', name:'12lb Copolymer Line', cost:1000, icon:'🧵', category:'Main Line', description:'Sinking copolymer for bottom fishing.', effects:{catchRateBonus:0.02}, prerequisite:'fluoro_12lb', unlocks:['titanium_15lb']},
-        { id:'titanium_15lb', name:'15lb Titanium Leader Line', cost:1400, icon:'🧵', category:'Main Line', description:'Abrasion-resistant leader material.', effects:{breakStrengthBonus:0.08}, prerequisite:'copolymer_12lb', unlocks:[]},
+        { id:'copolymer_12lb', name:'12lb Copolymer Line', cost:1400, icon:'🧵', category:'Main Line', description:'Sinking copolymer for bottom fishing.', effects:{catchRateBonus:0.02}, prerequisite:'fluoro_12lb', unlocks:['titanium_15lb']},
+        { id:'titanium_15lb', name:'15lb Titanium Leader Line', cost:1700, icon:'🧵', category:'Main Line', description:'Abrasion-resistant leader material.', effects:{breakStrengthBonus:0.08}, prerequisite:'copolymer_12lb', unlocks:[]},
         // Leads
         { id:'backlead_1oz', name:'1oz Backlead', cost:400, icon:'🪨', category:'Leads', description:'Light backlead for slip presentations.', effects:{castRangeBonus:0.02}, prerequisite:null, unlocks:['inline_lead_2oz']},
         { id:'inline_lead_2oz', name:'2oz Inline Lead', cost:500, icon:'🪨', category:'Leads', description:'Classic inline lead for distance.', effects:{castRangeBonus:0.03, hookSetBonus:0.02}, prerequisite:'backlead_1oz', unlocks:['window_lead_2oz']},
@@ -307,14 +308,14 @@ const Anglers = (function () {
         { id:'bivvy_overwrap', name:'Bivvy Overwrap', cost:1600, icon:'⛺', category:'Bivvys', description:'Weatherproof overwrap for cold nights.', effects:{fishHealthBonus:0.02, satisfactionBonus:2}, prerequisite:'bivvy_1man', unlocks:[]},
         // Alarms
         { id:'wireless_receiver', name:'Wireless Receiver', cost:900, icon:'🔔', category:'Alarms', description:'Receiver for wireless bite alarms.', effects:{catchRateBonus:0.03}, prerequisite:null, unlocks:['swinger_kit']},
-        { id:'swinger_kit', name:'Swinger Kit', cost:1100, icon:'🔔', category:'Alarms', description:'Rod-mounted swingers for quick bites.', effects:{catchRateBonus:0.05}, prerequisite:'wireless_receiver', unlocks:['siren_deluxe']},
-        { id:'siren_deluxe', name:'Deluxe Siren Alarm', cost:1400, icon:'🔔', category:'Alarms', description:'Loud siren alarm for noisy lakes.', effects:{catchRateBonus:0.05}, prerequisite:'swinger_kit', unlocks:['bite_alarm_set']},
-        { id:'bite_alarm_set', name:'3-Rod Alarm Set', cost:1800, icon:'🔔', category:'Alarms', description:'Set of three with LED indicators.', effects:{catchRateBonus:0.06}, prerequisite:'siren_deluxe', unlocks:[]},
+        { id:'swinger_kit', name:'Swinger Kit', cost:1600, icon:'🔔', category:'Alarms', description:'Rod-mounted swingers for quick bites.', effects:{catchRateBonus:0.05}, prerequisite:'wireless_receiver', unlocks:['siren_deluxe']},
+        { id:'siren_deluxe', name:'Deluxe Siren Alarm', cost:2000, icon:'🔔', category:'Alarms', description:'Loud siren alarm for noisy lakes.', effects:{catchRateBonus:0.05}, prerequisite:'swinger_kit', unlocks:['bite_alarm_set']},
+        { id:'bite_alarm_set', name:'3-Rod Alarm Set', cost:2600, icon:'🔔', category:'Alarms', description:'Set of three with LED indicators.', effects:{catchRateBonus:0.06}, prerequisite:'siren_deluxe', unlocks:[]},
         // Landing Nets
         { id:'landing_net_retainer', name:'Retainer Sling', cost:600, icon:'🥅', category:'Landing Nets', description:'Retainer sling for unhooking safely.', effects:{fishHealthBonus:0.03}, prerequisite:null, unlocks:['landing_net_standard']},
         { id:'landing_net_standard', name:'Standard Landing Net', cost:800, icon:'🥅', category:'Landing Nets', description:'Durable net with soft mesh.', effects:{fishHealthBonus:0.03}, prerequisite:'landing_net_retainer', unlocks:['landing_net_carp']},
-        { id:'landing_net_carp', name:'Carp Landing Net', cost:1200, icon:'🥅', category:'Landing Nets', description:'Large carp net with rubber mesh.', effects:{fishHealthBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'landing_net_standard', unlocks:['landing_net_speci']},
-        { id:'landing_net_speci', name:'Specimen Net', cost:2000, icon:'🥅', category:'Landing Nets', description:'Wide-mesh net for big specimens.', effects:{fishHealthBonus:0.06}, prerequisite:'landing_net_carp', unlocks:[]},
+        {id:'landing_net_carp', name:'Carp Landing Net', cost:1200, icon:'🥅', category:'Landing Nets', description:'Large carp net with rubber mesh.', effects:{fishHealthBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'landing_net_standard', unlocks:['landing_net_speci']},
+        {id:'landing_net_speci', name:'Specimen Net', cost:1400, icon:'🥅', category:'Landing Nets', description:'Wide-mesh net for big specimens.', effects:{fishHealthBonus:0.06}, prerequisite:'landing_net_carp', unlocks:[]},
         // Fish Care
         { id:'first_aid_kit', name:'Angler First Aid Kit', cost:400, icon:'🛟', category:'Fish Care', description:'Small kit for hook and nick care.', effects:{fishHealthBonus:0.02}, prerequisite:null, unlocks:['unhooking_mat']},
         { id:'unhooking_mat', name:'Unhooking Mat', cost:700, icon:'🛟', category:'Fish Care', description:'Padded mat for safe unhooking.', effects:{fishHealthBonus:0.04}, prerequisite:'first_aid_kit', unlocks:['weigh_sling']},
@@ -344,6 +345,39 @@ const Anglers = (function () {
                 if (combined.hasOwnProperty(key)) {
                     combined[key] += item.effects[key];
                 }
+            });
+        });
+        return combined;
+    }
+
+    /** Get the combined effects from all owned bait. */
+    function getBaitEffects() {
+        initState();
+        var state = Game.getState();
+        var owned = state.anglerBait || [];
+        var combined = { weightBonus: 0, catchRateBonus: 0, lakeBonus: 0 };
+        var catalog = [];
+        try { catalog = (typeof Shop !== 'undefined' && Shop.getBaitCatalog) ? Shop.getBaitCatalog() : []; } catch(e) {}
+        if (!catalog.length) {
+            catalog = [
+                {id:'popup_white', name:'White Popups', cost:350, effects:{catchRateBonus:0.02}},
+                {id:'popup_yellow', name:'Yellow Popups', cost:400, effects:{catchRateBonus:0.03, lakeBonus:0.04}},
+                {id:'popup_pink', name:'Pink Popups', cost:400, effects:{catchRateBonus:0.03}},
+                {id:'popup_orange', name:'Orange Popups', cost:400, effects:{catchRateBonus:0.03}},
+                {id:'popup_purple', name:'Purple Popups', cost:420, effects:{catchRateBonus:0.03}},
+                {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, effects:{catchRateBonus:0.02}},
+                {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, effects:{catchRateBonus:0.03}},
+                {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, effects:{catchRateBonus:0.03, weightBonus:0.02}},
+                {id:'spod_mix', name:'Spod Mix', cost:700, effects:{catchRateBonus:0.04, lakeBonus:0.05}}
+            ];
+        }
+        var lookup = {};
+        catalog.forEach(function(it){ lookup[it.id] = it; });
+        owned.forEach(function (baitId) {
+            var item = lookup[baitId];
+            if (!item || !item.effects) return;
+            Object.keys(item.effects).forEach(function (key) {
+                if (combined.hasOwnProperty(key)) combined[key] += item.effects[key];
             });
         });
         return combined;
@@ -380,6 +414,47 @@ const Anglers = (function () {
         }
         Game.saveToStorage();
         renderAnglers();
+        return true;
+    }
+
+    /** Purchase a bait item if the player can afford it. */
+    function buyBait(baitId) {
+        initState();
+        var state = Game.getState();
+        var catalog = [];
+        try { catalog = (typeof Shop !== 'undefined' && Shop.getBaitCatalog) ? Shop.getBaitCatalog() : []; } catch(e) {}
+        if (!catalog.length) {
+            catalog = [
+                {id:'popup_white', name:'White Popups', cost:350},
+                {id:'popup_yellow', name:'Yellow Popups', cost:400},
+                {id:'popup_pink', name:'Pink Popups', cost:400},
+                {id:'popup_orange', name:'Orange Popups', cost:400},
+                {id:'popup_purple', name:'Purple Popups', cost:420},
+                {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500},
+                {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550},
+                {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600},
+                {id:'spod_mix', name:'Spod Mix', cost:700}
+            ];
+        }
+        var item = catalog.find(function(b){ return b.id === baitId; });
+        if (!item) { UI.showToast('Bait not found.', 'error'); return false; }
+        if ((state.anglerBait || []).indexOf(baitId) !== -1) {
+            UI.showToast('You already own ' + item.name + '.', 'warning');
+            return false;
+        }
+        if ((state.money || 0) < item.cost) {
+            UI.showToast('Not enough money for ' + item.name + '.', 'error');
+            return false;
+        }
+        state.money -= item.cost;
+        state.anglerBait = state.anglerBait || [];
+        state.anglerBait.push(baitId);
+        UI.showToast('🪱 ' + item.name + ' added to your bait stash!', 'success');
+        if (typeof Finance !== 'undefined') {
+            Finance.addFinanceLog('bait_purchase', -item.cost, item.name);
+        }
+        Game.saveToStorage && Game.saveToStorage();
+        renderAnglers && renderAnglers();
         return true;
     }
 
@@ -1625,6 +1700,23 @@ const Anglers = (function () {
         }
         if (rigBonus > 0) {
             catchCount += Math.floor(catchCount * rigBonus);
+        }
+
+        // Bait fish preference bonus for booked lake species match
+        var baitEffects = typeof Anglers !== 'undefined' && Anglers.getBaitEffects ? Anglers.getBaitEffects() : {};
+        if (baitEffects.lakeBonus && lakeId) {
+            var lakeSpeciesPrefs = [];
+            try {
+                lakeFish.forEach(function(f){
+                    var sp = typeof Fish !== 'undefined' && Fish.getSpecies ? Fish.getSpecies(f.species) : null;
+                    if (sp && sp.preferredBait) lakeSpeciesPrefs.push(sp.preferredBait);
+                });
+            } catch(e){}
+            var ownedBait = (typeof state.anglerBait !== 'undefined' ? state.anglerBait : []);
+            var matchedBait = ownedBait.some(function(b){ return lakeSpeciesPrefs.indexOf(b) !== -1; });
+            if (matchedBait) {
+                catchCount = Math.max(1, Math.floor(catchCount * (1 + baitEffects.lakeBonus)));
+            }
         }
 
         stats.fishCaught += catchCount;

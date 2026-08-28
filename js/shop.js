@@ -382,7 +382,58 @@ const Shop = (function () {
         }
 
         if (_shopView === 'bait') {
-            html += '<p class="empty-state">Bait shop coming soon — groundbait, boilies, and hookbait options will be available here.</p>';
+            html += '<div class="tackle-shop-root">';
+            html += '<h3 class="tackle-heading">The Bait Shed</h3>';
+            html += '<p class="tackle-subtitle">Popups, boilies, and spod mix to tempt fish into feeding.</p>';
+
+            var BAIT_CATALOG = [
+              {id:'popup_white', name:'White Popups', cost:350, icon:'⚪', category:'Popups', description:'Classic white buoyant popups.', effects:{catchRateBonus:0.02}, preference:'popup_white'},
+              {id:'popup_yellow', name:'Yellow Popups', cost:400, icon:'🟡', category:'Popups', description:'Bright yellow popups for extra attraction.', effects:{catchRateBonus:0.03}, preference:'popup_yellow', lakeBonus:0.04},
+              {id:'popup_pink', name:'Pink Popups', cost:400, icon:'🩷', category:'Popups', description:'Pink popups for wary fish.', effects:{catchRateBonus:0.03}, preference:'popup_pink'},
+              {id:'popup_orange', name:'Orange Popups', cost:400, icon:'🟠', category:'Popups', description:'Orange popups for low-visibility swims.', effects:{catchRateBonus:0.03}, preference:'popup_orange'},
+              {id:'popup_purple', name:'Purple Popups', cost:420, icon:'🟣', category:'Popups', description:'Deep purple popups for specimen triggers.', effects:{catchRateBonus:0.03}, preference:'popup_purple'},
+              {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, icon:'🟤', category:'Boilies', description:'High-protein fishmeal boilies.', effects:{catchRateBonus:0.02}, preference:'boilie_fishmeal'},
+              {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, icon:'🌈', category:'Boilies', description:'Multibirdfood boilies for all-round attraction.', effects:{catchRateBonus:0.03}, preference:'boilie_birdfood'},
+              {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, icon:'🟤', category:'Boilies', description:'Tiger nut boilies for big carp.', effects:{catchRateBonus:0.03, weightBonus:0.02}, preference:'boilie_tigernut'},
+              {id:'spod_mix', name:'Spod Mix', cost:700, icon:'🪣', category:'Spod Mix', description:'Mixed particle spod mix to draw fish in.', effects:{catchRateBonus:0.04}, preference:'spod_mix', lakeBonus:0.05}
+            ];
+
+            var ownedBait = (state.anglerBait || []);
+            html += '<div class="tackle-section-grid">';
+            BAIT_CATALOG.forEach(function(item, idx){
+                var owned = ownedBait.indexOf(item.id) !== -1;
+                if (idx > 0) html += '<div class="tackle-arrow" aria-hidden="true">👉</div>';
+                html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
+                html += '<div class="tackle-icon">' + item.icon + '</div>';
+                html += '<div class="tackle-name">' + item.name + '</div>';
+                html += '<div class="tackle-category">' + item.category + '</div>';
+                html += '<div class="tackle-desc">' + item.description + '</div>';
+                if (item.preference) {
+                    html += '<div class="tackle-buffs"><span class="tackle-buff">🐟 Preferred by fish</span></div>';
+                }
+                if (item.effects) {
+                    html += '<div class="tackle-buffs">';
+                    Object.keys(item.effects).forEach(function(k){
+                        var v = item.effects[k];
+                        if (!v) return;
+                        var label = k;
+                        if (k === 'catchRateBonus') label = 'Catch Chance +' + (v*100).toFixed(0) + '%';
+                        else if (k === 'weightBonus') label = 'Weight +' + (v*100).toFixed(0) + '%';
+                        else if (k === 'lakeBonus') label = 'Booked Lake Bonus +' + (v*100).toFixed(0) + '%';
+                        html += '<span class="tackle-buff">' + label + '</span>';
+                    });
+                    html += '</div>';
+                }
+                html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
+                if (owned) {
+                    html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
+                } else {
+                    html += '<button class="btn btn-sm btn-primary buy-bait-btn" data-bait="' + item.id + '">Buy</button>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
             container.innerHTML = html;
             return;
         }
@@ -398,7 +449,7 @@ const Shop = (function () {
                   {id:'rod_12ft_carp', name:'12ft Carp Rod', cost:1800, icon:'🎣', category:'Rod', description:'Versatile 12ft rod for general carp fishing.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['rod_carbon_carp']},
                   {id:'rod_carbon_carp', name:'Carbon Carp Rod', cost:2600, icon:'🎣', category:'Rod', description:'Lightweight carbon blank with responsive action.', effects:{catchRateBonus:0.03, castRangeBonus:0.02}, prerequisite:'rod_12ft_carp', unlocks:['rod_13ft_carp']},
                   {id:'rod_13ft_carp', name:'13ft Carp Rod', cost:3400, icon:'🎣', category:'Rod', description:'Extra length for longer casts and better leverage.', effects:{castRangeBonus:0.05, catchRateBonus:0.02}, prerequisite:'rod_carbon_carp', unlocks:['rod_custom_carp']},
-                  {id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'rod_13ft_carp', unlocks:[], crossUnlocks:['standard_reel']}
+                  {id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'rod_13ft_carp', unlocks:[]}
               ]},
               { key:'Reels', label:'Reels', items:[
                   {id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['big_pit_reel']},
@@ -409,8 +460,8 @@ const Shop = (function () {
               { key:'Main Line', label:'Main Line', items:[
                   {id:'mono_10lb', name:'10lb Mono Mainline', cost:800, icon:'🧵', category:'Main Line', description:'Stretchy mono that absorbs shock.', effects:{breakStrengthBonus:0.05}, prerequisite:null, unlocks:['fluoro_12lb']},
                   {id:'fluoro_12lb', name:'12lb Fluorocarbon', cost:1200, icon:'🧵', category:'Main Line', description:'Low-visibility fluorocarbon mainline.', effects:{breakStrengthBonus:0.07, catchRateBonus:0.01}, prerequisite:'mono_10lb', unlocks:['copolymer_12lb']},
-                  {id:'copolymer_12lb', name:'12lb Copolymer Line', cost:1000, icon:'🧵', category:'Main Line', description:'Sinking copolymer for bottom fishing.', effects:{catchRateBonus:0.02}, prerequisite:'fluoro_12lb', unlocks:['titanium_15lb']},
-                  {id:'titanium_15lb', name:'15lb Titanium Leader Line', cost:1400, icon:'🧵', category:'Main Line', description:'Abrasion-resistant leader material.', effects:{breakStrengthBonus:0.08}, prerequisite:'copolymer_12lb', unlocks:[]}
+                  {id:'copolymer_12lb', name:'12lb Copolymer Line', cost:1400, icon:'🧵', category:'Main Line', description:'Sinking copolymer for bottom fishing.', effects:{catchRateBonus:0.02}, prerequisite:'fluoro_12lb', unlocks:['titanium_15lb']},
+                  {id:'titanium_15lb', name:'15lb Titanium Leader Line', cost:1700, icon:'🧵', category:'Main Line', description:'Abrasion-resistant leader material.', effects:{breakStrengthBonus:0.08}, prerequisite:'copolymer_12lb', unlocks:[]}
               ]},
               { key:'Leads', label:'Leads', items:[
                   {id:'backlead_1oz', name:'1oz Backlead', cost:400, icon:'🪨', category:'Leads', description:'Light backlead for slip presentations.', effects:{castRangeBonus:0.02}, prerequisite:null, unlocks:['inline_lead_2oz']},
@@ -426,15 +477,15 @@ const Shop = (function () {
               ]},
               { key:'Alarms', label:'Alarms', items:[
                   {id:'wireless_receiver', name:'Wireless Receiver', cost:900, icon:'🔔', category:'Alarms', description:'Receiver for wireless bite alarms.', effects:{catchRateBonus:0.03}, prerequisite:null, unlocks:['swinger_kit']},
-                  {id:'swinger_kit', name:'Swinger Kit', cost:1100, icon:'🔔', category:'Alarms', description:'Rod-mounted swingers for quick bites.', effects:{catchRateBonus:0.05}, prerequisite:'wireless_receiver', unlocks:['siren_deluxe']},
-                  {id:'siren_deluxe', name:'Deluxe Siren Alarm', cost:1400, icon:'🔔', category:'Alarms', description:'Loud siren alarm for noisy lakes.', effects:{catchRateBonus:0.05}, prerequisite:'swinger_kit', unlocks:['bite_alarm_set']},
-                  {id:'bite_alarm_set', name:'3-Rod Alarm Set', cost:1800, icon:'🔔', category:'Alarms', description:'Set of three with LED indicators.', effects:{catchRateBonus:0.06}, prerequisite:'siren_deluxe', unlocks:[]}
+                  {id:'swinger_kit', name:'Swinger Kit', cost:1600, icon:'🔔', category:'Alarms', description:'Rod-mounted swingers for quick bites.', effects:{catchRateBonus:0.05}, prerequisite:'wireless_receiver', unlocks:['siren_deluxe']},
+                  {id:'siren_deluxe', name:'Deluxe Siren Alarm', cost:2000, icon:'🔔', category:'Alarms', description:'Loud siren alarm for noisy lakes.', effects:{catchRateBonus:0.05}, prerequisite:'swinger_kit', unlocks:['bite_alarm_set']},
+                  {id:'bite_alarm_set', name:'3-Rod Alarm Set', cost:2600, icon:'🔔', category:'Alarms', description:'Set of three with LED indicators.', effects:{catchRateBonus:0.06}, prerequisite:'siren_deluxe', unlocks:[]}
               ]},
               { key:'Landing Nets', label:'Landing Nets', items:[
                   {id:'landing_net_retainer', name:'Retainer Sling', cost:600, icon:'🥅', category:'Landing Nets', description:'Retainer sling for unhooking safely.', effects:{fishHealthBonus:0.03}, prerequisite:null, unlocks:['landing_net_standard']},
                   {id:'landing_net_standard', name:'Standard Landing Net', cost:800, icon:'🥅', category:'Landing Nets', description:'Durable net with soft mesh.', effects:{fishHealthBonus:0.03}, prerequisite:'landing_net_retainer', unlocks:['landing_net_carp']},
                   {id:'landing_net_carp', name:'Carp Landing Net', cost:1200, icon:'🥅', category:'Landing Nets', description:'Large carp net with rubber mesh.', effects:{fishHealthBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'landing_net_standard', unlocks:['landing_net_speci']},
-                  {id:'landing_net_speci', name:'Specimen Net', cost:2000, icon:'🥅', category:'Landing Nets', description:'Wide-mesh net for big specimens.', effects:{fishHealthBonus:0.06}, prerequisite:'landing_net_carp', unlocks:[]}
+                  {id:'landing_net_speci', name:'Specimen Net', cost:1400, icon:'🥅', category:'Landing Nets', description:'Wide-mesh net for big specimens.', effects:{fishHealthBonus:0.06}, prerequisite:'landing_net_carp', unlocks:[]}
               ]},
               { key:'Fish Care', label:'Fish Care', items:[
                   {id:'first_aid_kit', name:'Angler First Aid Kit', cost:400, icon:'🛟', category:'Fish Care', description:'Small kit for hook and nick care.', effects:{fishHealthBonus:0.02}, prerequisite:null, unlocks:['unhooking_mat']},
@@ -490,7 +541,7 @@ const Shop = (function () {
                     if (owned) {
                         html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
                     } else if (!locked) {
-                        html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyTackle(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
+                        html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyBait(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
                     } else {
                         html += '<button class="btn btn-sm btn-muted" disabled>Locked</button>';
                     }
@@ -821,11 +872,19 @@ const Shop = (function () {
         getLakeIncomeBonus: getLakeIncomeBonus,
         getLakeHealthBonus: getLakeHealthBonus,
         getAllUpgrades: getAllUpgrades,
-        renderShop: renderShop
+        renderShop: renderShop,
+        getBaitCatalog: getBaitCatalog
     };
 })();
 
 window.Shop = Shop;
+
+document.addEventListener('click', function(e){
+    if(e.target && e.target.classList && e.target.classList.contains('buy-bait-btn')){
+        try{ Anglers.buyBait(e.target.getAttribute('data-bait')); }catch(err){ console.error(err); }
+        if(typeof Shop !== 'undefined') Shop.renderShop();
+    }
+});
 
 (function(){
     if (typeof document === 'undefined') return;
