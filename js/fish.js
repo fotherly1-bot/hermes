@@ -505,6 +505,18 @@ const Fish = (function () {
         }, 0);
     }
 
+    function getSpeciesImage(speciesKey) {
+        var map = {
+            common: 'img/carp/commoncarp1.png',
+            mirror: 'img/carp/mirrorcarp1.png',
+            leather: 'img/carp/leathercarp1.png',
+            ghost: 'img/carp/ghostcarp1.png',
+            koi: 'img/carp/koicarp1.png',
+            grass: 'img/carp/grasscarp1.png'
+        };
+        return map[speciesKey] || '';
+    }
+
     return {
         SPECIES: SPECIES,
         RARITIES: RARITIES,
@@ -530,6 +542,7 @@ const Fish = (function () {
         setNextId: setNextId,
         getNextId: getNextId,
         getFishValue: getFishValue,
-        getTotalStockValue: getTotalStockValue
+        getTotalStockValue: getTotalStockValue,
+        getSpeciesImage: getSpeciesImage
     };
 })();

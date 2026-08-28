@@ -1516,6 +1516,25 @@ const Lakes = (function () {
 
         html += '<p class="lake-accordion-desc">' + lake.description + '</p>';
 
+        // ── Lake Traits ──────────────────────────────────────────────────────
+        html += '<div class="lake-traits">';
+        html += '<div class="lake-traits-title">🌿 Lake Traits</div>';
+        html += '<div class="lake-traits-grid">';
+        if (lake.buffs && lake.buffs.positive) {
+            html += '<div class="lake-trait-positive">' +
+                '<span class="lake-trait-label">' + (lake.buffs.positive.summary || 'Positive trait') + '</span>' +
+                '</div>';
+        }
+        if (lake.buffs && lake.buffs.negative) {
+            html += '<div class="lake-trait-negative">' +
+                '<span class="lake-trait-label">' + (lake.buffs.negative.summary || 'Negative trait') + '</span>' +
+                '</div>';
+        }
+        if ((!lake.buffs || !lake.buffs.positive) && (!lake.buffs || !lake.buffs.negative)) {
+            html += '<div class="lake-trait-neutral">No special traits.</div>';
+        }
+        html += '</div></div>';
+
         if (isClosed) {
             html += '<div class="lake-closed-banner">&#9888; Closed until day ' +
                 state.lakeClosures[state.activeLakeId] + '</div>';

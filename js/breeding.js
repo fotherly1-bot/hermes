@@ -256,18 +256,13 @@ const Breeding = (function () {
                 html += '<span class="breed-parent-rarity" style="background:'+rc+'33;color:'+rc+';border:1px solid '+rc+'55;">'+rn+'</span>';
                 html += '</div>';
                 html += '<span class="breed-parent-icon">';
-                if (f.species === 'common') {
-                    html += '<img src="img/carp/commoncarp1.png" alt="Common Carp" class="breed-parent-img"/>';
-                } else if (f.species === 'grass') {
-                    html += '<img src="img/carp/grasscarp1.png" alt="Grass Carp" class="breed-parent-img"/>';
-                } else if (f.species === 'mirror') {
-                    html += '<img src="img/carp/mirrorcarp1.png" alt="Mirror Carp" class="breed-parent-img"/>';
-                } else if (f.species === 'leather') {
-                    html += '<img src="img/carp/leathercarp1.png" alt="Leather Carp" class="breed-parent-img"/>';
-                } else if (f.species === 'ghost') {
-                    html += '<img src="img/carp/ghostcarp1.png" alt="Ghost Carp" class="breed-parent-img"/>';
-                } else if (f.species === 'koi') {
-                    html += '<img src="img/carp/koicarp1.png" alt="Koi Carp" class="breed-parent-img"/>';
+                if (typeof Fish !== 'undefined' && typeof Fish.getSpeciesImage === 'function') {
+                    var imgSrc = Fish.getSpeciesImage(f.species);
+                    if (imgSrc) {
+                        html += '<img src="' + imgSrc + '" alt="' + sp + '" class="breed-parent-img"/>';
+                    } else {
+                        html += '🐟';
+                    }
                 } else {
                     html += '🐟';
                 }
@@ -316,7 +311,6 @@ const Breeding = (function () {
 
             // 3rd card: Trait inheritance + mutation chances
             var allTraits   = [];
-            console.log('renderBreedingPond crash', p1, p2, isActive, s.breedingPond);
             [p1, p2].forEach(function(p){ (p && p.personality_traits || []).forEach(function(t){ if (allTraits.indexOf(t)===-1) allTraits.push(t); }); });
             var inheritPct  = allTraits.length > 0 ? Math.round(70 / allTraits.length * 10) / 10 : 0; // each trait shared across offspring
             var mutationPct = 20; // base mutation chance for a new random trait

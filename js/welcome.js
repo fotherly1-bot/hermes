@@ -59,11 +59,15 @@
         var welcome = document.getElementById('welcome-screen');
         if (welcome) welcome.style.display = 'none';
 
-        if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') {
-            Dashboard.renderDashboard();
-        }
-        if (typeof Lakes !== 'undefined' && typeof Lakes.renderLakes === 'function') {
-            Lakes.renderLakes();
+        if (typeof UI !== 'undefined' && typeof UI.init === 'function') {
+            UI.init();
+        } else {
+            if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') {
+                Dashboard.renderDashboard();
+            }
+            if (typeof Lakes !== 'undefined' && typeof Lakes.renderLakes === 'function') {
+                Lakes.renderLakes();
+            }
         }
 
         UI.showToast('Welcome! Remember to hire staff before you start.', 'info');
@@ -107,6 +111,32 @@
             '</div>';
     }
 
+    function _renderChecklist() {
+        var container = document.getElementById('welcome-checklist');
+        if (!container) return;
+        var items = [
+            { id: 'angler', label: 'Pick your angler' },
+            { id: 'staff',  label: 'Hire staff for every role' }
+        ];
+        var saved = (typeof Game !== 'undefined' && Game.loadFromStorage) ? Game.loadFromStorage() : null;
+        var completed = new Set();
+        if (saved) {
+            if (saved.playerAnglerId) completed.add('angler');
+            if (saved.hiredStaff && saved.hiredStaff.length) completed.add('staff');
+        }
+        var html = '<div class="welcome-checklist">' +
+            '<div class="welcome-checklist-title">First session checklist</div>';
+        items.forEach(function (item) {
+            var done = completed.has(item.id);
+            html += '<div class="welcome-checklist-item ' + (done ? 'welcome-checklist-done' : 'welcome-checklist-pending') + '">' +
+                '<span class="welcome-checklist-check">' + (done ? '✓' : '○') + '</span>' +
+                '<span>' + item.label + '</span>' +
+            '</div>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
     function _bindEvents() {
         var prev = document.getElementById('angler-prev');
         var next = document.getElementById('angler-next');
@@ -132,6 +162,7 @@
         carouselIndex = 0;
         _renderCarousel();
         _renderLakeCard();
+        _renderChecklist();
         _bindEvents();
     }
 

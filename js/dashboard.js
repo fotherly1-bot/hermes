@@ -507,12 +507,9 @@ const Dashboard = (function () {
 
     function getFishIconHtml(species, double) {
         var src = '';
-        if (species === 'common') src = 'img/carp/commoncarp1.png';
-        else if (species === 'grass') src = 'img/carp/grasscarp1.png';
-        else if (species === 'mirror') src = 'img/carp/mirrorcarp1.png';
-        else if (species === 'leather') src = 'img/carp/leathercarp1.png';
-        else if (species === 'ghost') src = 'img/carp/ghostcarp1.png';
-        else if (species === 'koi') src = 'img/carp/koicarp1.png';
+        if (typeof Fish !== 'undefined' && typeof Fish.getSpeciesImage === 'function') {
+            src = Fish.getSpeciesImage(species);
+        }
         if (!src) return '';
         var cls = 'dash-fish-icon' + (double ? ' dash-fish-icon--double' : '');
         return '<img src="' + src + '" alt="' + (species || 'fish') + '" class="' + cls + '" />';

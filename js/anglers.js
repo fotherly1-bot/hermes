@@ -1321,6 +1321,13 @@ const Anglers = (function () {
             return;
         }
 
+        // bookings view
+        if (_anglerView === 'bookings') {
+            html += renderBookingsTab(state);
+            container.innerHTML = html;
+            return;
+        }
+
         // Auto-booking info banner
         html += '<div class="auto-booking-banner">';
         html += '<span class="auto-booking-icon">\uD83E\uDD16</span>';
@@ -1418,6 +1425,105 @@ const Anglers = (function () {
         html += '</div>';
 
         container.innerHTML = html;
+    }
+
+    function renderBookingsTab(state) {
+        var html = '';
+
+        // Auto-booking info banner
+        html += '<div class="auto-booking-banner">';
+        html += '<span class="auto-booking-icon">\uD83E\uDD16</span>';
+        html += '<div>';
+        html += '<strong>Bookings are fully automated.</strong>';
+        html += ' Anglers and competitions are booked in automatically each day based on your reputation, season, and weather.';
+        html += '</div>';
+        html += '</div>';
+
+        // Today's summary
+        var todayActive = state.anglerBookings.filter(function (b) {
+            return state.day >= b.startDay && state.day <= b.endDay;
+        });
+        var todayIncome = todayActive.reduce(function (s, b) { return s + b.dailyRate; }, 0);
+        var todayMatches = todayActive.filter(function (b) { return b.isMatch; });
+
+        html += '<div class="angler-today-strip">';
+        html += '<div class="angler-today-stat"><span class="angler-today-val">' + todayActive.length + '</span><span class="angler-today-label">On-Site Today</span></div>';
+        html += '<div class="angler-today-stat"><span class="angler-today-val">' + UI.formatMoney(todayIncome) + '</span><span class="angler-today-label">Today\'s Income</span></div>';
+        html += '<div class="angler-today-stat"><span class="angler-today-val">' + todayMatches.length + '</span><span class="angler-today-label">Active Matches</span></div>';
+        html += '</div>';
+
+        // Calendar — one per lake
+        html += '<h3 class="section-heading">Booking Calendar</h3>';
+        html += renderCalendar();
+
+        // Active Bookings
+        html += '<h3 class="section-heading">Active Bookings</h3>';
+        var activeBookings = state.anglerBookings.filter(function (b) {
+            return state.day <= b.endDay;
+        });
+        if (activeBookings.length === 0) {
+            html += '<p class="empty-state">No active bookings. Advance a day to generate new ones.</p>';
+        } else {
+            html += '<div class="active-bookings-list" style="max-height:400px;overflow-y:auto;">';
+            activeBookings.forEach(function (booking) {
+                var lake     = Lakes.getLakeById(booking.lakeId);
+                var angler   = getAnglerById(booking.anglerId);
+                var sm       = angler ? (angler.socialMedia || 5) : 5;
+                var daysLeft = booking.endDay - state.day + 1;
+                var sat      = booking.satisfaction || 50;
+                var borderCol = booking.isMatch ? 'var(--colour-gold)' : getLakeColour(booking.lakeId);
+
+                var satMod    = (sat - 50) / 50;
+                var mktImpact = Math.round(sm * (1 + satMod));
+                var mktCol    = mktImpact >= 8 ? 'var(--colour-accent)' : mktImpact >= 5 ? '#d4a843' : 'var(--colour-danger)';
+                var mktLabel  = mktImpact >= 8 ? '\u2B06 Boosting' : mktImpact >= 5 ? '\u2192 Neutral' : '\u2B07 Weak';
+                var smCol     = sm >= 8 ? '#f1c40f' : sm >= 6 ? '#2ecc71' : '#aaa';
+
+                html += '<div class="active-booking-card" style="border-left-color:' + borderCol + ';">';
+                html += '<strong>' + (booking.isMatch ? '\uD83C\uDFC6 ' : '') + booking.anglerName + '</strong>';
+                html += '<span class="booking-lake-tag" style="background:' + getLakeColour(booking.lakeId) + ';">' + (lake ? lake.name : 'Unknown') + '</span>';
+                html += '<span>' + daysLeft + ' day' + (daysLeft > 1 ? 's' : '') + ' left</span>';
+                html += '<span class="booking-satisfaction">Sat: ' + sat + '%</span>';
+                html += '<span class="booking-social" style="color:' + smCol + ';">\uD83D\uDCF1 ' + sm + '/10</span>';
+                html += '<span class="booking-mkt-impact" style="color:' + mktCol + ';" title="Marketing impact from this visit">' + mktLabel + '\u00A0(' + mktImpact + ')</span>';
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+
+        // Angler Pool
+        html += '<h3 class="section-heading">Angler Pool</h3>';
+        html += '<div class="angler-pool-grid">';
+        ANGLER_POOL.forEach(function (angler) {
+            var isBooked = state.anglerBookings.some(function (b) {
+                return b.anglerId === angler.id && state.day <= b.endDay;
+            });
+            html += '<div class="angler-card' + (isBooked ? ' angler-booked' : '') + '">';
+            html += '<div class="angler-card-name">' + angler.name + '</div>' +
+                ('<span class="angler-category-badge ' + (angler.category === 'Amature' ? 'cat-amature' : 'cat-professional') + '">' + (angler.category || 'Professional') + '</span>');
+            html += '<div class="angler-photo-slot">' + (angler.category !== 'Amature' && angler.photo ? '<img src="' + angler.photo + '" alt="' + angler.name + '" class="angler-photo-img" loading="lazy"/>' : angler.category !== 'Amature' ? '<div class="angler-photo-placeholder">' + angler.name.split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase() + '</div>' : '') + '</div>';
+            html += '<div class="angler-card-info">';
+            html += '<span class="angler-skill-badge">Skill ' + angler.skill + '/10</span>';
+            html += '<span class="angler-social-badge" style="color:' + (angler.socialMedia >= 8 ? '#f1c40f' : angler.socialMedia >= 6 ? '#2ecc71' : '#aaa') + ';">\uD83D\uDCF1 ' + angler.socialMedia + '/10</span>';
+            html += '<span class="angler-budget-badge">' + UI.formatMoney(angler.budget) + '/day</span>';
+            html += '</div>';
+            html += '<div class="angler-card-prefs">';
+            html += '<span class="pref-label">Likes:</span> ' + angler.preferred.map(formatWaterType).join(', ');
+            html += '</div>';
+            html += '<div class="angler-card-prefs angler-dislikes">';
+            html += '<span class="pref-label">Dislikes:</span> ' + angler.disliked.map(formatWaterType).join(', ');
+            html += '</div>';
+            if (isBooked) {
+                html += '<div class="angler-status-tag">Currently Booked</div>';
+            }
+            if (angler.category !== 'Amature') {
+                html += '<button class="angler-more-btn" onclick="Anglers.showAnglerDetails(' + angler.id + ')">More Info</button>';
+            }
+            html += '</div>';
+        });
+        html += '</div>';
+
+        return html;
     }
 
     /**

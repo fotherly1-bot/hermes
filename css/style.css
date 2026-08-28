@@ -250,6 +250,35 @@ body {
     background: rgba(74, 156, 109, 0.1);
 }
 
+/* Welcome checklist */
+.welcome-checklist {
+    text-align: left;
+    display: inline-block;
+    min-width: 220px;
+}
+.welcome-checklist-title {
+    font-weight: 700;
+    color: var(--colour-accent);
+    margin-bottom: 0.5rem;
+}
+.welcome-checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0;
+    color: var(--colour-text-muted);
+    font-size: 0.92rem;
+}
+.welcome-checklist-done {
+    color: var(--colour-text);
+}
+.welcome-checklist-check {
+    font-weight: 700;
+    width: 1.1rem;
+    text-align: center;
+    color: var(--colour-accent);
+}
+
 /* === Content Panels === */
 #content {
     padding: 1.5rem;
@@ -4677,6 +4706,48 @@ details[open] > .lake-accordion-summary::before {
     font-style: italic;
     margin: 0.5rem 0 0.6rem;
     line-height: 1.4;
+}
+
+/* Lake traits */
+.lake-traits {
+    margin: 0.5rem 0 0.7rem;
+}
+.lake-traits-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--colour-text-muted);
+    margin-bottom: 0.35rem;
+}
+.lake-traits-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.lake-trait-positive,
+.lake-trait-negative,
+.lake-trait-neutral {
+    font-size: 0.78rem;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.18);
+}
+.lake-trait-positive {
+    color: #7fd89a;
+    border-color: rgba(74,156,109,0.35);
+    background: rgba(74,156,109,0.08);
+}
+.lake-trait-negative {
+    color: #e08e8e;
+    border-color: rgba(184,48,32,0.35);
+    background: rgba(184,48,32,0.08);
+}
+.lake-trait-neutral {
+    color: var(--colour-text-muted);
+}
+.lake-trait-label {
+    font-weight: 600;
 }
 
 

@@ -199,68 +199,55 @@ const Game = (function () {
     /**
      * Initialise the game - load saved state or create new.
      */
+    const SAVE_VERSION_KEY = 'carpFishingTycoon_saveVersion';
+    const CURRENT_SAVE_VERSION = 1;
+
+    function migrateSave(saved) {
+        var version = 0;
+        try { version = parseInt(localStorage.getItem(SAVE_VERSION_KEY) || '0', 10) || 0; } catch (e) { version = 0; }
+        var s = JSON.parse(JSON.stringify(saved));
+        if (version < 1) {
+            var defaults = {
+                breedingPond: [], breedingTimer: 0, breedingActive: false, lakeUpgrades: {},
+                fishHistory: [], nextFishId: 1, anglerBookings: [], anglerSatisfaction: {},
+                pendingBookings: [], incomeHistory: [], completedQuests: [], disasterLog: [],
+                lakeClosures: {}, biodiversityPenalties: {}, capacityPenalties: {},
+                weather: null, lakeOxygen: {}, hiredStaff: [], availableStaffIds: [],
+                loans: [], marketingCampaigns: [], financeLog: [], spawnLog: {},
+                breedingSettings: { feedQuality: 0, feedFrequency: 1, pondTemp: 1, stressControl: 1 },
+                eventLog: [], fishCreationLog: [], nextEventId: 1, lastBreedingOutcome: null,
+                investorDeals: [], marketEquityPct: 0, dividendsPaid: 0, fisheryListed: false,
+                sharePrice: 0, nextInvestorId: 1, fishAuctions: [], lakeMaintenance: {},
+                lakeExpansions: {}, sponsorships: [], anglerStats: {}, matchResults: [],
+                rigInventory: [], rigEquipped: [null, null, null],
+                rigCustomizations: [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }],
+                rigComponentsOwned: ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'],
+                customRigs: [null, null, null]
+            };
+            Object.keys(defaults).forEach(function (k) {
+                if (s[k] === undefined || s[k] === null) s[k] = JSON.parse(JSON.stringify(defaults[k]));
+            });
+            if (typeof s.reputationAccumulator === 'undefined') s.reputationAccumulator = 0;
+            if (typeof s.nextStaffRefreshDay === 'undefined') s.nextStaffRefreshDay = 0;
+            if (typeof s.nextStaffInstanceId === 'undefined') s.nextStaffInstanceId = 1;
+            if (typeof s.nextLoanId === 'undefined') s.nextLoanId = 1;
+            if (typeof s.nextCampaignId === 'undefined') s.nextCampaignId = 1;
+            if (typeof s.nextNewsId === 'undefined') s.nextNewsId = 1;
+            if (typeof s.nextSponsorshipId === 'undefined') s.nextSponsorshipId = 1;
+            if (typeof s.lastDeathCount === 'undefined') s.lastDeathCount = 0;
+            if (typeof s.duckHuntDone === 'undefined') s.duckHuntDone = false;
+            if (typeof s.lastDuckHuntDay === 'undefined') s.lastDuckHuntDay = 0;
+            if (typeof s.lastDisasterDay === 'undefined') s.lastDisasterDay = 0;
+        }
+        return s;
+    }
+
     function init() {
         const saved = loadFromStorage();
         console.log('[Game.init] saved=', saved, 'typeof=', typeof saved, 'keys=', saved ? Object.keys(saved).sort().join(',') : 'none');
         if (saved) {
-            state = saved;
+            state = migrateSave(saved);
             console.log('[Game.init] took saved branch');
-            // Ensure new state fields exist for older saves
-            if (!state.breedingPond) state.breedingPond = [];
-            if (!state.breedingTimer) state.breedingTimer = 0;
-            if (!state.breedingActive) state.breedingActive = false;
-            if (!state.lakeUpgrades) state.lakeUpgrades = {};
-            if (!state.fishHistory) state.fishHistory = [];
-            if (!state.nextFishId) state.nextFishId = 1;
-            if (!state.anglerBookings) state.anglerBookings = [];
-            if (!state.anglerSatisfaction) state.anglerSatisfaction = {};
-            if (!state.pendingBookings) state.pendingBookings = [];
-            if (!state.incomeHistory) state.incomeHistory = [];
-            if (!state.completedQuests) state.completedQuests = [];
-            if (!state.disasterLog) state.disasterLog = [];
-            if (!state.lakeClosures) state.lakeClosures = {};
-            if (!state.biodiversityPenalties) state.biodiversityPenalties = {};
-            if (!state.capacityPenalties) state.capacityPenalties = {};
-            if (state.reputationAccumulator === undefined) state.reputationAccumulator = 0;
-            if (!state.weather)    state.weather    = null;
-            if (!state.lakeOxygen) state.lakeOxygen = {};
-            if (!state.hiredStaff)          state.hiredStaff          = [];
-            if (!state.availableStaffIds)   state.availableStaffIds   = [];
-            if (state.nextStaffRefreshDay  === undefined) state.nextStaffRefreshDay  = 0;
-            if (state.nextStaffInstanceId  === undefined) state.nextStaffInstanceId  = 1;
-            if (!state.loans)            state.loans            = [];
-            if (!state.marketingCampaigns) state.marketingCampaigns = [];
-            if (!state.financeLog)       state.financeLog       = [];
-            if (!state.nextLoanId)       state.nextLoanId       = 1;
-            if (!state.nextCampaignId)   state.nextCampaignId   = 1;
-            if (!state.spawnLog)         state.spawnLog         = {};
-            if (!state.breedingSettings) state.breedingSettings = { feedQuality: 0, feedFrequency: 1, pondTemp: 1, stressControl: 1 };
-            if (!state.eventLog)          state.eventLog          = [];
-            if (!state.fishCreationLog)   state.fishCreationLog   = [];
-            if (!state.nextEventId)       state.nextEventId       = 1;
-            if (state.lastBreedingOutcome === undefined) state.lastBreedingOutcome = null;
-            if (state.duckHuntDone === undefined) state.duckHuntDone = false;
-            if (state.lastDuckHuntDay === undefined) state.lastDuckHuntDay = 0;
-            if (state.lastDisasterDay === undefined) state.lastDisasterDay = 0;
-            if (!state.investorDeals)    state.investorDeals    = [];
-            if (!state.marketEquityPct)  state.marketEquityPct  = 0;
-            if (!state.dividendsPaid)    state.dividendsPaid    = 0;
-            if (!state.fisheryListed)    state.fisheryListed    = false;
-            if (!state.sharePrice)       state.sharePrice       = 0;
-            if (!state.nextInvestorId)   state.nextInvestorId   = 1;
-            if (!state.fishAuctions)     state.fishAuctions     = [];
-            if (!state.lakeMaintenance)  state.lakeMaintenance  = {};
-            if (!state.lakeExpansions)   state.lakeExpansions   = {};
-            if (!state.sponsorships)     state.sponsorships     = [];
-            if (!state.anglerStats)      state.anglerStats      = {};
-            if (!state.matchResults)     state.matchResults     = [];
-            if (!state.rigInventory)     state.rigInventory     = [];
-            if (!state.rigEquipped)      state.rigEquipped      = [null, null, null];
-            if (!state.rigCustomizations) state.rigCustomizations = [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }];
-            if (!state.rigComponentsOwned) state.rigComponentsOwned = ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'];
-            if (!Array.isArray(state.customRigs) || state.customRigs.length !== 3) {
-                state.customRigs = [null, null, null];
-            }
         } else {
             state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             console.log('[Game.init] took ELSE branch, DEFAULT_STATE keys:', Object.keys(state).sort().join(','));
@@ -321,6 +308,7 @@ const Game = (function () {
     function saveToStorage() {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            try { localStorage.setItem(SAVE_VERSION_KEY, String(CURRENT_SAVE_VERSION)); } catch (e) {}
         } catch (e) {
             console.warn('Failed to save game state:', e);
         }
