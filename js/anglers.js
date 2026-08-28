@@ -280,59 +280,60 @@ const Anglers = (function () {
      * and an effects object that is applied daily to the player's angler.
      */
     var TACKLE_CATALOG = [
-        { id:'carbon_pro_rod', name:'Carbon Pro Carp Rod', cost:4000, icon:'🎣', category:'Rod', description:'Lightweight carbon rod with a fighting curve.', effects:{castRangeBonus:0.12}, unlocks:[]},
-        { id:'distance_feeder_rod', name:'Distance Feeder Rod', cost:3500, icon:'🎣', category:'Rod', description:'Long-range feeder rod for extra distance.', effects:{castRangeBonus:0.10}, unlocks:['carbon_pro_rod']},
-        { id:'waggler_pole', name:'Waggler Pole', cost:2500, icon:'🎣', category:'Rod', description:'Tuned pole for accurate presentation.', effects:{catchRateBonus:0.03, castRangeBonus:0.04}, unlocks:['distance_feeder_rod']},
-        { id:'spod_rod', name:'Spod Rod', cost:3000, icon:'🎣', category:'Rod', description:'Heavy spod rod for bait delivery.', effects:{castRangeBonus:0.05}, unlocks:['waggler_pole']},
+        // Rods
         { id:'float_rod', name:'Match Float Rod', cost:2200, icon:'🎣', category:'Rod', description:'Sensitive tip for bite detection.', effects:{catchRateBonus:0.04, castRangeBonus:0.02}, unlocks:['spod_rod']},
-
-        { id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, unlocks:[]},
-        { id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}, unlocks:['standard_reel']},
-        { id:'big_pit_12k_reel', name:'Big Pit 12k Reel', cost:4200, icon:'🔄', category:'Reel', description:'12k bearing system with extra smooth retrieve.', effects:{castRangeBonus:0.08, catchRateBonus:0.02}, unlocks:['big_pit_reel']},
-        { id:'big_pit_14k_reel', name:'Big Pit 14k Reel', cost:5500, icon:'🔄', category:'Reel', description:'14k high-speed retrieve for instant line pickup.', effects:{castRangeBonus:0.09, catchRateBonus:0.03}, unlocks:['big_pit_12k_reel']},
-        { id:'tournament_reel', name:'Tournament Reel', cost:7000, icon:'🔄', category:'Reel', description:'Match-spec reel with carbon drag and longcast spool.', effects:{castRangeBonus:0.11, catchRateBonus:0.04}, unlocks:['big_pit_14k_reel']},
-
-        { id:'mono_10lb', name:'10lb Mono Mainline', cost:800, icon:'🧵', category:'Main Line', description:'Stretchy mono that absorbs shock.', effects:{breakStrengthBonus:0.05}, unlocks:[]},
-        { id:'fluoro_12lb', name:'12lb Fluorocarbon', cost:1200, icon:'🧵', category:'Main Line', description:'Low-visibility fluorocarbon mainline.', effects:{breakStrengthBonus:0.07, catchRateBonus:0.01}, unlocks:['mono_10lb']},
-        { id:'braid_20lb', name:'20lb Braided Mainline', cost:1600, icon:'🧵', category:'Main Line', description:'Ultra-thin braid with zero stretch.', effects:{castRangeBonus:0.04, breakStrengthBonus:0.03}, unlocks:['fluoro_12lb']},
-        { id:'titanium_15lb', name:'15lb Titanium Leader Line', cost:1400, icon:'🧵', category:'Main Line', description:'Abrasion-resistant leader material.', effects:{breakStrengthBonus:0.08}, unlocks:['braid_20lb']},
-        { id:'copolymer_12lb', name:'12lb Copolymer Line', cost:1000, icon:'🧵', category:'Main Line', description:'Sinking copolymer for bottom fishing.', effects:{catchRateBonus:0.02}, unlocks:['titanium_15lb']},
-
-        { id:'backlead_1oz', name:'1oz Backlead', cost:400, icon:'🪨', category:'Leads', description:'Light backlead for slip presentations.', effects:{castRangeBonus:0.02}, unlocks:[]},
-        { id:'inline_lead_2oz', name:'2oz Inline Lead', cost:500, icon:'🪨', category:'Leads', description:'Classic inline lead for distance.', effects:{castRangeBonus:0.03, hookSetBonus:0.02}, unlocks:['backlead_1oz']},
-        { id:'method_lead_3oz', name:'3oz Method Lead', cost:700, icon:'🪨', category:'Leads', description:'Method lead with open insert.', effects:{catchRateBonus:0.03, hookSetBonus:0.01}, unlocks:['inline_lead_2oz']},
-        { id:'window_lead_2oz', name:'2oz Window Lead', cost:650, icon:'🪨', category:'Leads', description:'Window lead for hard lake beds.', effects:{hookSetBonus:0.03}, unlocks:['method_lead_3oz']},
-        { id:'helicopter_lead', name:'Helicopter Lead', cost:900, icon:'🪨', category:'Leads', description:'Helicopter system for rocky lakes.', effects:{breakStrengthBonus:0.04}, unlocks:['window_lead_2oz']},
-
-        { id:'bivvy_brolly', name:'Brolly System', cost:900, icon:'⛺', category:'Bivvys', description:'Quick-deploy umbrella shelter.', effects:{fishHealthBonus:0.01, satisfactionBonus:1}, unlocks:[]},
-        { id:'bivvy_groundsheet', name:'Insulated Groundsheet', cost:700, icon:'⛺', category:'Bivvys', description:'Keeps moisture out and warmth in.', effects:{fishHealthBonus:0.02}, unlocks:['bivvy_brolly']},
-        { id:'bivvy_1man', name:'1-Man Bivvy', cost:1200, icon:'⛺', category:'Bivvys', description:'Compact shelter for solo sessions.', effects:{fishHealthBonus:0.02, satisfactionBonus:2}, unlocks:['bivvy_groundsheet']},
-        { id:'bivvy_overwrap', name:'Bivvy Overwrap', cost:1600, icon:'⛺', category:'Bivvys', description:'Weatherproof overwrap for cold nights.', effects:{fishHealthBonus:0.02, satisfactionBonus:2}, unlocks:['bivvy_1man']},
-        { id:'bivvy_2man', name:'2-Man Bivvy', cost:2200, icon:'⛺', category:'Bivvys', description:'Roomier shelter with storage pockets.', effects:{fishHealthBonus:0.03, satisfactionBonus:3}, unlocks:['bivvy_overwrap']},
-
-        { id:'bite_alarm_single', name:'Single Bite Alarm', cost:700, icon:'🔔', category:'Alarms', description:'Reliable single-channel alarm.', effects:{catchRateBonus:0.04}, unlocks:[]},
-        { id:'wireless_receiver', name:'Wireless Receiver', cost:900, icon:'🔔', category:'Alarms', description:'Receiver for wireless bite alarms.', effects:{catchRateBonus:0.03}, unlocks:['bite_alarm_single']},
-        { id:'swinger_kit', name:'Swinger Kit', cost:1100, icon:'🔔', category:'Alarms', description:'Rod-mounted swingers for quick bites.', effects:{catchRateBonus:0.05}, unlocks:['wireless_receiver']},
-        { id:'siren_deluxe', name:'Deluxe Siren Alarm', cost:1400, icon:'🔔', category:'Alarms', description:'Loud siren alarm for noisy lakes.', effects:{catchRateBonus:0.05}, unlocks:['swinger_kit']},
-        { id:'bite_alarm_set', name:'3-Rod Alarm Set', cost:1800, icon:'🔔', category:'Alarms', description:'Set of three with LED indicators.', effects:{catchRateBonus:0.06}, unlocks:['siren_deluxe']},
-
-        { id:'landing_net_retainer', name:'Retainer Sling', cost:600, icon:'🥅', category:'Landing Nets', description:'Retainer sling for unhooking safely.', effects:{fishHealthBonus:0.03}, unlocks:[]},
-        { id:'landing_net_standard', name:'Standard Landing Net', cost:800, icon:'🥅', category:'Landing Nets', description:'Durable net with soft mesh.', effects:{fishHealthBonus:0.03}, unlocks:['landing_net_retainer']},
-        { id:'landing_net_carp', name:'Carp Landing Net', cost:1200, icon:'🥅', category:'Landing Nets', description:'Large carp net with rubber mesh.', effects:{fishHealthBonus:0.04, breakStrengthBonus:0.02}, unlocks:['landing_net_standard']},
-        { id:'landing_net_triangle', name:'Triangle Keepnet', cost:1500, icon:'🥅', category:'Landing Nets', description:'Triangle keepnet for temporary holding.', effects:{fishHealthBonus:0.05}, unlocks:['landing_net_carp']},
-        { id:'landing_net_speci', name:'Specimen Net', cost:2000, icon:'🥅', category:'Landing Nets', description:'Wide-mesh net for big specimens.', effects:{fishHealthBonus:0.06}, unlocks:['landing_net_triangle']},
-
-        { id:'first_aid_kit', name:'Angler First Aid Kit', cost:400, icon:'🛟', category:'Fish Care', description:'Small kit for hook and nick care.', effects:{fishHealthBonus:0.02}, unlocks:[]},
-        { id:'fish_slime', name:'Fish Slime Revival', cost:500, icon:'🛟', category:'Fish Care', description:'Revives slime coat after handling.', effects:{fishHealthBonus:0.03}, unlocks:['first_aid_kit']},
-        { id:'unhooking_mat', name:'Unhooking Mat', cost:700, icon:'🛟', category:'Fish Care', description:'Padded mat for safe unhooking.', effects:{fishHealthBonus:0.04}, unlocks:['fish_slime']},
-        { id:'weigh_sling', name:'Weigh Sling', cost:900, icon:'🛟', category:'Fish Care', description:'Support sling for accurate weighing.', effects:{fishHealthBonus:0.03}, unlocks:['unhooking_mat']},
-        { id:'carp_cradle', name:'Carp Cradle', cost:1400, icon:'🛟', category:'Fish Care', description:'Cradle for unhooking on the mat.', effects:{fishHealthBonus:0.05}, unlocks:['weigh_sling']},
-
+        { id:'waggler_pole', name:'Waggler Pole', cost:2500, icon:'🎣', category:'Rod', description:'Tuned pole for accurate presentation.', effects:{catchRateBonus:0.03, castRangeBonus:0.04}, unlocks:['distance_feeder_rod']},
+        { id:'spod_rod', name:'Spod Rod', cost:3000, icon:'🎣', category:'Rod', description:'Heavy spod rod for bait delivery.', effects:{castRangeBonus:0.05}, unlocks:['carbon_pro_rod']},
+        { id:'distance_feeder_rod', name:'Distance Feeder Rod', cost:3500, icon:'🎣', category:'Rod', description:'Long-range feeder rod for extra distance.', effects:{castRangeBonus:0.10}, unlocks:[]},
+        { id:'carbon_pro_rod', name:'Carbon Pro Carp Rod', cost:4000, icon:'🎣', category:'Rod', description:'Lightweight carbon rod with a fighting curve.', effects:{castRangeBonus:0.12}, unlocks:[], crossUnlocks:['standard_reel']},
+        // Reels
+        { id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, unlocks:['big_pit_reel']},
+        { id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}, unlocks:['big_pit_12k_reel']},
+        { id:'big_pit_12k_reel', name:'Big Pit 12k Reel', cost:4200, icon:'🔄', category:'Reel', description:'12k bearing system with extra smooth retrieve.', effects:{castRangeBonus:0.08, catchRateBonus:0.02}, unlocks:['big_pit_14k_reel']},
+        { id:'big_pit_14k_reel', name:'Big Pit 14k Reel', cost:5500, icon:'🔄', category:'Reel', description:'14k high-speed retrieve for instant line pickup.', effects:{castRangeBonus:0.09, catchRateBonus:0.03}, unlocks:['tournament_reel']},
+        { id:'tournament_reel', name:'Tournament Reel', cost:7000, icon:'🔄', category:'Reel', description:'Match-spec reel with carbon drag and longcast spool.', effects:{castRangeBonus:0.11, catchRateBonus:0.04}, unlocks:[]},
+        // Main Line
+        { id:'mono_10lb', name:'10lb Mono Mainline', cost:800, icon:'🧵', category:'Main Line', description:'Stretchy mono that absorbs shock.', effects:{breakStrengthBonus:0.05}, unlocks:['fluoro_12lb']},
+        { id:'copolymer_12lb', name:'12lb Copolymer Line', cost:1000, icon:'🧵', category:'Main Line', description:'Sinking copolymer for bottom fishing.', effects:{catchRateBonus:0.02}, unlocks:['braid_20lb']},
+        { id:'fluoro_12lb', name:'12lb Fluorocarbon', cost:1200, icon:'🧵', category:'Main Line', description:'Low-visibility fluorocarbon mainline.', effects:{breakStrengthBonus:0.07, catchRateBonus:0.01}, unlocks:['titanium_15lb']},
+        { id:'braid_20lb', name:'20lb Braided Mainline', cost:1600, icon:'🧵', category:'Main Line', description:'Ultra-thin braid with zero stretch.', effects:{castRangeBonus:0.04, breakStrengthBonus:0.03}, unlocks:[]},
+        { id:'titanium_15lb', name:'15lb Titanium Leader Line', cost:1400, icon:'🧵', category:'Main Line', description:'Abrasion-resistant leader material.', effects:{breakStrengthBonus:0.08}, unlocks:[]},
+        // Leads
+        { id:'backlead_1oz', name:'1oz Backlead', cost:400, icon:'🪨', category:'Leads', description:'Light backlead for slip presentations.', effects:{castRangeBonus:0.02}, unlocks:['inline_lead_2oz']},
+        { id:'inline_lead_2oz', name:'2oz Inline Lead', cost:500, icon:'🪨', category:'Leads', description:'Classic inline lead for distance.', effects:{castRangeBonus:0.03, hookSetBonus:0.02}, unlocks:['method_lead_3oz']},
+        { id:'window_lead_2oz', name:'2oz Window Lead', cost:650, icon:'🪨', category:'Leads', description:'Window lead for hard lake beds.', effects:{hookSetBonus:0.03}, unlocks:['helicopter_lead']},
+        { id:'method_lead_3oz', name:'3oz Method Lead', cost:700, icon:'🪨', category:'Leads', description:'Method lead with open insert.', effects:{catchRateBonus:0.03, hookSetBonus:0.01}, unlocks:[]},
+        { id:'helicopter_lead', name:'Helicopter Lead', cost:900, icon:'🪨', category:'Leads', description:'Helicopter system for rocky lakes.', effects:{breakStrengthBonus:0.04}, unlocks:[]},
+        // Bivvys
+        { id:'bivvy_brolly', name:'Brolly System', cost:900, icon:'⛺', category:'Bivvys', description:'Quick-deploy umbrella shelter.', effects:{fishHealthBonus:0.01, satisfactionBonus:1}, unlocks:['bivvy_groundsheet']},
+        { id:'bivvy_groundsheet', name:'Insulated Groundsheet', cost:700, icon:'⛺', category:'Bivvys', description:'Keeps moisture out and warmth in.', effects:{fishHealthBonus:0.02}, unlocks:['bivvy_1man']},
+        { id:'bivvy_1man', name:'1-Man Bivvy', cost:1200, icon:'⛺', category:'Bivvys', description:'Compact shelter for solo sessions.', effects:{fishHealthBonus:0.02, satisfactionBonus:2}, unlocks:['bivvy_overwrap']},
+        { id:'bivvy_overwrap', name:'Bivvy Overwrap', cost:1600, icon:'⛺', category:'Bivvys', description:'Weatherproof overwrap for cold nights.', effects:{fishHealthBonus:0.02, satisfactionBonus:2}, unlocks:['bivvy_2man']},
+        { id:'bivvy_2man', name:'2-Man Bivvy', cost:2200, icon:'⛺', category:'Bivvys', description:'Roomier shelter with storage pockets.', effects:{fishHealthBonus:0.03, satisfactionBonus:3}, unlocks:[]},
+        // Alarms
+        { id:'bite_alarm_single', name:'Single Bite Alarm', cost:700, icon:'🔔', category:'Alarms', description:'Reliable single-channel alarm.', effects:{catchRateBonus:0.04}, unlocks:['wireless_receiver']},
+        { id:'wireless_receiver', name:'Wireless Receiver', cost:900, icon:'🔔', category:'Alarms', description:'Receiver for wireless bite alarms.', effects:{catchRateBonus:0.03}, unlocks:['swinger_kit']},
+        { id:'swinger_kit', name:'Swinger Kit', cost:1100, icon:'🔔', category:'Alarms', description:'Rod-mounted swingers for quick bites.', effects:{catchRateBonus:0.05}, unlocks:['siren_deluxe']},
+        { id:'siren_deluxe', name:'Deluxe Siren Alarm', cost:1400, icon:'🔔', category:'Alarms', description:'Loud siren alarm for noisy lakes.', effects:{catchRateBonus:0.05}, unlocks:['bite_alarm_set']},
+        { id:'bite_alarm_set', name:'3-Rod Alarm Set', cost:1800, icon:'🔔', category:'Alarms', description:'Set of three with LED indicators.', effects:{catchRateBonus:0.06}, unlocks:[]},
+        // Landing Nets
+        { id:'landing_net_retainer', name:'Retainer Sling', cost:600, icon:'🥅', category:'Landing Nets', description:'Retainer sling for unhooking safely.', effects:{fishHealthBonus:0.03}, unlocks:['landing_net_standard']},
+        { id:'landing_net_standard', name:'Standard Landing Net', cost:800, icon:'🥅', category:'Landing Nets', description:'Durable net with soft mesh.', effects:{fishHealthBonus:0.03}, unlocks:['landing_net_carp']},
+        { id:'landing_net_carp', name:'Carp Landing Net', cost:1200, icon:'🥅', category:'Landing Nets', description:'Large carp net with rubber mesh.', effects:{fishHealthBonus:0.04, breakStrengthBonus:0.02}, unlocks:['landing_net_triangle']},
+        { id:'landing_net_triangle', name:'Triangle Keepnet', cost:1500, icon:'🥅', category:'Landing Nets', description:'Triangle keepnet for temporary holding.', effects:{fishHealthBonus:0.05}, unlocks:['landing_net_speci']},
+        { id:'landing_net_speci', name:'Specimen Net', cost:2000, icon:'🥅', category:'Landing Nets', description:'Wide-mesh net for big specimens.', effects:{fishHealthBonus:0.06}, unlocks:[]},
+        // Fish Care
+        { id:'first_aid_kit', name:'Angler First Aid Kit', cost:400, icon:'🛟', category:'Fish Care', description:'Small kit for hook and nick care.', effects:{fishHealthBonus:0.02}, unlocks:['fish_slime']},
+        { id:'fish_slime', name:'Fish Slime Revival', cost:500, icon:'🛟', category:'Fish Care', description:'Revives slime coat after handling.', effects:{fishHealthBonus:0.03}, unlocks:['unhooking_mat']},
+        { id:'unhooking_mat', name:'Unhooking Mat', cost:700, icon:'🛟', category:'Fish Care', description:'Padded mat for safe unhooking.', effects:{fishHealthBonus:0.04}, unlocks:['weigh_sling']},
+        { id:'weigh_sling', name:'Weigh Sling', cost:900, icon:'🛟', category:'Fish Care', description:'Support sling for accurate weighing.', effects:{fishHealthBonus:0.03}, unlocks:['carp_cradle']},
+        { id:'carp_cradle', name:'Carp Cradle', cost:1400, icon:'🛟', category:'Fish Care', description:'Cradle for unhooking on the mat.', effects:{fishHealthBonus:0.05}, unlocks:[]},
+        // Extras
         { id:'bucket', name:'Bait Bucket', cost:300, icon:'🪣', category:'Extras', description:'Insulated bucket for live bait.', effects:{catchRateBonus:0.02}, unlocks:[]},
-        { id:'stool', name:'Fishing Stool', cost:500, icon:'🪑', category:'Extras', description:'Comfortable padded seat.', effects:{satisfactionBonus:2}, unlocks:['bucket']},
-        { id:'rod_rest', name:'Rod Rest Kit', cost:450, icon:'🛠️', category:'Extras', description:'Adjustable rod rest for steady holds.', effects:{catchRateBonus:0.02}, unlocks:['stool']},
-        { id:'landing_forceps', name:'Forceps & Pliers', cost:350, icon:'🛠️', category:'Extras', description:'Forceps for safe hook removal.', effects:{fishHealthBonus:0.02}, unlocks:['rod_rest']},
-        { id:'scale', name:'Digital Scales', cost:800, icon:'⚖️', category:'Extras', description:'Digital scales to 120lb capacity.', effects:{fishHealthBonus:0.02}, unlocks:['landing_forceps']}
+        { id:'rod_rest', name:'Rod Rest Kit', cost:450, icon:'🛠️', category:'Extras', description:'Adjustable rod rest for steady holds.', effects:{catchRateBonus:0.02}, unlocks:[]},
+        { id:'stool', name:'Fishing Stool', cost:500, icon:'🪑', category:'Extras', description:'Comfortable padded seat.', effects:{satisfactionBonus:2}, unlocks:[]},
+        { id:'landing_forceps', name:'Forceps & Pliers', cost:350, icon:'🛠️', category:'Extras', description:'Forceps for safe hook removal.', effects:{fishHealthBonus:0.02}, unlocks:[]},
+        { id:'scale', name:'Digital Scales', cost:800, icon:'⚖️', category:'Extras', description:'Digital scales to 120lb capacity.', effects:{fishHealthBonus:0.02}, unlocks:[]}
     ];
 
     /** Sub-tab state */
@@ -374,6 +375,14 @@ const Anglers = (function () {
             if (missing.length) {
                 var req = missing.map(function(u){ var it = TACKLE_CATALOG.find(function(t){return t.id===u;}); return it ? it.name : u; }).join(', ');
                 UI.showToast('Unlock required: ' + req, 'warning');
+                return false;
+            }
+        }
+        if (item.crossUnlocks && item.crossUnlocks.length) {
+            var missingCross = item.crossUnlocks.filter(function(u){ return (state.anglerTackle || []).indexOf(u) === -1; });
+            if (missingCross.length) {
+                var reqCross = missingCross.map(function(u){ var it = TACKLE_CATALOG.find(function(t){return t.id===u;}); return it ? it.name : u; }).join(', ');
+                UI.showToast('Unlock required: ' + reqCross, 'warning');
                 return false;
             }
         }
