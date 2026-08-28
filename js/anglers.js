@@ -1042,11 +1042,35 @@ const Anglers = (function () {
             html += '<div class="current-lake-meta">No active booking</div>';
         }
         html += '</div></div></div>';
-        html += '</div>';
+        html += '</div></div>';
+
+        // ── Quests ─────────────────────────────────────────────────────────
+        var quests = state.anglerQuests || [];
+        if (quests.length > 0) {
+            html += '<div class="your-angler-section">';
+            html += '<h4 class="dash-section-subheading">🎯 Active Quests</h4>';
+            html += '<div class="quest-list">';
+            quests.forEach(function(q){
+                var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
+                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
+                var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
+                html += '<div class="angler-quest-card ' + statusClass + '">';
+                html += '<div class="quest-header">';
+                html += '<span class="quest-title">' + q.title + '</span>';
+                html += '<span class="quest-status ' + statusClass + '">' + statusText + '</span>';
+                html += '</div>';
+                html += '<div class="quest-bar-wrap">';
+                html += '<div class="quest-bar" style="width:' + pct + '%;"></div>';
+                html += '</div>';
+                html += '<div class="quest-meta">' + q.progress + ' / ' + q.required + ' · Reward: £' + (q.rewardMoney || 0) + '</div>';
+                html += '</div>';
+            });
+            html += '</div></div>';
+        }
 
         html += '</div>'; // .your-angler-left
 
-        // ── Right column: about, career stats, personal bests, actions ──────
+        // ── Right column: about, career stats, personal bests, quests ──────
         html += '<div class="your-angler-right">';
 
         // ── Change Angler ──────────────────────────────────────────────────
@@ -1110,31 +1134,7 @@ const Anglers = (function () {
         }
         html += '</div></div>';
 
-        // ── Quests ─────────────────────────────────────────────────────────
-        var quests = state.anglerQuests || [];
-        if (quests.length > 0) {
-            html += '<div class="your-angler-section">';
-            html += '<h4 class="dash-section-subheading">🎯 Active Quests</h4>';
-            html += '<div class="quest-list">';
-            quests.forEach(function(q){
-                var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
-                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
-                var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
-                html += '<div class="angler-quest-card ' + statusClass + '">';
-                html += '<div class="quest-header">';
-                html += '<span class="quest-title">' + q.title + '</span>';
-                html += '<span class="quest-status ' + statusClass + '">' + statusText + '</span>';
-                html += '</div>';
-                html += '<div class="quest-bar-wrap">';
-                html += '<div class="quest-bar" style="width:' + pct + '%;"></div>';
-                html += '</div>';
-                html += '<div class="quest-meta">' + q.progress + ' / ' + q.required + ' · Reward: £' + (q.rewardMoney || 0) + '</div>';
-                html += '</div>';
-            });
-            html += '</div></div>';
-        }
-
-        html += '</div>'; // .your-angler-right
+        html += '</div>'; // .your-angler-left
         html += '</div>'; // .your-angler-main-row
 
         html += '</div>'; // .your-angler-root
