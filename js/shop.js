@@ -395,10 +395,10 @@ const Shop = (function () {
 
             var sections = [
               { key:'Rods', label:'Rods', items:[
-                  {id:'float_rod', name:'Match Float Rod', cost:2200, icon:'🎣', category:'Rod', description:'Sensitive tip for bite detection.', effects:{catchRateBonus:0.04, castRangeBonus:0.02}, unlocks:['spod_rod']},
-                  {id:'spod_rod', name:'Spod Rod', cost:3000, icon:'🎣', category:'Rod', description:'Heavy spod rod for bait delivery.', effects:{castRangeBonus:0.05}, unlocks:['waggler_pole']},
-                  {id:'waggler_pole', name:'Waggler Pole', cost:2500, icon:'🎣', category:'Rod', description:'Tuned pole for accurate presentation.', effects:{catchRateBonus:0.03, castRangeBonus:0.04}, unlocks:['carbon_pro_rod']},
-                  {id:'carbon_pro_rod', name:'Carbon Pro Carp Rod', cost:4000, icon:'🎣', category:'Rod', description:'Lightweight carbon rod with a fighting curve.', effects:{castRangeBonus:0.12}, unlocks:[], crossUnlocks:['standard_reel']}
+                  {id:'rod_12ft_carp', name:'12ft Carp Rod', cost:1800, icon:'🎣', category:'Rod', description:'Versatile 12ft rod for general carp fishing.', effects:{catchRateBonus:0.02}, unlocks:['rod_carbon_carp']},
+                  {id:'rod_carbon_carp', name:'Carbon Carp Rod', cost:2600, icon:'🎣', category:'Rod', description:'Lightweight carbon blank with responsive action.', effects:{catchRateBonus:0.03, castRangeBonus:0.02}, unlocks:['rod_13ft_carp']},
+                  {id:'rod_13ft_carp', name:'13ft Carp Rod', cost:3400, icon:'🎣', category:'Rod', description:'Extra length for longer casts and better leverage.', effects:{castRangeBonus:0.05, catchRateBonus:0.02}, unlocks:['rod_custom_carp']},
+                  {id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02}, unlocks:[], crossUnlocks:['standard_reel']}
               ]},
               { key:'Reels', label:'Reels', items:[
                   {id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, unlocks:[]},
