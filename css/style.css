@@ -9477,7 +9477,7 @@ details[open] > .lake-accordion-summary::before {
     opacity: 0.8;
 }
 
-.lake-detail-close {
+.lake-detail-close { position: absolute; top: 0.5rem; right: 0.5rem; z-index: 5;
     background: none;
     border: none;
     color: var(--colour-text-muted);
