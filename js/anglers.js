@@ -91,7 +91,7 @@ const Anglers = (function () {
           notableWaters: ['Severn Valley', 'Barnt Green', 'Droitwich Canals'],
           techniques: ['Waggler Fishing', 'Dog Biscuits', 'Floating Baits'],
           legacy: 'Brought showmanship back to competitive angling. His match broadcasts inspired a new generation of fan-facing tournament carp anglers.' },
-        { id: 10, name: 'Rob Hughes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7,  photo: 'img/anglers/robhughes221.png', category: 'Professional',
+        { id: 10, name: 'Rob Hughes',       preferred: ['estate_lake','still'],       disliked: ['running'],     budget: 50, skill: 8,  socialMedia: 7,  photo: 'img/anglers/rob-hughes.png', category: 'Professional',
           bio: 'A methodical specimen hunter, Rob Hughes spends more time on fish ethnicity and scale patterns than many biologists do. His notebooks are legendary, and his big-fish credentials are unmatched.',
           signatureCatch: 'A 55lb linear common from the Avenue, fished on a three-rod boilie presentation.',
           competitionsWon: ['Big Fish Challenge 2014', 'UK Linear Championship 2018', 'National Carp Championship 2020'],

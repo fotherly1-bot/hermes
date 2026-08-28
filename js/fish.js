@@ -507,12 +507,12 @@ const Fish = (function () {
 
     function getSpeciesImage(speciesKey) {
         var map = {
-            common: 'img/carp/commoncarp1.png',
-            mirror: 'img/carp/mirrorcarp1.png',
-            leather: 'img/carp/leathercarp1.png',
-            ghost: 'img/carp/ghostcarp1.png',
-            koi: 'img/carp/koicarp1.png',
-            grass: 'img/carp/grasscarp1.png'
+            common: 'img/carp/common-carp.png',
+            mirror: 'img/carp/mirror-carp.png',
+            leather: 'img/carp/leather-carp.png',
+            ghost: 'img/carp/ghost-carp.png',
+            koi: 'img/carp/koi-carp.png',
+            grass: 'img/carp/grass-carp.png'
         };
         return map[speciesKey] || '';
     }
