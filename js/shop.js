@@ -366,13 +366,13 @@ const Shop = (function () {
         // ── Tab switcher ─────────────────────────────────────────────────────
         html += '<div class="shop-tabs">';
         html += '<button class="shop-tab' + (_shopView === 'tackle' ? ' shop-tab-active' : '') +
-                '" onclick="Shop.showShopView(\'tackle\')">🎣 Tackle</button>';
+                '" data-view="tackle">🎣 Tackle</button>';
         html += '<button class="shop-tab' + (_shopView === 'bait' ? ' shop-tab-active' : '') +
-                '" onclick="Shop.showShopView(\'bait\')">🪱 Bait</button>';
+                '" data-view="bait">🪱 Bait</button>';
         html += '<button class="shop-tab' + (_shopView === 'buy-fish' ? ' shop-tab-active' : '') +
-                '" onclick="Shop.showShopView(\'buy-fish\')">🐟 Buy Fish</button>';
+                '" data-view="buy-fish">🐟 Buy Fish</button>';
         html += '<button class="shop-tab' + (_shopView === 'sell' ? ' shop-tab-active' : '') +
-                '" onclick="Shop.showShopView(\'sell\')">💰 Sell Fish</button>';
+                '" data-view="sell">💰 Sell Fish</button>';
         html += '</div>';
 
         if (_shopView === 'sell') {
@@ -825,3 +825,15 @@ const Shop = (function () {
 })();
 
 window.Shop = Shop;
+
+(function(){
+    if (typeof document === 'undefined') return;
+    document.addEventListener('click', function(e){
+        var tab = e.target.closest('.shop-tab[data-view]');
+        if (!tab) return;
+        var view = tab.getAttribute('data-view');
+        if (view && typeof Shop !== 'undefined' && typeof Shop.showShopView === 'function') {
+            Shop.showShopView(view);
+        }
+    });
+})();
