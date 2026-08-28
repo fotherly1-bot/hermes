@@ -658,24 +658,25 @@ const Game = (function () {
     function processWorldEvent() {
         var roll = Math.random();
         var event, amount, balanceBefore = state.money;
+        var weeklyRevenue = Math.max(2000, (state.totalEarnings || 0) / Math.max(1, state.day / 7));
 
         if (roll < 0.35) {
-            amount = Math.floor(Math.random() * 4000) + 2000;
+            amount = Math.floor(Math.random() * 0.05 * weeklyRevenue) + 1000;
             state.money += amount;
             state.totalEarnings += amount;
             event = { icon: '\uD83C\uDF1F', text: 'Tourist boom: extra angler spending brought in ' + UI.formatMoney(amount) + '.' };
         } else if (roll < 0.65) {
-            amount = Math.floor(Math.random() * 6000) + 2000;
+            amount = Math.floor(Math.random() * 0.10 * weeklyRevenue) + 1000;
             state.money = Math.max(0, state.money - amount);
             state.totalSpent += amount;
             event = { icon: '\u26A0\uFE0F', text: 'Equipment failure: repairs and fines cost ' + UI.formatMoney(amount) + '.' };
         } else if (roll < 0.85) {
-            amount = Math.floor(Math.random() * 12000) + 8000;
+            amount = Math.floor(Math.random() * 0.12 * weeklyRevenue) + 8000;
             state.money += amount;
             state.totalEarnings += amount;
             event = { icon: '\uD83D\uDCB0', text: 'Corporate booking: a large group paid ' + UI.formatMoney(amount) + ' for a private event.' };
         } else {
-            amount = Math.floor(Math.random() * 10000) + 8000;
+            amount = Math.floor(Math.random() * 0.15 * weeklyRevenue) + 8000;
             state.money = Math.max(0, state.money - amount);
             state.totalSpent += amount;
             event = { icon: '\uD83D\uDCA5', text: 'Lake pollution notice: cleanup and fines cost ' + UI.formatMoney(amount) + '.' };

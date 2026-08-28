@@ -345,7 +345,7 @@ const Finance = (function () {
                 } else {
                     var partial   = state.money;
                     var missed    = payment - partial;
-                    var penalty   = Math.round(missed * 0.12);
+                    var penalty   = state.money === 0 ? 0 : Math.round(missed * 0.05);
                     state.money      = 0;
                     state.totalSpent += partial;
                     loan.totalPaid   += partial;

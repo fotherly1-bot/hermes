@@ -14,7 +14,7 @@ const Disasters = (function () {
             id: 'otter_attack',
             name: 'Otter Attack',
             description: 'Otters have been spotted in your lake! Some fish have been taken.',
-            probability: 0.005,
+            probability: 0.004,
             effect: function (state, lakeId) {
                 var lakeFish = state.fish.filter(function (f) { return f.alive && f.lake_id === lakeId; });
                 if (lakeFish.length === 0) return 'No fish were harmed.';
@@ -33,7 +33,7 @@ const Disasters = (function () {
             id: 'blue_green_algae',
             name: 'Blue-Green Algae',
             description: 'Blue-green algae bloom detected! Lake closed for 3 days.',
-            probability: 0.005,
+            probability: 0.004,
             effect: function (state, lakeId) {
                 // Mark lake as closed for 3 days
                 if (!state.lakeClosures) state.lakeClosures = {};
@@ -54,7 +54,7 @@ const Disasters = (function () {
             id: 'poaching',
             name: 'Poaching',
             description: 'Poachers have stolen valuable fish from your lake overnight.',
-            probability: 0.008,
+            probability: 0.0064,
             effect: function (state, lakeId) {
                 // Target fish with rarity-weighted random selection
                 var lakeFish = state.fish.filter(function (f) { return f.alive && f.lake_id === lakeId; });
@@ -83,7 +83,7 @@ const Disasters = (function () {
             id: 'storm_damage',
             name: 'Storm Damage',
             description: 'A severe storm has damaged lakeside vegetation and reduced biodiversity.',
-            probability: 0.012,
+            probability: 0.0096,
             effect: function (state, lakeId) {
                 // Temporary biodiversity reduction tracked separately
                 if (!state.biodiversityPenalties) state.biodiversityPenalties = {};
@@ -98,7 +98,7 @@ const Disasters = (function () {
             id: 'fish_disease',
             name: 'Fish Disease',
             description: 'A disease has spread among some fish, reducing their health.',
-            probability: 0.010,
+            probability: 0.008,
             effect: function (state, lakeId) {
                 var lakeFish = state.fish.filter(function (f) { return f.alive && f.lake_id === lakeId; });
                 if (lakeFish.length === 0) return 'No fish were affected.';
@@ -116,7 +116,7 @@ const Disasters = (function () {
             id: 'drought',
             name: 'Drought',
             description: 'Extended dry weather has lowered water levels, reducing lake capacity.',
-            probability: 0.008,
+            probability: 0.0064,
             effect: function (state, lakeId) {
                 if (!state.capacityPenalties) state.capacityPenalties = {};
                 state.capacityPenalties[lakeId] = {
@@ -130,7 +130,7 @@ const Disasters = (function () {
             id: 'vandalism',
             name: 'Vandalism',
             description: 'Vandals have damaged equipment at your lake. Repairs needed.',
-            probability: 0.007,
+            probability: 0.0056,
             effect: function (state, lakeId) {
                 // Cost to repair
                 var repairCost = 1000 + Math.floor(Math.random() * 4000);

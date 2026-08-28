@@ -481,7 +481,7 @@ const Fish = (function () {
      * Calculate the monetary value of a fish based on rarity, weight, and health.
      */
     function getFishValue(fish) {
-        var RARITY_BASE = { common: 50, uncommon: 200, rare: 750, epic: 2500, legendary: 8000, mythic: 30000 };
+        var RARITY_BASE = { common: 50, uncommon: 200, rare: 750, epic: 2500, legendary: 12000, mythic: 18000 };
         var base        = RARITY_BASE[fish.rarity] || 50;
         var weightMult  = Math.max(0.4, fish.weight_oz / 160);
         var healthMult  = 0.6 + ((fish.stats ? fish.stats.health : 80) / 250);
