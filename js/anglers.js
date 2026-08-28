@@ -589,7 +589,8 @@ const Anglers = (function () {
                 mktBonus = Math.max(mktBonus, Lakes.getLakeMaintenanceEffect(lkId, 'bookingBonus'));
             });
         }
-        var maxRequests = baseMax + assistBonus + Math.round(mktBonus * 3);
+        var starterBoost = state.ownedLakes.length <= 1 ? 1 : 0;
+        var maxRequests = baseMax + assistBonus + Math.round(mktBonus * 3) + starterBoost;
 
         var requestCount = Math.floor(Math.random() * (maxRequests + 1));
 
