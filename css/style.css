@@ -10539,21 +10539,18 @@ details[open] > .lake-accordion-summary::before {
     aspect-ratio: 4 / 3;
     overflow: hidden;
     border-radius: calc(var(--radius) - 0.25rem);
-    background: #ffffff;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0.5rem;
-    border: 1px solid var(--colour-border);
+    border: 1px dashed var(--colour-border);
 }
 
-.rigs-shop-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: top center;
-    display: block;
+.rigs-shop-card-emoji-wrap {
+    font-size: 2.6rem;
+    line-height: 1;
 }
 
 .rig-badge {
