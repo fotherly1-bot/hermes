@@ -1131,59 +1131,11 @@ const Anglers = (function () {
         }
         html += '</div>';
 
-        // ── Tackle Shop ────────────────────────────────────────────────────
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">🛒 Tackle Shop</h4>';
-        html += '<div class="tackle-shop-header">';
-        html += '<img src="img/tackleshop11.png" alt="Tackle Shop" class="tackle-shop-banner" />';
-        html += '<div class="tackle-shop-info">';
-        html += '<h5>The Tackle Box</h5>';
-        html += '<p>Here you can buy upgrades for your angler from the tackle shop. Browse rods, reels, bait, bivvies, and more to improve your performance on the water.</p>';
-        html += '</div>';
-        html += '</div>';
-        html += '<div class="tackle-shop-grid">';
-        if (typeof TACKLE_CATALOG !== 'undefined') {
-            TACKLE_CATALOG.forEach(function(item){
-                var owned = ownedTackle.indexOf(item.id) !== -1;
-                html += '<div class="tackle-shop-card' + (owned ? ' tackle-owned' : '') + '">';
-                html += '<div class="tackle-icon">' + item.icon + '</div>';
-                html += '<div class="tackle-name">' + item.name + '</div>';
-                html += '<div class="tackle-category">' + item.category + '</div>';
-                html += '<div class="tackle-desc">' + item.description + '</div>';
-                html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
-                if (owned) {
-                    html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
-                } else {
-                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.buyTackle(\'' + item.id + '\');Anglers.renderAnglers();">Buy</button>';
-                }
-                html += '</div>';
-            });
-        }
-        html += '</div></div>';
-
-        // ── Rig Shop ──────────────────────────────────────────────────────
+        // ── Rig Shop moved to Shop > Tackle tab ────────────────────────────
         html += '<div class="your-angler-section">';
         html += '<h4 class="dash-section-subheading">🎣 Rig Shop</h4>';
-        html += '<p style="font-size:0.85rem;color:var(--colour-text-muted);margin-bottom:0.75rem;">Buy carp rigs for your tackle box. Equip up to 3 rigs on My Rigs.</p>';
-        html += '<div class="tackle-shop-grid">';
-        if (typeof Rigs !== 'undefined' && Rigs.RIG_CATALOG) {
-            Rigs.RIG_CATALOG.forEach(function(def){
-                var owned = (state.rigInventory || []).indexOf(def.id) !== -1;
-                html += '<div class="tackle-shop-card' + (owned ? ' tackle-owned' : '') + '">';
-                html += '<div class="tackle-icon">' + def.icon + '</div>';
-                html += '<div class="tackle-name">' + def.name + '</div>';
-                html += '<div class="tackle-category">' + def.category + '</div>';
-                html += '<div class="tackle-desc">' + def.description + '</div>';
-                html += '<div class="tackle-cost">£' + (def.cost || 2500) + '</div>';
-                if (owned) {
-                    html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
-                } else {
-                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.buyRig(\'' + def.id + '\');Anglers.renderAnglers();">Buy</button>';
-                }
-                html += '</div>';
-            });
-        }
-        html += '</div></div>';
+        html += '<p style="font-size:0.85rem;color:var(--colour-text-muted);margin-bottom:0.75rem;">Buy carp rigs in the Shop <strong>Tackle</strong> tab. Equip up to 3 rigs on <strong>My Rigs</strong>.</p>';
+        html += '</div>';
 
         html += '</div>'; // .your-angler-left
 

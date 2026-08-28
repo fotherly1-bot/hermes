@@ -388,7 +388,27 @@ const Shop = (function () {
         }
 
         if (_shopView === 'tackle') {
-            html += '<p class="empty-state">Tackle shop coming soon — leaders, hooks, swivels, and rig components will be available here.</p>';
+            html += '<p class="empty-state">Buy and unlock new rigs. Owned rigs can be equipped on any rod from <strong>My Rigs</strong>.</p>';
+            html += '<div class="rigs-shop-root">';
+            html += '<div class="rigs-shop-grid">';
+            if (typeof Rigs !== 'undefined' && Rigs.RIG_CATALOG) {
+                Rigs.RIG_CATALOG.forEach(function (def) {
+                    var owned = (state.rigInventory || []).indexOf(def.id) !== -1;
+                    html += '<div class="rigs-shop-card' + (owned ? ' rig-owned' : '') + '">';
+                    html += '<div class="rigs-shop-card-img-wrap rigs-shop-card-emoji-wrap" aria-hidden="true">🎣</div>';
+                    html += '<div class="rigs-shop-card-name">' + def.name + '</div>';
+                    html += '<div class="rigs-shop-card-desc">' + def.description + '</div>';
+                    if (owned) {
+                        html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                    } else {
+                        html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(def.cost) + '</span>';
+                        html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyRigFromShop(\'' + def.id + '\');Shop.renderShop();">Buy</button>';
+                    }
+                    html += '</div>';
+                });
+            }
+            html += '</div>';
+            html += '</div>';
             container.innerHTML = html;
             return;
         }
