@@ -205,7 +205,7 @@ const Game = (function () {
     function migrateSave(saved) {
         var version = 0;
         try { version = parseInt(localStorage.getItem(SAVE_VERSION_KEY) || '0', 10) || 0; } catch (e) { version = 0; }
-        var s = JSON.parse(JSON.stringify(saved));
+        var s = (saved && typeof saved === 'object') ? JSON.parse(JSON.stringify(saved)) : {};
         if (version < 1) {
             var defaults = {
                 breedingPond: [], breedingTimer: 0, breedingActive: false, lakeUpgrades: {},
@@ -929,3 +929,11 @@ const Game = (function () {
         DEFAULT_STATE: DEFAULT_STATE
     };
 })();
+
+// TEMP TEST SHIM: expose Game for save-migration runtime tests
+if (typeof window !== 'undefined') {
+    window.Game = Game;
+}
+if (typeof global !== 'undefined') {
+    global.Game = Game;
+}
