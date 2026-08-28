@@ -399,10 +399,9 @@ const Shop = (function () {
             ];
 
             var ownedBait = (state.anglerBait || []);
-            html += '<div class="tackle-section-grid">';
+            html += '<div class="bait-grid">';
             BAIT_CATALOG.forEach(function(item, idx){
                 var owned = ownedBait.indexOf(item.id) !== -1;
-                if (idx > 0) html += '<div class="tackle-arrow" aria-hidden="true">👉</div>';
                 html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
                 html += '<div class="tackle-icon">' + item.icon + '</div>';
                 html += '<div class="tackle-name">' + item.name + '</div>';
@@ -541,7 +540,7 @@ const Shop = (function () {
                     if (owned) {
                         html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
                     } else if (!locked) {
-                        html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyBait(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
+                        html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyTackle(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
                     } else {
                         html += '<button class="btn btn-sm btn-muted" disabled>Locked</button>';
                     }
@@ -872,8 +871,7 @@ const Shop = (function () {
         getLakeIncomeBonus: getLakeIncomeBonus,
         getLakeHealthBonus: getLakeHealthBonus,
         getAllUpgrades: getAllUpgrades,
-        renderShop: renderShop,
-        getBaitCatalog: getBaitCatalog
+        renderShop: renderShop
     };
 })();
 
