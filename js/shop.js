@@ -409,6 +409,30 @@ const Shop = (function () {
             }
             html += '</div>';
             html += '</div>';
+
+            html += '<h3 class="section-heading" style="margin-top:1.5rem;">Tackle Shop</h3>';
+            html += '<p style="font-size:0.85rem;color:var(--colour-text-muted);margin-bottom:0.75rem;">Browse rods, reels, bait, and more.</p>';
+            html += '<div class="tackle-shop-grid">';
+            if (typeof TACKLE_CATALOG !== 'undefined') {
+                var ownedTackle = (state.anglerTackle || []);
+                TACKLE_CATALOG.forEach(function(item){
+                    var owned = ownedTackle.indexOf(item.id) !== -1;
+                    html += '<div class="tackle-shop-card' + (owned ? ' tackle-owned' : '') + '">';
+                    html += '<div class="tackle-icon">' + item.icon + '</div>';
+                    html += '<div class="tackle-name">' + item.name + '</div>';
+                    html += '<div class="tackle-category">' + item.category + '</div>';
+                    html += '<div class="tackle-desc">' + item.description + '</div>';
+                    html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
+                    if (owned) {
+                        html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
+                    } else {
+                        html += '<button class="btn btn-sm btn-primary" onclick="Anglers.buyTackle(\'' + item.id + '\');Shop.renderShop();">Buy</button>';
+                    }
+                    html += '</div>';
+                });
+            }
+            html += '</div>';
+
             container.innerHTML = html;
             return;
         }

@@ -1109,34 +1109,6 @@ const Anglers = (function () {
         html += '</div></div></div>';
         html += '</div>';
 
-        // ── Tackle Box ─────────────────────────────────────────────────────
-        var ownedTackle = (state.anglerTackle || []);
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">🎒 Tackle Box</h4>';
-        if (ownedTackle.length === 0) {
-            html += '<div class="empty-state" style="padding:0.5rem 0;">No tackle yet. Visit the shop to kit out your angler.</div>';
-        } else {
-            html += '<div class="tackle-grid">';
-            ownedTackle.forEach(function(tackleId){
-                var item = (typeof TACKLE_CATALOG !== 'undefined' ? TACKLE_CATALOG : []).find(function(t){ return t.id === tackleId; });
-                if (!item) return;
-                html += '<div class="tackle-card">';
-                html += '<div class="tackle-icon">' + item.icon + '</div>';
-                html += '<div class="tackle-name">' + item.name + '</div>';
-                html += '<div class="tackle-category">' + item.category + '</div>';
-                html += '<div class="tackle-desc">' + item.description + '</div>';
-                html += '</div>';
-            });
-            html += '</div>';
-        }
-        html += '</div>';
-
-        // ── Rig Shop moved to Shop > Tackle tab ────────────────────────────
-        html += '<div class="your-angler-section">';
-        html += '<h4 class="dash-section-subheading">🎣 Rig Shop</h4>';
-        html += '<p style="font-size:0.85rem;color:var(--colour-text-muted);margin-bottom:0.75rem;">Buy carp rigs in the Shop <strong>Tackle</strong> tab. Equip up to 3 rigs on <strong>My Rigs</strong>.</p>';
-        html += '</div>';
-
         html += '</div>'; // .your-angler-left
 
         // ── Right column: about, career stats, personal bests, actions ──────
