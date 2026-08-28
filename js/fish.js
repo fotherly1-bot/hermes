@@ -546,3 +546,5 @@ const Fish = (function () {
         getSpeciesImage: getSpeciesImage
     };
 })();
+
+window.Fish = Fish;
