@@ -118,7 +118,7 @@ const Shop = (function () {
 
     /** Currently selected lake in the shop UI (module-level, not persisted). */
     var _shopLakeId = null;
-    var _shopView   = 'buy-fish'; // 'buy-fish' | 'sell' | 'bait' | 'tackle'
+    var _shopView   = 'tackle'; // 'tackle' | 'bait' | 'buy-fish' | 'sell'
 
     /** Switch between shop views. */
     function showShopView(view) {
