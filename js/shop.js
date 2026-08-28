@@ -365,14 +365,14 @@ const Shop = (function () {
 
         // ── Tab switcher ─────────────────────────────────────────────────────
         html += '<div class="shop-tabs">';
+        html += '<button class="shop-tab' + (_shopView === 'tackle' ? ' shop-tab-active' : '') +
+                '" onclick="Shop.showShopView(\'tackle\')">🎣 Tackle</button>';
+        html += '<button class="shop-tab' + (_shopView === 'bait' ? ' shop-tab-active' : '') +
+                '" onclick="Shop.showShopView(\'bait\')">🪱 Bait</button>';
         html += '<button class="shop-tab' + (_shopView === 'buy-fish' ? ' shop-tab-active' : '') +
                 '" onclick="Shop.showShopView(\'buy-fish\')">🐟 Buy Fish</button>';
         html += '<button class="shop-tab' + (_shopView === 'sell' ? ' shop-tab-active' : '') +
                 '" onclick="Shop.showShopView(\'sell\')">💰 Sell Fish</button>';
-        html += '<button class="shop-tab' + (_shopView === 'bait' ? ' shop-tab-active' : '') +
-                '" onclick="Shop.showShopView(\'bait\')">🪱 Bait</button>';
-        html += '<button class="shop-tab' + (_shopView === 'tackle' ? ' shop-tab-active' : '') +
-                '" onclick="Shop.showShopView(\'tackle\')">🎣 Tackle</button>';
         html += '</div>';
 
         if (_shopView === 'sell') {
