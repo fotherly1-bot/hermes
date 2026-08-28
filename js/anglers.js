@@ -281,10 +281,10 @@ const Anglers = (function () {
      */
     var TACKLE_CATALOG = [
         // Rods
-        { id:'rod_12ft_carp', name:'12ft Carp Rod', cost:1800, icon:'🎣', category:'Rod', description:'Versatile 12ft rod for general carp fishing.', effects:{catchRateBonus:0.02}, unlocks:['rod_carbon_carp']},
-        { id:'rod_carbon_carp', name:'Carbon Carp Rod', cost:2600, icon:'🎣', category:'Rod', description:'Lightweight carbon blank with responsive action.', effects:{catchRateBonus:0.03, castRangeBonus:0.02}, unlocks:['rod_13ft_carp']},
-        { id:'rod_13ft_carp', name:'13ft Carp Rod', cost:3400, icon:'🎣', category:'Rod', description:'Extra length for longer casts and better leverage.', effects:{castRangeBonus:0.05, catchRateBonus:0.02}, unlocks:['rod_custom_carp']},
-        { id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02}, unlocks:[], crossUnlocks:['standard_reel']},
+        { id:'rod_12ft_carp', name:'12ft Carp Rod', cost:1800, icon:'🎣', category:'Rod', description:'Versatile 12ft rod for general carp fishing.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['rod_carbon_carp']},
+        { id:'rod_carbon_carp', name:'Carbon Carp Rod', cost:2600, icon:'🎣', category:'Rod', description:'Lightweight carbon blank with responsive action.', effects:{catchRateBonus:0.03, castRangeBonus:0.02}, prerequisite:'rod_12ft_carp', unlocks:['rod_13ft_carp']},
+        { id:'rod_13ft_carp', name:'13ft Carp Rod', cost:3400, icon:'🎣', category:'Rod', description:'Extra length for longer casts and better leverage.', effects:{castRangeBonus:0.05, catchRateBonus:0.02}, prerequisite:'rod_carbon_carp', unlocks:['rod_custom_carp']},
+        { id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'rod_13ft_carp', unlocks:[], crossUnlocks:['standard_reel']},
         // Reels
         { id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, unlocks:['big_pit_reel']},
         { id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}, unlocks:['big_pit_12k_reel']},
@@ -361,21 +361,13 @@ const Anglers = (function () {
             UI.showToast('You already own ' + item.name + '.', 'warning');
             return false;
         }
-        if (item.unlocks && item.unlocks.length) {
-            var missing = item.unlocks.filter(function(u){ return (state.anglerTackle || []).indexOf(u) === -1; });
-            if (missing.length) {
-                var req = missing.map(function(u){ var it = TACKLE_CATALOG.find(function(t){return t.id===u;}); return it ? it.name : u; }).join(', ');
-                UI.showToast('Unlock required: ' + req, 'warning');
-                return false;
-            }
-        }
-        if (item.crossUnlocks && item.crossUnlocks.length) {
-            var missingCross = item.crossUnlocks.filter(function(u){ return (state.anglerTackle || []).indexOf(u) === -1; });
-            if (missingCross.length) {
-                var reqCross = missingCross.map(function(u){ var it = TACKLE_CATALOG.find(function(t){return t.id===u;}); return it ? it.name : u; }).join(', ');
-                UI.showToast('Unlock required: ' + reqCross, 'warning');
-                return false;
-            }
+        if (tackleId !== 'rod_12ft_carp' && item.prerequisite && (state.anglerTackle || []).indexOf(item.prerequisite) === -1) {
+            var prereqName = (function(){
+                try { var it = TACKLE_CATALOG.find(function(t){return t.id===item.prerequisite;}); return it ? it.name : item.prerequisite; }
+                catch(e) { return item.prerequisite; }
+            })();
+            UI.showToast('Unlock required: ' + prereqName, 'warning');
+            return false;
         }
         if (!Game.spendMoney(item.cost)) {
             UI.showToast('Not enough money! You need ' + UI.formatMoney(item.cost) + '.', 'error');
