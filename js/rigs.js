@@ -270,9 +270,6 @@
             }
             html += '</div>'; // close rigs-rod-row
 
-            // Tackle Box Shop
-            html += renderTackleBoxShop();
-
             // Weather preview
             if (typeof Weather !== 'undefined') {
                 var w = Weather.getCurrentWeather();
