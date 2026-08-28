@@ -122,6 +122,7 @@ const Shop = (function () {
 
     /** Switch between shop views. */
     function showShopView(view) {
+        console.log('[Shop] showShopView called with:', view);
         _shopView = view;
         renderShop();
     }
@@ -832,8 +833,13 @@ window.Shop = Shop;
         var tab = e.target.closest('.shop-tab[data-view]');
         if (!tab) return;
         var view = tab.getAttribute('data-view');
+        console.log('[Shop] tab clicked:', view, 'Shop?', typeof Shop, 'showShopView?', typeof Shop !== 'undefined' && typeof Shop.showShopView === 'function');
         if (view && typeof Shop !== 'undefined' && typeof Shop.showShopView === 'function') {
-            Shop.showShopView(view);
+            try {
+                Shop.showShopView(view);
+            } catch (err) {
+                console.error('[Shop] showShopView error:', err);
+            }
         }
     });
 })();
