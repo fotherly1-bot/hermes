@@ -53,10 +53,10 @@ const UI = (function () {
     // ── Day auto-timer ────────────────────────────────────────────────────────
 
     var _timerPaused      = false;
-    var _timerSecsLeft    = 60;    // 1 minute per day
+    var _timerSecsLeft    = 30;    // 30 seconds per day
     var _timerInterval    = null;
     var _speedMultiplier  = 1;     // 1 = normal, 2 = 2x, 4 = 4x
-    var DAY_DURATION      = 60;    // seconds
+    var DAY_DURATION      = 30;    // seconds
 
     function _getDayDuration() {
         try {
@@ -66,7 +66,7 @@ const UI = (function () {
         } catch (e) {
             // ignore
         }
-        return 60;
+        return 30;
     }
 
     function startDayTimer() {
@@ -82,7 +82,7 @@ const UI = (function () {
                 Game.nextDay();
                 renderAll();
                 if (Game.getState().day >= 2) {
-                    DAY_DURATION = 60;
+                    DAY_DURATION = 30;
                     _timerSecsLeft = DAY_DURATION;
                     updateTimerDisplay();
                 }
