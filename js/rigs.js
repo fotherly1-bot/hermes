@@ -135,10 +135,16 @@
             var state = Game.getState();
             if (!state.rigInventory) state.rigInventory = [];
             if (!state.rigEquipped) state.rigEquipped = [null, null, null];
-            // Starter rig
-            if (state.rigInventory.length === 0 && state.rigEquipped.every(function(s){ return !s; })) {
+            if (!state.rigBaitEquipped) state.rigBaitEquipped = [null, null, null];
+            // Starter setup: always equipped Hair Rig + Standard Boilies on all 3 rods
+            var allEquipped = state.rigEquipped.every(function(s){ return !!s; });
+            var allBaited = state.rigBaitEquipped.every(function(b){ return !!b; });
+            if (!allEquipped || !allBaited) {
                 state.rigInventory.push('hair');
-                state.rigEquipped[0] = { rigId: 'hair', leadType: 'lead_clip' };
+                for (var i = 0; i < 3; i++) {
+                    state.rigEquipped[i] = { rigId: 'hair', leadType: 'lead_clip' };
+                    state.rigBaitEquipped[i] = 'boilie_fishmeal';
+                }
             }
         }
 
@@ -166,11 +172,7 @@
         }
 
         function unequipRig(rodIndex) {
-            var state = Game.getState();
-            initState();
-            if (rodIndex < 0 || rodIndex > 2) return;
-            state.rigEquipped[rodIndex] = null;
-            UI.showToast('Rod ' + (rodIndex + 1) + ' unequipped.', 'warning');
+            // Rods must always stay equipped; keep current setup
         }
 
         function getEquippedRigEffects() {
@@ -213,6 +215,80 @@
             return bonus;
         }
 
+        function getBaitById(id) {
+            return (typeof Anglers !== 'undefined' && Anglers.getBaitById) ? Anglers.getBaitById(id) : null;
+        }
+
+        function getBaitDef(id) {
+            if (id === 'boilie_fishmeal') return { id: 'boilie_fishmeal', name: 'Fishmeal Boilies', effects: { catchRateBonus: 0.02 } };
+            if (id === 'boilie_birdfood') return { id: 'boilie_birdfood', name: 'Birdfood Blend Boilies', effects: { catchRateBonus: 0.03 } };
+            if (id === 'boilie_tigernut') return { id: 'boilie_tigernut', name: 'Tiger Nut Boilies', effects: { catchRateBonus: 0.03, weightBonus: 0.02 } };
+            if (id === 'popup_white') return { id: 'popup_white', name: 'White Popups', effects: { catchRateBonus: 0.01 } };
+            if (id === 'popup_yellow') return { id: 'popup_yellow', name: 'Yellow Popups', effects: { catchRateBonus: 0.01 } };
+            if (id === 'popup_pink') return { id: 'popup_pink', name: 'Pink Popups', effects: { catchRateBonus: 0.01 } };
+            if (id === 'popup_orange') return { id: 'popup_orange', name: 'Orange Popups', effects: { catchRateBonus: 0.01 } };
+            if (id === 'popup_purple') return { id: 'popup_purple', name: 'Purple Popups', effects: { catchRateBonus: 0.01 } };
+            if (id === 'spod_mix') return { id: 'spod_mix', name: 'Spod Mix', effects: { catchRateBonus: 0.02 } };
+            return null;
+        }
+
+        function getEquippedBaitEffects() {
+            var state = Game.getState();
+            initState();
+            var baits = state.rigBaitEquipped || [null, null, null];
+            var catchBonus = 0;
+            var weightBonus = 0;
+            baits.forEach(function (baitId) {
+                if (!baitId) return;
+                var def = getBaitDef(baitId);
+                if (!def) return;
+                var fx = def.effects || {};
+                catchBonus += fx.catchRateBonus || 0;
+                weightBonus += fx.weightBonus || 0;
+            });
+            return { catchRateBonus: catchBonus, weightBonus: weightBonus };
+        }
+
+        function equipBait(rodIndex, baitId) {
+            var state = Game.getState();
+            initState();
+            if (rodIndex < 0 || rodIndex > 2) return;
+            if (!getBaitDef(baitId)) return;
+            state.rigBaitEquipped[rodIndex] = baitId;
+            var fx = getEquippedBaitEffects();
+            UI.showToast('Rod ' + (rodIndex + 1) + ' bait set. +' + (fx.catchRateBonus * 100).toFixed(0) + '% catch | +' + (fx.weightBonus * 100).toFixed(0) + '% weight', 'success');
+            renderRigs();
+        }
+
+        function unequipBait(rodIndex) {
+            // Bait should always be equipped; keep current bait
+        }
+
+        function getEquippedSummary() {
+            var state = Game.getState();
+            initState();
+            var equipped = state.rigEquipped || [null, null, null];
+            var baits = state.rigBaitEquipped || [null, null, null];
+            var rows = [];
+            for (var i = 0; i < 3; i++) {
+                var slot = equipped[i];
+                var baitId = baits[i];
+                var def = slot ? getRigById(slot.rigId) : null;
+                var lead = slot ? getLeadDef(slot.leadType) : null;
+                var baitDef = getBaitDef(baitId);
+                rows.push({
+                    rodLabel: 'Rod ' + (i + 1),
+                    rigName: def ? def.name : 'Empty',
+                    rigIcon: def ? def.icon : '🎣',
+                    leadName: lead ? lead.name : '',
+                    leadIcon: lead ? lead.icon : '',
+                    baitName: baitDef ? baitDef.name : 'None',
+                    baitId: baitId || ''
+                });
+            }
+            return rows;
+        }
+
         /* ── RENDER ───────────────────────────────────────────────────────── */
         function renderRigs() {
             initState();
@@ -222,36 +298,39 @@
             // Rod slots row with selectors below each
             html += '<div class="rigs-rod-row">';
             for (var i = 0; i < 3; i++) {
+                var summary = getEquippedSummary()[i];
                 var slot = (state.rigEquipped || [])[i];
-                var slotLabel = 'Rod ' + (i + 1);
+                var slotLabel = summary.rodLabel;
                 html += '<div class="rig-rod-col">';
-                if (slot) {
-                    var def = getRigById(slot.rigId);
-                    var lead = getLeadDef(slot.leadType);
-                    html += '<div class="rig-rod-card">';
-                    html += '<div class="rig-rod-label">' + slotLabel + '</div>';
-                    if (def) {
-                        html += '<div class="rig-rod-icon">' + def.icon + '</div>';
-                        html += '<div class="rig-rod-name">' + def.name + '</div>';
-                        html += '<div class="rig-rod-lead">' + lead.icon + ' ' + lead.name + '</div>';
-                        // Live bonus preview
-                        var fx = getEquippedRigEffects();
-                        var cBonus = (fx.catchRateBonus * 100).toFixed(0);
-                        var wBonus = (fx.weightBonus * 100).toFixed(0);
-                        html += '<div class="rig-rod-bonus">+' + cBonus + '% catch | +' + wBonus + '% weight</div>';
-                    } else {
-                        html += '<div class="rig-rod-icon">🎣</div>';
-                        html += '<div class="rig-rod-name">Empty</div>';
-                    }
-                    html += '<button class="btn btn-sm btn-primary" onclick="Rigs.unequipRig(' + i + ');Rigs.renderRigs();">Unequip</button>';
-                    html += '</div>';
-                } else {
-                    html += '<div class="rig-rod-card rig-rod-empty">';
-                    html += '<div class="rig-rod-label">' + slotLabel + '</div>';
-                    html += '<div class="rig-rod-icon">🎣</div>';
-                    html += '<div class="rig-rod-name">Empty Slot</div>';
-                    html += '</div>';
-                }
+                html += '<div class="rig-rod-card">';
+                html += '<div class="rig-rod-label">' + summary.rodLabel + '</div>';
+                html += '<div class="rig-rod-icon">' + summary.rigIcon + '</div>';
+                html += '<div class="rig-rod-name">' + summary.rigName + '</div>';
+                html += '<div class="rig-rod-lead">' + summary.leadIcon + ' ' + summary.leadName + '</div>';
+                var fx = getEquippedRigEffects();
+                var cBonus = (fx.catchRateBonus * 100).toFixed(0);
+                var wBonus = (fx.weightBonus * 100).toFixed(0);
+                html += '<div class="rig-rod-bonus">+' + cBonus + '% catch | +' + wBonus + '% weight</div>';
+                var baitFx2 = getEquippedBaitEffects();
+                html += '<div class="rig-rod-bonus">Bait: +' + (baitFx2.catchRateBonus * 100).toFixed(0) + '% catch | +' + (baitFx2.weightBonus * 100).toFixed(0) + '% weight</div>';
+                html += '<div class="rig-bait-selector">';
+                var baitOptions = [
+                    {id:'boilie_fishmeal', name:'Fishmeal Boilies'},
+                    {id:'boilie_birdfood', name:'Birdfood Blend'},
+                    {id:'boilie_tigernut', name:'Tiger Nut Boilies'},
+                    {id:'popup_white', name:'White Pop-ups'},
+                    {id:'popup_yellow', name:'Yellow Pop-ups'},
+                    {id:'popup_pink', name:'Pink Pop-ups'},
+                    {id:'popup_orange', name:'Orange Pop-ups'},
+                    {id:'popup_purple', name:'Purple Pop-ups'},
+                    {id:'spod_mix', name:'Spod Mix'}
+                ];
+                var currentBait = summary.baitId || 'boilie_fishmeal';
+                baitOptions.forEach(function(opt){
+                    html += '<button class="btn btn-sm ' + (currentBait === opt.id ? 'btn-primary' : 'btn-secondary') + '" onclick="Rigs.equipBait(' + i + ',\'' + opt.id + '\');Rigs.renderRigs();">' + opt.name + '</button>';
+                });
+                html += '</div>';
+                html += '</div>';
 
                 // Rig selector below rod
                 html += '<div class="rig-rod-selector">';
@@ -401,7 +480,12 @@
             renderRigs: renderRigs,
             openEquipModal: openEquipModal,
             selectLead: selectLead,
-            buyRigFromShop: buyRigFromShop
+            buyRigFromShop: buyRigFromShop,
+            getBaitDef: getBaitDef,
+            getEquippedBaitEffects: getEquippedBaitEffects,
+            equipBait: equipBait,
+            unequipBait: unequipBait,
+            getEquippedSummary: getEquippedSummary
         };
     })();
     window.Rigs = Rigs;
