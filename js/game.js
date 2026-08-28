@@ -924,6 +924,7 @@ const Game = (function () {
         addNotification: addNotification,
         addEvent: addEvent,
         logFishCreation: logFishCreation,
+        migrateSave: migrateSave,
         DEFAULT_STATE: DEFAULT_STATE
     };
 })();
