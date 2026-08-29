@@ -532,7 +532,7 @@ const Dashboard = (function () {
         html += '<button class="dash-subtab' + (_dashTab === 'overview' ? ' dash-subtab-active' : '') +
                 '" onclick="Dashboard.showDashTab(\'overview\')">Overview</button>';
         html += '<button class="dash-subtab' + (_dashTab === 'quests' ? ' dash-subtab-active' : '') +
-                '" onclick="Dashboard.showDashTab(\'quests\')">\uD83C\uDFC6 Quests</button>';
+                '" onclick="Dashboard.showDashTab(\'quests\')">🏆 Main Quests</button>';
         html += '<button class="dash-subtab' + (_dashTab === 'fish' ? ' dash-subtab-active' : '') +
                 '" onclick="Dashboard.showDashTab(\'fish\')">\uD83D\uDC1F Fish Tracker</button>';
         html += '</div>';
