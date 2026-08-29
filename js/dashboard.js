@@ -1422,8 +1422,13 @@ const Dashboard = (function () {
             html += '</div>';
             html += '</div>';
         } else {
+            html += '<div style="display:flex;gap:0.75rem;align-items:center;">';
+            html += '<img src="data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"220\" height=\"120\" viewBox=\"0 0 220 120\"><rect width=\"220\" height=\"120\" fill=\"#1b3a26\"/><rect x=\"0\" y=\"0\" width=\"220\" height=\"120\" fill=\"none\" stroke=\"rgba(255,255,255,0.15)\" stroke-width=\"2\"/><text x=\"110\" y=\"62\" font-family=\"sans-serif\" font-size=\"12\" fill=\"rgba(255,255,255,0.6)\" text-anchor=\"middle\">No lake booked</text></svg>') + '" alt="No booking" style="width:5.5rem;height:auto;border-radius:8px;border:1px solid var(--colour-border);object-fit:cover;flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
+            html += '<div style="flex:1 1 0%;min-width:0;">';
             html += '<div style="font-weight:700;color:var(--colour-text-muted);">Not booked</div>';
-            html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.15rem;">—</div>';
+            html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.15rem;">Browse lakes to book a session</div>';
+            html += '</div>';
+            html += '</div>';
         }
         html += '</div>';
 
