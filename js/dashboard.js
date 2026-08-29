@@ -448,6 +448,8 @@ const Dashboard = (function () {
         if (!state.completedQuests) state.completedQuests = [];
         if (!state.disasterLog) state.disasterLog = [];
         if (!state.incomeHistory) state.incomeHistory = [];
+        if (!state.adamAdvice) state.adamAdvice = [];
+        if (!state.adamAdviceLastDay) state.adamAdviceLastDay = 0;
     }
 
     /**
@@ -519,6 +521,7 @@ const Dashboard = (function () {
 
     function renderDashboard() {
         initState();
+        refreshAdamAdvice(false);
         var state     = Game.getState();
         var container = document.getElementById('panel-dashboard');
 
@@ -546,11 +549,12 @@ const Dashboard = (function () {
             return;
         }
 
-        // ── Row 0: Your Angler | Lake Summary ──────────────────────────────────
+        // ── Row 0: Your Angler | Lake Summary & Adam ──────────────────────────
         html += '<div class="dash-row dash-row-equal">';
         html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
         html += '<div class="dashboard-card">';
-        html += '<h4 style="margin-bottom:0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">\uD83C\uDFC6 Angler Quests</h4>';
+        html += renderAdamPenningCard(state);
+        html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">\uD83C\uDFC6 Angler Quests</h4>';
         html += renderAnglerQuestsCard(state);
         html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">\uD83C\uDF3E Lake Summary</h4>';
         html += renderLakeSummaryList(state);
@@ -1397,6 +1401,129 @@ const Dashboard = (function () {
         html += '</div>';
 
         return html;
+    }
+
+    function renderAdamPenningCard(state) {
+        var advice = getAdamAdvice(state);
+        if (!advice) return '';
+
+        var borderColour = advice.level === 'critical' ? '#e74c3c' : (advice.level === 'warning' ? '#d4a843' : 'var(--colour-accent)');
+        var bg = advice.level === 'critical' ? 'rgba(231, 76, 60, 0.12)' : (advice.level === 'warning' ? 'rgba(212, 168, 67, 0.12)' : 'rgba(0,0,0,0.15)');
+        var html = '<div class="dashboard-card" style="margin-bottom:1rem;">';
+        html += '<div style="display:flex;align-items:center;gap:0.8rem;">';
+        html += '<div style="flex:1 1 0%;min-width:0;">';
+        html += '<h4 style="margin:0 0 0.5rem;font-size:0.95rem;color:var(--colour-gold);">🎣 Advice from Adam Penning</h4>';
+        html += '<div class="speech-bubble" style="background:' + bg + ';border:1px solid ' + borderColour + ';border-radius:12px;padding:0.8rem 1rem;color:var(--colour-text);">' + advice.text + '</div>';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.55rem;">';
+        html += '<button class="btn btn-secondary btn-sm" onclick="Dashboard.prevAdamAdvice()" ' + (advice.page <= 0 ? 'disabled' : '') + '>◀ Prev</button>';
+        html += '<span style="font-size:0.75rem;color:var(--colour-text-muted);">Tip ' + (advice.page + 1) + ' of ' + advice.pages + '</span>';
+        html += '<button class="btn btn-secondary btn-sm" onclick="Dashboard.nextAdamAdvice()" ' + (advice.page >= advice.pages - 1 ? 'disabled' : '') + '>Next ▶</button>';
+        html += '</div>';
+        html += '</div>';
+        html += '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:7rem;height:auto;max-height:9rem;object-fit:contain;border-radius:var(--radius);border:1px solid var(--colour-border);background:rgba(0,0,0,0.2);flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
+        html += '</div>';
+        html += '</div>';
+
+        return html;
+    }
+
+    function getAdamAdvice(state) {
+        if (!state.adamAdvice || state.adamAdvice.length === 0) return null;
+        if (!state._adamPage) state._adamPage = 0;
+        var pages = state.adamAdvice.length;
+        if (state._adamPage >= pages) state._adamPage = pages - 1;
+        var item = state.adamAdvice[state._adamPage];
+        return {
+            text: item.text || '',
+            level: item.level || 'info',
+            page: state._adamPage,
+            pages: pages
+        };
+    }
+
+    function refreshAdamAdvice(keepPage) {
+        var state = Game.getState();
+        var day = state.day || 0;
+        if (!state.adamAdvice) state.adamAdvice = [];
+        if (!state.adamAdviceLastDay) state.adamAdviceLastDay = 0;
+        if (!keepPage && state._adamPage) state._adamPage = 0;
+        if (!keepPage) {
+            var urgent = hasUrgentAdvice(state);
+            if (urgent || day - state.adamAdviceLastDay >= 3 || state.adamAdvice.length === 0) {
+                state.adamAdviceLastDay = day;
+                state.adamAdvice = generateAdamAdvice(state, urgent);
+                state._adamPage = 0;
+            }
+        }
+    }
+
+    function hasUrgentAdvice(state) {
+        var lakeIds = (typeof Lakes !== 'undefined' && Lakes.getLakeIds ? Lakes.getLakeIds() : Object.keys(state.lakeStock || {}));
+        var aliveFish = (state.fish || []).filter(function (f) { return f.alive; });
+        var staff = state.hiredStaff || [];
+        if (staff.length === 0) return true;
+        for (var i = 0; i < lakeIds.length; i++) {
+            var lakeId = lakeIds[i];
+            var lake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
+            var capacity = lake ? (lake.netCapacity || 10) : 10;
+            var fishHere = aliveFish.filter(function (f) { return f.lake_id === lakeId; }).length;
+            if (fishHere >= capacity) return true;
+            if (fishHere === 0 && (state.ownedLakes || []).indexOf(lakeId) !== -1) return true;
+        }
+        return false;
+    }
+
+    function generateAdamAdvice(state, urgentOnly) {
+        var out = [];
+        var lakeIds = (typeof Lakes !== 'undefined' && Lakes.getLakeIds ? Lakes.getLakeIds() : Object.keys(state.lakeStock || {}));
+        var ownedLakes = (state.ownedLakes || []).slice(0, 10);
+        var aliveFish = (state.fish || []).filter(function (f) { return f.alive; });
+        var staff = state.hiredStaff || [];
+        var marketing = state.marketingCampaigns || [];
+        var reputation = state.reputation || 0;
+        var bookings = state.anglerBookings || [];
+
+        if (!urgentOnly) {
+            out.push({ text: 'Hey bud, you’re missing a Marketing Manager — you should probably hire one.', level: 'warning' });
+            if (marketing.length === 0) {
+                out.push({ text: 'No active marketing campaigns. Try the Shop to attract more anglers.', level: 'info' });
+            }
+            if (reputation < 50) {
+                out.push({ text: 'Reputation is low. Host successful bookings to rebuild trust.', level: 'warning' });
+            }
+            if (bookings.length === 0) {
+                out.push({ text: 'No upcoming bookings. Book an angler to keep cash flow moving.', level: 'info' });
+            }
+        }
+
+        if (staff.length === 0) {
+            out.unshift({ text: 'Critical: you have no staff. Hire at least one manager before things go wrong.', level: 'critical' });
+        }
+        for (var i = 0; i < lakeIds.length; i++) {
+            var lakeId = lakeIds[i];
+            var lake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
+            var name = lake ? lake.name : lakeId;
+            var capacity = lake ? (lake.netCapacity || 10) : 10;
+            var fishHere = aliveFish.filter(function (f) { return f.lake_id === lakeId; }).length;
+            if (fishHere >= capacity) {
+                out.unshift({ text: 'Urgent: ' + name + ' is at max population. Move fish or expand capacity.', level: 'critical' });
+            }
+            if (fishHere === 0 && ownedLakes.indexOf(lakeId) !== -1) {
+                out.unshift({ text: name + ' looks dead — stock it before you lose reputation.', level: 'critical' });
+            }
+        }
+
+        if (out.length === 0) {
+            out.push({ text: 'Things look steady. Keep an eye on lake stock and marketing.', level: 'info' });
+        }
+        return out.slice(0, 20);
+    }
+
+    function setAdamAdvicePage(page) {
+        var state = Game.getState();
+        if (!state.adamAdvice || state.adamAdvice.length === 0) return;
+        state._adamPage = Math.max(0, Math.min(page, state.adamAdvice.length - 1));
+        renderDashboard();
     }
 
     function renderAnglerQuestsCard(state) {
@@ -2459,7 +2586,9 @@ const Dashboard = (function () {
         showDashTab: showDashTab,
         showFinanceTab: showFinanceTab,
         showFishLineage: showFishLineage,
-        setQuestPage: function(page){ _questPage = page; renderDashboard(); }
+        setQuestPage: function(page){ _questPage = page; renderDashboard(); },
+        prevAdamAdvice: function(){ setAdamAdvicePage((Game.getState()._adamPage || 0) - 1); },
+        nextAdamAdvice: function(){ setAdamAdvicePage((Game.getState()._adamPage || 0) + 1); }
     };
 })();
 
