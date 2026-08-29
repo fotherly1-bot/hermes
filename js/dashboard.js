@@ -1462,6 +1462,8 @@ const Dashboard = (function () {
         var lakeIds = (typeof Lakes !== 'undefined' && Lakes.getLakeIds ? Lakes.getLakeIds() : Object.keys(state.lakeStock || {}));
         var aliveFish = (state.fish || []).filter(function (f) { return f.alive; });
         var staff = state.hiredStaff || [];
+        var roles = {};
+        staff.forEach(function (s) { roles[s.role] = (roles[s.role] || 0) + 1; });
         if (staff.length === 0) return true;
         for (var i = 0; i < lakeIds.length; i++) {
             var lakeId = lakeIds[i];
@@ -1491,9 +1493,10 @@ const Dashboard = (function () {
         var rodLevel = getPlayerRodLevel(state);
 
         if (!urgentOnly) {
-            out.push({ text: 'Hey bud, you’re missing a Marketing Manager — you should probably hire one.', level: 'warning' });
-            if (marketing.length === 0) {
-                out.push({ text: 'No active marketing campaigns. Try the Shop to attract more anglers.', level: 'info' });
+            if (!roles['marketer']) {
+                out.push({ text: 'Hey bud, you’re missing a Marketing Manager — you should probably hire one.', level: 'warning' });
+            } else if (marketing.length === 0) {
+                out.push({ text: 'You’ve got a marketer but no campaigns running — time to press go.', level: 'warning' });
             }
             if (reputation < 50) {
                 out.push({ text: 'Reputation is low. Host successful bookings to rebuild trust.', level: 'warning' });
