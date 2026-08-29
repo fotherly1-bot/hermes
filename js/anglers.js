@@ -2272,6 +2272,42 @@ const Anglers = (function () {
                 rewardMoney: 2000, rewardRep: 75, completed: false, claimed: false
             });
         }
+        state.anglerQuests.push({
+            id: qid++, title: 'Lake Baron',
+            description: 'Own 3 lakes.',
+            target: 'ownedLakes', required: 3, progress: 0,
+            rewardMoney: 15000, rewardRep: 5, completed: false, claimed: false
+        });
+        state.anglerQuests.push({
+            id: qid++, title: 'Fish Collector',
+            description: 'Have 20 living fish across all lakes.',
+            target: 'stock', required: 20, progress: 0,
+            rewardMoney: 3000, rewardRep: 5, completed: false, claimed: false
+        });
+        state.anglerQuests.push({
+            id: qid++, title: 'Rising Star',
+            description: 'Reach 200 reputation.',
+            target: 'reputation', required: 200, progress: 0,
+            rewardMoney: 10000, rewardRep: 0, completed: false, claimed: false
+        });
+        state.anglerQuests.push({
+            id: qid++, title: 'Breeding Expert',
+            description: 'Breed 5 fish.',
+            target: 'bred', required: 5, progress: 0,
+            rewardMoney: 6000, rewardRep: 6, completed: false, claimed: false
+        });
+        state.anglerQuests.push({
+            id: qid++, title: 'Seasoned Host',
+            description: 'Complete 10 angler bookings.',
+            target: 'bookings', required: 10, progress: 0,
+            rewardMoney: 7000, rewardRep: 8, completed: false, claimed: false
+        });
+        state.anglerQuests.push({
+            id: qid++, title: 'Marketing Maestro',
+            description: 'Launch 3 marketing campaigns.',
+            target: 'campaigns', required: 3, progress: 0,
+            rewardMoney: 4000, rewardRep: 5, completed: false, claimed: false
+        });
 
         // Try to grant immediate progress based on current anglerStats if present
         updateAnglerQuestProgress();
@@ -2285,7 +2321,9 @@ const Anglers = (function () {
         var stats = (state.anglerStats || {})[angler.name] || { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0 };
         state.anglerQuests.forEach(function(q) {
             if (q.completed) return;
-            q.progress = stats[q.target] || 0;
+            var current = stats[q.target];
+            if (typeof current === 'undefined' && typeof state[q.target] !== 'undefined') current = state[q.target];
+            q.progress = current || 0;
             if (q.progress >= q.required) {
                 q.completed = true;
             }

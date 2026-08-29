@@ -493,6 +493,8 @@ const Dashboard = (function () {
      */
     /** Sub-tab state for the dashboard panel. */
     var _dashTab = 'overview';
+    var _questPage = 0;
+    const QUESTS_PER_PAGE = 4;
     var _financeTab = 'daily'; // 'daily' | 'totals'
 
     function showDashTab(tab) {
@@ -1399,31 +1401,51 @@ const Dashboard = (function () {
 
     function renderAnglerQuestsCard(state) {
         var quests = state.anglerQuests || [];
-        if (quests.length === 0) return '';
+        var total = quests.length;
+        var page = _questPage || 0;
+        var maxPage = Math.max(0, Math.ceil(total / QUESTS_PER_PAGE) - 1);
+        if (page > maxPage) page = maxPage;
+        _questPage = page;
+
+        var start = page * QUESTS_PER_PAGE;
+        var pageQuests = quests.slice(start, start + QUESTS_PER_PAGE);
+        if (total === 0) pageQuests = [];
 
         var html = '<div class="dashboard-card" style="margin-bottom:1rem;">';
         html += '<h4 style="margin:0 0 0.6rem;font-size:0.95rem;color:var(--colour-gold);">🎯 Quests</h4>';
-        html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
-        quests.forEach(function(q) {
-            var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
-            var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
-            var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
-            html += '<div class="angler-quest-card ' + statusClass + '">';
-            html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
-            html += '<div style="font-weight:700;">' + q.title + '</div>';
-            html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);">' + statusText + '</div>';
+
+        if (total === 0) {
+            html += '<p class="empty-state">No quests yet.</p>';
+        } else {
+            html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
+            pageQuests.forEach(function(q) {
+                var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
+                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
+                var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
+                html += '<div class="angler-quest-card ' + statusClass + '">';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
+                html += '<div style="font-weight:700;">' + q.title + '</div>';
+                html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);">' + statusText + '</div>';
+                html += '</div>';
+                html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin:0.35rem 0 0.4rem;">' + q.description + '</div>';
+                html += '<div class="quest-bar-track"><div class="quest-bar-fill" style="width:' + pct + '%;background:' + (q.completed ? 'var(--colour-accent)' : 'linear-gradient(90deg,#f1c40f,#e67e22)') + ';"></div></div>';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-top:0.35rem;">';
+                html += '<span style="font-size:0.75rem;">' + (typeof q.progress === 'number' ? q.progress : 0) + ' / ' + q.required + '</span>';
+                if (q.completed && !q.claimed) {
+                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');refreshDashboard();">Claim</button>';
+                }
+                html += '</div>';
+                html += '</div>';
+            });
             html += '</div>';
-            html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin:0.35rem 0 0.4rem;">' + q.description + '</div>';
-            html += '<div class="quest-bar-track"><div class="quest-bar-fill" style="width:' + pct + '%;background:' + (q.completed ? 'var(--colour-accent)' : 'linear-gradient(90deg,#f1c40f,#e67e22)') + ';"></div></div>';
-            html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-top:0.35rem;">';
-            html += '<span style="font-size:0.75rem;">' + q.progress + ' / ' + q.required + '</span>';
-            if (q.completed && !q.claimed) {
-                html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');refreshDashboard();">Claim</button>';
-            }
+
+            html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.6rem;">';
+            html += '<button class="btn btn-secondary btn-sm" onclick="Dashboard.setQuestPage(' + (page - 1) + ')" ' + (page <= 0 ? 'disabled' : '') + '>◀ Prev</button>';
+            html += '<span style="font-size:0.75rem;color:var(--colour-text-muted);">Page ' + (page + 1) + ' of ' + (maxPage + 1) + '</span>';
+            html += '<button class="btn btn-secondary btn-sm" onclick="Dashboard.setQuestPage(' + (page + 1) + ')" ' + (page >= maxPage ? 'disabled' : '') + '>Next ▶</button>';
             html += '</div>';
-            html += '</div>';
-        });
-        html += '</div>';
+        }
+
         html += '</div>';
 
         return html;
@@ -2436,7 +2458,8 @@ const Dashboard = (function () {
         renderWeatherCard: renderWeatherCard,
         showDashTab: showDashTab,
         showFinanceTab: showFinanceTab,
-        showFishLineage: showFishLineage
+        showFishLineage: showFishLineage,
+        setQuestPage: function(page){ _questPage = page; renderDashboard(); }
     };
 })();
 
