@@ -448,8 +448,6 @@ const Dashboard = (function () {
         if (!state.completedQuests) state.completedQuests = [];
         if (!state.disasterLog) state.disasterLog = [];
         if (!state.incomeHistory) state.incomeHistory = [];
-        if (!state.adamAdvice) state.adamAdvice = [];
-        if (!state.adamAdviceLastDay) state.adamAdviceLastDay = 0;
     }
 
     /**
@@ -522,7 +520,6 @@ const Dashboard = (function () {
     function renderDashboard() {
         try {
             initState();
-            refreshAdamAdvice(false);
             var state     = Game.getState();
             var container = document.getElementById('panel-dashboard');
 
@@ -567,46 +564,6 @@ const Dashboard = (function () {
             html += '<div class="dash-row dash-row-equal">';
             html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
             html += '<div class="dashboard-card">';
-            html += renderAdamPenningCard(state);
-            html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏆 Angler Quests</h4>';
-            html += renderAnglerQuestsCard(state);
-            html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🌾 Lake Summary</h4>';
-            html += renderLakeSummaryList(state);
-            html += '</div>';
-            html += '</div>';
-
-            var aliveFish = state.fish.filter(function(f){ return f.alive; });
-
-            // ── Row 1: Fish cards under angler info ─────────────────────────────────
-            if (aliveFish.length > 0) {
-                html += '<div class="dash-row dash-row-2-2">';
-                html += '<div class="dashboard-card">' + renderMostExpensiveFishCard(state) + '</div>';
-                html += '<div class="dashboard-card">' + renderAnglerPBCard(state) + '</div>';
-                html += '</div>';
-            }
-
-            // ── Row 1: Fishery Pulse ─────────────────────────────────────────────────
-            html += '<div class="dash-row">';
-            html += '<div class="dashboard-card">' + renderFisheryPulse(state) + '</div>';
-            html += '</div>';
-
-            // ── Row 2: Biggest Fish | Rarest Fish | Most Expensive ───────────────────
-            html += '<div class="dash-row dash-row-2">';
-            if (aliveFish.length > 0) {
-                html += '<div class="dashboard-card dash-feature-fish-card">' + renderBiggestFishCard(state) + '</div>';
-                html += '<div class="dashboard-card dash-feature-fish-card">' + renderRarestFishCard(state) + '</div>';
-                html += '<div class="dashboard-card dash-feature-fish-card">' + renderMostExpensiveFishCard(state) + '</div>';
-            } else {
-                html += '<div class="dashboard-card">' + renderTodayActivity(state) + '</div>';
-                html += '<div class="dashboard-card">' + renderFinanceSnapshot(state) + '</div>';
-                html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
-            }
-            html += '</div>';
-            // ── Row 3: Progression (spans left+middle) | Weather ────────────────────────
-            html += '<div class="dash-row dash-row-2">';
-            html += '<div class="dashboard-card dash-progression-wide">' + renderProgressionCard(state) + '</div>';
-            html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
-            html += '</div>';
 
             // ── Row 3: Active Card Buffs (always shown) ──────────────────────────
             var activeBuffs = (state.activeCardBuffs || []).filter(function(b){ return b.endDay >= state.day; });
@@ -1459,204 +1416,9 @@ const Dashboard = (function () {
         return html;
     }
 
-    Dashboard.startAdamAutoAdvance = function() {
-        clearTimeout(Dashboard._adamAutoTimer);
-        Dashboard._adamAutoTimer = setTimeout(function() {
-            try {
-                var st = typeof Game !== 'undefined' ? Game.getState() : null;
-                if (st && st.adamAdvice && st.adamAdvice.length > 1) {
-                    Dashboard.nextAdamAdvice();
-                    if (st._dashTab === 'overview' && typeof renderDashboard === 'function') renderDashboard();
-                }
-            } catch (e) {}
-        }, 6000);
-    };
 
-    function getAdamAdvice(state) {
-        if (!state.adamAdvice || state.adamAdvice.length === 0) return null;
-        if (!state._adamPage) state._adamPage = 0;
-        var pages = state.adamAdvice.length;
-        if (state._adamPage >= pages) state._adamPage = pages - 1;
-        var item = state.adamAdvice[state._adamPage];
-        return {
-            text: item.text || '',
-            level: item.level || 'info',
-            page: state._adamPage,
-            pages: pages
-        };
-    }
 
-    function refreshAdamAdvice(keepPage) {
-        var state = Game.getState();
-        var day = state.day || 0;
-        if (!state.adamAdvice) state.adamAdvice = [];
-        if (!state.adamAdviceLastDay) state.adamAdviceLastDay = 0;
-        if (!keepPage && state._adamPage) state._adamPage = 0;
-        if (!keepPage) {
-            var urgent = hasUrgentAdvice(state);
-            var hasCritical = state.adamAdvice.some(function (a) { return a.level === 'critical'; });
-            var staff = state.hiredStaff || [];
-            var staffKey = staff.map(function (s) { return (s.role || '') + ':' + (s.id || ''); }).join('|');
-            var lastStaffKey = state._adamAdviceStaffKey || '';
-            var staffChanged = staffKey !== lastStaffKey;
-            if (urgent || hasCritical !== urgent || staffChanged || day - state.adamAdviceLastDay >= 3 || state.adamAdvice.length === 0) {
-                state.adamAdviceLastDay = day;
-                state.adamAdvice = generateAdamAdvice(state, urgent);
-                state._adamPage = 0;
-                state._adamAdviceStaffKey = staffKey;
-            }
-        }
-    }
 
-    function hasUrgentAdvice(state) {
-        var lakeIds = (typeof Lakes !== 'undefined' && Lakes.getLakeIds ? Lakes.getLakeIds() : Object.keys(state.lakeStock || {}));
-        var aliveFish = (state.fish || []).filter(function (f) { return f.alive; });
-        var staff = state.hiredStaff || [];
-        var roles = {};
-        staff.forEach(function (s) { roles[s.role] = (roles[s.role] || 0) + 1; });
-        if (staff.length === 0) return true;
-        for (var i = 0; i < lakeIds.length; i++) {
-            var lakeId = lakeIds[i];
-            var lake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
-            if (!lake) continue;
-            var capPenalty = 0;
-            if (lake.negative && lake.negative.capacityPenalty) capPenalty = lake.capacity * lake.negative.capacityPenalty;
-            var expansionBonus = (typeof Lakes.getLakeExpansionBonus === 'function') ? Lakes.getLakeExpansionBonus(lakeId) : { capacity: 0 };
-            var effectiveCap = Math.max(0, lake.capacity + (expansionBonus.capacity || 0) - capPenalty);
-            var fishHere = aliveFish.filter(function (f) { return f.lake_id === lakeId; }).length;
-            if (effectiveCap > 0 && fishHere >= effectiveCap) return true;
-            if (fishHere === 0 && (state.ownedLakes || []).indexOf(lakeId) !== -1) return true;
-        }
-        return false;
-    }
-
-    function generateAdamAdvice(state, urgentOnly) {
-        var out = [];
-        var lakeIds = (typeof Lakes !== 'undefined' && Lakes.getLakeIds ? Lakes.getLakeIds() : Object.keys(state.lakeStock || {}));
-        var ownedLakes = (state.ownedLakes || []).slice(0, 10);
-        var aliveFish = (state.fish || []).filter(function (f) { return f.alive; });
-        var staff = state.hiredStaff || [];
-        var marketing = state.marketingCampaigns || [];
-        var reputation = state.reputation || 0;
-        var bookings = state.anglerBookings || [];
-        var news = (state.newsStories || []).slice(0, 40);
-        var weather = (typeof Weather !== 'undefined' && Weather.getCurrentWeather) ? Weather.getCurrentWeather() : null;
-        var wName = weather ? (weather.current || '').toLowerCase() : '';
-        var ownedCount = (state.ownedLakes || []).length;
-        var totalCaught = (state.anglerStats && state.playerAngler && state.anglerStats[state.playerAngler]) ? (state.anglerStats[state.playerAngler].fishCaught || 0) : 0;
-        var rodLevel = getPlayerRodLevel(state);
-        var roles = {};
-        staff.forEach(function (s) { roles[s.role] = (roles[s.role] || 0) + 1; });
-
-        if (!urgentOnly) {
-            if (!roles['marketer']) {
-                out.push({ text: 'Hey bud, you’re missing a Marketing Manager — you should probably hire one.', level: 'warning' });
-            } else if (marketing.length === 0) {
-                out.push({ text: 'You’ve got a marketer but no campaigns running — time to press go.', level: 'warning' });
-            }
-            if (reputation < 50) {
-                out.push({ text: 'Reputation is low. Host successful bookings to rebuild trust.', level: 'warning' });
-            }
-            if (bookings.length === 0) {
-                out.push({ text: 'No upcoming bookings. Book an angler to keep cash flow moving.', level: 'info' });
-            }
-            if (totalCaught === 0 && rodLevel > 0) {
-                out.push({ text: 'You’ve got the gear but no fish yet — time to wet a line, mate.', level: 'info' });
-            }
-            if (rodLevel < 2) {
-                out.push({ text: 'Upgrade your rod in the Tackle shop — distance wins matches.', level: 'warning' });
-            }
-            if (wName) {
-                if (wName.indexOf('rain') !== -1) {
-                    out.push({ text: 'Rainy today — perfect carp conditions if you’ve got the right rigs.', level: 'info' });
-                } else if (wName.indexOf('sun') !== -1 || wName.indexOf('clear') !== -1) {
-                    out.push({ text: 'Sunny and clear — fish might be deeper, so don’t neglect the bottom baits.', level: 'info' });
-                } else if (wName.indexOf('cloud') !== -1) {
-                    out.push({ text: 'Cloud cover keeps the fish cruising — good day for a long cast.', level: 'info' });
-                } else if (wName.indexOf('storm') !== -1) {
-                    out.push({ text: 'Stormy weather means chaotic feeding. Stay safe and fish tight lines.', level: 'warning' });
-                } else if (wName.indexOf('frost') !== -1 || wName.indexOf('snow') !== -1) {
-                    out.push({ text: 'Cold snap — switch to smaller baits and expect slow bites.', level: 'warning' });
-                } else if (wName.indexOf('heat') !== -1) {
-                    out.push({ text: 'Heatwave on the way. Fish early or late, or use a bivvy with shade.', level: 'warning' });
-                }
-            }
-            var recentCatch = news.find(function (s) { return /caught|trophy|record|mirror|common|ghost/i.test(s.headline || s.body || ''); });
-            if (recentCatch) {
-                out.push({ text: 'Heard on the grapevine: "' + strip(recentCatch.headline || recentCatch.body || '') + '"', level: 'info' });
-            }
-            if (aliveFish.length > 50 && ownedCount > 0) {
-                out.push({ text: 'Stock is booming across your lakes. Time to host a premium booking?', level: 'info' });
-            }
-            if (ownedCount === 0) {
-                out.push({ text: 'You don’t own a lake yet — Oakmere is waiting for a new owner.', level: 'warning' });
-            }
-            if (bookings.length > 0) {
-                out.push({ text: 'Looks like you’ve got bookings lined up — make sure the lakes are ready.', level: 'info' });
-            }
-            if (marketing.length > 0) {
-                out.push({ text: 'Your marketing is bringing anglers in; keep an eye on lake capacity.', level: 'info' });
-            }
-        }
-
-        if (staff.length === 0) {
-            out.unshift({ text: 'Critical: you have no staff. Hire at least one manager before things go wrong.', level: 'critical' });
-        }
-        for (var i = 0; i < lakeIds.length; i++) {
-            var lakeId = lakeIds[i];
-            var lake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
-            var name = lake ? lake.name : lakeId;
-            if (!lake) continue;
-            var capPenalty = 0;
-            if (lake.negative && lake.negative.capacityPenalty) capPenalty = lake.capacity * lake.negative.capacityPenalty;
-            var expansionBonus = (typeof Lakes.getLakeExpansionBonus === 'function') ? Lakes.getLakeExpansionBonus(lakeId) : { capacity: 0 };
-            var effectiveCap = Math.max(0, lake.capacity + (expansionBonus.capacity || 0) - capPenalty);
-            var fishHere = aliveFish.filter(function (f) { return f.lake_id === lakeId; }).length;
-            if (effectiveCap > 0 && fishHere >= effectiveCap) {
-                out.unshift({ text: 'Urgent: ' + name + ' is at max population. Move fish or expand capacity.', level: 'critical' });
-            }
-            if (fishHere === 0 && (state.ownedLakes || []).indexOf(lakeId) !== -1) {
-                out.unshift({ text: name + ' looks dead — stock it before you lose reputation.', level: 'critical' });
-            }
-        }
-
-        if (out.length === 0 || (out.filter(function (x) { return x.level === 'info'; }).length === out.length && out.length > 3)) {
-            out = out.slice(0, 3);
-            var jokes = [
-                'Why do carp love anglers? Because we bring the snacks and tell the best stories.',
-                'I once saw a 30lb mirror leap out the water just to slap a poacher. True story.',
-                'If your float’s not moving, neither is the mortgage payment.',
-                'The only thing stronger than a 20lb common is an angler’s optimism.',
-                'Carp don’t care about your spreadsheets. They care about boilies.'
-            ];
-            out.push({ text: jokes[Math.floor(Math.random() * jokes.length)], level: 'info' });
-            if (Math.random() < 0.5) {
-                out.push({ text: 'Fish of the day: a 28lb 4oz ghostie from a secret swim I can’t mention.', level: 'info' });
-            }
-        }
-
-        return out.slice(0, 20);
-    }
-
-    function getPlayerRodLevel(state) {
-        var rodId = (state && state.rigLoadout && state.rigLoadout.rodId) ? state.rigLoadout.rodId : '';
-        if (!rodId) return 0;
-        var order = ['rod_12ft','rod_carbon','rod_13ft','rod_custom'];
-        var idx = order.indexOf(rodId);
-        return idx === -1 ? 0 : idx + 1;
-    }
-
-    function strip(str) {
-        return str.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-    }
-
-    function setAdamAdvicePage(page) {
-        var state = Game.getState();
-        if (!state.adamAdvice || state.adamAdvice.length === 0) return;
-        var max = Math.max(0, state.adamAdvice.length - 1);
-        state._adamPage = Math.max(0, Math.min(page, max));
-        renderDashboard();
-    }
 
     function renderAnglerQuestsCard(state) {
         var quests = state.anglerQuests || [];
