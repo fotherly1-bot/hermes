@@ -2082,39 +2082,62 @@ const Dashboard = (function () {
         var completedIds  = state.completedQuests || [];
         var activeQuests  = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) === -1; });
         var doneQuests    = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) !== -1; });
-        var showing       = activeQuests.slice(0, 3);
-        var queued        = activeQuests.slice(3);
+
+        function questCategory(q) {
+            var id = q.id || '';
+            var title = (q.title || '').toLowerCase();
+            if (/breed|brood|hatchery|industrial breeder|production line/.test(id + ' ' + title)) return 'Breeding & Stock';
+            if (/lake|property|portfolio|magnate|tycoon|emperor/.test(id + ' ' + title)) return 'Lake & Property';
+            if (/reputation|renowned|living legend|seasoned host|legendary guide/.test(id + ' ' + title)) return 'Reputation & Hosting';
+            if (/earn|spend|wealthy|millionaire|cash|bank|networth|dynasty|corporate|high roller|loan/.test(id + ' ' + title)) return 'Money & Finance';
+            if (/legendary|monster|heavyweight|fish collector|fishery colossus/.test(id + ' ' + title)) return 'Specimen & Trophy';
+            if (/marketing/.test(id + ' ' + title)) return 'Marketing';
+            return 'General';
+        }
+
+        var groups = {};
+        activeQuests.forEach(function (quest) {
+            var cat = questCategory(quest);
+            if (!groups[cat]) groups[cat] = [];
+            groups[cat].push(quest);
+        });
 
         var html = '';
 
-        // ── Active (up to 3) ─────────────────────────────────────────────────
-        if (showing.length === 0 && doneQuests.length === QUESTS.length) {
+        // ── Active grouped ──────────────────────────────────────────────────
+        var groupKeys = Object.keys(groups);
+        if (groupKeys.length === 0 && doneQuests.length === QUESTS.length) {
             html += '<p class="empty-state" style="color:var(--colour-gold);">\uD83C\uDFC6 All quests complete!</p>';
         } else {
-            html += '<div class="quest-list">';
-            showing.forEach(function (quest) {
-                var progress   = quest.checkProgress(state);
-                var percentage = Math.min(100, Math.floor((progress.current / progress.target) * 100));
-                html += '<div class="quest-item">';
-                html += '<div class="quest-header">';
-                html += '<span class="quest-title">' + quest.title + '</span>';
-                html += '<span class="quest-reward">';
-                if (quest.reward.money > 0)      html += UI.formatMoney(quest.reward.money);
-                if (quest.reward.reputation > 0) html += ' +' + quest.reward.reputation + ' rep';
-                html += '</span>';
+            groupKeys.forEach(function (cat) {
+                var list = groups[cat];
+                html += '<div class="quest-category">';
+                html += '<div class="quest-category-header">' + cat + '</div>';
+                html += '<div class="quest-list">';
+                list.slice(0, 3).forEach(function (quest) {
+                    var progress = quest.checkProgress(state);
+                    var percentage = Math.min(100, Math.floor((progress.current / progress.target) * 100));
+                    html += '<div class="quest-item">';
+                    html += '<div class="quest-header">';
+                    html += '<span class="quest-title">' + quest.title + '</span>';
+                    html += '<span class="quest-reward">';
+                    if (quest.reward.money > 0) html += UI.formatMoney(quest.reward.money);
+                    if (quest.reward.reputation > 0) html += ' +' + quest.reward.reputation + ' rep';
+                    html += '</span>';
+                    html += '</div>';
+                    html += '<p class="quest-desc">' + quest.description + '</p>';
+                    html += '<div class="quest-progress">';
+                    html += '<div class="quest-progress-track"><div class="quest-progress-fill" style="width:' + percentage + '%;"></div></div>';
+                    html += '<span class="quest-progress-text">' + progress.current + '/' + progress.target + '</span>';
+                    html += '</div>';
+                    html += '</div>';
+                });
                 html += '</div>';
-                html += '<p class="quest-desc">' + quest.description + '</p>';
-                html += '<div class="quest-progress">';
-                html += '<div class="quest-progress-track"><div class="quest-progress-fill" style="width:' + percentage + '%;"></div></div>';
-                html += '<span class="quest-progress-text">' + progress.current + '/' + progress.target + '</span>';
-                html += '</div>';
+                if (list.length > 3) {
+                    html += '<p class="quest-queue-note">+' + (list.length - 3) + ' more in this category</p>';
+                }
                 html += '</div>';
             });
-            html += '</div>';
-
-            if (queued.length > 0) {
-                html += '<p class="quest-queue-note">+' + queued.length + ' more quest' + (queued.length === 1 ? '' : 's') + ' unlocked after these</p>';
-            }
         }
 
         // ── Completed ────────────────────────────────────────────────────────
