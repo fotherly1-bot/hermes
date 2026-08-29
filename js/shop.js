@@ -118,7 +118,7 @@ const Shop = (function () {
 
     /** Currently selected lake in the shop UI (module-level, not persisted). */
     var _shopLakeId = null;
-    var _shopView   = 'tackle'; // 'tackle' | 'bait' | 'buy-fish' | 'sell'
+    var _shopView   = 'tackle'; // 'tackle' | 'rigs' | 'bait' | 'buy-fish' | 'sell'
 
     /** Switch between shop views. */
     function showShopView(view) {
@@ -367,6 +367,8 @@ const Shop = (function () {
         html += '<div class="shop-tabs">';
         html += '<button class="shop-tab' + (_shopView === 'tackle' ? ' shop-tab-active' : '') +
                 '" data-view="tackle">🎣 Tackle</button>';
+        html += '<button class="shop-tab' + (_shopView === 'rigs' ? ' shop-tab-active' : '') +
+                '" data-view="rigs">🎒 Rigs</button>';
         html += '<button class="shop-tab' + (_shopView === 'bait' ? ' shop-tab-active' : '') +
                 '" data-view="bait">🪱 Bait</button>';
         html += '<button class="shop-tab' + (_shopView === 'buy-fish' ? ' shop-tab-active' : '') +
@@ -439,6 +441,12 @@ const Shop = (function () {
             });
             html += '</div>';
             html += '</div>';
+            container.innerHTML = html;
+            return;
+        }
+
+        if (_shopView === 'rigs') {
+            html += (typeof Rigs !== 'undefined' && typeof Rigs.renderTackleBoxShop === 'function') ? Rigs.renderTackleBoxShop() : '<p class="empty-state">Rig shop coming soon.</p>';
             container.innerHTML = html;
             return;
         }

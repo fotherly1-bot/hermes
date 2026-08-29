@@ -510,6 +510,7 @@
             openEquipModal: openEquipModal,
             selectLead: selectLead,
             buyRigFromShop: buyRigFromShop,
+            renderTackleBoxShop: renderTackleBoxShop,
             getBaitDef: getBaitDef,
             getEquippedBaitEffects: getEquippedBaitEffects,
             equipBait: equipBait,
