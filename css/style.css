@@ -9929,6 +9929,33 @@ details[open] > .lake-accordion-summary::before {
 .dash-fish-icon--double {
     height: 11rem;
 }
+
+.your-angler-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+.your-angler-profile-text {
+    flex: 1 1 0%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.your-angler-profile-photo {
+    flex: 0 0 auto;
+    width: 14rem;
+    max-width: 40%;
+}
+.your-angler-profile-photo img {
+    width: 100%;
+    height: auto;
+    max-height: 18rem;
+    object-fit: contain;
+    display: block;
+    border-radius: var(--radius);
+}
 .dash-fish-name {
     font-weight: 700;
     font-size: 1rem;

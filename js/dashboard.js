@@ -1370,14 +1370,16 @@ const Dashboard = (function () {
 
         html += '<div class="dash-fish-feature-card">';
         html += '<h4 class="dash-section-subheading">🎣 Your Angler</h4>';
-        html += '<div class="dash-fish-feature">';
-        html += photoHtml;
+        html += '<div class="your-angler-profile">';
+        html += '<div class="your-angler-profile-text">';
         html += '<span class="dash-fish-name">' + angler.name + '</span>';
         html += '<span class="dash-fish-species">' + (angler.category || 'Angler') + '</span>';
         html += '<span class="dash-fish-rarity" style="color:var(--colour-accent);">Skill ' + angler.skill + '/10</span>';
         html += '<span class="dash-fish-weight" style="color:var(--colour-gold);font-size:1.2rem;font-weight:800;">' + (stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—') + '</span>';
         html += '<span class="dash-fish-lake">Likes: ' + (likes || '—') + '</span>';
         html += '<span class="dash-fish-lake" style="color:#e74c3c;">Dislikes: ' + (dislikes || '—') + '</span>';
+        html += '</div>';
+        html += '<div class="your-angler-profile-photo">' + photoHtml + '</div>';
         html += '</div>';
         html += '<div class="dash-fish-stat-bars">' + barsHtml + '</div>';
         html += '</div>';
