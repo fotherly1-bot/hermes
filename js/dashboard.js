@@ -1449,7 +1449,8 @@ const Dashboard = (function () {
         if (!keepPage && state._adamPage) state._adamPage = 0;
         if (!keepPage) {
             var urgent = hasUrgentAdvice(state);
-            if (urgent || day - state.adamAdviceLastDay >= 3 || state.adamAdvice.length === 0) {
+            var hasCritical = state.adamAdvice.some(function (a) { return a.level === 'critical'; });
+            if (urgent || hasCritical !== urgent || day - state.adamAdviceLastDay >= 3 || state.adamAdvice.length === 0) {
                 state.adamAdviceLastDay = day;
                 state.adamAdvice = generateAdamAdvice(state, urgent);
                 state._adamPage = 0;
@@ -1530,6 +1531,12 @@ const Dashboard = (function () {
             }
             if (ownedCount === 0) {
                 out.push({ text: 'You don’t own a lake yet — Oakmere is waiting for a new owner.', level: 'warning' });
+            }
+            if (bookings.length > 0) {
+                out.push({ text: 'Looks like you’ve got bookings lined up — make sure the lakes are ready.', level: 'info' });
+            }
+            if (marketing.length > 0) {
+                out.push({ text: 'Your marketing is bringing anglers in; keep an eye on lake capacity.', level: 'info' });
             }
         }
 
