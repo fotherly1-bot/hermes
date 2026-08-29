@@ -227,14 +227,14 @@
         function getBaitDef(id) {
             if (id === 'boilie_standard') return { id: 'boilie_standard', name: 'Standard Boilies', effects: { catchRateBonus: 0.01 } };
             if (id === 'boilie_fishmeal') return { id: 'boilie_fishmeal', name: 'Fishmeal Boilies', effects: { catchRateBonus: 0.02 } };
-            if (id === 'boilie_birdfood') return { id: 'boilie_birdfood', name: 'Birdfood Blend Boilies', effects: { catchRateBonus: 0.03 } };
-            if (id === 'boilie_tigernut') return { id: 'boilie_tigernut', name: 'Tiger Nut Boilies', effects: { catchRateBonus: 0.03, weightBonus: 0.02 } };
+            if (id === 'boilie_birdfood') return { id: 'boilie_birdfood', name: 'Birdfood Blend Boilies', effects: { catchRateBonus: 0.02 } };
+            if (id === 'boilie_tigernut') return { id: 'boilie_tigernut', name: 'Tiger Nut Boilies', effects: { catchRateBonus: 0.02, weightBonus: 0.01 } };
             if (id === 'popup_white') return { id: 'popup_white', name: 'White Popups', effects: { catchRateBonus: 0.01 } };
             if (id === 'popup_yellow') return { id: 'popup_yellow', name: 'Yellow Popups', effects: { catchRateBonus: 0.01 } };
             if (id === 'popup_pink') return { id: 'popup_pink', name: 'Pink Popups', effects: { catchRateBonus: 0.01 } };
             if (id === 'popup_orange') return { id: 'popup_orange', name: 'Orange Popups', effects: { catchRateBonus: 0.01 } };
             if (id === 'popup_purple') return { id: 'popup_purple', name: 'Purple Popups', effects: { catchRateBonus: 0.01 } };
-            if (id === 'spod_mix') return { id: 'spod_mix', name: 'Spod Mix', effects: { catchRateBonus: 0.02 } };
+            if (id === 'spod_mix') return { id: 'spod_mix', name: 'Spod Mix', effects: { catchRateBonus: 0.01 } };
             return null;
         }
 
