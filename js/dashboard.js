@@ -1409,18 +1409,18 @@ const Dashboard = (function () {
 
         var borderColour = advice.level === 'critical' ? '#e74c3c' : (advice.level === 'warning' ? '#d4a843' : 'var(--colour-accent)');
         var bg = advice.level === 'critical' ? 'rgba(231, 76, 60, 0.12)' : (advice.level === 'warning' ? 'rgba(212, 168, 67, 0.12)' : 'rgba(0,0,0,0.15)');
-        var html = '<div class="dashboard-card" style="margin-bottom:1rem;">';
-        html += '<div style="display:flex;align-items:center;gap:0.8rem;">';
-        html += '<div style="flex:1 1 0%;min-width:0;">';
-        html += '<h4 style="margin:0 0 0.5rem;font-size:0.95rem;color:var(--colour-gold);">🎣 Advice from Adam Penning</h4>';
-        html += '<div class="speech-bubble" style="background:' + bg + ';border:1px solid ' + borderColour + ';border-radius:12px;padding:0.8rem 1rem;color:var(--colour-text);">' + advice.text + '</div>';
-        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.55rem;">';
-        html += '<button class="btn btn-secondary btn-sm" onclick="Dashboard.prevAdamAdvice()" ' + (advice.page <= 0 ? 'disabled' : '') + '>◀ Prev</button>';
-        html += '<span style="font-size:0.75rem;color:var(--colour-text-muted);">Tip ' + (advice.page + 1) + ' of ' + advice.pages + '</span>';
-        html += '<button class="btn btn-secondary btn-sm" onclick="Dashboard.nextAdamAdvice()" ' + (advice.page >= advice.pages - 1 ? 'disabled' : '') + '>Next ▶</button>';
+        var html = '<div class="dashboard-card" style="margin-bottom:1.1rem;">';
+        html += '<div style="display:flex;align-items:center;gap:0.9rem;">';
+        html += '<div style="flex:1 1 0%;min-width:0;position:relative;z-index:0;">';
+        html += '<h4 style="margin:0 0 0.6rem;font-size:1rem;color:var(--colour-gold);position:relative;z-index:1;">🎣 Advice from Adam Penning</h4>';
+        html += '<div class="speech-bubble" style="background:' + bg + ';border:1px solid ' + borderColour + ';border-radius:12px;padding:1rem 1.1rem;color:var(--colour-text);min-height:6.5rem;position:relative;z-index:0;">' + advice.text + '</div>';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.75rem;gap:0.6rem;position:relative;z-index:2;">';
+        html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;" onclick="Dashboard.prevAdamAdvice();return false;" ' + (advice.page <= 0 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>◀ Prev</a>';
+        html += '<span style="font-size:0.8rem;color:var(--colour-text-muted);">Tip ' + (advice.page + 1) + ' of ' + advice.pages + '</span>';
+        html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;" onclick="Dashboard.nextAdamAdvice();return false;" ' + (advice.page >= advice.pages - 1 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>Next ▶</a>';
         html += '</div>';
         html += '</div>';
-        html += '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:7rem;height:auto;max-height:9rem;object-fit:contain;border-radius:var(--radius);border:1px solid var(--colour-border);background:rgba(0,0,0,0.2);flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
+        html += '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:7.5rem;height:auto;max-height:10rem;object-fit:contain;border-radius:var(--radius);border:1px solid var(--colour-border);background:rgba(0,0,0,0.2);flex:0 0 auto;position:relative;z-index:1;" onerror="this.style.display=\'none\'" />';
         html += '</div>';
         html += '</div>';
 
@@ -1583,7 +1583,8 @@ const Dashboard = (function () {
     function setAdamAdvicePage(page) {
         var state = Game.getState();
         if (!state.adamAdvice || state.adamAdvice.length === 0) return;
-        state._adamPage = Math.max(0, Math.min(page, state.adamAdvice.length - 1));
+        var max = Math.max(0, state.adamAdvice.length - 1);
+        state._adamPage = Math.max(0, Math.min(page, max));
         renderDashboard();
     }
 
