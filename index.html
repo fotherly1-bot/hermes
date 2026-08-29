@@ -249,6 +249,7 @@
             try {
                 var saved = localStorage.getItem('carpFishingTycoon_saveData');
                 if (saved) {
+                    if (typeof Game !== 'undefined' && typeof Game.init === 'function') Game.init();
                     if (typeof Anglers !== 'undefined' && typeof Anglers.initState === 'function') Anglers.initState();
                     if (typeof UI !== 'undefined' && typeof UI.init === 'function') UI.init();
                     if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') Dashboard.renderDashboard();
