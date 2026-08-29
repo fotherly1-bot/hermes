@@ -452,12 +452,16 @@
             html += '<div class="rigs-shop-grid">';
             RIG_CATALOG.forEach(function (def) {
                 var inv = state.rigInventory || [];
+                var pending = (state.pendingRigPurchases || []).indexOf(def.id) !== -1;
                 var alreadyOwned = inv.indexOf(def.id) !== -1;
-                html += '<div class="rigs-shop-card' + (alreadyOwned ? ' rig-owned' : '') + '">';
+                html += '<div class="rigs-shop-card' + (alreadyOwned ? ' rig-owned' : '') + (pending ? ' rig-pending' : '') + '">';
                 html += '<div class="rigs-shop-card-name">' + def.name + '</div>';
                 html += '<div class="rigs-shop-card-desc">' + def.description + '</div>';
                 if (alreadyOwned) {
                     html += '<span class="rig-badge rig-badge-owned">Owned</span>';
+                } else if (pending) {
+                    html += '<span class="rig-badge rig-badge-pending">Pending</span>';
+                    html += '<button class="btn btn-sm btn-muted" disabled>Arriving tomorrow</button>';
                 } else {
                     html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(def.cost) + '</span>';
                     html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyRigFromShop(\'' + def.id + '\')">Buy</button>';
@@ -481,18 +485,22 @@
                 renderRigs();
                 return;
             }
+            if ((state.pendingRigPurchases || []).indexOf(rigId) !== -1) {
+                UI.showToast(def.name + ' is already pending delivery.', 'warning');
+                return;
+            }
             var cost = def.cost || 2500;
             if (!Game.spendMoney(cost)) {
                 UI.showToast('Not enough money! You need ' + UI.formatMoney(cost) + '.', 'error');
                 return;
             }
-            inv.push(rigId);
-            UI.showToast(def.icon + ' ' + def.name + ' added to your tackle box!', 'success');
+            (state.pendingRigPurchases || []).push(rigId);
+            UI.showToast(def.icon + ' ' + def.name + ' ordered — it arrives tomorrow.', 'success');
             if (typeof Finance !== 'undefined') {
-                Finance.addFinanceLog('rig_purchase', -cost, def.name);
+                Finance.addFinanceLog('rig_purchase', -cost, def.name + ' (pending)');
             }
             Game.saveToStorage();
-            renderRigs();
+            renderTackleBoxShop();
         }
 
         /* ── PUBLIC API ───────────────────────────────────────────────────── */

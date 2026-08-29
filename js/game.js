@@ -222,6 +222,7 @@ const Game = (function () {
                 sharePrice: 0, nextInvestorId: 1, fishAuctions: [], lakeMaintenance: {},
                 lakeExpansions: {}, sponsorships: [], anglerStats: {}, matchResults: [],
                 rigInventory: [], rigEquipped: [null, null, null], rigBaitEquipped: ['boilie_standard','boilie_standard','boilie_standard'],
+                pendingRigPurchases: [],
                 rigCustomizations: [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }],
                 rigComponentsOwned: ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'],
                 customRigs: [null, null, null]
@@ -408,6 +409,19 @@ const Game = (function () {
         // Resolve any completed fish auctions
         if (typeof Shop !== 'undefined' && Shop.processDailyAuctions) {
             Shop.processDailyAuctions();
+        }
+
+        // Resolve pending rig purchases
+        if (state.pendingRigPurchases && state.pendingRigPurchases.length) {
+            state.pendingRigPurchases.forEach(function (rigId) {
+                if ((state.rigInventory || []).indexOf(rigId) === -1) {
+                    state.rigInventory.push(rigId);
+                }
+            });
+            state.pendingRigPurchases = [];
+            if (typeof Rigs !== 'undefined' && typeof Rigs.renderTackleBoxShop === 'function') {
+                Rigs.renderTackleBoxShop();
+            }
         }
 
         // Apply lake maintenance costs + effects

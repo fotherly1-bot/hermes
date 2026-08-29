@@ -10676,6 +10676,21 @@ details[open] > .lake-accordion-summary::before {
     margin-right: 0.5rem;
 }
 
+.rig-badge-pending {
+    background: rgba(30,30,30,0.85);
+    color: var(--colour-text-muted);
+    border: 1px solid var(--colour-border);
+    margin-right: 0.5rem;
+}
+
+.rigs-shop-card.rig-pending {
+    opacity: 0.9;
+}
+
+.rigs-shop-card.rig-pending .btn {
+    filter: grayscale(0.35);
+}
+
 /* Equip modal inside existing modal layout */
 .rig-equip-modal .rig-equip-carousel {
     display: flex;
