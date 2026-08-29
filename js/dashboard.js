@@ -560,12 +560,48 @@ const Dashboard = (function () {
                 return;
             }
 
-            // ── Row 0: Your Angler | Lake Summary & Adam ──────────────────────────
+            // ── Row 0: Your Angler | Angler PB / Most Expensive Fish ──────────────
             html += '<div class="dash-row dash-row-equal">';
             html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
             html += '<div class="dashboard-card">';
+            html += renderAdamPlaceholderCard();
+            html += '</div>';
+            html += '</div>';
 
-            // ── Row 3: Active Card Buffs (always shown) ──────────────────────────
+            // ── Row 1: Angler PB | Most Expensive Fish ─────────────────────────────
+            html += '<div class="dash-row dash-row-2-2">';
+            html += '<div class="dashboard-card">' + renderAnglerPBCard(state) + '</div>';
+            html += '<div class="dashboard-card">' + renderMostExpensiveFishCard(state) + '</div>';
+            html += '</div>';
+
+            // ── Row 1: Fishery Pulse ─────────────────────────────────────────────────
+            html += '<div class="dash-row">';
+            html += '<div class="dashboard-card">' + renderFisheryPulse(state) + '</div>';
+            html += '</div>';
+
+            // ── Row 2: Weather & Conditions ─────────────────────────────────────────
+            html += '<div class="dash-row">';
+            html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
+            html += '</div>';
+
+            // ── Row 2: Progression ──────────────────────────────────────────────────
+            html += '<div class="dash-row">';
+            html += '<div class="dashboard-card dash-progression-wide">' + renderProgressionCard(state) + '</div>';
+            html += '</div>';
+
+            // ── Row 3: Angler Quests | Lake Summary ──────────────────────────────────
+            html += '<div class="dash-row dash-row-equal">';
+            html += '<div class="dashboard-card">';
+            html += '<h4 style="margin:0 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏆 Angler Quests</h4>';
+            html += renderAnglerQuestsCard(state);
+            html += '</div>';
+            html += '<div class="dashboard-card">';
+            html += '<h4 style="margin:0 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🌾 Lake Summary</h4>';
+            html += renderLakeSummaryList(state);
+            html += '</div>';
+            html += '</div>';
+
+            // ── Row 4: Active Card Buffs (always shown) ──────────────────────────
             var activeBuffs = (state.activeCardBuffs || []).filter(function(b){ return b.endDay >= state.day; });
             html += '<div class="dashboard-card" style="margin-top:1rem;">';
             html += '<h3>🗺️ Active Card Buffs</h3>';
@@ -588,7 +624,7 @@ const Dashboard = (function () {
             }
             html += '</div>';
 
-            // ── Row 4: Activity & Notifications ──────────────────────────────────
+            // ── Row 5: Activity & Notifications ──────────────────────────────────
             html += '<div class="dashboard-card" style="margin-top:1rem;">';
             html += '<h3>Activity &amp; Notifications</h3>';
             html += renderNotificationBoard(state);
@@ -1390,35 +1426,13 @@ const Dashboard = (function () {
         return html;
     }
 
-    function renderAdamPenningCard(state) {
-        var advice = getAdamAdvice(state);
-        if (!advice) return '';
-
-        var borderColour = advice.level === 'critical' ? '#e74c3c' : (advice.level === 'warning' ? '#d4a843' : 'var(--colour-accent)');
-        var bg = advice.level === 'critical' ? 'rgba(231, 76, 60, 0.12)' : (advice.level === 'warning' ? 'rgba(212, 168, 67, 0.12)' : 'rgba(0,0,0,0.15)');
-        var html = '<div class="dashboard-card" style="margin-bottom:1.2rem;" onmouseenter="clearTimeout(Dashboard._adamAutoTimer);" onmouseleave="Dashboard.startAdamAutoAdvance();">';
-        html += '<div style="display:flex;align-items:center;gap:1rem;">';
-        html += '<div style="flex:1 1 0%;min-width:0;position:relative;z-index:0;">';
-        html += '<h4 style="margin:0 0 0.7rem;font-size:1.05rem;color:var(--colour-gold);position:relative;z-index:1;letter-spacing:0.3px;">🎣 Advice from Adam Penning</h4>';
-        html += '<div class="speech-bubble" style="background:' + bg + ';border:1px solid ' + borderColour + ';border-radius:14px;padding:1.3rem 1.4rem;color:var(--colour-text);min-height:11rem;position:relative;z-index:0;font-size:0.95rem;line-height:1.55;box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(0,0,0,0.25);">' + advice.text + '</div>';
-        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.9rem;gap:0.7rem;position:relative;z-index:2;">';
-        html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5.5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;padding:0.45rem 0.9rem;font-size:0.85rem;" onclick="Dashboard.prevAdamAdvice();return false;" ' + (advice.page <= 0 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>◀ Prev</a>';
-        html += '<span style="font-size:0.85rem;color:var(--colour-text-muted);font-weight:600;">Tip ' + (advice.page + 1) + ' of ' + advice.pages + '</span>';
-        html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5.5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;padding:0.45rem 0.9rem;font-size:0.85rem;" onclick="Dashboard.nextAdamAdvice();return false;" ' + (advice.page >= advice.pages - 1 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>Next ▶</a>';
-        html += '</div>';
-        html += '</div>';
-        html += '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:12rem;height:auto;max-height:none;object-fit:contain;flex:0 0 auto;position:relative;z-index:1;" onerror="this.style.display=\'none\'" />';
-        html += '</div>';
-        html += '</div>';
-
-
-
-        return html;
+    function renderAdamPlaceholderCard() {
+        return '<div class="dashboard-card" style="text-align:center;padding:1.5rem;">' +
+            '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="max-width:12rem;max-height:14rem;object-fit:contain;border-radius:8px;" onerror="this.style.display=\'none\'" />' +
+            '<h4 style="margin:0.8rem 0 0.4rem;color:var(--colour-gold);">🎣 Advice from Adam Penning</h4>' +
+            '<p style="color:var(--colour-text-muted);">Coming soon.</p>' +
+            '</div>';
     }
-
-
-
-
 
     function renderAnglerQuestsCard(state) {
         var quests = state.anglerQuests || [];
@@ -2503,9 +2517,7 @@ const Dashboard = (function () {
         showDashTab: showDashTab,
         showFinanceTab: showFinanceTab,
         showFishLineage: showFishLineage,
-        setQuestPage: function(page){ _questPage = page; renderDashboard(); },
-        prevAdamAdvice: function(){ setAdamAdvicePage((Game.getState()._adamPage || 0) - 1); },
-        nextAdamAdvice: function(){ setAdamAdvicePage((Game.getState()._adamPage || 0) + 1); }
+        setQuestPage: function(page){ _questPage = page; renderDashboard(); }
     };
 })();
 
