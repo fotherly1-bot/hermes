@@ -16,6 +16,7 @@ const Game = (function () {
         playerAnglerId: null,
         fish: [],
         anglers: [],
+        anglerBait: ['boilie_standard'],
         notifications: [],
         totalEarnings: 0,
         totalSpent: 0,
@@ -220,7 +221,7 @@ const Game = (function () {
                 investorDeals: [], marketEquityPct: 0, dividendsPaid: 0, fisheryListed: false,
                 sharePrice: 0, nextInvestorId: 1, fishAuctions: [], lakeMaintenance: {},
                 lakeExpansions: {}, sponsorships: [], anglerStats: {}, matchResults: [],
-                rigInventory: [], rigEquipped: [null, null, null], rigBaitEquipped: ['boilie_fishmeal','boilie_fishmeal','boilie_fishmeal'],
+                rigInventory: [], rigEquipped: [null, null, null], rigBaitEquipped: ['boilie_standard','boilie_standard','boilie_standard'],
                 rigCustomizations: [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }],
                 rigComponentsOwned: ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'],
                 customRigs: [null, null, null]
