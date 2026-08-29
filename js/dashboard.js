@@ -520,110 +520,129 @@ const Dashboard = (function () {
     }
 
     function renderDashboard() {
-        initState();
-        refreshAdamAdvice(false);
-        var state     = Game.getState();
-        var container = document.getElementById('panel-dashboard');
+        try {
+            initState();
+            refreshAdamAdvice(false);
+            var state     = Game.getState();
+            var container = document.getElementById('panel-dashboard');
 
-        var html = '<h2>Dashboard</h2>';
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'panel-dashboard';
+                container.className = 'panel active';
+                var main = document.getElementById('main-panels') || document.body;
+                if (main) main.appendChild(container);
+            }
 
-        // Sub-tab switcher
-        html += '<div class="dash-subtabs">';
-        html += '<button class="dash-subtab' + (_dashTab === 'overview' ? ' dash-subtab-active' : '') +
-                '" onclick="Dashboard.showDashTab(\'overview\')">Overview</button>';
-        html += '<button class="dash-subtab' + (_dashTab === 'quests' ? ' dash-subtab-active' : '') +
-                '" onclick="Dashboard.showDashTab(\'quests\')">🏆 Main Quests</button>';
-        html += '<button class="dash-subtab' + (_dashTab === 'fish' ? ' dash-subtab-active' : '') +
-                '" onclick="Dashboard.showDashTab(\'fish\')">\uD83D\uDC1F Fish Tracker</button>';
-        html += '</div>';
+            if (!state) {
+                container.innerHTML = '<div class="dashboard-card"><h2>Dashboard</h2><p class="empty-state">No save data found. Start a new game to begin.</p></div>';
+                return;
+            }
 
-        if (_dashTab === 'fish') {
-            html += renderFishTracker(state);
-            container.innerHTML = html;
-            return;
-        }
+            var html = '<h2>Dashboard</h2>';
 
-        if (_dashTab === 'quests') {
-            html += renderInfoTab(state);
-            container.innerHTML = html;
-            return;
-        }
-
-        // ── Row 0: Your Angler | Lake Summary & Adam ──────────────────────────
-        html += '<div class="dash-row dash-row-equal">';
-        html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
-        html += '<div class="dashboard-card">';
-        html += renderAdamPenningCard(state);
-        html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">\uD83C\uDFC6 Angler Quests</h4>';
-        html += renderAnglerQuestsCard(state);
-        html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">\uD83C\uDF3E Lake Summary</h4>';
-        html += renderLakeSummaryList(state);
-        html += '</div>';
-        html += '</div>';
-
-        var aliveFish = state.fish.filter(function(f){ return f.alive; });
-
-        // ── Row 1: Fish cards under angler info ─────────────────────────────────
-        if (aliveFish.length > 0) {
-            html += '<div class="dash-row dash-row-2-2">';
-            html += '<div class="dashboard-card">' + renderMostExpensiveFishCard(state) + '</div>';
-            html += '<div class="dashboard-card">' + renderAnglerPBCard(state) + '</div>';
+            // Sub-tab switcher
+            html += '<div class="dash-subtabs">';
+            html += '<button class="dash-subtab' + (_dashTab === 'overview' ? ' dash-subtab-active' : '') +
+                    '" onclick="Dashboard.showDashTab(\'overview\')">Overview</button>';
+            html += '<button class="dash-subtab' + (_dashTab === 'quests' ? ' dash-subtab-active' : '') +
+                    '" onclick="Dashboard.showDashTab(\'quests\')">🏆 Main Quests</button>';
+            html += '<button class="dash-subtab' + (_dashTab === 'fish' ? ' dash-subtab-active' : '') +
+                    '" onclick="Dashboard.showDashTab(\'fish\')">🐟 Fish Tracker</button>';
             html += '</div>';
-        }
 
-        // ── Row 1: Fishery Pulse ─────────────────────────────────────────────────
-        html += '<div class="dash-row">';
-        html += '<div class="dashboard-card">' + renderFisheryPulse(state) + '</div>';
-        html += '</div>';
+            if (_dashTab === 'fish') {
+                html += renderFishTracker(state);
+                container.innerHTML = html;
+                return;
+            }
 
-        // ── Row 2: Biggest Fish | Rarest Fish | Most Expensive ───────────────────
-        html += '<div class="dash-row dash-row-2">';
-        if (aliveFish.length > 0) {
-            html += '<div class="dashboard-card dash-feature-fish-card">' + renderBiggestFishCard(state) + '</div>';
-            html += '<div class="dashboard-card dash-feature-fish-card">' + renderRarestFishCard(state) + '</div>';
-            html += '<div class="dashboard-card dash-feature-fish-card">' + renderMostExpensiveFishCard(state) + '</div>';
-        } else {
-            html += '<div class="dashboard-card">' + renderTodayActivity(state) + '</div>';
-            html += '<div class="dashboard-card">' + renderFinanceSnapshot(state) + '</div>';
+            if (_dashTab === 'quests') {
+                html += renderInfoTab(state);
+                container.innerHTML = html;
+                return;
+            }
+
+            // ── Row 0: Your Angler | Lake Summary & Adam ──────────────────────────
+            html += '<div class="dash-row dash-row-equal">';
+            html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
+            html += '<div class="dashboard-card">';
+            html += renderAdamPenningCard(state);
+            html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏆 Angler Quests</h4>';
+            html += renderAnglerQuestsCard(state);
+            html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🌾 Lake Summary</h4>';
+            html += renderLakeSummaryList(state);
+            html += '</div>';
+            html += '</div>';
+
+            var aliveFish = state.fish.filter(function(f){ return f.alive; });
+
+            // ── Row 1: Fish cards under angler info ─────────────────────────────────
+            if (aliveFish.length > 0) {
+                html += '<div class="dash-row dash-row-2-2">';
+                html += '<div class="dashboard-card">' + renderMostExpensiveFishCard(state) + '</div>';
+                html += '<div class="dashboard-card">' + renderAnglerPBCard(state) + '</div>';
+                html += '</div>';
+            }
+
+            // ── Row 1: Fishery Pulse ─────────────────────────────────────────────────
+            html += '<div class="dash-row">';
+            html += '<div class="dashboard-card">' + renderFisheryPulse(state) + '</div>';
+            html += '</div>';
+
+            // ── Row 2: Biggest Fish | Rarest Fish | Most Expensive ───────────────────
+            html += '<div class="dash-row dash-row-2">';
+            if (aliveFish.length > 0) {
+                html += '<div class="dashboard-card dash-feature-fish-card">' + renderBiggestFishCard(state) + '</div>';
+                html += '<div class="dashboard-card dash-feature-fish-card">' + renderRarestFishCard(state) + '</div>';
+                html += '<div class="dashboard-card dash-feature-fish-card">' + renderMostExpensiveFishCard(state) + '</div>';
+            } else {
+                html += '<div class="dashboard-card">' + renderTodayActivity(state) + '</div>';
+                html += '<div class="dashboard-card">' + renderFinanceSnapshot(state) + '</div>';
+                html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
+            }
+            html += '</div>';
+            // ── Row 3: Progression (spans left+middle) | Weather ────────────────────────
+            html += '<div class="dash-row dash-row-2">';
+            html += '<div class="dashboard-card dash-progression-wide">' + renderProgressionCard(state) + '</div>';
             html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
-        }
-        html += '</div>';
-        // ── Row 3: Progression (spans left+middle) | Weather ────────────────────────
-        html += '<div class="dash-row dash-row-2">';
-        html += '<div class="dashboard-card dash-progression-wide">' + renderProgressionCard(state) + '</div>';
-        html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
-        html += '</div>';
-
-        // ── Row 3: Active Card Buffs (always shown) ──────────────────────────
-        var activeBuffs = (state.activeCardBuffs || []).filter(function(b){ return b.endDay >= state.day; });
-        html += '<div class="dashboard-card" style="margin-top:1rem;">';
-        html += '<h3>\uD83C\uDCCF Active Card Buffs</h3>';
-        if (activeBuffs.length === 0) {
-            html += '<p class="empty-state">No buffs active. Open card packs in the <strong>Shop</strong> to find buff cards.</p>';
-        } else {
-            html += '<div class="dash-buff-grid">';
-            activeBuffs.forEach(function(b){
-                var daysLeft = b.endDay - state.day + 1;
-                var pct      = Math.max(5, Math.round((daysLeft / (b.endDay - b.startDay + 1)) * 100));
-                html += '<div class="dash-buff-card" style="border-left:3px solid ' + b.colour + ';">';
-                html += '<div class="dash-buff-top">';
-                html += '<span class="dash-buff-name" style="color:' + b.colour + ';">' + b.name + '</span>';
-                html += '<span class="dash-buff-timer">' + daysLeft + ' day' + (daysLeft !== 1 ? 's' : '') + ' left</span>';
-                html += '</div>';
-                html += '<div class="dash-buff-bar-track"><div class="dash-buff-bar-fill" style="width:' + pct + '%;background:' + b.colour + ';"></div></div>';
-                html += '</div>';
-            });
             html += '</div>';
+
+            // ── Row 3: Active Card Buffs (always shown) ──────────────────────────
+            var activeBuffs = (state.activeCardBuffs || []).filter(function(b){ return b.endDay >= state.day; });
+            html += '<div class="dashboard-card" style="margin-top:1rem;">';
+            html += '<h3>🗺️ Active Card Buffs</h3>';
+            if (activeBuffs.length === 0) {
+                html += '<p class="empty-state">No buffs active. Open card packs in the <strong>Shop</strong> to find buff cards.</p>';
+            } else {
+                html += '<div class="dash-buff-grid">';
+                activeBuffs.forEach(function(b){
+                    var daysLeft = b.endDay - state.day + 1;
+                    var pct      = Math.max(5, Math.round((daysLeft / (b.endDay - b.startDay + 1)) * 100));
+                    html += '<div class="dash-buff-card" style="border-left:3px solid ' + b.colour + ';">';
+                    html += '<div class="dash-buff-top">';
+                    html += '<span class="dash-buff-name" style="color:' + b.colour + ';">' + b.name + '</span>';
+                    html += '<span class="dash-buff-timer">' + daysLeft + ' day' + (daysLeft !== 1 ? 's' : '') + ' left</span>';
+                    html += '</div>';
+                    html += '<div class="dash-buff-bar-track"><div class="dash-buff-bar-fill" style="width:' + pct + '%;background:' + b.colour + ';"></div></div>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+            html += '</div>';
+
+            // ── Row 4: Activity & Notifications ──────────────────────────────────
+            html += '<div class="dashboard-card" style="margin-top:1rem;">';
+            html += '<h3>Activity &amp; Notifications</h3>';
+            html += renderNotificationBoard(state);
+            html += '</div>';
+
+            container.innerHTML = html;
+        } catch (err) {
+            console.warn('renderDashboard failed', err);
+            var container = document.getElementById('panel-dashboard');
+            if (container) container.innerHTML = '<div class="dashboard-card"><h2>Dashboard</h2><p class="empty-state">Dashboard failed to load.</p></div>';
         }
-        html += '</div>';
-
-        // ── Row 4: Activity & Notifications ──────────────────────────────────
-        html += '<div class="dashboard-card" style="margin-top:1rem;">';
-        html += '<h3>Activity &amp; Notifications</h3>';
-        html += renderNotificationBoard(state);
-        html += '</div>';
-
-        container.innerHTML = html;
     }
 
     // ── Stat Bar (replaces pill KPI strip) ───────────────────────────────────

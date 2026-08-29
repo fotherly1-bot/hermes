@@ -222,7 +222,7 @@ const Game = (function () {
                 sharePrice: 0, nextInvestorId: 1, fishAuctions: [], lakeMaintenance: {},
                 lakeExpansions: {}, sponsorships: [], anglerStats: {}, matchResults: [],
                 rigInventory: [], rigEquipped: [null, null, null], rigBaitEquipped: ['boilie_standard','boilie_standard','boilie_standard'],
-                pendingRigPurchases: [],
+                pendingRigPurchases: [], pendingTacklePurchases: [], pendingBaitPurchases: [], pendingFishPurchases: [],
                 rigCustomizations: [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }],
                 rigComponentsOwned: ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'],
                 customRigs: [null, null, null]
@@ -246,11 +246,20 @@ const Game = (function () {
     }
 
     function init() {
-        const saved = loadFromStorage();
-        console.log('[Game.init] saved=', saved, 'typeof=', typeof saved, 'keys=', saved ? Object.keys(saved).sort().join(',') : 'none');
+        var saved = null;
+        try {
+            saved = loadFromStorage();
+        } catch (e) {
+            console.warn('Game.init load failed', e);
+        }
         if (saved) {
-            state = migrateSave(saved);
-            console.log('[Game.init] took saved branch');
+            try {
+                state = migrateSave(saved);
+                console.log('[Game.init] took saved branch');
+            } catch (e) {
+                console.warn('Game.init migrate failed, resetting', e);
+                state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+            }
         } else {
             state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             console.log('[Game.init] took ELSE branch, DEFAULT_STATE keys:', Object.keys(state).sort().join(','));
