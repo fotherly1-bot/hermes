@@ -383,6 +383,12 @@ const Anglers = (function () {
         return combined;
     }
 
+    function getCastDistanceM() {
+        var effects = getTackleEffects();
+        var bonus = effects.castRangeBonus || 0;
+        return Math.round(35 * (1 + bonus));
+    }
+
     /**
      * Purchase a tackle item if the player can afford it.
      */
@@ -1163,6 +1169,7 @@ const Anglers = (function () {
         html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + UI.formatMoney(stats.winnings) + '</span><span class="your-angler-stat-lbl">Winnings</span></div>';
         html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + stats.visits + '</span><span class="your-angler-stat-lbl">Visits</span></div>';
         html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—') + '</span><span class="your-angler-stat-lbl">Social Media</span></div>';
+        html += '<div class="your-angler-stat"><span class="your-angler-stat-val">' + (typeof Anglers !== 'undefined' && Anglers.getCastDistanceM ? Anglers.getCastDistanceM() + 'm' : '—') + '</span><span class="your-angler-stat-lbl">Cast Distance</span></div>';
         html += '</div></div>';
 
         // ── Personal Bests ─────────────────────────────────────────────────

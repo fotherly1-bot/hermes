@@ -1357,6 +1357,7 @@ const Dashboard = (function () {
             { label: 'Biggest Fish', pct: Math.min(100, Math.round((stats.biggestFishOz / 1200) * 100)), value: stats.biggestFishOz > 0 ? UI.formatWeight(stats.biggestFishOz) : '—', colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '⚖️' },
             { label: 'Wins', pct: Math.min(100, stats.wins * 10), value: stats.wins, colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '🏆' },
             { label: 'Social Media', pct: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia * 10 : 0), value: (typeof angler.socialMedia !== 'undefined' ? angler.socialMedia + '/10' : '—'), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '📱' },
+            { label: 'Cast Distance', pct: Math.min(100, Math.round(((typeof Anglers !== 'undefined' && Anglers.getCastDistanceM ? Anglers.getCastDistanceM() : 35) / 100) * 100)), value: (typeof Anglers !== 'undefined' && Anglers.getCastDistanceM ? Anglers.getCastDistanceM() + 'm' : '35m'), colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '🎯' },
             { label: 'Leaderboard', pct: Math.max(5, 100 - ((anglerRank - 1) / Math.max(1, anglersWithCatches.length) * 100)), value: '#' + anglerRank + ' of ' + anglersWithCatches.length, colour: 'linear-gradient(90deg, #00b4d8, #0077b6)', icon: '📊' }
         ];
 
