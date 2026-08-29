@@ -401,13 +401,15 @@ const Shop = (function () {
             ];
 
             var ownedBait = (state.anglerBait || []);
+            var pendingBait = (state.pendingBaitPurchases || []);
             html += '<div class="bait-grid">';
             BAIT_CATALOG.forEach(function(item, idx){
                 var owned = ownedBait.indexOf(item.id) !== -1;
-                html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
+                var pending = pendingBait.indexOf(item.id) !== -1;
+                html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + (pending ? ' tackle-pending' : '') + '">';
                 html += '<div class="tackle-icon">';
                 if (item.image) {
-                    html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<span class=\\\'tackle-icon-fallback\\\'>' + (item.icon||'🪱') + '</span>\';">';
+                    html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\'">';
                 } else {
                     html += (item.icon || '🪱');
                 }
@@ -434,6 +436,8 @@ const Shop = (function () {
                 html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
                 if (owned) {
                     html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
+                } else if (pending) {
+                    html += '<button class="btn btn-sm btn-muted" disabled>Pending</button>';
                 } else {
                     html += '<button class="btn btn-sm btn-primary buy-bait-btn" data-bait="' + item.id + '">Buy</button>';
                 }
@@ -554,7 +558,11 @@ const Shop = (function () {
                     if (owned) {
                         html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
                     } else if (!locked) {
-                        html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyTackle(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
+                        if ((state.pendingTacklePurchases || []).indexOf(item.id) !== -1) {
+                            html += '<button class="btn btn-sm btn-muted" disabled>Pending</button>';
+                        } else {
+                            html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyTackle(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
+                        }
                     } else {
                         html += '<button class="btn btn-sm btn-muted" disabled>Locked</button>';
                     }

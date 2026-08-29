@@ -560,11 +560,13 @@ const Dashboard = (function () {
                 return;
             }
 
-            // ── Row 0: Your Angler | Angler PB / Most Expensive Fish ──────────────
+            // ── Row 0: Your Angler | Adam + Angler Quests ─────────────────────────
             html += '<div class="dash-row dash-row-equal">';
             html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
             html += '<div class="dashboard-card">';
             html += renderAdamPlaceholderCard();
+            html += '<h4 style="margin:1rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏆 Angler Quests</h4>';
+            html += renderAnglerQuestsCard(state);
             html += '</div>';
             html += '</div>';
 
@@ -589,12 +591,8 @@ const Dashboard = (function () {
             html += '<div class="dashboard-card dash-progression-wide">' + renderProgressionCard(state) + '</div>';
             html += '</div>';
 
-            // ── Row 3: Angler Quests | Lake Summary ──────────────────────────────────
-            html += '<div class="dash-row dash-row-equal">';
-            html += '<div class="dashboard-card">';
-            html += '<h4 style="margin:0 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏆 Angler Quests</h4>';
-            html += renderAnglerQuestsCard(state);
-            html += '</div>';
+            // ── Row 3: Lake Summary ──────────────────────────────────────────────────
+            html += '<div class="dash-row">';
             html += '<div class="dashboard-card">';
             html += '<h4 style="margin:0 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🌾 Lake Summary</h4>';
             html += renderLakeSummaryList(state);
@@ -1409,7 +1407,7 @@ const Dashboard = (function () {
         html += '<div style="margin-top:0.9rem;padding:0.75rem 1rem;background:' + (activeBooking ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.1)') + ';border:1px solid ' + (activeBooking ? 'var(--colour-border)' : 'rgba(255,255,255,0.08)') + ';border-radius:var(--radius);opacity:' + (activeBooking ? '1' : '0.6') + ';">';
         html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:0.2rem;">📍 Currently Booked At</div>';
         if (bookedLake) {
-            var lakeImgPath = 'img/lakes/' + bookedLake.id.replace(/_lake$/, '') + '.png';
+            var lakeImgPath = 'data:image/svg+xml;utf8,' + encodeURIComponent(buildLakeMapSvg(bookedLake));
             html += '<div style="display:flex;gap:0.75rem;align-items:center;">';
             html += '<img src="' + lakeImgPath + '" alt="' + bookedLake.name + '" style="width:5.5rem;height:auto;border-radius:8px;border:1px solid var(--colour-border);object-fit:cover;flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
             html += '<div style="flex:1 1 0%;min-width:0;">';
@@ -1424,6 +1422,18 @@ const Dashboard = (function () {
         html += '</div>';
 
         return html;
+    }
+
+    function buildLakeMapSvg(lake) {
+        var base = 'C:/Users/fothe/carp-zip/img/lakes/' + lake.id.replace(/_lake$/, '') + '.png';
+        return '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="220" viewBox="0 0 320 220">' +
+            '<rect width="320" height="220" fill="#1b3a26"/>' +
+            '<image href="' + base + '" x="0" y="0" width="320" height="220" preserveAspectRatio="xMidYMid slice"/>' +
+            '<rect x="0" y="0" width="320" height="220" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>' +
+            '<circle cx="160" cy="110" r="18" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-dasharray="4 3"/>' +
+            '<path d="M142 110 L160 92 L178 110 L160 128 Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>' +
+            '<text x="160" y="115" font-family="sans-serif" font-size="10" fill="white" text-anchor="middle" font-weight="bold">SWIM</text>' +
+            '</svg>';
     }
 
     function renderAdamPlaceholderCard() {

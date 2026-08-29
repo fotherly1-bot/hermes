@@ -409,17 +409,21 @@ const Anglers = (function () {
             UI.showToast('Unlock required: ' + prereqName, 'warning');
             return false;
         }
+        if ((state.pendingTacklePurchases || []).indexOf(tackleId) !== -1) {
+            UI.showToast(item.name + ' is already pending delivery.', 'warning');
+            return false;
+        }
         if (!Game.spendMoney(item.cost)) {
             UI.showToast('Not enough money! You need ' + UI.formatMoney(item.cost) + '.', 'error');
             return false;
         }
-        state.anglerTackle.push(tackleId);
-        UI.showToast(item.icon + ' ' + item.name + ' added to your tackle box!', 'success');
+        (state.pendingTacklePurchases || []).push(tackleId);
+        UI.showToast(item.icon + ' ' + item.name + ' ordered — it arrives tomorrow.', 'success');
         if (typeof Finance !== 'undefined') {
-            Finance.addFinanceLog('tackle_purchase', -item.cost, item.name);
+            Finance.addFinanceLog('tackle_purchase', -item.cost, item.name + ' (pending)');
         }
-        Game.saveToStorage();
-        renderAnglers();
+        Game.saveToStorage && Game.saveToStorage();
+        renderAnglers && renderAnglers();
         return true;
     }
 
@@ -448,16 +452,19 @@ const Anglers = (function () {
             UI.showToast('You already own ' + item.name + '.', 'warning');
             return false;
         }
+        if ((state.pendingBaitPurchases || []).indexOf(baitId) !== -1) {
+            UI.showToast(item.name + ' is already pending delivery.', 'warning');
+            return false;
+        }
         if ((state.money || 0) < item.cost) {
             UI.showToast('Not enough money for ' + item.name + '.', 'error');
             return false;
         }
         state.money -= item.cost;
-        state.anglerBait = state.anglerBait || [];
-        state.anglerBait.push(baitId);
-        UI.showToast('🪱 ' + item.name + ' added to your bait stash!', 'success');
+        (state.pendingBaitPurchases || []).push(baitId);
+        UI.showToast('🪱 ' + item.name + ' ordered — it arrives tomorrow.', 'success');
         if (typeof Finance !== 'undefined') {
-            Finance.addFinanceLog('bait_purchase', -item.cost, item.name);
+            Finance.addFinanceLog('bait_purchase', -item.cost, item.name + ' (pending)');
         }
         Game.saveToStorage && Game.saveToStorage();
         renderAnglers && renderAnglers();
