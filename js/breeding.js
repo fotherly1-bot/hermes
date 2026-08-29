@@ -462,7 +462,13 @@ const Breeding = (function () {
     // ── Breeding pond destination lake ─────────────────────────────────────
     function getDestinationLakeId() {
         var s = Game.getState();
-        return s.breedingDestinationLakeId || (s.ownedLakes && s.ownedLakes.length ? s.ownedLakes[0] : null);
+        var preferred = s.breedingDestinationLakeId || (s.ownedLakes && s.ownedLakes.length ? s.ownedLakes[0] : null);
+        if (!preferred) return null;
+        if (s.lakeClosures && s.lakeClosures[preferred] && s.lakeClosures[preferred] >= s.day) {
+            var open = (s.ownedLakes || []).find(function(id){ return !(s.lakeClosures && s.lakeClosures[id] && s.lakeClosures[id] >= s.day); });
+            return open || null;
+        }
+        return preferred;
     }
 
     function setDestinationLakeId(lakeId) {
