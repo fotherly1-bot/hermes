@@ -2198,6 +2198,30 @@ body {
     white-space: nowrap;
 }
 
+.quest-category {
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.85rem;
+}
+
+.quest-category-header {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--colour-gold);
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.quest-completed-list {
+    margin-top: 0.75rem;
+    padding-left: 0.25rem;
+}
+
 /* ── Tackle Box ─────────────────────────────────────────────────── */
 .tackle-grid {
     display: grid;
