@@ -288,8 +288,13 @@ const UI = (function () {
             }
             if (typeof Game.saveToStorage === 'function') Game.saveToStorage();
             if (typeof Anglers !== 'undefined' && typeof Anglers.initState === 'function') Anglers.initState();
-            if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') Dashboard.renderDashboard();
-            if (typeof UI.renderLakes === 'function') UI.renderLakes();
+            if (typeof Game !== 'undefined' && typeof Game.getState === 'function') {
+                var st = Game.getState();
+                if (!st.playerAnglerId && typeof Anglers !== 'undefined' && Anglers.getAllAnglers && Anglers.getAllAnglers().length) {
+                    st.playerAnglerId = Anglers.getAllAnglers()[0].id;
+                }
+            }
+            UI.init();
             UI.showToast('Game loaded.', 'success');
         }
     }
