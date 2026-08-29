@@ -1435,12 +1435,7 @@ const Dashboard = (function () {
         html += '</div>';
         html += '</div>';
 
-        (function(){
-            if (!state._adamAutoStarted) {
-                state._adamAutoStarted = true;
-                Dashboard.startAdamAutoAdvance();
-            }
-        })();
+
 
         return html;
     }
