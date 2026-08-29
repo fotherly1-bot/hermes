@@ -387,15 +387,15 @@ const Shop = (function () {
             html += '<p class="tackle-subtitle">Popups, boilies, and spod mix to tempt fish into feeding.</p>';
 
             var BAIT_CATALOG = [
-              {id:'popup_white', name:'White Popups', cost:350, icon:'⚪', category:'Popups', description:'Classic white buoyant popups.', effects:{catchRateBonus:0.02}, preference:'popup_white'},
-              {id:'popup_yellow', name:'Yellow Popups', cost:400, icon:'🟡', category:'Popups', description:'Bright yellow popups for extra attraction.', effects:{catchRateBonus:0.03}, preference:'popup_yellow', lakeBonus:0.04},
-              {id:'popup_pink', name:'Pink Popups', cost:400, icon:'🩷', category:'Popups', description:'Pink popups for wary fish.', effects:{catchRateBonus:0.03}, preference:'popup_pink'},
-              {id:'popup_orange', name:'Orange Popups', cost:400, icon:'🟠', category:'Popups', description:'Orange popups for low-visibility swims.', effects:{catchRateBonus:0.03}, preference:'popup_orange'},
-              {id:'popup_purple', name:'Purple Popups', cost:420, icon:'🟣', category:'Popups', description:'Deep purple popups for specimen triggers.', effects:{catchRateBonus:0.03}, preference:'popup_purple'},
-              {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, icon:'🟤', category:'Boilies', description:'High-protein fishmeal boilies.', effects:{catchRateBonus:0.02}, preference:'boilie_fishmeal'},
-              {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, icon:'🌈', category:'Boilies', description:'Multibirdfood boilies for all-round attraction.', effects:{catchRateBonus:0.03}, preference:'boilie_birdfood'},
-              {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, icon:'🟤', category:'Boilies', description:'Tiger nut boilies for big carp.', effects:{catchRateBonus:0.03, weightBonus:0.02}, preference:'boilie_tigernut'},
-              {id:'spod_mix', name:'Spod Mix', cost:700, icon:'🪣', category:'Spod Mix', description:'Mixed particle spod mix to draw fish in.', effects:{catchRateBonus:0.04}, preference:'spod_mix', lakeBonus:0.05}
+              {id:'popup_white', name:'White Popups', cost:350, image:'img/bait/boilie-white.png', category:'Popups', description:'Classic white buoyant popups.', effects:{catchRateBonus:0.02}, preference:'popup_white'},
+              {id:'popup_yellow', name:'Yellow Popups', cost:400, image:'img/bait/boilie-yellow.png', category:'Popups', description:'Bright yellow popups for extra attraction.', effects:{catchRateBonus:0.03}, preference:'popup_yellow', lakeBonus:0.04},
+              {id:'popup_pink', name:'Pink Popups', cost:400, image:'img/bait/boilie-pink.png', category:'Popups', description:'Pink popups for wary fish.', effects:{catchRateBonus:0.03}, preference:'popup_pink'},
+              {id:'popup_orange', name:'Orange Popups', cost:400, image:'img/bait/boilie-orange.png', category:'Popups', description:'Orange popups for low-visibility swims.', effects:{catchRateBonus:0.03}, preference:'popup_orange'},
+              {id:'popup_purple', name:'Purple Popups', cost:420, image:'img/bait/boilie-purple.png', category:'Popups', description:'Deep purple popups for specimen triggers.', effects:{catchRateBonus:0.03}, preference:'popup_purple'},
+              {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, image:'img/bait/boilie-fishmeal.png', category:'Boilies', description:'High-protein fishmeal boilies.', effects:{catchRateBonus:0.02}, preference:'boilie_fishmeal'},
+              {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, image:'img/bait/boilie-birdfood.png', category:'Boilies', description:'Multibirdfood boilies for all-round attraction.', effects:{catchRateBonus:0.03}, preference:'boilie_birdfood'},
+              {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, image:'img/bait/boilie-tigernut.png', category:'Boilies', description:'Tiger nut boilies for big carp.', effects:{catchRateBonus:0.03, weightBonus:0.02}, preference:'boilie_tigernut'},
+              {id:'spod_mix', name:'Spod Mix', cost:700, image:'img/bait/spod-mix.png', category:'Spod Mix', description:'Mixed particle spod mix to draw fish in.', effects:{catchRateBonus:0.04}, preference:'spod_mix', lakeBonus:0.05}
             ];
 
             var ownedBait = (state.anglerBait || []);
@@ -403,7 +403,13 @@ const Shop = (function () {
             BAIT_CATALOG.forEach(function(item, idx){
                 var owned = ownedBait.indexOf(item.id) !== -1;
                 html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
-                html += '<div class="tackle-icon">' + item.icon + '</div>';
+                html += '<div class="tackle-icon">';
+                if (item.image) {
+                    html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<span class=\\\'tackle-icon-fallback\\\'>' + (item.icon||'🪱') + '</span>\';">';
+                } else {
+                    html += (item.icon || '🪱');
+                }
+                html += '</div>';
                 html += '<div class="tackle-name">' + item.name + '</div>';
                 html += '<div class="tackle-category">' + item.category + '</div>';
                 html += '<div class="tackle-desc">' + item.description + '</div>';
