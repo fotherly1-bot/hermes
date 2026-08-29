@@ -1482,6 +1482,12 @@ const Dashboard = (function () {
         var marketing = state.marketingCampaigns || [];
         var reputation = state.reputation || 0;
         var bookings = state.anglerBookings || [];
+        var news = (state.newsStories || []).slice(0, 40);
+        var weather = (typeof Weather !== 'undefined' && Weather.getCurrentWeather) ? Weather.getCurrentWeather() : null;
+        var wName = weather ? (weather.current || '').toLowerCase() : '';
+        var ownedCount = (state.ownedLakes || []).length;
+        var totalCaught = (state.anglerStats && state.playerAngler && state.anglerStats[state.playerAngler]) ? (state.anglerStats[state.playerAngler].fishCaught || 0) : 0;
+        var rodLevel = getPlayerRodLevel(state);
 
         if (!urgentOnly) {
             out.push({ text: 'Hey bud, you’re missing a Marketing Manager — you should probably hire one.', level: 'warning' });
@@ -1493,6 +1499,37 @@ const Dashboard = (function () {
             }
             if (bookings.length === 0) {
                 out.push({ text: 'No upcoming bookings. Book an angler to keep cash flow moving.', level: 'info' });
+            }
+            if (totalCaught === 0 && rodLevel > 0) {
+                out.push({ text: 'You’ve got the gear but no fish yet — time to wet a line, mate.', level: 'info' });
+            }
+            if (rodLevel < 2) {
+                out.push({ text: 'Upgrade your rod in the Tackle shop — distance wins matches.', level: 'warning' });
+            }
+            if (wName) {
+                if (wName.indexOf('rain') !== -1) {
+                    out.push({ text: 'Rainy today — perfect carp conditions if you’ve got the right rigs.', level: 'info' });
+                } else if (wName.indexOf('sun') !== -1 || wName.indexOf('clear') !== -1) {
+                    out.push({ text: 'Sunny and clear — fish might be deeper, so don’t neglect the bottom baits.', level: 'info' });
+                } else if (wName.indexOf('cloud') !== -1) {
+                    out.push({ text: 'Cloud cover keeps the fish cruising — good day for a long cast.', level: 'info' });
+                } else if (wName.indexOf('storm') !== -1) {
+                    out.push({ text: 'Stormy weather means chaotic feeding. Stay safe and fish tight lines.', level: 'warning' });
+                } else if (wName.indexOf('frost') !== -1 || wName.indexOf('snow') !== -1) {
+                    out.push({ text: 'Cold snap — switch to smaller baits and expect slow bites.', level: 'warning' });
+                } else if (wName.indexOf('heat') !== -1) {
+                    out.push({ text: 'Heatwave on the way. Fish early or late, or use a bivvy with shade.', level: 'warning' });
+                }
+            }
+            var recentCatch = news.find(function (s) { return /caught|trophy|record|mirror|common|ghost/i.test(s.headline || s.body || ''); });
+            if (recentCatch) {
+                out.push({ text: 'Heard on the grapevine: "' + strip(recentCatch.headline || recentCatch.body || '') + '"', level: 'info' });
+            }
+            if (aliveFish.length > 50 && ownedCount > 0) {
+                out.push({ text: 'Stock is booming across your lakes. Time to host a premium booking?', level: 'info' });
+            }
+            if (ownedCount === 0) {
+                out.push({ text: 'You don’t own a lake yet — Oakmere is waiting for a new owner.', level: 'warning' });
             }
         }
 
@@ -1508,15 +1545,39 @@ const Dashboard = (function () {
             if (fishHere >= capacity) {
                 out.unshift({ text: 'Urgent: ' + name + ' is at max population. Move fish or expand capacity.', level: 'critical' });
             }
-            if (fishHere === 0 && ownedLakes.indexOf(lakeId) !== -1) {
+            if (fishHere === 0 && (state.ownedLakes || []).indexOf(lakeId) !== -1) {
                 out.unshift({ text: name + ' looks dead — stock it before you lose reputation.', level: 'critical' });
             }
         }
 
-        if (out.length === 0) {
-            out.push({ text: 'Things look steady. Keep an eye on lake stock and marketing.', level: 'info' });
+        if (out.length === 0 || (out.filter(function (x) { return x.level === 'info'; }).length === out.length && out.length > 3)) {
+            out = out.slice(0, 3);
+            var jokes = [
+                'Why do carp love anglers? Because we bring the snacks and tell the best stories.',
+                'I once saw a 30lb mirror leap out the water just to slap a poacher. True story.',
+                'If your float’s not moving, neither is the mortgage payment.',
+                'The only thing stronger than a 20lb common is an angler’s optimism.',
+                'Carp don’t care about your spreadsheets. They care about boilies.'
+            ];
+            out.push({ text: jokes[Math.floor(Math.random() * jokes.length)], level: 'info' });
+            if (Math.random() < 0.5) {
+                out.push({ text: 'Fish of the day: a 28lb 4oz ghostie from a secret swim I can’t mention.', level: 'info' });
+            }
         }
+
         return out.slice(0, 20);
+    }
+
+    function getPlayerRodLevel(state) {
+        var rodId = (state && state.rigLoadout && state.rigLoadout.rodId) ? state.rigLoadout.rodId : '';
+        if (!rodId) return 0;
+        var order = ['rod_12ft','rod_carbon','rod_13ft','rod_custom'];
+        var idx = order.indexOf(rodId);
+        return idx === -1 ? 0 : idx + 1;
+    }
+
+    function strip(str) {
+        return str.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
     }
 
     function setAdamAdvicePage(page) {
