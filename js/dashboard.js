@@ -1396,8 +1396,19 @@ const Dashboard = (function () {
         var bookedLake = activeBooking ? (typeof Lakes !== 'undefined' ? Lakes.getLakeById(activeBooking.lakeId) : null) : null;
         html += '<div style="margin-top:0.9rem;padding:0.75rem 1rem;background:' + (activeBooking ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.1)') + ';border:1px solid ' + (activeBooking ? 'var(--colour-border)' : 'rgba(255,255,255,0.08)') + ';border-radius:var(--radius);opacity:' + (activeBooking ? '1' : '0.6') + ';">';
         html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:0.2rem;">📍 Currently Booked At</div>';
-        html += '<div style="font-weight:700;color:' + (activeBooking ? 'var(--colour-accent)' : 'var(--colour-text-muted)') + ';">' + (bookedLake ? bookedLake.name : 'Not booked') + '</div>';
-        html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.15rem;">' + (activeBooking ? 'Day ' + activeBooking.startDay + ' – ' + activeBooking.endDay : '—') + '</div>';
+        if (bookedLake) {
+            var lakeImgPath = 'img/lakes/' + bookedLake.id.replace(/_lake$/, '') + '.png';
+            html += '<div style="display:flex;gap:0.75rem;align-items:center;">';
+            html += '<img src="' + lakeImgPath + '" alt="' + bookedLake.name + '" style="width:5.5rem;height:auto;border-radius:8px;border:1px solid var(--colour-border);object-fit:cover;flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
+            html += '<div style="flex:1 1 0%;min-width:0;">';
+            html += '<div style="font-weight:700;color:var(--colour-accent);">' + bookedLake.name + '</div>';
+            html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.15rem;">Day ' + activeBooking.startDay + ' – ' + activeBooking.endDay + '</div>';
+            html += '</div>';
+            html += '</div>';
+        } else {
+            html += '<div style="font-weight:700;color:var(--colour-text-muted);">Not booked</div>';
+            html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.15rem;">—</div>';
+        }
         html += '</div>';
 
         return html;
@@ -1409,7 +1420,7 @@ const Dashboard = (function () {
 
         var borderColour = advice.level === 'critical' ? '#e74c3c' : (advice.level === 'warning' ? '#d4a843' : 'var(--colour-accent)');
         var bg = advice.level === 'critical' ? 'rgba(231, 76, 60, 0.12)' : (advice.level === 'warning' ? 'rgba(212, 168, 67, 0.12)' : 'rgba(0,0,0,0.15)');
-        var html = '<div class="dashboard-card" style="margin-bottom:1.2rem;">';
+        var html = '<div class="dashboard-card" style="margin-bottom:1.2rem;" onmouseenter="clearTimeout(Dashboard._adamAutoTimer);" onmouseleave="Dashboard.startAdamAutoAdvance();">';
         html += '<div style="display:flex;align-items:center;gap:1rem;">';
         html += '<div style="flex:1 1 0%;min-width:0;position:relative;z-index:0;">';
         html += '<h4 style="margin:0 0 0.7rem;font-size:1.05rem;color:var(--colour-gold);position:relative;z-index:1;letter-spacing:0.3px;">🎣 Advice from Adam Penning</h4>';
@@ -1424,8 +1435,28 @@ const Dashboard = (function () {
         html += '</div>';
         html += '</div>';
 
+        (function(){
+            if (!state._adamAutoStarted) {
+                state._adamAutoStarted = true;
+                Dashboard.startAdamAutoAdvance();
+            }
+        })();
+
         return html;
     }
+
+    Dashboard.startAdamAutoAdvance = function() {
+        clearTimeout(Dashboard._adamAutoTimer);
+        Dashboard._adamAutoTimer = setTimeout(function() {
+            try {
+                var st = typeof Game !== 'undefined' ? Game.getState() : null;
+                if (st && st.adamAdvice && st.adamAdvice.length > 1) {
+                    Dashboard.nextAdamAdvice();
+                    if (st._dashTab === 'overview' && typeof renderDashboard === 'function') renderDashboard();
+                }
+            } catch (e) {}
+        }, 6000);
+    };
 
     function getAdamAdvice(state) {
         if (!state.adamAdvice || state.adamAdvice.length === 0) return null;
