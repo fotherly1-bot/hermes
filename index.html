@@ -235,38 +235,48 @@
     <script src="js/weather.js?v=13"></script>
     <script src="js/breeding.js?v=16"></script>
     <script src="js/finance.js?v=14"></script>
-    <script src="js/dashboard.js?v=61"></script>
+    <script src="js/dashboard.js?v=62"></script>
     <script src="js/lakes.js?v=36"></script>
     <script src="js/welcome-entry.js?v=17"></script>
     <script src="js/staff.js?v=14"></script>
     <script>
         window.addEventListener('DOMContentLoaded', function () {
             if (typeof Game === 'undefined' || typeof Game.init !== 'function') return;
-            Game.init();
-            if (typeof Welcome === 'undefined' || typeof Welcome.show !== 'function') return;
 
-            // Skip welcome screen if save exists — go straight to dashboard
             try {
                 var saved = localStorage.getItem('carpFishingTycoon_saveData');
-                if (saved) {
-                    if (typeof Game !== 'undefined' && typeof Game.init === 'function') {
-                        try { Game.init(); } catch (e) { console.warn('Game.init failed on load', e); }
+                console.log('[load] raw saved length=', saved ? saved.length : 0);
+                var hasSave = !!saved;
+
+                if (typeof Game.init === 'function') {
+                    try {
+                        var initResult = Game.init();
+                        console.log('[load] Game.init result keys=', initResult ? Object.keys(initResult).sort().join(',') : 'null/undefined');
+                    } catch (e) {
+                        console.warn('[load] Game.init failed', e);
                     }
-                    if (typeof Anglers !== 'undefined' && typeof Anglers.initState === 'function') {
-                        try { Anglers.initState(); } catch (e) { console.warn('Anglers.initState failed on load', e); }
-                    }
-                    if (typeof UI !== 'undefined' && typeof UI.init === 'function') {
-                        try { UI.init(); } catch (e) { console.warn('UI.init failed on load', e); }
-                    }
+                }
+                if (typeof Anglers !== 'undefined' && typeof Anglers.initState === 'function') {
+                    try { Anglers.initState(); } catch (e) { console.warn('[load] Anglers.initState failed', e); }
+                }
+                if (typeof UI !== 'undefined' && typeof UI.init === 'function') {
+                    try { UI.init(); } catch (e) { console.warn('[load] UI.init failed', e); }
+                }
+
+                if (hasSave) {
                     if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') {
-                        try { Dashboard.renderDashboard(); } catch (e) { console.warn('Dashboard.renderDashboard failed on load', e); }
+                        try { Dashboard.renderDashboard(); } catch (e) { console.warn('[load] Dashboard.renderDashboard failed', e); }
                     }
                     return;
                 }
+
+                if (typeof Welcome !== 'undefined' && typeof Welcome.show === 'function') {
+                    Welcome.show();
+                }
             } catch (e) {
-                // localStorage unavailable — fall back to welcome
+                console.warn('[load] top-level load failed', e);
+                try { if (typeof Welcome !== 'undefined' && typeof Welcome.show === 'function') Welcome.show(); } catch (e2) {}
             }
-            Welcome.show();
         });
     </script>
 </body>
