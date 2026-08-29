@@ -1409,18 +1409,18 @@ const Dashboard = (function () {
 
         var borderColour = advice.level === 'critical' ? '#e74c3c' : (advice.level === 'warning' ? '#d4a843' : 'var(--colour-accent)');
         var bg = advice.level === 'critical' ? 'rgba(231, 76, 60, 0.12)' : (advice.level === 'warning' ? 'rgba(212, 168, 67, 0.12)' : 'rgba(0,0,0,0.15)');
-        var html = '<div class="dashboard-card" style="margin-bottom:1.1rem;">';
-        html += '<div style="display:flex;align-items:center;gap:0.9rem;">';
+        var html = '<div class="dashboard-card" style="margin-bottom:1.2rem;">';
+        html += '<div style="display:flex;align-items:center;gap:1rem;">';
         html += '<div style="flex:1 1 0%;min-width:0;position:relative;z-index:0;">';
-        html += '<h4 style="margin:0 0 0.6rem;font-size:1rem;color:var(--colour-gold);position:relative;z-index:1;">🎣 Advice from Adam Penning</h4>';
-        html += '<div class="speech-bubble" style="background:' + bg + ';border:1px solid ' + borderColour + ';border-radius:12px;padding:1rem 1.1rem;color:var(--colour-text);min-height:6.5rem;position:relative;z-index:0;">' + advice.text + '</div>';
-        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.75rem;gap:0.6rem;position:relative;z-index:2;">';
-        html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;" onclick="Dashboard.prevAdamAdvice();return false;" ' + (advice.page <= 0 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>◀ Prev</a>';
-        html += '<span style="font-size:0.8rem;color:var(--colour-text-muted);">Tip ' + (advice.page + 1) + ' of ' + advice.pages + '</span>';
-        html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;" onclick="Dashboard.nextAdamAdvice();return false;" ' + (advice.page >= advice.pages - 1 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>Next ▶</a>';
+        html += '<h4 style="margin:0 0 0.7rem;font-size:1.05rem;color:var(--colour-gold);position:relative;z-index:1;letter-spacing:0.3px;">🎣 Advice from Adam Penning</h4>';
+        html += '<div class="speech-bubble" style="background:' + bg + ';border:1px solid ' + borderColour + ';border-radius:14px;padding:1.3rem 1.4rem;color:var(--colour-text);min-height:14rem;position:relative;z-index:0;font-size:0.95rem;line-height:1.55;box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(0,0,0,0.25);">' + advice.text + '</div>';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.9rem;gap:0.7rem;position:relative;z-index:2;">';
+        html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5.5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;padding:0.45rem 0.9rem;font-size:0.85rem;" onclick="Dashboard.prevAdamAdvice();return false;" ' + (advice.page <= 0 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>◀ Prev</a>';
+        html += '<span style="font-size:0.85rem;color:var(--colour-text-muted);font-weight:600;">Tip ' + (advice.page + 1) + ' of ' + advice.pages + '</span>';
+        html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5.5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;padding:0.45rem 0.9rem;font-size:0.85rem;" onclick="Dashboard.nextAdamAdvice();return false;" ' + (advice.page >= advice.pages - 1 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>Next ▶</a>';
         html += '</div>';
         html += '</div>';
-        html += '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:7.5rem;height:auto;max-height:10rem;object-fit:contain;border-radius:var(--radius);border:1px solid var(--colour-border);background:rgba(0,0,0,0.2);flex:0 0 auto;position:relative;z-index:1;" onerror="this.style.display=\'none\'" />';
+        html += '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:8.5rem;height:auto;max-height:12rem;object-fit:contain;border-radius:var(--radius);border:1px solid var(--colour-border);background:rgba(0,0,0,0.25);flex:0 0 auto;position:relative;z-index:1;box-shadow: 0 4px 14px rgba(0,0,0,0.35);" onerror="this.style.display=\'none\'" />';
         html += '</div>';
         html += '</div>';
 
