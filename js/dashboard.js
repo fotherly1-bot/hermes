@@ -1420,7 +1420,7 @@ const Dashboard = (function () {
         html += '<a href="#" class="btn btn-secondary btn-sm" style="min-width:5.5rem;position:relative;text-align:center;display:inline-flex;align-items:center;justify-content:center;padding:0.45rem 0.9rem;font-size:0.85rem;" onclick="Dashboard.nextAdamAdvice();return false;" ' + (advice.page >= advice.pages - 1 ? 'aria-disabled="true" style="pointer-events:none;opacity:0.5;"' : '') + '>Next ▶</a>';
         html += '</div>';
         html += '</div>';
-        html += '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:8.5rem;height:auto;max-height:12rem;object-fit:contain;border-radius:var(--radius);border:1px solid var(--colour-border);background:rgba(0,0,0,0.25);flex:0 0 auto;position:relative;z-index:1;box-shadow: 0 4px 14px rgba(0,0,0,0.35);" onerror="this.style.display=\'none\'" />';
+        html += '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:12rem;height:auto;max-height:none;object-fit:contain;flex:0 0 auto;position:relative;z-index:1;" onerror="this.style.display=\'none\'" />';
         html += '</div>';
         html += '</div>';
 
