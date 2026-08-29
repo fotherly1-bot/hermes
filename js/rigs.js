@@ -47,9 +47,10 @@
                 id: 'hair',
                 name: 'Hair Rig',
                 description: 'The iconic carp rig. Hookbait sits away from the lead for natural presentation.',
-                icon: '🧵',
+                icon: '🎣',
+                image: 'img/rigs/rod112.png',
                 category: 'Rig',
-                cost: 2000,
+                cost: 0,
                 leadTypes: ['inline', 'lead_clip', 'running'],
                 bestLead: 'lead_clip',
                 baseCatchMod: 0.04,
@@ -61,6 +62,7 @@
                 name: 'Chod Rig',
                 description: 'Perfect for weedy, silty, or rocky bottoms. The hook sits proud for easy pickup.',
                 icon: '🌿',
+                image: 'img/rigs/rod112.png',
                 category: 'Rig',
                 cost: 4000,
                 leadTypes: ['heli', 'lead_clip', 'inline'],
@@ -74,6 +76,7 @@
                 name: 'Zig Rig',
                 description: 'Floating zig rig for mid-water presentations. Devastating on warm, active carp.',
                 icon: '〰️',
+                image: 'img/rigs/rod112.png',
                 category: 'Rig',
                 cost: 2500,
                 leadTypes: ['inline', 'running'],
@@ -87,6 +90,7 @@
                 name: 'Dumpy Rig',
                 description: 'Short, heavy rig for rough conditions and long-range casting. Ideal for windy days.',
                 icon: '⚓',
+                image: 'img/rigs/rod112.png',
                 category: 'Rig',
                 cost: 3500,
                 leadTypes: ['lead_clip', 'running', 'inline'],
@@ -100,6 +104,7 @@
                 name: 'Pop-up Rig',
                 description: 'Buoyant hookbait rig that lifts bait off the bottom. Great for weedy lakes and cautious fish.',
                 icon: '🫧',
+                image: 'img/rigs/rod112.png',
                 category: 'Rig',
                 cost: 2800,
                 leadTypes: ['inline', 'lead_clip', 'heli'],
@@ -284,6 +289,7 @@
                     rodLabel: 'Rod ' + (i + 1),
                     rigName: def ? def.name : 'Empty',
                     rigIcon: def ? def.icon : '🎣',
+                    rigImage: def ? def.image : '',
                     leadName: lead ? lead.name : '',
                     leadIcon: lead ? lead.icon : '',
                     baitName: baitDef ? baitDef.name : 'None',
@@ -308,7 +314,13 @@
                 html += '<div class="rig-rod-col">';
                 html += '<div class="rig-rod-card">';
                 html += '<div class="rig-rod-label">' + summary.rodLabel + '</div>';
-                html += '<div class="rig-rod-icon">' + summary.rigIcon + '</div>';
+                html += '<div class="rig-rod-icon">';
+                if (summary.rigImage) {
+                    html += '<img src="' + summary.rigImage + '" alt="' + summary.rigName + '" class="rig-rod-img" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'' + summary.rigIcon + '\';">';
+                } else {
+                    html += summary.rigIcon;
+                }
+                html += '</div>';
                 html += '<div class="rig-rod-name">' + summary.rigName + '</div>';
                 html += '<div class="rig-rod-lead">' + summary.leadIcon + ' ' + summary.leadName + '</div>';
                 var fx = getEquippedRigEffects();
