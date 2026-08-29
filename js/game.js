@@ -617,6 +617,14 @@ const Game = (function () {
             Dashboard.checkQuests();
         }
 
+        // Remove claimed angler quests after 3 days
+        if (state.anglerQuests && state.anglerQuests.length) {
+            var cutoff = state.day - 3;
+            state.anglerQuests = state.anglerQuests.filter(function (q) {
+                return !(q.claimed && q.claimedDay && q.claimedDay <= cutoff);
+            });
+        }
+
         // Process card buffs
         if (typeof Cards !== 'undefined') {
             Cards.processBuffs();

@@ -2137,6 +2137,11 @@ body {
     border-color: var(--colour-accent);
 }
 
+.angler-quest-card.quest-claimed {
+    opacity: 0.45;
+    filter: grayscale(0.35);
+}
+
 .quest-header {
     display: flex;
     justify-content: space-between;

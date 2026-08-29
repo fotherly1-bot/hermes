@@ -2336,6 +2336,7 @@ const Anglers = (function () {
         var quest = state.anglerQuests.find(function(q){ return q.id === questId; });
         if (!quest || !quest.completed || quest.claimed) return;
         quest.claimed = true;
+        quest.claimedDay = state.day;
         state.money += quest.rewardMoney;
         state.reputation += quest.rewardRep;
         if (typeof Finance !== 'undefined') {
