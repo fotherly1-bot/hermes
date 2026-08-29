@@ -544,24 +544,24 @@ const Dashboard = (function () {
             return;
         }
 
-        // ── Row 0: Your Angler | Top Catch ──────────────────────────────────────
+        // ── Row 0: Your Angler | Lake Summary ──────────────────────────────────
         html += '<div class="dash-row dash-row-equal">';
         html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
         html += '<div class="dashboard-card">';
         html += '<h4 style="margin-bottom:0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">\uD83C\uDF3E Lake Summary</h4>';
         html += renderLakeSummaryList(state);
-        html += '<h3 class="section-heading" style="margin-top:1rem;">\uD83C\uDFC6 Top Catch</h3>';
+        html += '</div>';
+        html += '</div>';
+
         var aliveFish = state.fish.filter(function(f){ return f.alive; });
+
+        // ── Row 1: Fish cards under angler info ─────────────────────────────────
         if (aliveFish.length > 0) {
-            html += '<div class="dash-row-2-2">';
-            html += renderMostExpensiveFishCard(state);
-            html += renderAnglerPBCard(state);
+            html += '<div class="dash-row dash-row-2-2">';
+            html += '<div class="dashboard-card">' + renderMostExpensiveFishCard(state) + '</div>';
+            html += '<div class="dashboard-card">' + renderAnglerPBCard(state) + '</div>';
             html += '</div>';
-        } else {
-            html += '<p class="empty-state">No fish yet.</p>';
         }
-        html += '</div>';
-        html += '</div>';
 
         // ── Row 1: Fishery Pulse ─────────────────────────────────────────────────
         html += '<div class="dash-row">';
