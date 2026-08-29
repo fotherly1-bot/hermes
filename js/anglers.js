@@ -357,18 +357,18 @@ const Anglers = (function () {
         var owned = state.anglerBait || [];
         var combined = { weightBonus: 0, catchRateBonus: 0, lakeBonus: 0 };
         var catalog = [];
-        try { catalog = (typeof Shop !== 'undefined' && Shop.getBaitCatalog) ? Shop.getBaitCatalog() : []; } catch(e) {}
+        catalog = [];
         if (!catalog.length) {
             catalog = [
-                {id:'popup_white', name:'White Popups', cost:350, effects:{catchRateBonus:0.02}},
-                {id:'popup_yellow', name:'Yellow Popups', cost:400, effects:{catchRateBonus:0.03, lakeBonus:0.04}},
-                {id:'popup_pink', name:'Pink Popups', cost:400, effects:{catchRateBonus:0.03}},
-                {id:'popup_orange', name:'Orange Popups', cost:400, effects:{catchRateBonus:0.03}},
-                {id:'popup_purple', name:'Purple Popups', cost:420, effects:{catchRateBonus:0.03}},
+                {id:'popup_white', name:'White Popups', cost:350, effects:{catchRateBonus:0.01}},
+                {id:'popup_yellow', name:'Yellow Popups', cost:400, effects:{catchRateBonus:0.01, lakeBonus:0.02}},
+                {id:'popup_pink', name:'Pink Popups', cost:400, effects:{catchRateBonus:0.01}},
+                {id:'popup_orange', name:'Orange Popups', cost:400, effects:{catchRateBonus:0.01}},
+                {id:'popup_purple', name:'Purple Popups', cost:420, effects:{catchRateBonus:0.01}},
                 {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, effects:{catchRateBonus:0.02}},
-                {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, effects:{catchRateBonus:0.03}},
-                {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, effects:{catchRateBonus:0.03, weightBonus:0.02}},
-                {id:'spod_mix', name:'Spod Mix', cost:700, effects:{catchRateBonus:0.04, lakeBonus:0.05}}
+                {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, effects:{catchRateBonus:0.02}},
+                {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, effects:{catchRateBonus:0.02, weightBonus:0.01}},
+                {id:'spod_mix', name:'Spod Mix', cost:550, effects:{catchRateBonus:0.01, lakeBonus:0.02}}
             ];
         }
         var lookup = {};
@@ -422,7 +422,7 @@ const Anglers = (function () {
         initState();
         var state = Game.getState();
         var catalog = [];
-        try { catalog = (typeof Shop !== 'undefined' && Shop.getBaitCatalog) ? Shop.getBaitCatalog() : []; } catch(e) {}
+        catalog = [];
         if (!catalog.length) {
             catalog = [
                 {id:'popup_white', name:'White Popups', cost:350},
@@ -433,7 +433,7 @@ const Anglers = (function () {
                 {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500},
                 {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550},
                 {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600},
-                {id:'spod_mix', name:'Spod Mix', cost:700}
+                {id:'spod_mix', name:'Spod Mix', cost:550}
             ];
         }
         var item = catalog.find(function(b){ return b.id === baitId; });
