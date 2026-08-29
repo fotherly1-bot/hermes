@@ -548,7 +548,9 @@ const Dashboard = (function () {
         html += '<div class="dash-row dash-row-equal">';
         html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
         html += '<div class="dashboard-card">';
-        html += '<h3 class="section-heading">🏆 Top Catch</h3>';
+        html += '<h4 style="margin-bottom:0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">\uD83C\uDF3E Lake Summary</h4>';
+        html += renderLakeSummaryList(state);
+        html += '<h3 class="section-heading" style="margin-top:1rem;">\uD83C\uDFC6 Top Catch</h3>';
         var aliveFish = state.fish.filter(function(f){ return f.alive; });
         if (aliveFish.length > 0) {
             html += '<div class="dash-row-2-2">';
@@ -558,8 +560,6 @@ const Dashboard = (function () {
         } else {
             html += '<p class="empty-state">No fish yet.</p>';
         }
-        html += '<h4 style="margin-top:1rem;margin-bottom:0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏞 Lake Summary</h4>';
-        html += renderLakeSummaryTiles(state);
         html += '</div>';
         html += '</div>';
 
@@ -2362,8 +2362,8 @@ const Dashboard = (function () {
         return html;
     }
 
-    function renderLakeSummaryTiles(state) {
-        var html = '<div class="lake-summary-grid">';
+    function renderLakeSummaryList(state) {
+        var html = '<div class="lake-summary-list">';
         var owned = state.ownedLakes || [];
         if (owned.length === 0) {
             html += '<p class="empty-state">No lakes owned yet. Visit Buy Lakes to expand your fishery.</p>';
@@ -2377,13 +2377,34 @@ const Dashboard = (function () {
             var lakeFish = state.fish.filter(function(f){ return f.alive && f.lake_id === lakeId; });
             var expBonus = (typeof Lakes !== 'undefined' && Lakes.getLakeExpansionBonus) ? Lakes.getLakeExpansionBonus(lakeId) : { capacity:0 };
             var effectiveCap = lake.capacity + (expBonus.capacity || 0);
+            var capPenalty = (state.capacityPenalties && state.capacityPenalties[lakeId]) ? (state.capacityPenalties[lakeId].amount || 0) : 0;
+            var netCap = Math.max(0, effectiveCap - capPenalty);
+            var occupancy = netCap > 0 ? Math.round((lakeFish.length / netCap) * 100) : 0;
 
-            html += '<div class="lake-summary-tile">';
+            var oxygen = (typeof Weather !== 'undefined' && Weather.getLakeOxygen) ? Weather.getLakeOxygen(lakeId) : null;
+            var oxyStatus = (typeof Weather !== 'undefined' && Weather.getOxygenStatus && oxygen !== null) ? Weather.getOxygenStatus(oxygen) : null;
+            var oxyLabel = oxyStatus ? (oxyStatus.label || oxygen + ' mg/L') : (oxygen !== null ? oxygen + ' mg/L' : '—');
+            var oxyClass = oxyStatus ? (oxyStatus.cssClass || '') : '';
+
+            var bio = (typeof Lakes !== 'undefined' && typeof Lakes.getLakeById === 'function') ? (Lakes.getLakeById(lakeId).biodiversityScore || 0) : 0;
+            var treated = !!(state.lakeWaterTreatments && state.lakeWaterTreatments[lakeId] && state.lakeWaterTreatments[lakeId].endDay >= state.day);
+            var treatLeft = treated ? (state.lakeWaterTreatments[lakeId].endDay - state.day + 1) : 0;
+
+            var healthPct = Math.max(0, Math.min(100, Math.round((bio / 10) * 70 + (oxyStatus ? 30 : 0))));
+            var healthLabel = healthPct >= 80 ? 'Healthy' : healthPct >= 50 ? 'Fair' : 'Poor';
+            var healthColour = healthPct >= 80 ? 'var(--colour-accent)' : healthPct >= 50 ? '#d4a843' : 'var(--colour-danger)';
+
+            var qualityLabel = treated ? 'Treated ' + treatLeft + 'd' : (oxyStatus ? oxyStatus.label : 'Unknown');
+            var qualityColour = treated ? 'var(--colour-accent)' : (oxyStatus ? (oxyStatus.cssClass === 'oxygen-excellent' || oxyStatus.cssClass === 'oxygen-good' ? 'var(--colour-accent)' : oxyStatus.cssClass === 'oxygen-low' ? '#d4a843' : 'var(--colour-danger)') : 'var(--colour-text-muted)');
+
+            html += '<div class="lake-summary-row">';
+            html += '<div class="lake-summary-main">';
             html += '<div class="lake-summary-name">' + lake.name + '</div>';
-            html += '<div class="lake-summary-meta">Owned</div>';
-            html += '<div class="lake-summary-stats">';
-            html += '<div><span class="lake-summary-value">' + lakeFish.length + '</span><span class="lake-summary-label">Fish</span></div>';
-            html += '<div><span class="lake-summary-value">' + effectiveCap + '</span><span class="lake-summary-label">Capacity</span></div>';
+            html += '<div class="lake-summary-meta">' + lakeFish.length + '/' + netCap + ' fish · ' + occupancy + '% full</div>';
+            html += '</div>';
+            html += '<div class="lake-summary-pills">';
+            html += '<span class="lake-pill" style="color:' + healthColour + ';border-color:' + healthColour + ';">🫀 Health: ' + healthLabel + ' · ' + bio + '/10</span>';
+            html += '<span class="lake-pill" style="color:' + qualityColour + ';border-color:' + qualityColour + ';">💧 Water: ' + qualityLabel + (oxyLabel !== '—' ? ' · ' + oxyLabel : '') + '</span>';
             html += '</div>';
             html += '</div>';
         });

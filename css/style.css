@@ -352,18 +352,25 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* === Lake Summary Tiles === */
-.lake-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
+/* === Lake Summary List === */
+.lake-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
-.lake-summary-tile {
+.lake-summary-row {
     background: var(--colour-card);
     border-radius: var(--radius);
-    padding: 1rem 1.1rem;
+    padding: 0.9rem 1rem;
     border: 1px solid var(--colour-border);
     box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.lake-summary-main {
+    min-width: 0;
 }
 .lake-summary-name {
     font-weight: 700;
@@ -373,21 +380,24 @@ body {
 .lake-summary-meta {
     font-size: 0.78rem;
     color: var(--colour-text-muted);
-    margin: 0.15rem 0 0.5rem;
+    margin-top: 0.15rem;
 }
-.lake-summary-stats {
+.lake-summary-pills {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
-.lake-summary-value {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #fff;
-}
-.lake-summary-label {
-    font-size: 0.75rem;
-    color: var(--colour-text-muted);
-    margin-left: 0.25rem;
+.lake-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border: 1px solid;
+    border-radius: 999px;
+    padding: 0.35rem 0.6rem;
+    background: rgba(0,0,0,0.25);
+    white-space: nowrap;
 }
 
 .lake-card.owned {
