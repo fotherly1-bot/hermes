@@ -1450,10 +1450,15 @@ const Dashboard = (function () {
         if (!keepPage) {
             var urgent = hasUrgentAdvice(state);
             var hasCritical = state.adamAdvice.some(function (a) { return a.level === 'critical'; });
-            if (urgent || hasCritical !== urgent || day - state.adamAdviceLastDay >= 3 || state.adamAdvice.length === 0) {
+            var staff = state.hiredStaff || [];
+            var staffKey = staff.map(function (s) { return (s.role || '') + ':' + (s.id || ''); }).join('|');
+            var lastStaffKey = state._adamAdviceStaffKey || '';
+            var staffChanged = staffKey !== lastStaffKey;
+            if (urgent || hasCritical !== urgent || staffChanged || day - state.adamAdviceLastDay >= 3 || state.adamAdvice.length === 0) {
                 state.adamAdviceLastDay = day;
                 state.adamAdvice = generateAdamAdvice(state, urgent);
                 state._adamPage = 0;
+                state._adamAdviceStaffKey = staffKey;
             }
         }
     }
@@ -1495,6 +1500,8 @@ const Dashboard = (function () {
         var ownedCount = (state.ownedLakes || []).length;
         var totalCaught = (state.anglerStats && state.playerAngler && state.anglerStats[state.playerAngler]) ? (state.anglerStats[state.playerAngler].fishCaught || 0) : 0;
         var rodLevel = getPlayerRodLevel(state);
+        var roles = {};
+        staff.forEach(function (s) { roles[s.role] = (roles[s.role] || 0) + 1; });
 
         if (!urgentOnly) {
             if (!roles['marketer']) {
