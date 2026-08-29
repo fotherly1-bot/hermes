@@ -1431,7 +1431,7 @@ const Dashboard = (function () {
     }
 
     function buildLakeMapSvg(lake) {
-        var base = 'C:/Users/fothe/carp-zip/img/lakes/' + lake.id.replace(/_lake$/, '') + '.png';
+        var base = 'img/lakes/' + lake.id.replace(/_lake$/, '') + '.png';
         return '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="220" viewBox="0 0 320 220">' +
             '<rect width="320" height="220" fill="#1b3a26"/>' +
             '<image href="' + base + '" x="0" y="0" width="320" height="220" preserveAspectRatio="xMidYMid slice"/>' +
