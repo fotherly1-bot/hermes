@@ -387,11 +387,11 @@ const Shop = (function () {
             html += '<p class="tackle-subtitle">Popups, boilies, and spod mix to tempt fish into feeding.</p>';
 
             var BAIT_CATALOG = [
-              {id:'popup_white', name:'White Popups', cost:350, image:'img/bait/boilie-white.png', category:'Popups', description:'Classic white buoyant popups.', effects:{catchRateBonus:0.01}, preference:'popup_white'},
-              {id:'popup_yellow', name:'Yellow Popups', cost:400, image:'img/bait/boilie-yellow.png', category:'Popups', description:'Bright yellow popups for extra attraction.', effects:{catchRateBonus:0.01}, preference:'popup_yellow', lakeBonus:0.02},
-              {id:'popup_pink', name:'Pink Popups', cost:400, image:'img/bait/boilie-pink.png', category:'Popups', description:'Pink popups for wary fish.', effects:{catchRateBonus:0.01}, preference:'popup_pink'},
-              {id:'popup_orange', name:'Orange Popups', cost:400, image:'img/bait/boilie-orange.png', category:'Popups', description:'Orange popups for low-visibility swims.', effects:{catchRateBonus:0.01}, preference:'popup_orange'},
-              {id:'popup_purple', name:'Purple Popups', cost:420, image:'img/bait/boilie-purple.png', category:'Popups', description:'Deep purple popups for specimen triggers.', effects:{catchRateBonus:0.01}, preference:'popup_purple'},
+              {id:'popup_white', name:'White Popups', cost:350, image:'img/bait/popup-white.png', category:'Popups', description:'Classic white buoyant popups.', effects:{catchRateBonus:0.01}, preference:'popup_white'},
+              {id:'popup_yellow', name:'Yellow Popups', cost:400, image:'img/bait/popup-yellow.png', category:'Popups', description:'Bright yellow popups for extra attraction.', effects:{catchRateBonus:0.01}, preference:'popup_yellow', lakeBonus:0.02},
+              {id:'popup_pink', name:'Pink Popups', cost:400, image:'img/bait/popup-pink.png', category:'Popups', description:'Pink popups for wary fish.', effects:{catchRateBonus:0.01}, preference:'popup_pink'},
+              {id:'popup_orange', name:'Orange Popups', cost:400, image:'img/bait/popup-orange.png', category:'Popups', description:'Orange popups for low-visibility swims.', effects:{catchRateBonus:0.01}, preference:'popup_orange'},
+              {id:'popup_purple', name:'Purple Popups', cost:420, image:'img/bait/popup-purple.png', category:'Popups', description:'Deep purple popups for specimen triggers.', effects:{catchRateBonus:0.01}, preference:'popup_purple'},
               {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, image:'img/bait/boilie-fishmeal.png', category:'Boilies', description:'High-protein fishmeal boilies.', effects:{catchRateBonus:0.01}, preference:'boilie_fishmeal'},
               {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, image:'img/bait/boilie-birdfood.png', category:'Boilies', description:'Multibirdfood boilies for all-round attraction.', effects:{catchRateBonus:0.02}, preference:'boilie_birdfood'},
               {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, image:'img/bait/boilie-tigernut.png', category:'Boilies', description:'Tiger nut boilies for big carp.', effects:{catchRateBonus:0.02, weightBonus:0.01}, preference:'boilie_tigernut'},

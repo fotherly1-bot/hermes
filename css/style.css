@@ -2208,6 +2208,19 @@ body {
     line-height: 1;
 }
 
+.tackle-item-img {
+    width: 100%;
+    height: 6rem;
+    object-fit: contain;
+    display: block;
+}
+
+.tackle-icon-fallback {
+    font-size: 1.6rem;
+    line-height: 1;
+    display: inline-block;
+}
+
 .tackle-name {
     font-weight: 700;
     color: var(--colour-text);
@@ -10786,7 +10799,10 @@ details[open] > .lake-accordion-summary::before {
     color: var(--colour-text-muted);
 }
 .tackle-card.tackle-locked {
-    opacity: 0.7;
+    opacity: 1;
+    background: linear-gradient(180deg, rgba(180,40,40,0.25), rgba(120,20,20,0.15));
+    border-color: rgba(220,60,60,0.55);
+    box-shadow: inset 0 0 0 1px rgba(220,60,60,0.25);
 }
 
 @media (max-width: 980px) {

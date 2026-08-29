@@ -332,13 +332,13 @@
                 html += '<div class="rig-selector-grid rig-bait-grid">';
                 var baitOptions = [
                     {id:'boilie_fishmeal', name:'Fishmeal Boilies'},
-                    {id:'boilie_birdfood', name:'Birdfood Blend'},
+                    {id:'boilie_birdfood', name:'Birdfood Blend Boilies'},
                     {id:'boilie_tigernut', name:'Tiger Nut Boilies'},
-                    {id:'popup_white', name:'White Pop-up'},
-                    {id:'popup_yellow', name:'Yellow Pop-up'},
-                    {id:'popup_pink', name:'Pink Pop-up'},
-                    {id:'popup_orange', name:'Orange Pop-up'},
-                    {id:'popup_purple', name:'Purple Pop-up'},
+                    {id:'popup_white', name:'White Popups'},
+                    {id:'popup_yellow', name:'Yellow Popups'},
+                    {id:'popup_pink', name:'Pink Popups'},
+                    {id:'popup_orange', name:'Orange Popups'},
+                    {id:'popup_purple', name:'Purple Popups'},
                     {id:'spod_mix', name:'Spod Mix'}
                 ];
                 var currentBait = summary.baitId || 'boilie_fishmeal';
