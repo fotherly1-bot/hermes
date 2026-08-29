@@ -225,6 +225,7 @@
         }
 
         function getBaitDef(id) {
+            if (id === 'boilie_standard') return { id: 'boilie_standard', name: 'Standard Boilies', effects: { catchRateBonus: 0.01 } };
             if (id === 'boilie_fishmeal') return { id: 'boilie_fishmeal', name: 'Fishmeal Boilies', effects: { catchRateBonus: 0.02 } };
             if (id === 'boilie_birdfood') return { id: 'boilie_birdfood', name: 'Birdfood Blend Boilies', effects: { catchRateBonus: 0.03 } };
             if (id === 'boilie_tigernut') return { id: 'boilie_tigernut', name: 'Tiger Nut Boilies', effects: { catchRateBonus: 0.03, weightBonus: 0.02 } };
@@ -347,6 +348,7 @@
                 html += '<div class="rig-selector-label">Bait for ' + slotLabel + ' <span class="rig-help-trigger" title="Choose bait for this rod. Use bait that matches your target species for better results.">?</span></div>';
                 html += '<div class="rig-selector-grid rig-bait-grid">';
                 var baitOptions = [
+                    {id:'boilie_standard', name:'Standard Boilies'},
                     {id:'boilie_fishmeal', name:'Fishmeal Boilies'},
                     {id:'boilie_birdfood', name:'Birdfood Blend Boilies'},
                     {id:'boilie_tigernut', name:'Tiger Nut Boilies'},
