@@ -1468,9 +1468,13 @@ const Dashboard = (function () {
         for (var i = 0; i < lakeIds.length; i++) {
             var lakeId = lakeIds[i];
             var lake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
-            var capacity = lake ? (lake.netCapacity || 10) : 10;
+            if (!lake) continue;
+            var capPenalty = 0;
+            if (lake.negative && lake.negative.capacityPenalty) capPenalty = lake.capacity * lake.negative.capacityPenalty;
+            var expansionBonus = (typeof Lakes.getLakeExpansionBonus === 'function') ? Lakes.getLakeExpansionBonus(lakeId) : { capacity: 0 };
+            var effectiveCap = Math.max(0, lake.capacity + (expansionBonus.capacity || 0) - capPenalty);
             var fishHere = aliveFish.filter(function (f) { return f.lake_id === lakeId; }).length;
-            if (fishHere >= capacity) return true;
+            if (effectiveCap > 0 && fishHere >= effectiveCap) return true;
             if (fishHere === 0 && (state.ownedLakes || []).indexOf(lakeId) !== -1) return true;
         }
         return false;
@@ -1550,9 +1554,13 @@ const Dashboard = (function () {
             var lakeId = lakeIds[i];
             var lake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
             var name = lake ? lake.name : lakeId;
-            var capacity = lake ? (lake.netCapacity || 10) : 10;
+            if (!lake) continue;
+            var capPenalty = 0;
+            if (lake.negative && lake.negative.capacityPenalty) capPenalty = lake.capacity * lake.negative.capacityPenalty;
+            var expansionBonus = (typeof Lakes.getLakeExpansionBonus === 'function') ? Lakes.getLakeExpansionBonus(lakeId) : { capacity: 0 };
+            var effectiveCap = Math.max(0, lake.capacity + (expansionBonus.capacity || 0) - capPenalty);
             var fishHere = aliveFish.filter(function (f) { return f.lake_id === lakeId; }).length;
-            if (fishHere >= capacity) {
+            if (effectiveCap > 0 && fishHere >= effectiveCap) {
                 out.unshift({ text: 'Urgent: ' + name + ' is at max population. Move fish or expand capacity.', level: 'critical' });
             }
             if (fishHere === 0 && (state.ownedLakes || []).indexOf(lakeId) !== -1) {
