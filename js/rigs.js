@@ -254,6 +254,10 @@
             initState();
             if (rodIndex < 0 || rodIndex > 2) return;
             if (!getBaitDef(baitId)) return;
+            if ((state.anglerBait || []).indexOf(baitId) === -1) {
+                UI.showToast('Buy this bait in the Shop first.', 'warning');
+                return;
+            }
             state.rigBaitEquipped[rodIndex] = baitId;
             var fx = getEquippedBaitEffects();
             UI.showToast('Rod ' + (rodIndex + 1) + ' bait set. +' + (fx.catchRateBonus * 100).toFixed(0) + '% catch | +' + (fx.weightBonus * 100).toFixed(0) + '% weight', 'success');
@@ -342,9 +346,12 @@
                     {id:'spod_mix', name:'Spod Mix'}
                 ];
                 var currentBait = summary.baitId || 'boilie_fishmeal';
+                var ownedBait = (state.anglerBait || []);
                 baitOptions.forEach(function(opt){
                     var isActive = currentBait === opt.id;
-                    html += '<button class="btn btn-sm bait-opt ' + (isActive ? 'btn-primary' : 'btn-secondary') + '" onclick="Rigs.equipBait(' + i + ',\'' + opt.id + '\');Rigs.renderRigs();" aria-pressed="' + isActive + '">' + opt.name + (isActive ? ' ✓' : '') + '</button>';
+                    var isOwned = ownedBait.indexOf(opt.id) !== -1;
+                    var cls = 'btn btn-sm bait-opt ' + (isActive ? 'btn-primary' : 'btn-secondary') + (isOwned ? '' : ' bait-locked');
+                    html += '<button class="' + cls + '" onclick="' + (isOwned ? 'Rigs.equipBait(' + i + ',\'' + opt.id + '\');Rigs.renderRigs();' : 'UI.showToast(\'Buy this bait in the Shop first.\',\'warning\');') + '" aria-pressed="' + isActive + '" ' + (isOwned ? '' : 'disabled') + '>' + opt.name + (isActive ? ' ✓' : '') + (isOwned ? '' : ' 🔒') + '</button>';
                 });
                 html += '</div>';
                 html += '<div class="rig-bait-bonus">';
