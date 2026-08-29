@@ -2398,12 +2398,8 @@ const Dashboard = (function () {
             var qualityColour = treated ? 'var(--colour-accent)' : (oxyStatus ? (oxyStatus.cssClass === 'oxygen-excellent' || oxyStatus.cssClass === 'oxygen-good' ? 'var(--colour-accent)' : oxyStatus.cssClass === 'oxygen-low' ? '#d4a843' : 'var(--colour-danger)') : 'var(--colour-text-muted)');
 
             html += '<div class="lake-summary-row">';
-            html += '<div class="lake-summary-thumb"><img src="img/lakes/' + lake.id.replace(/_lake$/, '') + '.png" alt="' + lake.name + '" class="lake-summary-thumb-img" onerror="this.style.display=\'none\'" /></div>';
-            html += '<div class="lake-summary-main">';
             html += '<div class="lake-summary-name">' + lake.name + '</div>';
             html += '<div class="lake-summary-meta">' + lakeFish.length + '/' + netCap + ' fish · ' + occupancy + '% full</div>';
-            html += '</div>';
-            html += '</div>';
             html += '<div class="lake-summary-pills">';
             html += '<span class="lake-pill" style="color:' + healthColour + ';border-color:' + healthColour + ';">🫀 Health: ' + healthLabel + ' · ' + bio + '/10</span>';
             html += '<span class="lake-pill" style="color:' + qualityColour + ';border-color:' + qualityColour + ';">💧 Water: ' + qualityLabel + (oxyLabel !== '—' ? ' · ' + oxyLabel : '') + '</span>';
