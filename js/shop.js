@@ -402,7 +402,7 @@ const Shop = (function () {
             html += '<div class="bait-grid">';
             BAIT_CATALOG.forEach(function(item, idx){
                 var owned = ownedBait.indexOf(item.id) !== -1;
-                html += '<div class="tackle-card' + (owned ? ' tackle-owned' : ' tackle-locked') + '">';
+                html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
                 html += '<div class="tackle-icon">';
                 if (item.image) {
                     html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<span class=\\\'tackle-icon-fallback\\\'>' + (item.icon||'🪱') + '</span>\';">';
