@@ -8979,6 +8979,11 @@ details[open] > .lake-accordion-summary::before {
 .breed-placeholder-fish  { font-size: 1.5rem; text-align: center; opacity: 0.3; margin-bottom: 0.2rem; }
 .breed-placeholder-label { font-size: 0.72rem; color: var(--colour-text-muted); text-align: center; margin-bottom: 0.35rem; font-style: italic; }
 
+.breed-destination-wrap { margin: 1rem 0; }
+.breed-selector-label { font-size: 0.8rem; font-weight: 700; color: var(--colour-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+.breed-lake-select { width: 100%; max-width: 320px; padding: 0.5rem 0.65rem; background: rgba(0,0,0,0.25); color: var(--colour-text); border: 1px solid var(--colour-border); border-radius: var(--radius); }
+.breed-lake-select option { background: #1a1a1a; color: var(--colour-text); }
+
 
 
 /* ============================================================
@@ -10468,6 +10473,40 @@ details[open] > .lake-accordion-summary::before {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+}
+
+.rig-bait-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 0.4rem 0.5rem;
+    align-items: center;
+}
+
+.bait-opt {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rig-bait-bonus {
+    font-size: 0.75rem;
+    color: var(--colour-gold);
+    font-weight: 700;
+    margin-top: 0.35rem;
+}
+
+.rig-help-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    color: var(--colour-text-muted);
+    border: 1px solid var(--colour-border);
+    cursor: help;
 }
 
 .rigs-section-heading {

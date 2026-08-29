@@ -311,25 +311,6 @@
                 var cBonus = (fx.catchRateBonus * 100).toFixed(0);
                 var wBonus = (fx.weightBonus * 100).toFixed(0);
                 html += '<div class="rig-rod-bonus">+' + cBonus + '% catch | +' + wBonus + '% weight</div>';
-                var baitFx2 = getEquippedBaitEffects();
-                html += '<div class="rig-rod-bonus">Bait: +' + (baitFx2.catchRateBonus * 100).toFixed(0) + '% catch | +' + (baitFx2.weightBonus * 100).toFixed(0) + '% weight</div>';
-                html += '<div class="rig-bait-selector">';
-                var baitOptions = [
-                    {id:'boilie_fishmeal', name:'Fishmeal Boilies'},
-                    {id:'boilie_birdfood', name:'Birdfood Blend'},
-                    {id:'boilie_tigernut', name:'Tiger Nut Boilies'},
-                    {id:'popup_white', name:'White Pop-ups'},
-                    {id:'popup_yellow', name:'Yellow Pop-ups'},
-                    {id:'popup_pink', name:'Pink Pop-ups'},
-                    {id:'popup_orange', name:'Orange Pop-ups'},
-                    {id:'popup_purple', name:'Purple Pop-ups'},
-                    {id:'spod_mix', name:'Spod Mix'}
-                ];
-                var currentBait = summary.baitId || 'boilie_fishmeal';
-                baitOptions.forEach(function(opt){
-                    html += '<button class="btn btn-sm ' + (currentBait === opt.id ? 'btn-primary' : 'btn-secondary') + '" onclick="Rigs.equipBait(' + i + ',\'' + opt.id + '\');Rigs.renderRigs();">' + opt.name + '</button>';
-                });
-                html += '</div>';
                 html += '</div>';
 
                 // Rig selector below rod
@@ -342,6 +323,33 @@
                     var isActive = slot && slot.rigId === rigId;
                     html += '<button class="btn btn-sm ' + (isActive ? 'btn-primary' : 'btn-secondary') + '" onclick="Rigs.equipRig(' + i + ',\'' + rigId + '\',\'' + (rDef.leadTypes[0] || 'inline') + '\');Rigs.renderRigs();">' + rDef.icon + ' ' + rDef.name + '</button>';
                 });
+                html += '</div>';
+                html += '</div>';
+
+                // Bait selector below rig
+                html += '<div class="rig-bait-selector">';
+                html += '<div class="rig-selector-label">Bait for ' + slotLabel + ' <span class="rig-help-trigger" title="Choose bait for this rod. Use bait that matches your target species for better results.">?</span></div>';
+                html += '<div class="rig-selector-grid rig-bait-grid">';
+                var baitOptions = [
+                    {id:'boilie_fishmeal', name:'Fishmeal Boilies'},
+                    {id:'boilie_birdfood', name:'Birdfood Blend'},
+                    {id:'boilie_tigernut', name:'Tiger Nut Boilies'},
+                    {id:'popup_white', name:'White Pop-up'},
+                    {id:'popup_yellow', name:'Yellow Pop-up'},
+                    {id:'popup_pink', name:'Pink Pop-up'},
+                    {id:'popup_orange', name:'Orange Pop-up'},
+                    {id:'popup_purple', name:'Purple Pop-up'},
+                    {id:'spod_mix', name:'Spod Mix'}
+                ];
+                var currentBait = summary.baitId || 'boilie_fishmeal';
+                baitOptions.forEach(function(opt){
+                    var isActive = currentBait === opt.id;
+                    html += '<button class="btn btn-sm bait-opt ' + (isActive ? 'btn-primary' : 'btn-secondary') + '" onclick="Rigs.equipBait(' + i + ',\'' + opt.id + '\');Rigs.renderRigs();" aria-pressed="' + isActive + '">' + opt.name + (isActive ? ' ✓' : '') + '</button>';
+                });
+                html += '</div>';
+                html += '<div class="rig-bait-bonus">';
+                var bFx = getEquippedBaitEffects();
+                html += '<span>Bait Bonus: +' + (bFx.catchRateBonus * 100).toFixed(0) + '% catch | +' + (bFx.weightBonus * 100).toFixed(0) + '% weight</span>';
                 html += '</div>';
                 html += '</div>';
 

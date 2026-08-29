@@ -90,7 +90,7 @@ const Breeding = (function () {
         if (!p1 || !p2) return;
         var boost   = scientistRarityBonus();
         var numOff  = 1 + Math.floor(Math.random() * 3);
-        var lakeId  = s.activeLakeId || (s.ownedLakes.length > 0 ? s.ownedLakes[0] : null);
+        var lakeId  = getDestinationLakeId();
         var lake    = lakeId && typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
         var cap     = lake ? lake.capacity : 0;
         var stocked = lakeId ? s.fish.filter(function(f){ return f.alive && f.lake_id === lakeId; }).length : 0;
@@ -361,7 +361,9 @@ const Breeding = (function () {
             html += '</div>'; // breed-parent-cards
             html += '</div>'; // breed-active-wrap
 
-        // ── Two-column: Last Outcome + Rarity Odds ────────────────────────────
+            html += renderLakeDestinationControl();
+
+            // ── Two-column: Last Outcome + Rarity Odds ────────────────────────────
         html += '<div class="breed-two-col">';
 
         // Last outcome
@@ -457,6 +459,42 @@ const Breeding = (function () {
         container.innerHTML = html;
     }
 
-    // ── Public API ────────────────────────────────────────────────────────────
-    return { initState, processDailyBreeding, renderBreedingPond, sellFish };
+    // ── Breeding pond destination lake ─────────────────────────────────────
+    function getDestinationLakeId() {
+        var s = Game.getState();
+        return s.breedingDestinationLakeId || (s.ownedLakes && s.ownedLakes.length ? s.ownedLakes[0] : null);
+    }
+
+    function setDestinationLakeId(lakeId) {
+        var s = Game.getState();
+        s.breedingDestinationLakeId = lakeId;
+        Game.saveToStorage();
+        renderBreedingPond();
+    }
+
+    function getOwnedLakes() {
+        var s = Game.getState();
+        var out = [];
+        (s.ownedLakes || []).forEach(function(lakeId){
+            var lake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
+            out.push({ id: lakeId, name: lake ? lake.name : lakeId });
+        });
+        return out;
+    }
+
+    function renderLakeDestinationControl() {
+        var lakes = getOwnedLakes();
+        var current = getDestinationLakeId();
+        var html = '<div class="breed-destination-wrap">';
+        html += '<div class="breed-selector-label">Offspring lake <span class="rig-help-trigger" title="Chosen lake receives newly bred offspring. If it is full, offspring are not created and parents return to your stock.">?</span></div>';
+        html += '<select class="breed-lake-select" onchange="Breeding.setDestinationLakeId(this.value)">';
+        lakes.forEach(function(lk){
+            html += '<option value="' + lk.id + '"' + (lk.id === current ? ' selected' : '') + '>' + lk.name + '</option>';
+        });
+        if (!lakes.length) html += '<option value="">No owned lakes</option>';
+        html += '</select>';
+        html += '</div>';
+        return html;
+    }
+    return { initState, processDailyBreeding, renderBreedingPond, sellFish, setDestinationLakeId, renderLakeDestinationControl };
 })();
