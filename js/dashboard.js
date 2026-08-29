@@ -1386,6 +1386,16 @@ const Dashboard = (function () {
         html += '<div class="dash-fish-stat-bars">' + barsHtml + '</div>';
         html += '</div>';
 
+        var activeBooking = (state.anglerBookings || []).find(function(b){ return b.anglerId === angler.id && state.day >= b.startDay && state.day <= b.endDay; });
+        if (activeBooking) {
+            var bookedLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(activeBooking.lakeId) : null;
+            html += '<div style="margin-top:0.9rem;padding:0.75rem 1rem;background:rgba(0,0,0,0.25);border:1px solid var(--colour-border);border-radius:var(--radius);">';
+            html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:0.2rem;">📍 Currently Booked At</div>';
+            html += '<div style="font-weight:700;color:var(--colour-accent);">' + (bookedLake ? bookedLake.name : (activeBooking.lakeId || '—')) + '</div>';
+            html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.15rem;">Day ' + activeBooking.startDay + ' – ' + activeBooking.endDay + '</div>';
+            html += '</div>';
+        }
+
         return html;
     }
 
