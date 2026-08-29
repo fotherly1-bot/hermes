@@ -457,10 +457,10 @@ const Shop = (function () {
                   {id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02}, prerequisite:'rod_13ft_carp', unlocks:[]}
               ]},
               { key:'Reels', label:'Reels', items:[
-                  {id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['big_pit_reel']},
-                  {id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}, prerequisite:'standard_reel', unlocks:['big_pit_12k_reel']},
-                  {id:'big_pit_12k_reel', name:'Big Pit 12k Reel', cost:4200, icon:'🔄', category:'Reel', description:'12k bearing system with extra smooth retrieve.', effects:{castRangeBonus:0.08, catchRateBonus:0.02}, prerequisite:'big_pit_reel', unlocks:['big_pit_14k_reel']},
-                  {id:'big_pit_14k_reel', name:'Big Pit 14k Reel', cost:5500, icon:'🔄', category:'Reel', description:'14k high-speed retrieve for instant line pickup.', effects:{castRangeBonus:0.09, catchRateBonus:0.03}, prerequisite:'big_pit_12k_reel', unlocks:[]}
+                  {id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', image:'img/reels/reel1.png', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['big_pit_reel']},
+                  {id:'big_pit_reel', name:'Big Pit Reel', cost:3000, icon:'🔄', image:'img/reels/reel2.png', category:'Reel', description:'Large spool for long casts and strong runs.', effects:{castRangeBonus:0.06}, prerequisite:'standard_reel', unlocks:['big_pit_12k_reel']},
+                  {id:'big_pit_12k_reel', name:'Big Pit 12k Reel', cost:4200, icon:'🔄', image:'img/reels/reel3.png', category:'Reel', description:'12k bearing system with extra smooth retrieve.', effects:{castRangeBonus:0.08, catchRateBonus:0.02}, prerequisite:'big_pit_reel', unlocks:['big_pit_14k_reel']},
+                  {id:'big_pit_14k_reel', name:'Big Pit 14k Reel', cost:5500, icon:'🔄', image:'img/reels/reel4.png', category:'Reel', description:'14k high-speed retrieve for instant line pickup.', effects:{castRangeBonus:0.09, catchRateBonus:0.03}, prerequisite:'big_pit_12k_reel', unlocks:[]}
               ]},
               { key:'Main Line', label:'Main Line', items:[
                   {id:'mono_10lb', name:'10lb Mono Mainline', cost:800, icon:'🧵', category:'Main Line', description:'Stretchy mono that absorbs shock.', effects:{breakStrengthBonus:0.05}, prerequisite:null, unlocks:['fluoro_12lb']},
