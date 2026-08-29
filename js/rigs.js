@@ -357,13 +357,13 @@
                     {id:'popup_purple', name:'Purple Popups'},
                     {id:'spod_mix', name:'Spod Mix'}
                 ];
-                var currentBait = summary.baitId || 'boilie_fishmeal';
+                var currentBait = summary.baitId || 'boilie_standard';
                 var ownedBait = (state.anglerBait || []);
                 baitOptions.forEach(function(opt){
                     var isActive = currentBait === opt.id;
                     var isOwned = ownedBait.indexOf(opt.id) !== -1;
-                    var cls = 'btn btn-sm bait-opt ' + (isActive ? 'btn-primary' : 'btn-secondary') + (isOwned ? '' : ' bait-locked');
-                    html += '<button class="' + cls + '" onclick="' + (isOwned ? 'Rigs.equipBait(' + i + ',\'' + opt.id + '\');Rigs.renderRigs();' : 'UI.showToast(\'Buy this bait in the Shop first.\',\'warning\');') + '" aria-pressed="' + isActive + '" ' + (isOwned ? '' : 'disabled') + '>' + opt.name + (isActive ? ' ✓' : '') + (isOwned ? '' : ' 🔒') + '</button>';
+                    var cls = 'btn btn-sm bait-opt ' + (isActive ? 'btn-primary' : 'btn-secondary');
+                    html += '<button class="' + cls + '" onclick="' + (isOwned ? 'Rigs.equipBait(' + i + ',\'' + opt.id + '\');Rigs.renderRigs();' : '') + '" aria-pressed="' + isActive + '" ' + (isOwned ? '' : 'disabled') + '>' + opt.name + (isActive ? ' ✓' : '') + '</button>';
                 });
                 html += '</div>';
                 html += '<div class="rig-bait-bonus">';
