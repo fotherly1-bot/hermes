@@ -1419,6 +1419,9 @@ const Dashboard = (function () {
         }
         html += '</div>';
 
+        // Bivvy image under booking info
+        html += '<img src="img/tackle/bivvy.png" alt="Bivvy" style="width:100%;max-height:11rem;margin-top:0.6rem;border-radius:8px;border:1px solid var(--colour-border);object-fit:contain;background:rgba(0,0,0,0.15);" onerror="this.style.display=\'none\'" />';
+
         return html;
     }
 
