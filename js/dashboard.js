@@ -1413,7 +1413,7 @@ const Dashboard = (function () {
         html += '<div style="margin-top:0.9rem;padding:0.75rem 1rem;background:' + (activeBooking ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.1)') + ';border:1px solid ' + (activeBooking ? 'var(--colour-border)' : 'rgba(255,255,255,0.08)') + ';border-radius:var(--radius);opacity:' + (activeBooking ? '1' : '0.6') + ';">';
         html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:0.4rem;">📍 Currently Booked At</div>';
         if (bookedLake) {
-            var lakeImgPath = 'data:image/svg+xml;utf8,' + encodeURIComponent(buildLakeMapSvg(bookedLake));
+            var lakeImgPath = 'img/lakes/' + bookedLake.id.replace(/_lake$/, '') + '.png';
             html += '<div style="display:flex;gap:0.9rem;align-items:flex-start;">';
             html += '<img src="' + lakeImgPath + '" alt="' + bookedLake.name + '" style="width:7.5rem;height:10rem;border-radius:8px;border:1px solid var(--colour-border);object-fit:cover;flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
             html += '<div style="flex:1 1 0%;min-width:0;">';
@@ -1435,18 +1435,6 @@ const Dashboard = (function () {
         html += '</div>';
 
         return html;
-    }
-
-    function buildLakeMapSvg(lake) {
-        var base = 'img/lakes/' + lake.id.replace(/_lake$/, '') + '.png';
-        return '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="220" viewBox="0 0 320 220">' +
-            '<rect width="320" height="220" fill="#1b3a26"/>' +
-            '<image href="' + base + '" x="0" y="0" width="320" height="220" preserveAspectRatio="xMidYMid slice"/>' +
-            '<rect x="0" y="0" width="320" height="220" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>' +
-            '<circle cx="160" cy="110" r="18" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-dasharray="4 3"/>' +
-            '<path d="M142 110 L160 92 L178 110 L160 128 Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>' +
-            '<text x="160" y="115" font-family="sans-serif" font-size="10" fill="white" text-anchor="middle" font-weight="bold">SWIM</text>' +
-            '</svg>';
     }
 
     function renderAdamPlaceholderCard() {
