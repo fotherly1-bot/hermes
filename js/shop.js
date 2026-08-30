@@ -672,56 +672,36 @@ const Shop = (function () {
 
     /** Sell a fish immediately for its calculated value. */
     function sellFish(fishId) {
-        var state = Game.getState();
-        var idx   = state.fish.findIndex(function (f) { return f.id === fishId; });
-        if (idx === -1) { UI.showToast('Fish not found.', 'error'); return; }
-        var fish  = state.fish[idx];
-        if (!fish.alive) { UI.showToast('Cannot sell a deceased fish.', 'error'); return; }
-
-        var price = typeof Fish !== 'undefined' ? Fish.getFishValue(fish) : 0;
-        state.fish.splice(idx, 1);
-        state.money         += price;
-        state.totalEarnings += price;
-
-        if (typeof Finance !== 'undefined') {
-            Finance.addFinanceLog('fish_sale', price, 'Sold ' + fish.name + ' (' + fish.speciesName + ')');
-        }
-        Game.addNotification('\uD83D\uDCB8 Sold ' + fish.name + ' for ' + UI.formatMoney(price) + '.');
-        UI.showToast(fish.name + ' sold for ' + UI.formatMoney(price) + '!', 'success');
-        Game.saveToStorage();
-        renderShop();
-        UI.renderTopBar();
+        queuePendingSellOrAuction('sell', fishId);
     }
 
-    /** List a fish for auction at a premium. Resolves after 3 days. */
     function auctionFish(fishId) {
+        queuePendingSellOrAuction('auction', fishId);
+    }
+
+    function queuePendingSellOrAuction(type, fishId) {
         var state = Game.getState();
         var idx   = state.fish.findIndex(function (f) { return f.id === fishId; });
         if (idx === -1) { UI.showToast('Fish not found.', 'error'); return; }
         var fish  = state.fish[idx];
-        if (!fish.alive) { UI.showToast('Cannot auction a deceased fish.', 'error'); return; }
+        if (!fish.alive) { UI.showToast('Cannot sell/auction a deceased fish.', 'error'); return; }
 
-        var RARITY_MULT = { common: 1.20, uncommon: 1.30, rare: 1.45, epic: 1.60, legendary: 1.80 };
-        var baseVal  = typeof Fish !== 'undefined' ? Fish.getFishValue(fish) : 0;
-        var askPrice = Math.round(baseVal * (RARITY_MULT[fish.rarity] || 1.25));
-
-        if (!state.fishAuctions) state.fishAuctions = [];
-        state.fishAuctions.push({
-            fishId:      fish.id,
-            fishName:    fish.name,
+        if (!state.pendingFishSales) state.pendingFishSales = [];
+        state.pendingFishSales.push({
+            type: type,
+            fishId: fish.id,
+            fishName: fish.name,
             fishSpecies: fish.speciesName,
-            fishRarity:  fish.rarity,
-            fishWeightOz:fish.weight_oz,
-            baseValue:   baseVal,
-            askingPrice: askPrice,
-            startDay:    state.day,
-            endDay:      state.day + 3
+            fishRarity: fish.rarity,
+            fishWeightOz: fish.weight_oz,
+            dayQueued: state.day,
+            resolveDay: state.day + 1
         });
 
-        // Remove from main fish pool while auctioned
+        // Remove from main fish pool while pending
         state.fish.splice(idx, 1);
-        Game.addNotification('\uD83C\uDFC6 ' + fish.name + ' listed for auction at ' + UI.formatMoney(askPrice) + '. Resolves in 3 days.');
-        UI.showToast(fish.name + ' listed at ' + UI.formatMoney(askPrice) + '!', 'success');
+        Game.addNotification((type === 'auction' ? '🏆 Auction queued for ' : '💰 Sale queued for ') + fish.name + '. Arrives tomorrow.');
+        UI.showToast((type === 'auction' ? 'Auction' : 'Sale') + ' queued for tomorrow.', 'success');
         Game.saveToStorage();
         renderShop();
     }
