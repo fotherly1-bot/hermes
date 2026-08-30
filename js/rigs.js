@@ -332,15 +332,9 @@
 
                 // Rig selector below rod
                 html += '<div class="rig-rod-selector">';
-                html += '<div class="rig-selector-label">Select Rig for ' + slotLabel + '</div>';
-                html += '<div class="rig-selector-grid">';
-                (state.rigInventory || []).forEach(function (rigId) {
-                    var rDef = getRigById(rigId);
-                    if (!rDef) return;
-                    var isActive = slot && slot.rigId === rigId;
-                    html += '<button class="btn btn-sm ' + (isActive ? 'btn-primary' : 'btn-secondary') + '" onclick="Rigs.equipRig(' + i + ',\'' + rigId + '\',\'' + (rDef.leadTypes[0] || 'inline') + '\');Rigs.renderRigs();">' + rDef.icon + ' ' + rDef.name + '</button>';
-                });
-                html += '</div>';
+                html += '<div class="rig-selector-label">Select Rig for ' + slotLabel + ' <span class="rig-help-trigger" title="Opens the full rig list. Owned rigs are selectable.">?</span></div>';
+                html += '<button class="btn btn-primary" onclick="Rigs.openEquipModal(' + i + ')">Select Rig</button>';
+                html += '<div style="margin-top:0.4rem;font-size:0.82rem;color:var(--colour-text-muted);">Equipped: ' + (summary.rigName || '—') + '</div>';
                 html += '</div>';
 
                 // Bait selector below rig
