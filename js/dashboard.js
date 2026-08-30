@@ -1427,15 +1427,21 @@ const Dashboard = (function () {
 
     function renderAdamPlaceholderCard() {
         var advice = [
-            'Start with Standard Boilies on all rods until you unlock better bait.',
-            'Keep your booking window active to build daily catch history.',
-            'Book deeper lake sections when light levels are low.',
-            'Check rig weight against lake notes — too heavy and bites drop.',
-            'Upgrade your reel before chasing rare Mirror Carp.',
-            'Pause bookings during heavy weather to protect your PB chance.'
+            { text: 'Start with Standard Boilies on all rods until you unlock better bait.', urgency: 'low' },
+            { text: 'Keep your booking window active to build daily catch history.', urgency: 'medium' },
+            { text: 'Book deeper lake sections when light levels are low.', urgency: 'medium' },
+            { text: 'Check rig weight against lake notes — too heavy and bites drop.', urgency: 'high' },
+            { text: 'Upgrade your reel before chasing rare Mirror Carp.', urgency: 'medium' },
+            { text: 'Pause bookings during heavy weather to protect your PB chance.', urgency: 'high' }
         ];
-        var items = advice.map(function (text) {
-            return '<div style="padding:0.6rem 0.7rem;border-bottom:1px solid var(--colour-border);color:var(--colour-text);font-size:0.9rem;line-height:1.35;">' + text + '</div>';
+        var urgencyColor = {
+            low: 'var(--colour-text-muted)',
+            medium: 'var(--colour-text)',
+            high: '#f1c40f'
+        };
+        var items = advice.map(function (item) {
+            var color = urgencyColor[item.urgency] || 'var(--colour-text)';
+            return '<div style="padding:0.6rem 0.7rem;border-bottom:1px solid var(--colour-border);color:' + color + ';font-size:0.9rem;line-height:1.35;">' + item.text + '</div>';
         }).join('');
         return '<div class="dashboard-card" style="padding:1rem;">' +
             '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:100%;max-height:9rem;object-fit:contain;border-radius:8px;margin-bottom:0.8rem;" onerror="this.style.display=\'none\'" />' +
