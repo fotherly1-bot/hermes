@@ -140,13 +140,18 @@ const Breeding = (function () {
             offspring: offspringList
         };
 
-        var best = offspringList.length > 0 ? offspringList.reduce(function(b,o){
-            return RARITY_ORDER.indexOf(o.rarity) > RARITY_ORDER.indexOf(b.rarity) ? o : b;
-        }) : null;
-        Game.addReputation(5);
-        Game.addNotification('\uD83E\uDD5A Breeding complete! ' + offspringList.length + ' offspring produced' +
-            (best ? ' — best: ' + best.rarity + ' ' + best.name : '') + '.');
-        Game.saveToStorage();
+        if (offspringList.length === 0) {
+            Game.addNotification('Breeding complete, but no offspring were produced — the destination lake may be full.');
+        } else {
+            var best = offspringList.reduce(function(b,o){
+                return RARITY_ORDER.indexOf(o.rarity) > RARITY_ORDER.indexOf(b.rarity) ? o : b;
+            });
+            Game.addReputation(5);
+            Game.addNotification('Breeding complete! ' + offspringList.length + ' offspring produced — best: ' + best.rarity + ' ' + best.name + '.');
+        }
+        Game.saveToStorage && Game.saveToStorage();
+        if (typeof UI !== 'undefined' && typeof UI.renderTopBar === 'function') UI.renderTopBar();
+        if (typeof Breeding !== 'undefined' && typeof Breeding.renderBreedingPond === 'function') Breeding.renderBreedingPond();
     }
 
     // ── Daily processing ──────────────────────────────────────────────────────
@@ -169,7 +174,9 @@ const Breeding = (function () {
                         s.breedingPond = [f2, f1];
                         s.breedingActive = true;
                         s.breedingTimer  = CYCLE_DAYS;
-                        Game.addNotification('\uD83D\uDD2C ' + sci.name + ' started a breeding cycle: ' + pair[0].name + ' \xD7 ' + pair[1].name + '.');
+                        Game.addNotification('\uD83D\uDD2C ' + sci.name + ' started a breeding cycle: ' + pair[0].name + ' \u00D7 ' + pair[1].name + '.');
+                        Game.saveToStorage && Game.saveToStorage();
+                        if (typeof UI !== 'undefined' && typeof UI.renderTopBar === 'function') UI.renderTopBar();
                     }
                 }
             }
