@@ -765,7 +765,7 @@ const Shop = (function () {
         // Active auctions
         var auctions = state.fishAuctions || [];
         if (auctions.length > 0) {
-            html += '<h3 class="section-heading">\uD83C\uDFC6 Active Auctions</h3>';
+            html += '<h3 class="section-heading">🏆 Active Auctions</h3>';
             html += '<div class="sell-auction-list">';
             auctions.forEach(function (a) {
                 var col      = RARITY_COLS[a.fishRarity] || '#888';
@@ -777,6 +777,25 @@ const Shop = (function () {
                 html += '<span class="sell-auction-price">' + UI.formatMoney(a.askingPrice) + '</span>';
                 html += '<span class="sell-auction-days">' + daysLeft + 'd left</span>';
                 html += '<button class="btn btn-danger btn-sm" onclick="Shop.cancelAuction(' + a.fishId + ')">Cancel</button>';
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+
+        // Pending sales/auctions arriving tomorrow
+        var pendingSales = state.pendingFishSales || [];
+        if (pendingSales.length > 0) {
+            html += '<h3 class="section-heading">⏳ Pending Sales</h3>';
+            html += '<div class="sell-auction-list">';
+            pendingSales.forEach(function (sale) {
+                var col = RARITY_COLS[sale.fishRarity] || '#888';
+                html += '<div class="sell-auction-row">';
+                html += '<span class="sell-auction-name">' + sale.fishName + '</span>';
+                html += '<span class="sell-auction-species">' + sale.fishSpecies + '</span>';
+                html += '<span class="sell-auction-rarity" style="color:' + col + ';">' + (sale.fishRarity || '') + '</span>';
+                html += '<span class="sell-auction-price">' + (sale.type === 'auction' ? 'Auction' : 'Sale') + '</span>';
+                html += '<span class="sell-auction-days">Arrives tomorrow</span>';
+                html += '<span class="sell-fish-pond-tag">Pending</span>';
                 html += '</div>';
             });
             html += '</div>';

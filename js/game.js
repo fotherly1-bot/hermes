@@ -486,6 +486,38 @@ const Game = (function () {
             }
         }
 
+        // Resolve pending fish sales/auctions
+        if (state.pendingFishSales && state.pendingFishSales.length) {
+            state.pendingFishSales.forEach(function (sale) {
+                var price = typeof Fish !== 'undefined' ? Fish.getFishValue({
+                    id: sale.fishId,
+                    name: sale.fishName,
+                    speciesName: sale.fishSpecies,
+                    rarity: sale.fishRarity,
+                    weight_oz: sale.fishWeightOz,
+                    alive: true
+                }) : 0;
+                var RARITY_MULT = { common: 1.20, uncommon: 1.30, rare: 1.45, epic: 1.60, legendary: 1.80, mythic: 2.20 };
+                var auctionPrice = sale.type === 'auction' ? Math.round(price * (RARITY_MULT[sale.fishRarity] || 1.25)) : 0;
+                var finalPrice = sale.type === 'auction' ? auctionPrice : price;
+
+                state.money += finalPrice;
+                state.totalEarnings += finalPrice;
+                if (typeof Finance !== 'undefined') {
+                    Finance.addFinanceLog('fish_sale', finalPrice, (sale.type === 'auction' ? 'Auction' : 'Sold') + ' ' + sale.fishName + ' (' + sale.fishSpecies + ')');
+                }
+                Game.addNotification((sale.type === 'auction' ? '🏆 Auction settled: ' : '💰 Sold ') + sale.fishName + ' for ' + UI.formatMoney(finalPrice) + '.');
+                UI.showToast((sale.type === 'auction' ? 'Auction' : 'Sale') + ' settled: ' + sale.fishName + ' for ' + UI.formatMoney(finalPrice) + '!', 'success');
+            });
+            state.pendingFishSales = [];
+            if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') {
+                Shop.renderShop();
+            }
+            if (typeof UI !== 'undefined' && typeof UI.renderTopBar === 'function') {
+                UI.renderTopBar();
+            }
+        }
+
         // Apply lake maintenance costs + effects
         if (typeof Lakes !== 'undefined') {
             // Check for completed expansions
