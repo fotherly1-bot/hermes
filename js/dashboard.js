@@ -581,14 +581,10 @@ const Dashboard = (function () {
             html += '<div class="dashboard-card">' + renderFisheryPulse(state) + '</div>';
             html += '</div>';
 
-            // ── Row 2: Weather & Conditions ─────────────────────────────────────────
-            html += '<div class="dash-row">';
+            // ── Row 2: Weather & Conditions | Progression ───────────────────────────
+            html += '<div class="dash-row dash-row-equal">';
             html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
-            html += '</div>';
-
-            // ── Row 2: Progression ──────────────────────────────────────────────────
-            html += '<div class="dash-row">';
-            html += '<div class="dashboard-card dash-progression-wide">' + renderProgressionCard(state) + '</div>';
+            html += '<div class="dashboard-card">' + renderProgressionCard(state) + '</div>';
             html += '</div>';
 
             // ── Row 3: Lake Summary ──────────────────────────────────────────────────
