@@ -433,6 +433,36 @@ const Game = (function () {
             }
         }
 
+        // Resolve pending fish purchases
+        if (state.pendingFishPurchases && state.pendingFishPurchases.length) {
+            state.pendingFishPurchases.forEach(function (idx) {
+                var stockItem = (typeof STOCK_FISH !== 'undefined') ? STOCK_FISH[idx] : null;
+                if (!stockItem) return;
+                var lakeId = state.activeLakeId || (state.ownedLakes && state.ownedLakes[0]) || null;
+                var ageMin = stockItem.ageRange[0];
+                var ageMax = stockItem.ageRange[1];
+                var age    = ageMin + Math.floor(Math.random() * (ageMax - ageMin + 1));
+                var fish = (typeof Fish !== 'undefined') ? Fish.createFish({
+                    species:  stockItem.species,
+                    rarity:   stockItem.rarity,
+                    age_days: age,
+                    lake_id:  lakeId
+                }) : null;
+                if (fish) {
+                    state.fish.push(fish);
+                    if (typeof Game.logFishCreation === 'function') {
+                        Game.logFishCreation(fish, 'shop', null);
+                    }
+                    Game.addEvent('fish_born', '\uD83D\uDED2', stockItem.label + ' purchase arrived.');
+                    if (typeof News !== 'undefined') News.addStockingStory(stockItem.label, stockItem.rarity, lakeId);
+                }
+            });
+            state.pendingFishPurchases = [];
+            if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') {
+                Shop.renderShop();
+            }
+        }
+
         // Apply lake maintenance costs + effects
         if (typeof Lakes !== 'undefined') {
             // Check for completed expansions

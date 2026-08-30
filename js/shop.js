@@ -242,9 +242,13 @@ const Shop = (function () {
         var lakeId    = getShopLakeId();
 
         if (!stockItem) { UI.showToast('Fish not found.', 'error'); return false; }
-
         if (!lakeId) {
             UI.showToast('Select a lake first.', 'warning');
+            return false;
+        }
+
+        if ((state.pendingFishPurchases || []).indexOf(index) !== -1) {
+            UI.showToast(stockItem.label + ' is already pending delivery.', 'warning');
             return false;
         }
 
@@ -268,34 +272,12 @@ const Shop = (function () {
         if (!Game.spendMoney(stockItem.cost)) { return false; }
 
         if (typeof Finance !== 'undefined') {
-            Finance.addFinanceLog('shop_purchase', -stockItem.cost, 'Stocked fish: ' + stockItem.label + ' (' + stockItem.size + ')');
+            Finance.addFinanceLog('shop_purchase', -stockItem.cost, 'Stocked fish: ' + stockItem.label + ' (' + stockItem.size + ') (pending)');
         }
 
-        // Resolve age from the size variant's range
-        var ageMin = stockItem.ageRange[0];
-        var ageMax = stockItem.ageRange[1];
-        var age    = ageMin + Math.floor(Math.random() * (ageMax - ageMin + 1));
-
-        var fish = Fish.createFish({
-            species:  stockItem.species,
-            rarity:   stockItem.rarity,
-            age_days: age,
-            lake_id:  lakeId
-        });
-        state.fish.push(fish);
-        if (typeof Game.logFishCreation === 'function') {
-            Game.logFishCreation(fish, 'shop', null);
-        }
-        Game.addEvent('fish_born', '\uD83D\uDED2', stockItem.label + ' purchased and stocked.');
-        if (typeof News !== 'undefined') News.addStockingStory(stockItem.label, stockItem.rarity, lakeId);
-
-        var sizeMeta = SIZE_META[stockItem.size] || {};
-        UI.showToast(
-            sizeMeta.emoji + ' ' + fish.name + ' (' + stockItem.label + ', ' + (sizeMeta.label || stockItem.size) + ') \u2192 ' +
-            (lake ? lake.name : 'your lake') + '!',
-            'success'
-        );
-        Game.saveToStorage();
+        (state.pendingFishPurchases || []).push(index);
+        UI.showToast('🐟 ' + stockItem.label + ' ordered — it arrives tomorrow.', 'success');
+        Game.saveToStorage && Game.saveToStorage();
         renderShop();
         UI.renderTopBar();
         return true;
@@ -652,9 +634,10 @@ const Shop = (function () {
                 var gIdx     = STOCK_FISH.indexOf(item);
                 var rarDef   = Fish.getRarity(item.rarity);
                 var sizeMeta = SIZE_META[item.size] || { label: item.size, emoji: '', colour: '#888', hint: '' };
-                var full     = spaceLeft <= 0;
-                var afford   = state.money >= item.cost;
-                html += '<div class="st-stock-card' + (full || !afford ? ' shop-card-disabled' : '') + '">';
+                var full = spaceLeft <= 0;
+                var afford = state.money >= item.cost;
+                var pending = (state.pendingFishPurchases || []).indexOf(gIdx) !== -1;
+                html += '<div class="st-stock-card' + (full || !afford || pending ? ' shop-card-disabled' : '') + '">';
                 html += '<div class="st-stock-badges">';
                 html += '<span class="shop-size-badge" style="background:' + sizeMeta.colour + '22;color:' + sizeMeta.colour + ';border:1px solid ' + sizeMeta.colour + '55;">' + sizeMeta.emoji + ' ' + sizeMeta.label + '</span>';
                 html += '<span class="shop-card-rarity" style="background:' + rarDef.colour + ';color:' + (item.rarity === 'common' ? '#333' : '#fff') + ';">' + rarDef.name + '</span>';
@@ -670,6 +653,8 @@ const Shop = (function () {
                 html += '<span class="shop-card-cost">' + UI.formatMoney(item.cost) + '</span>';
                 if (full) {
                     html += '<button class="btn btn-secondary btn-sm" disabled>Full</button>';
+                } else if (pending) {
+                    html += '<button class="btn btn-secondary btn-sm" disabled>Pending</button>';
                 } else if (!afford) {
                     html += '<button class="btn btn-secondary btn-sm" disabled>Can\'t afford</button>';
                 } else {
