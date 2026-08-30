@@ -583,26 +583,17 @@ const Dashboard = (function () {
 
             // ── Row 2: Weather & Conditions | Progression ───────────────────────────
             html += '<div class="dash-row dash-row-equal">';
-            html += '<div class="dashboard-card">' + renderWeatherCard(state) + '</div>';
-            html += '<div class="dashboard-card">' + renderProgressionCard(state) + '</div>';
-            html += '</div>';
-
-            // ── Row 3: Lake Summary ──────────────────────────────────────────────────
-            html += '<div class="dash-row">';
-            html += '<div class="dashboard-card">';
+            html += '<div class="dashboard-card" style="display:flex;flex-direction:column;gap:1rem;">';
+            html += renderWeatherCard(state);
             html += '<h4 style="margin:0 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🌾 Lake Summary</h4>';
             html += renderLakeSummaryList(state);
-            html += '</div>';
-            html += '</div>';
-
-            // ── Row 4: Active Card Buffs (always shown) ──────────────────────────
-            var activeBuffs = (state.activeCardBuffs || []).filter(function(b){ return b.endDay >= state.day; });
-            html += '<div class="dashboard-card" style="margin-top:1rem;">';
+            html += '<div class="dashboard-card" style="margin-top:0;">';
             html += '<h3>🗺️ Active Card Buffs</h3>';
-            if (activeBuffs.length === 0) {
+            if ((state.activeCardBuffs || []).filter(function(b){ return b.endDay >= state.day; }).length === 0) {
                 html += '<p class="empty-state">No buffs active. Open card packs in the <strong>Shop</strong> to find buff cards.</p>';
             } else {
                 html += '<div class="dash-buff-grid">';
+                var activeBuffs = (state.activeCardBuffs || []).filter(function(b){ return b.endDay >= state.day; });
                 activeBuffs.forEach(function(b){
                     var daysLeft = b.endDay - state.day + 1;
                     var pct      = Math.max(5, Math.round((daysLeft / (b.endDay - b.startDay + 1)) * 100));
@@ -616,6 +607,9 @@ const Dashboard = (function () {
                 });
                 html += '</div>';
             }
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="dashboard-card">' + renderProgressionCard(state) + '</div>';
             html += '</div>';
 
             // ── Row 5: Activity & Notifications ──────────────────────────────────
