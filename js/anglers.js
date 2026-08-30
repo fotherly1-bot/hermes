@@ -1719,7 +1719,7 @@ const Anglers = (function () {
         var state = Game.getState();
         if (!state.anglerStats) state.anglerStats = {};
         if (!state.anglerStats[anglerName]) {
-            state.anglerStats[anglerName] = { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0 };
+            state.anglerStats[anglerName] = { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0, tripFishCaught: 0 };
         }
         var stats = state.anglerStats[anglerName];
         stats.visits++;
@@ -1769,7 +1769,12 @@ const Anglers = (function () {
             }
         }
 
+        // Track per-booking trip stats for dashboard
+        if (!state.bookingTripStats) state.bookingTripStats = {};
+        state.bookingTripStats[booking.anglerId + '::' + booking.lakeId + '::' + booking.startDay] = (state.bookingTripStats[booking.anglerId + '::' + booking.lakeId + '::' + booking.startDay] || 0) + catchCount;
+
         stats.fishCaught += catchCount;
+        stats.tripFishCaught = (stats.tripFishCaught || 0) + catchCount;
 
         // Simulate biggest fish caught
         if (lakeFish.length > 0 && Math.random() < 0.5) {

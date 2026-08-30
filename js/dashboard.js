@@ -1399,12 +1399,13 @@ const Dashboard = (function () {
         if (bookedLake) {
             var lakeImgPath = 'img/lakes/' + bookedLake.id.replace(/_lake$/, '') + '.png';
             html += '<div style="display:flex;gap:0.9rem;align-items:flex-start;">';
-            html += '<img src="' + lakeImgPath + '" alt="' + bookedLake.name + '" style="width:7.5rem;height:10rem;border-radius:8px;border:1px solid var(--colour-border);object-fit:cover;flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
+            html += '<img src="' + lakeImgPath + '" alt="' + bookedLake.name + '" style="width:7.5rem;max-height:10rem;border-radius:8px;border:1px solid var(--colour-border);object-fit:contain;flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
             html += '<div style="flex:1 1 0%;min-width:0;">';
             html += '<div style="font-weight:800;color:var(--colour-accent);font-size:1rem;">' + bookedLake.name + '</div>';
             html += '<div style="font-size:0.82rem;color:var(--colour-text-muted);margin-top:0.2rem;">Day ' + activeBooking.startDay + ' – ' + activeBooking.endDay + '</div>';
             html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.2rem;">Angler: ' + angler.name + '</div>';
             html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.2rem;">Skill ' + angler.skill + '/10</div>';
+            html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin-top:0.2rem;">Fish Caught: ' + ((state.bookingTripStats && state.bookingTripStats[activeBooking.anglerId + '::' + activeBooking.lakeId + '::' + activeBooking.startDay]) || 0) + '</div>';
             html += '</div>';
             html += '</div>';
         } else {
