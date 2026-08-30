@@ -2306,26 +2306,26 @@ const Anglers = (function () {
 
         state.anglerQuests.push({
             id: qid++, title: 'Catch ' + baseCatchTarget + ' Fish',
-            description: 'Accumulate ' + baseCatchTarget + ' total catches across your fishery.',
+            description: 'Catch ' + baseCatchTarget + ' fish in total.',
             target: 'fishCaught', required: baseCatchTarget, progress: 0,
             rewardMoney: 500, rewardRep: 25, completed: false, claimed: false
         });
         state.anglerQuests.push({
             id: qid++, title: 'Win ' + baseWinTarget + ' Matches',
-            description: 'Win ' + baseWinTarget + ' angling matches to build reputation.',
+            description: 'Win ' + baseWinTarget + ' matches.',
             target: 'wins', required: baseWinTarget, progress: 0,
             rewardMoney: 1000, rewardRep: 50, completed: false, claimed: false
         });
         state.anglerQuests.push({
             id: qid++, title: 'Prize Winner (£' + prizeTarget.toLocaleString() + ')',
-            description: 'Earn £' + prizeTarget.toLocaleString() + ' in tournament winnings.',
+            description: 'Win £' + prizeTarget.toLocaleString() + ' in tournaments.',
             target: 'winnings', required: prizeTarget, progress: 0,
             rewardMoney: prizeTarget * 0.1, rewardRep: 35, completed: false, claimed: false
         });
         if (angler.skill >= 7) {
             state.anglerQuests.push({
                 id: qid++, title: '10lb Trophy',
-                description: 'Land a fish over 160 oz as your biggest catch.',
+                description: 'Land a 10lb+ fish.',
                 target: 'biggestFishOz', required: 160, progress: 0,
                 rewardMoney: 2000, rewardRep: 75, completed: false, claimed: false
             });
@@ -2338,31 +2338,31 @@ const Anglers = (function () {
         });
         state.anglerQuests.push({
             id: qid++, title: 'Fish Collector',
-            description: 'Have 20 living fish across all lakes.',
+            description: 'Keep 20 fish alive across lakes.',
             target: 'stock', required: 20, progress: 0,
             rewardMoney: 3000, rewardRep: 5, completed: false, claimed: false
         });
         state.anglerQuests.push({
             id: qid++, title: 'Rising Star',
-            description: 'Reach 200 reputation.',
+            description: 'Reach 200 rep.',
             target: 'reputation', required: 200, progress: 0,
             rewardMoney: 10000, rewardRep: 0, completed: false, claimed: false
         });
         state.anglerQuests.push({
             id: qid++, title: 'Breeding Expert',
-            description: 'Breed 5 fish.',
+            description: 'Breed 5 offspring.',
             target: 'bred', required: 5, progress: 0,
             rewardMoney: 6000, rewardRep: 6, completed: false, claimed: false
         });
         state.anglerQuests.push({
             id: qid++, title: 'Seasoned Host',
-            description: 'Complete 10 angler bookings.',
+            description: 'Complete 10 bookings.',
             target: 'bookings', required: 10, progress: 0,
             rewardMoney: 7000, rewardRep: 8, completed: false, claimed: false
         });
         state.anglerQuests.push({
             id: qid++, title: 'Marketing Maestro',
-            description: 'Launch 3 marketing campaigns.',
+            description: 'Run 3 campaigns.',
             target: 'campaigns', required: 3, progress: 0,
             rewardMoney: 4000, rewardRep: 5, completed: false, claimed: false
         });
