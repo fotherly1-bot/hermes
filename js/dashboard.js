@@ -1426,22 +1426,31 @@ const Dashboard = (function () {
     }
 
     function renderAdamPlaceholderCard() {
-        var advice = [
+        var advice = [];
+        var hired = (state.hiredStaff || []);
+        var hiredRoles = hired.map(function(m){ return m.role; });
+        var missing = ['assistant','manager','keeper','guard','groundskeeper','scientist','marketer'].filter(function(r){ return hiredRoles.indexOf(r) === -1; });
+        if (missing.length) {
+            advice.push({ text: 'Missing staff: ' + missing.join(', ') + ' — go to Staff tab urgently.', urgency: 'critical', missingRole: true });
+        }
+        advice.push(
             { text: 'Start with Standard Boilies on all rods until you unlock better bait.', urgency: 'low' },
             { text: 'Keep your booking window active to build daily catch history.', urgency: 'medium' },
             { text: 'Book deeper lake sections when light levels are low.', urgency: 'medium' },
             { text: 'Check rig weight against lake notes — too heavy and bites drop.', urgency: 'high' },
             { text: 'Upgrade your reel before chasing rare Mirror Carp.', urgency: 'medium' },
             { text: 'Pause bookings during heavy weather to protect your PB chance.', urgency: 'high' }
-        ];
+        );
         var urgencyColor = {
             low: 'var(--colour-text-muted)',
             medium: 'var(--colour-text)',
-            high: '#f1c40f'
+            high: '#f1c40f',
+            critical: 'var(--colour-red)'
         };
         var items = advice.map(function (item) {
-            var color = urgencyColor[item.urgency] || 'var(--colour-text)';
-            return '<div style="padding:0.6rem 0.7rem;border-bottom:1px solid var(--colour-border);color:' + color + ';font-size:0.9rem;line-height:1.35;">' + item.text + '</div>';
+            var color = item.missingRole ? 'var(--colour-red)' : (urgencyColor[item.urgency] || 'var(--colour-text)');
+            var cls = item.missingRole ? 'adam-advice-item adam-advice-critical' : 'adam-advice-item';
+            return '<div class="' + cls + '" style="color:' + color + ';animation:' + (item.missingRole ? 'adamFlash 1s infinite' : 'none' ) + '">' + item.text + '</div>';
         }).join('');
         return '<div class="dashboard-card" style="padding:1rem;">' +
             '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:100%;max-height:9rem;object-fit:contain;border-radius:8px;margin-bottom:0.8rem;" onerror="this.style.display=\'none\'" />' +

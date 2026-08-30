@@ -5898,6 +5898,13 @@ details[open] > .lake-accordion-summary::before {
     100% { box-shadow: 0 0 0 4px transparent, 0 0 0 transparent; }
 }
 
+/* Adam Penning urgency flashing */
+.adam-advice-critical { animation: adamFlash 1s infinite; }
+@keyframes adamFlash {
+    0%,100% { opacity: 1; }
+    50%     { opacity: 0.25; }
+}
+
 .card-item-header {
     display: flex;
     align-items: center;
