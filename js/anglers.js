@@ -1796,8 +1796,9 @@ const Anglers = (function () {
             var targetWeight = heaviestToday.weight_oz || 0;
             if (targetWeight > prevPB) {
                 state.anglerStats[anglerName].biggestFishOz = targetWeight;
-                if (typeof UI !== 'undefined' && UI.showToast) {
-                    UI.showToast('🎉 New PB: ' + UI.formatWeight(targetWeight) + ' by ' + anglerName + '!', 'success');
+                var isPlayer = state.playerAnglerId && booking.anglerId === state.playerAnglerId;
+                if (isPlayer && typeof UI !== 'undefined' && UI.showToast) {
+                    UI.showToast('🎉 New PB: ' + UI.formatWeight(targetWeight) + '!', 'success');
                 }
             }
             if ((targetWeight || 0) >= 800 && typeof state.anglerStats[anglerName].wins === 'number') {
