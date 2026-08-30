@@ -240,6 +240,7 @@ const Shop = (function () {
         var state     = Game.getState();
         var stockItem = STOCK_FISH[index];
         var lakeId    = getShopLakeId();
+        if (!lakeId && state.ownedLakes && state.ownedLakes.length) lakeId = state.ownedLakes[0];
 
         if (!stockItem) { UI.showToast('Fish not found.', 'error'); return false; }
         if (!lakeId) {
