@@ -61,6 +61,13 @@
 
         if (typeof UI !== 'undefined' && typeof UI.init === 'function') {
             UI.init();
+            // Brief staff panel refresh so starter staff cards render on new game
+            setTimeout(function () {
+                if (typeof UI.switchTab === 'function') UI.switchTab('staff');
+                setTimeout(function () {
+                    if (typeof UI.switchTab === 'function') UI.switchTab('dashboard');
+                }, 300);
+            }, 0);
         } else {
             if (typeof Dashboard !== 'undefined' && typeof Dashboard.renderDashboard === 'function') {
                 Dashboard.renderDashboard();
