@@ -278,6 +278,7 @@ const Shop = (function () {
         (state.pendingFishPurchases || []).push({ index: index, lakeId: lakeId });
         UI.showToast('🐟 ' + stockItem.label + ' ordered — it arrives tomorrow.', 'success');
         Game.saveToStorage && Game.saveToStorage();
+        if (typeof UI.updateTransitBanner === 'function') UI.updateTransitBanner(Game.getState());
         renderShop();
         UI.renderTopBar();
         return true;

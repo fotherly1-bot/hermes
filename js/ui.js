@@ -381,6 +381,21 @@ const UI = (function () {
                 sDef.emoji + ' ' + sDef.name +
                 (temp ? ' &nbsp;&bull;&nbsp; <strong>' + temp + '</strong>' : '');
         }
+
+        updateTransitBanner(state);
+    }
+
+    function updateTransitBanner(state) {
+        var banner = document.getElementById('transit-banner');
+        var countEl = document.getElementById('transit-count');
+        if (!banner || !countEl) return;
+        var count = (state.pendingFishPurchases || []).length;
+        if (count > 0) {
+            countEl.textContent = count;
+            banner.classList.remove('hidden');
+        } else {
+            banner.classList.add('hidden');
+        }
     }
 
     /**

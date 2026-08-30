@@ -144,6 +144,18 @@ body {
     flex-wrap: wrap;
 }
 
+.transit-banner {
+    background: linear-gradient(90deg,#2a2210,#3e3010,#2a2210);
+    border-bottom: 1px solid #b89a3a;
+    color: #f3e7b8;
+    padding: 0.35rem 1rem;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.transit-banner.hidden { display: none; }
+
 .stat-item {
     font-size: 0.95rem;
     color: var(--colour-text-muted);
