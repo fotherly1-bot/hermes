@@ -5888,6 +5888,16 @@ details[open] > .lake-accordion-summary::before {
     100% { transform: translate(-50%,-50%) scale(2); opacity: 0; }
 }
 
+/* PB card highlight pulse */
+.card-item.highlight-pulse {
+    animation: pbHighlight 2.5s ease forwards;
+    box-shadow: 0 0 0 4px var(--colour-gold), 0 0 24px rgba(241,196,15,0.35);
+}
+@keyframes pbHighlight {
+    0%   { box-shadow: 0 0 0 4px var(--colour-gold), 0 0 24px rgba(241,196,15,0.35); }
+    100% { box-shadow: 0 0 0 4px transparent, 0 0 0 transparent; }
+}
+
 .card-item-header {
     display: flex;
     align-items: center;

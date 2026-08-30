@@ -1661,7 +1661,7 @@ const Dashboard = (function () {
             '</div>';
         }).join('');
 
-        return '<div class="dash-fish-feature-card">' +
+        return '<div class="dash-fish-feature-card" style="cursor:pointer;" onclick="Cards.showFishCardFromPB(' + (pbFish ? pbFish.id : 'null') + ')">' +
             '<h4 class="dash-section-subheading">🎣 Your Angler PB</h4>' +
             '<div class="dash-fish-feature">' +
                 (pbFish && typeof Fish !== 'undefined' ? getFishIconHtml(pbFish.species, true) : getFishIconHtml('common', true)) +

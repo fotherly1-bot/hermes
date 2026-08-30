@@ -426,6 +426,7 @@ const Cards = (function () {
         var card = {
             id: 'fish_' + (fish.id || 'x') + '_' + Date.now(),
             uid: 'fish_' + (fish.id || 'x') + '_' + Date.now(),
+            fishId: fish.id || null,
             type: 'fish',
             rarity: fish.rarity || 'common',
             name: fish.name || 'Untitled Fish',
@@ -444,5 +445,27 @@ const Cards = (function () {
         return card;
     }
 
-    return { initState, openPack, openPackAnimated, useCard, discardCard, processBuffs, getBuffMultiplier, renderCards, renderCardShopSection, confirmFishCardStock, createFishCard };
+    function showFishCardFromPB(fishId) {
+        if (!fishId && fishId !== 0) return;
+        var card = (Game.getState().cardInventory || []).find(function(c){ return c.type === 'fish' && c.fishId === fishId; });
+        if (!card) {
+            UI.showToast('No card for this fish yet.', 'warning');
+            return;
+        }
+        if (typeof UI !== 'undefined' && typeof UI.switchTab === 'function') UI.switchTab('cards');
+        setTimeout(function(){ if (typeof Cards !== 'undefined' && Cards.highlightCard) Cards.highlightCard(card.uid); }, 0);
+    }
+
+    function highlightCard(uid) {
+        try {
+            var el = document.getElementById('card-' + uid);
+            if (!el) return;
+            document.querySelectorAll('.card-item.highlight-pulse').forEach(function(n){ n.classList.remove('highlight-pulse'); });
+            el.classList.add('highlight-pulse');
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(function(){ el.classList.remove('highlight-pulse'); }, 2500);
+        } catch (e) {}
+    }
+
+    return { initState, openPack, openPackAnimated, useCard, discardCard, processBuffs, getBuffMultiplier, renderCards, renderCardShopSection, confirmFishCardStock, createFishCard, showFishCardFromPB, highlightCard };
 })();
