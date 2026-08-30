@@ -821,6 +821,42 @@ const Anglers = (function () {
         var dailyAnglerIncome = 0;
         var activeAnglerCount = 0;
 
+        // VIP booking priority: if player angler is not booked for today, auto-book immediately
+        if (state.playerAnglerId && typeof Anglers !== 'undefined') {
+            var playerAlreadyBooked = state.anglerBookings.some(function (booking) {
+                return booking.anglerId === state.playerAnglerId && state.day >= booking.startDay && state.day <= booking.endDay;
+            });
+            if (!playerAlreadyBooked && state.ownedLakes && state.ownedLakes.length > 0) {
+                var playerAngler = Anglers.getAnglerById(state.playerAnglerId);
+                if (playerAngler) {
+                    var preferredLakes = state.ownedLakes.slice().sort(function (a, b) {
+                        var la = typeof Lakes !== 'undefined' ? Lakes.getLakeById(a) : null;
+                        var lb = typeof Lakes !== 'undefined' ? Lakes.getLakeById(b) : null;
+                        if (!la || !lb) return 0;
+                        var scoreA = (playerAngler.preferred.indexOf(la.waterType) !== -1 ? 3 : 0) + (la.dailyIncomePerAngler || 0) * 0.1;
+                        var scoreB = (playerAngler.preferred.indexOf(lb.waterType) !== -1 ? 3 : 0) + (lb.dailyIncomePerAngler || 0) * 0.1;
+                        return scoreB - scoreA;
+                    });
+                    var vipLakeId = preferredLakes[0];
+                    var vipLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(vipLakeId) : null;
+                    var vipDuration = 2;
+                    var vipDailyRate = Math.max(100, Math.round((playerAngler.skill || 5) * 18 + (vipLake ? vipLake.dailyIncomePerAngler * 1.4 : 80)));
+                    state.anglerBookings.push({
+                        anglerId: state.playerAnglerId,
+                        anglerName: playerAngler.name,
+                        lakeId: vipLakeId,
+                        startDay: state.day,
+                        endDay: state.day + vipDuration - 1,
+                        duration: vipDuration,
+                        dailyRate: vipDailyRate,
+                        satisfaction: 70,
+                        isVip: true
+                    });
+                    UI.showToast('⭐ VIP Booking: ' + playerAngler.name + ' booked at ' + (vipLake ? vipLake.name : vipLakeId) + '!', 'success');
+                }
+            }
+        }
+
         state.anglerBookings.forEach(function (booking) {
             if (state.day >= booking.startDay && state.day <= booking.endDay) {
                 // Angler is active today
