@@ -419,5 +419,30 @@ const Cards = (function () {
         return html;
     }
 
-    return { initState, openPack, openPackAnimated, useCard, discardCard, processBuffs, getBuffMultiplier, renderCards, renderCardShopSection, confirmFishCardStock };
+    function createFishCard(fish) {
+        var state = Game.getState();
+        var speciesDef = typeof Fish !== 'undefined' && Fish.SPECIES ? Fish.SPECIES[fish.species] : null;
+        var rarityDef = typeof Fish !== 'undefined' && Fish.RARITIES ? Fish.RARITIES[fish.rarity] : null;
+        var card = {
+            id: 'fish_' + (fish.id || 'x') + '_' + Date.now(),
+            uid: 'fish_' + (fish.id || 'x') + '_' + Date.now(),
+            type: 'fish',
+            rarity: fish.rarity || 'common',
+            name: fish.name || 'Untitled Fish',
+            species: fish.species || 'common',
+            weight_oz: fish.weight_oz || 0,
+            age_days: fish.age_days || 0,
+            traits: fish.personality_traits || [],
+            flavour: rarityDef && speciesDef ? (speciesDef.name || fish.species) + ' offspring.' : 'Bred offspring.'
+        };
+        (state.cardInventory || []).push(card);
+        Game.saveToStorage && Game.saveToStorage();
+        if (typeof Cards !== 'undefined' && typeof Cards.renderCards === 'function') {
+            Cards.renderCards();
+        }
+        UI.showToast('🐟 ' + card.name + ' added to your cards.');
+        return card;
+    }
+
+    return { initState, openPack, openPackAnimated, useCard, discardCard, processBuffs, getBuffMultiplier, renderCards, renderCardShopSection, confirmFishCardStock, createFishCard };
 })();

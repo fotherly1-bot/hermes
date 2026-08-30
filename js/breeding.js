@@ -89,12 +89,17 @@ const Breeding = (function () {
         var p1   = s.breedingPond[0], p2 = s.breedingPond[1];
         if (!p1 || !p2) return;
         var boost   = scientistRarityBonus();
-        var numOff  = 1 + Math.floor(Math.random() * 3);
         var lakeId  = getDestinationLakeId();
         var lake    = lakeId && typeof Lakes !== 'undefined' ? Lakes.getLakeById(lakeId) : null;
         var cap     = lake ? lake.capacity : 0;
         var stocked = lakeId ? s.fish.filter(function(f){ return f.alive && f.lake_id === lakeId; }).length : 0;
-        numOff      = Math.min(numOff, Math.max(0, cap - stocked));
+        if (!lakeId || cap <= 0 || stocked >= cap) {
+            // No lake available — offspring stay in your cards/stock instead
+            lakeId = null;
+            cap = 0;
+            stocked = 0;
+        }
+        var numOff = cap > 0 ? Math.min(1 + Math.floor(Math.random() * 3), Math.max(0, cap - stocked)) : (1 + Math.floor(Math.random() * 3));
 
         var offspringList = [];
         for (var i = 0; i < numOff; i++) {
