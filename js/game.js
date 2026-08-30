@@ -70,7 +70,7 @@ const Game = (function () {
         tournamentCut: 0.20,
         rigInventory: [],
         rigEquipped: [null, null, null],
-        rigBaitEquipped: ['boilie_fishmeal', 'boilie_fishmeal', 'boilie_fishmeal'],
+        rigBaitEquipped: ['boilie_standard','boilie_standard','boilie_standard'],
         rigCustomizations: [{ hookType: 'standard', leadType: 'lead_clip', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'inline', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }, { hookType: 'standard', leadType: 'heli', tubing: 'none', weight: 2, bait: 'bottom_boilie', flavour: 'natural', rigLength: 45, popupHeight: 0, hairLength: 2 }],
         rigComponentsOwned: ['standard_hook', 'inline_lead', 'heli_lead', 'lead_clip_lead', 'running_lead', 'none_tubing', 'weight_2oz', 'bottom_boilie', 'natural'],
         customRigs: [null, null, null],
@@ -241,6 +241,9 @@ const Game = (function () {
             if (typeof s.duckHuntDone === 'undefined') s.duckHuntDone = false;
             if (typeof s.lastDuckHuntDay === 'undefined') s.lastDuckHuntDay = 0;
             if (typeof s.lastDisasterDay === 'undefined') s.lastDisasterDay = 0;
+            if ((s.anglerBait || []).indexOf('boilie_standard') === -1) s.anglerBait = ['boilie_standard'].concat(s.anglerBait || []);
+            if ((s.rigEquipped || []).some(function(slot, i){ return !slot; })) s.rigEquipped = [{ rigId: 'hair', leadType: 'lead_clip' }, { rigId: 'hair', leadType: 'lead_clip' }, { rigId: 'hair', leadType: 'lead_clip' }];
+            if ((s.rigBaitEquipped || []).some(function(b){ return b !== 'boilie_standard'; })) s.rigBaitEquipped = ['boilie_standard','boilie_standard','boilie_standard'];
         }
         return s;
     }

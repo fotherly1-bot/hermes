@@ -371,6 +371,7 @@ const Shop = (function () {
             html += '<p class="tackle-subtitle">Popups, boilies, and spod mix to tempt fish into feeding.</p>';
 
             var BAIT_CATALOG = [
+              {id:'boilie_standard', name:'Standard Boilies', cost:0, image:'img/bait/boilie-standard.png', category:'Boilies', description:'Reliable standard boilies. Unlocked by default.', effects:{catchRateBonus:0.01}, preference:'boilie_standard', free:true},
               {id:'popup_white', name:'White Popups', cost:350, image:'img/bait/popup-white.png', category:'Popups', description:'Classic white buoyant popups.', effects:{catchRateBonus:0.01}, preference:'popup_white'},
               {id:'popup_yellow', name:'Yellow Popups', cost:400, image:'img/bait/popup-yellow.png', category:'Popups', description:'Bright yellow popups for extra attraction.', effects:{catchRateBonus:0.01}, preference:'popup_yellow', lakeBonus:0.02},
               {id:'popup_pink', name:'Pink Popups', cost:400, image:'img/bait/popup-pink.png', category:'Popups', description:'Pink popups for wary fish.', effects:{catchRateBonus:0.01}, preference:'popup_pink'},
@@ -383,6 +384,7 @@ const Shop = (function () {
             ];
 
             var ownedBait = (state.anglerBait || []);
+            if (ownedBait.indexOf('boilie_standard') === -1) ownedBait = ['boilie_standard'].concat(ownedBait);
             var pendingBait = (state.pendingBaitPurchases || []);
             html += '<div class="bait-grid">';
             BAIT_CATALOG.forEach(function(item, idx){
