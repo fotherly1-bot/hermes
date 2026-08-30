@@ -972,7 +972,7 @@ const Anglers = (function () {
                 Game.addReputation(bookingRep);
                 Game.addNotification(booking.anglerName + ' left very satisfied! (+' + bookingRep + ' reputation)');
                 // Record visit stats for leaderboard
-                if (booking.lakeId) recordAnglerVisit(booking.anglerName, booking.lakeId, 1);
+                if (booking.lakeId) simulateDailyCatch(booking);
             } else if (booking.satisfaction >= 40) {
                 Game.addReputation(10);
                 Game.addNotification(booking.anglerName + ' had a decent visit. (+10 reputation)');
@@ -1716,46 +1716,29 @@ const Anglers = (function () {
 
     // ── Angler stats / leaderboard ────────────────────────────────────────────
 
-    function recordAnglerVisit(anglerName, lakeId, daysActive) {
+    function simulateDailyCatch(booking) {
         var state = Game.getState();
-        if (!state.anglerStats) state.anglerStats = {};
-        if (!state.anglerStats[anglerName]) {
-            state.anglerStats[anglerName] = { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0, tripFishCaught: 0 };
-        }
-        var stats = state.anglerStats[anglerName];
-        stats.visits++;
+        var lake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(booking.lakeId) : null;
+        if (!lake) return 0;
+        var lakeFish = state.fish.filter(function (f) { return f.alive && f.lake_id === booking.lakeId; });
+        if (!lakeFish.length) return 0;
 
-        // Simulate fish caught based on lake stock
-        var lakeFish = state.fish.filter(function (f) { return f.alive && f.lake_id === lakeId; });
-        var catchCount = Math.floor(Math.random() * 3) + (lakeFish.length > 10 ? 1 : 0);
-
-        // Tackle catch rate bonus
+        var catchCount = Math.floor(Math.random() * 2) + 1;
         var tackleEffects = typeof Anglers !== 'undefined' && Anglers.getTackleEffects ? Anglers.getTackleEffects() : { catchRateBonus: 0, weightBonus: 0 };
-        if (tackleEffects.catchRateBonus > 0) {
-            catchCount += Math.floor(catchCount * tackleEffects.catchRateBonus);
-        }
-
-        // Rig weather bonus
+        if (tackleEffects.catchRateBonus > 0) catchCount += Math.floor(catchCount * tackleEffects.catchRateBonus);
         var rigBonus = 0;
-        var rigWeightBonus = 0;
         if (typeof Rigs !== 'undefined' && Rigs.getEquippedRigEffects) {
             var rigEffects = Rigs.getEquippedRigEffects();
             rigBonus = rigEffects.catchRateBonus || 0;
-            rigWeightBonus = rigEffects.weightBonus || 0;
             if (typeof Weather !== 'undefined' && Weather.getCurrentWeather) {
                 var currentWeather = Weather.getCurrentWeather();
-                if (currentWeather && currentWeather.current && Rigs.getRigWeatherBonus) {
-                    rigBonus += Rigs.getRigWeatherBonus(currentWeather.current);
-                }
+                if (currentWeather && currentWeather.current && Rigs.getRigWeatherBonus) rigBonus += Rigs.getRigWeatherBonus(currentWeather.current);
             }
         }
-        if (rigBonus > 0) {
-            catchCount += Math.floor(catchCount * rigBonus);
-        }
+        if (rigBonus > 0) catchCount += Math.floor(catchCount * rigBonus);
 
-        // Bait fish preference bonus for booked lake species match
         var baitEffects = typeof Anglers !== 'undefined' && Anglers.getBaitEffects ? Anglers.getBaitEffects() : {};
-        if (baitEffects.lakeBonus && lakeId) {
+        if (baitEffects.lakeBonus && booking.lakeId) {
             var lakeSpeciesPrefs = [];
             try {
                 lakeFish.forEach(function(f){
@@ -1765,38 +1748,21 @@ const Anglers = (function () {
             } catch(e){}
             var ownedBait = (typeof state.anglerBait !== 'undefined' ? state.anglerBait : []);
             var matchedBait = ownedBait.some(function(b){ return lakeSpeciesPrefs.indexOf(b) !== -1; });
-            if (matchedBait) {
-                catchCount = Math.max(1, Math.floor(catchCount * (1 + baitEffects.lakeBonus)));
-            }
+            if (matchedBait) catchCount = Math.max(1, Math.floor(catchCount * (1 + baitEffects.lakeBonus)));
         }
 
-        // Track per-booking trip stats for dashboard
+        var anglerName = booking.anglerName;
+        if (!state.anglerStats) state.anglerStats = {};
+        if (!state.anglerStats[anglerName]) {
+            state.anglerStats[anglerName] = { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0, tripFishCaught: 0 };
+        }
+        state.anglerStats[anglerName].fishCaught += catchCount;
+        state.anglerStats[anglerName].tripFishCaught = (state.anglerStats[anglerName].tripFishCaught || 0) + catchCount;
+
+        var bookingKey = booking.anglerId + '::' + booking.lakeId + '::' + booking.startDay;
         if (!state.bookingTripStats) state.bookingTripStats = {};
-        state.bookingTripStats[booking.anglerId + '::' + booking.lakeId + '::' + booking.startDay] = (state.bookingTripStats[booking.anglerId + '::' + booking.lakeId + '::' + booking.startDay] || 0) + catchCount;
-
-        stats.fishCaught += catchCount;
-        stats.tripFishCaught = (stats.tripFishCaught || 0) + catchCount;
-
-        // Simulate biggest fish caught
-        if (lakeFish.length > 0 && Math.random() < 0.5) {
-            var caught = lakeFish[Math.floor(Math.random() * lakeFish.length)];
-            if (caught.weight_oz > stats.biggestFishOz) {
-                var totalWeightMod = (tackleEffects.weightBonus || 0) + rigWeightBonus;
-                stats.biggestFishOz = Math.round(caught.weight_oz * (1 + totalWeightMod));
-            }
-            // Skill and social media growth from good catches
-            var bigEnough = (caught.weight_oz || 0) >= 400;
-            if (bigEnough) {
-                if (typeof stats.skill !== 'number') stats.skill = 5;
-                if (typeof stats.socialMedia !== 'number') stats.socialMedia = 5;
-                stats.skill = Math.min(10, stats.skill + 1);
-                stats.socialMedia = Math.min(10, stats.socialMedia + 1);
-            }
-        }
-
-        if (typeof updateAnglerQuestProgress === 'function') {
-            updateAnglerQuestProgress();
-        }
+        state.bookingTripStats[bookingKey] = (state.bookingTripStats[bookingKey] || 0) + catchCount;
+        return catchCount;
     }
 
     function recordMatchResult(matchBooking) {
