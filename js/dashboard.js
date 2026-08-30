@@ -1450,10 +1450,23 @@ const Dashboard = (function () {
     }
 
     function renderAdamPlaceholderCard() {
-        return '<div class="dashboard-card" style="text-align:center;padding:1.5rem;">' +
-            '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="max-width:12rem;max-height:14rem;object-fit:contain;border-radius:8px;" onerror="this.style.display=\'none\'" />' +
-            '<h4 style="margin:0.8rem 0 0.4rem;color:var(--colour-gold);">🎣 Advice from Adam Penning</h4>' +
-            '<p style="color:var(--colour-text-muted);">Coming soon.</p>' +
+        var advice = [
+            'Start with Standard Boilies on all rods until you unlock better bait.',
+            'Keep your booking window active to build daily catch history.',
+            'Book deeper lake sections when light levels are low.',
+            'Check rig weight against lake notes — too heavy and bites drop.',
+            'Upgrade your reel before chasing rare Mirror Carp.',
+            'Pause bookings during heavy weather to protect your PB chance.'
+        ];
+        var items = advice.map(function (text) {
+            return '<div style="padding:0.6rem 0.7rem;border-bottom:1px solid var(--colour-border);color:var(--colour-text);font-size:0.9rem;line-height:1.35;">' + text + '</div>';
+        }).join('');
+        return '<div class="dashboard-card" style="padding:1rem;">' +
+            '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:100%;max-height:9rem;object-fit:contain;border-radius:8px;margin-bottom:0.8rem;" onerror="this.style.display=\'none\'" />' +
+            '<h4 style="margin:0 0 0.5rem;color:var(--colour-gold);font-size:1rem;">🎣 Advice from Adam Penning</h4>' +
+            '<div style="max-height:12rem;overflow-y:auto;border:1px solid var(--colour-border);border-radius:8px;background:rgba(0,0,0,0.15);">' +
+            items +
+            '</div>' +
             '</div>';
     }
 
