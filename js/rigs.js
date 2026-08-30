@@ -140,7 +140,7 @@
             var state = Game.getState();
             if (!state.rigInventory) state.rigInventory = [];
             if (!state.rigEquipped) state.rigEquipped = [null, null, null];
-            if (!state.rigBaitEquipped) state.rigBaitEquipped = [null, null, null];
+            if (!state.rigBaitEquipped) state.rigBaitEquipped = ['boilie_standard','boilie_standard','boilie_standard'];
             // Starter setup: always equipped Hair Rig + Standard Boilies on all 3 rods
             var allEquipped = state.rigEquipped.every(function(s){ return !!s; });
             var allBaited = state.rigBaitEquipped.every(function(b){ return !!b; });
@@ -148,9 +148,11 @@
                 state.rigInventory.push('hair');
                 for (var i = 0; i < 3; i++) {
                     state.rigEquipped[i] = { rigId: 'hair', leadType: 'lead_clip' };
-                    state.rigBaitEquipped[i] = 'boilie_fishmeal';
+                    state.rigBaitEquipped[i] = 'boilie_standard';
                 }
             }
+            if (!state.anglerBait) state.anglerBait = [];
+            if (state.anglerBait.indexOf('boilie_standard') === -1) state.anglerBait.unshift('boilie_standard');
         }
 
         function getRigById(id) {
