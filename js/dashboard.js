@@ -1451,12 +1451,21 @@ const Dashboard = (function () {
         var items = advice.map(function (item) {
             var color = item.missingRole ? 'var(--colour-red)' : (urgencyColor[item.urgency] || 'var(--colour-text)');
             var cls = item.missingRole ? 'adam-advice-item adam-advice-critical' : 'adam-advice-item';
-            return '<div class="' + cls + '" style="color:' + color + ';animation:' + (item.missingRole ? 'adamFlash 1s infinite' : 'none' ) + '">' + item.text + '</div>';
+            var urgencyBadge = item.missingRole ? '<span class="adam-urgency-pill adam-urgency-critical">Missing staff</span>' :
+                (item.urgency === 'high' ? '<span class="adam-urgency-pill adam-urgency-high">High</span>' :
+                (item.urgency === 'medium' ? '<span class="adam-urgency-pill adam-urgency-medium">Medium</span>' :
+                '<span class="adam-urgency-pill adam-urgency-low">Low</span>'));
+            return '<div class="' + cls + '" style="color:' + color + ';animation:' + (item.missingRole ? 'adamFlash 1s infinite' : 'none' ) + '">' +
+                '<div style="display:flex;align-items:center;justify-content:space-between;gap:0.6rem;">' +
+                    '<div style="flex:1;font-size:0.95rem;line-height:1.5;">' + item.text + '</div>' +
+                    urgencyBadge +
+                '</div>' +
+            '</div>';
         }).join('');
         return '<div class="dashboard-card" style="padding:1rem;">' +
             '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:100%;max-height:9rem;object-fit:contain;border-radius:8px;margin-bottom:0.8rem;" onerror="this.style.display=\'none\'" />' +
-            '<h4 style="margin:0 0 0.5rem;color:var(--colour-gold);font-size:1rem;">🎣 Advice from Adam Penning</h4>' +
-            '<div style="max-height:12rem;overflow-y:auto;border:1px solid var(--colour-border);border-radius:8px;background:rgba(0,0,0,0.15);">' +
+            '<h4 style="margin:0 0 0.6rem;color:var(--colour-gold);font-size:1rem;">🎣 Advice from Adam Penning</h4>' +
+            '<div style="max-height:22rem;overflow-y:auto;border:1px solid var(--colour-border);border-radius:10px;background:rgba(0,0,0,0.18);padding:0.4rem;">' +
             items +
             '</div>' +
             '</div>';

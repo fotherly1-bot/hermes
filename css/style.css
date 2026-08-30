@@ -5904,6 +5904,28 @@ details[open] > .lake-accordion-summary::before {
     0%,100% { opacity: 1; }
     50%     { opacity: 0.25; }
 }
+.adam-advice-item {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid var(--colour-border);
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+.adam-advice-item:last-child { border-bottom: none; }
+.adam-urgency-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.45rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: var(--colour-text-muted);
+    white-space: nowrap;
+}
+.adam-urgency-critical { background: rgba(231,76,60,0.15); color: var(--colour-red); }
+.adam-urgency-high { background: rgba(241,196,15,0.12); color: #f1c40f; }
+.adam-urgency-medium { background: rgba(52,152,219,0.1); color: #3498db; }
+.adam-urgency-low { background: rgba(170,170,170,0.1); color: var(--colour-text-muted); }
 
 .card-item-header {
     display: flex;
