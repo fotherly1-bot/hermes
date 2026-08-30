@@ -1463,7 +1463,7 @@ const Dashboard = (function () {
         if (total === 0) {
             html += '<p class="empty-state">No quests yet.</p>';
         } else {
-            html += '<div style="max-height:14rem;overflow-y:auto;padding-right:0.2rem;">';
+            html += '<div style="max-height:15rem;overflow-y:auto;padding-right:0.2rem;">';
             html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
             quests.forEach(function(q) {
                 var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
