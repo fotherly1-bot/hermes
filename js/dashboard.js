@@ -33,15 +33,6 @@ const Dashboard = (function () {
             }
         },
         {
-            id: 'own_3_lakes',
-            title: 'Lake Baron',
-            description: 'Own 3 lakes.',
-            reward: { money: 15000, reputation: 5 },
-            checkProgress: function (state) {
-                return { current: Math.min(3, state.ownedLakes.length), target: 3 };
-            }
-        },
-        {
             id: 'fish_over_40lb',
             title: 'Monster Hunter',
             description: 'Have a fish weighing over 40 lb.',

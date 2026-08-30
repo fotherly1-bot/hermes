@@ -2332,12 +2332,6 @@ const Anglers = (function () {
             });
         }
         state.anglerQuests.push({
-            id: qid++, title: 'Lake Baron',
-            description: 'Own 3 lakes.',
-            target: 'ownedLakes', required: 3, progress: 0,
-            rewardMoney: 15000, rewardRep: 5, completed: false, claimed: false
-        });
-        state.anglerQuests.push({
             id: qid++, title: 'Fish Collector',
             description: 'Keep 20 fish alive across lakes.',
             target: 'stock', required: 20, progress: 0,
