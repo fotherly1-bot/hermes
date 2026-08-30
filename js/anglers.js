@@ -476,12 +476,11 @@ const Anglers = (function () {
             return false;
         }
         state.money -= (item.cost || 0);
-        (state.pendingBaitPurchases || (state.pendingBaitPurchases = [])).push(baitId);
-        UI.showToast('🪱 ' + item.name + ' ordered — it arrives tomorrow.', 'success');
+        if ((state.anglerBait || []).indexOf(baitId) === -1) state.anglerBait.push(baitId);
+        UI.showToast('🪱 ' + item.name + ' purchased!', 'success');
         if (typeof Finance !== 'undefined') {
-            Finance.addFinanceLog('bait_purchase', -(item.cost || 0), item.name + ' (pending)');
+            Finance.addFinanceLog('bait_purchase', -(item.cost || 0), item.name);
         }
-        if (typeof UI !== 'undefined' && typeof UI.updateTransitBanner === 'function') UI.updateTransitBanner();
         Game.saveToStorage && Game.saveToStorage();
         renderAnglers && renderAnglers();
         if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') Shop.renderShop();
