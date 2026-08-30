@@ -952,7 +952,7 @@ const Anglers = (function () {
             if (booking.isMatch) {
                 // Match completion: record result + fishery cut
                 recordMatchResult(booking);
-                var repGain = (booking.repBonus || 15) + (booking.satisfaction >= 70 ? 10 : 0);
+                var repGain = (booking.repBonus || 15) + (state.reputation > 800 ? 10 : state.reputation > 500 ? 5 : 0) + (booking.satisfaction >= 70 ? 10 : 0);
                 Game.addReputation(repGain);
                 Game.addNotification(
                     '\uD83C\uDFC6 ' + booking.matchName + ' completed at ' +
@@ -974,12 +974,13 @@ const Anglers = (function () {
                 // Record visit stats for leaderboard
                 if (booking.lakeId) recordAnglerVisit(booking.anglerName, booking.lakeId, 1);
             } else if (booking.satisfaction >= 40) {
-                Game.addReputation(2);
-                Game.addNotification(booking.anglerName + ' had a decent visit. (+100 reputation)');
+                Game.addReputation(10);
+                Game.addNotification(booking.anglerName + ' had a decent visit. (+10 reputation)');
             } else {
-                Game.addNotification(booking.anglerName + ' left unhappy. (-100 reputation)');
+                Game.addReputation(-10);
+                Game.addNotification(booking.anglerName + ' left unhappy. (-10 reputation)');
                 var state2 = Game.getState();
-                state2.reputation = Math.max(0, state2.reputation - 2);
+                state2.reputation = Math.max(0, state2.reputation - 10);
             }        });
 
         // Remove expired pending bookings (older than 2 days)

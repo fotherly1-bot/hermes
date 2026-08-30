@@ -716,6 +716,11 @@ const Game = (function () {
         state.reputationHistory.push({ day: state.day, reputation: state.reputation });
         if (state.reputationHistory.length > 30) state.reputationHistory.shift();
 
+        // Soft reputation decay above threshold to create maintenance pressure
+        if (state.reputation > 500) {
+            addReputation(-1);
+        }
+
         // Add day progression notification
         addNotification('Day ' + state.day + ' has begun.');
 

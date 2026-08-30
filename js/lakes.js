@@ -288,10 +288,12 @@ const Lakes = (function () {
      */
     function getLakeMaintenanceDailyCost(lakeId) {
         var settings = getLakeMaintenance(lakeId);
+        var state = Game.getState();
+        var repFactor = 1 + Math.max(0, (state.reputation - 400)) / 400;
         return MAINTENANCE_KEYS.reduce(function (sum, key) {
             var cfg = MAINTENANCE_CONFIG[key];
             return sum + (cfg ? (cfg.costs[settings[key]] || 0) : 0);
-        }, 0);
+        }, 0) * Math.max(1, repFactor);
     }
 
     /**
@@ -392,12 +394,14 @@ const Lakes = (function () {
         }
 
         var tier = EXPANSION_TIERS[expState.level]; // 0-indexed = next tier
-        if (state.money < tier.cost) {
-            UI.showToast('Need ' + UI.formatMoney(tier.cost) + ' to start expansion.', 'error'); return;
+        var repFactor = 1 + Math.max(0, (state.reputation - 400)) / 400;
+        var adjustedCost = Math.round(tier.cost * repFactor);
+        if (state.money < adjustedCost) {
+            UI.showToast('Need ' + UI.formatMoney(adjustedCost) + ' to start expansion.', 'error'); return;
         }
 
-        state.money      -= tier.cost;
-        state.totalSpent += tier.cost;
+        state.money      -= adjustedCost;
+        state.totalSpent += adjustedCost;
         if (typeof Finance !== 'undefined') {
             Finance.addFinanceLog('shop_purchase', -tier.cost, tier.name + ' — ' + lake.name);
         }
