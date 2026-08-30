@@ -262,10 +262,20 @@ const Anglers = (function () {
         if (!state.anglerStats) state.anglerStats = {};
         if (!state.lastProcessedSeason) state.lastProcessedSeason = getCurrentSeasonNum(state.day);
         if (state.playerAnglerId) {
-            var p = (state.anglerStats[state.playerAnglerId] || {});
+            var angler = (typeof Anglers !== 'undefined' && typeof Anglers.getAnglerById === 'function')
+                ? Anglers.getAnglerById(state.playerAnglerId)
+                : null;
+            var nameKey = angler ? angler.name : state.playerAnglerId;
+            var p = (state.anglerStats[nameKey] || {});
             if (typeof p.skill !== 'number') p.skill = 5;
             if (typeof p.socialMedia !== 'number') p.socialMedia = 5;
-            state.anglerStats[state.playerAnglerId] = p;
+            if (!p.fishCaught) p.fishCaught = 0;
+            if (!p.biggestFishOz) p.biggestFishOz = 0;
+            if (!p.wins) p.wins = 0;
+            if (!p.winnings) p.winnings = 0;
+            if (!p.visits) p.visits = 0;
+            if (!p.tripFishCaught) p.tripFishCaught = 0;
+            state.anglerStats[nameKey] = p;
         }
         if (!state.playerAnglerId) {
             var anglers = (typeof Anglers !== 'undefined' && typeof Anglers.getAllAnglers === 'function')
@@ -1762,6 +1772,22 @@ const Anglers = (function () {
         var bookingKey = booking.anglerId + '::' + booking.lakeId + '::' + booking.startDay;
         if (!state.bookingTripStats) state.bookingTripStats = {};
         state.bookingTripStats[bookingKey] = (state.bookingTripStats[bookingKey] || 0) + catchCount;
+
+        // Update personal best weight from today's catches
+        if (lakeFish.length > 0) {
+            var heaviestToday = lakeFish[0];
+            for (var i = 1; i < lakeFish.length; i++) {
+                if ((lakeFish[i].weight_oz || 0) > (heaviestToday.weight_oz || 0)) heaviestToday = lakeFish[i];
+            }
+            var targetWeight = heaviestToday.weight_oz || 0;
+            if (targetWeight > (state.anglerStats[anglerName].biggestFishOz || 0)) {
+                state.anglerStats[anglerName].biggestFishOz = targetWeight;
+            }
+            if ((targetWeight || 0) >= 800 && typeof state.anglerStats[anglerName].wins === 'number') {
+                state.anglerStats[anglerName].wins += 1;
+            }
+        }
+
         return catchCount;
     }
 
