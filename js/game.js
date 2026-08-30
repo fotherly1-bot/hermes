@@ -467,10 +467,11 @@ const Game = (function () {
 
         // Resolve pending fish purchases
         if (state.pendingFishPurchases && state.pendingFishPurchases.length) {
-            state.pendingFishPurchases.forEach(function (idx) {
-                var stockItem = (typeof STOCK_FISH !== 'undefined') ? STOCK_FISH[idx] : null;
+            state.pendingFishPurchases.forEach(function (entry) {
+                var stockIndex = (entry && typeof entry.index !== 'undefined') ? entry.index : entry;
+                var lakeId = (entry && entry.lakeId) ? entry.lakeId : (state.activeLakeId || (state.ownedLakes && state.ownedLakes[0]) || null);
+                var stockItem = (typeof STOCK_FISH !== 'undefined') ? STOCK_FISH[stockIndex] : null;
                 if (!stockItem) return;
-                var lakeId = state.activeLakeId || (state.ownedLakes && state.ownedLakes[0]) || null;
                 var ageMin = stockItem.ageRange[0];
                 var ageMax = stockItem.ageRange[1];
                 var age    = ageMin + Math.floor(Math.random() * (ageMax - ageMin + 1));
@@ -485,13 +486,16 @@ const Game = (function () {
                     if (typeof Game.logFishCreation === 'function') {
                         Game.logFishCreation(fish, 'shop', null);
                     }
-                    Game.addEvent('fish_born', '\uD83D\uDED2', stockItem.label + ' purchase arrived.');
+                    Game.addEvent('fish_born', '\uD83D\uDED2', stockItem.label + ' purchase arrived at ' + (typeof Lakes !== 'undefined' && Lakes.getLakeById ? ((Lakes.getLakeById(lakeId) || {}).name || lakeId) : lakeId) + '.');
                     if (typeof News !== 'undefined') News.addStockingStory(stockItem.label, stockItem.rarity, lakeId);
                 }
             });
             state.pendingFishPurchases = [];
             if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') {
                 Shop.renderShop();
+            }
+            if (typeof UI !== 'undefined' && typeof UI.renderTopBar === 'function') {
+                UI.renderTopBar();
             }
         }
 

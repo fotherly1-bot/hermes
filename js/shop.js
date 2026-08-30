@@ -247,7 +247,7 @@ const Shop = (function () {
             return false;
         }
 
-        if ((state.pendingFishPurchases || []).indexOf(index) !== -1) {
+        if ((state.pendingFishPurchases || []).some(function(p){ return (p && p.index) === index; })) {
             UI.showToast(stockItem.label + ' is already pending delivery.', 'warning');
             return false;
         }
@@ -275,7 +275,7 @@ const Shop = (function () {
             Finance.addFinanceLog('shop_purchase', -stockItem.cost, 'Stocked fish: ' + stockItem.label + ' (' + stockItem.size + ') (pending)');
         }
 
-        (state.pendingFishPurchases || []).push(index);
+        (state.pendingFishPurchases || []).push({ index: index, lakeId: lakeId });
         UI.showToast('🐟 ' + stockItem.label + ' ordered — it arrives tomorrow.', 'success');
         Game.saveToStorage && Game.saveToStorage();
         renderShop();
@@ -638,7 +638,7 @@ const Shop = (function () {
                 var sizeMeta = SIZE_META[item.size] || { label: item.size, emoji: '', colour: '#888', hint: '' };
                 var full = spaceLeft <= 0;
                 var afford = state.money >= item.cost;
-                var pending = (state.pendingFishPurchases || []).indexOf(gIdx) !== -1;
+                var pending = (state.pendingFishPurchases || []).some(function(p){ return p && p.index === gIdx; });
                 html += '<div class="st-stock-card' + (full || !afford || pending ? ' shop-card-disabled' : '') + '">';
                 html += '<div class="st-stock-badges">';
                 html += '<span class="shop-size-badge" style="background:' + sizeMeta.colour + '22;color:' + sizeMeta.colour + ';border:1px solid ' + sizeMeta.colour + '55;">' + sizeMeta.emoji + ' ' + sizeMeta.label + '</span>';
@@ -694,6 +694,7 @@ const Shop = (function () {
             fishSpecies: fish.speciesName,
             fishRarity: fish.rarity,
             fishWeightOz: fish.weight_oz,
+            lakeId: fish.lake_id || null,
             dayQueued: state.day,
             resolveDay: state.day + 1
         });
@@ -702,6 +703,28 @@ const Shop = (function () {
         state.fish.splice(idx, 1);
         Game.addNotification((type === 'auction' ? '🏆 Auction queued for ' : '💰 Sale queued for ') + fish.name + '. Arrives tomorrow.');
         UI.showToast((type === 'auction' ? 'Auction' : 'Sale') + ' queued for tomorrow.', 'success');
+        Game.saveToStorage();
+        renderShop();
+    }
+
+    function cancelPendingSale(fishId) {
+        var state = Game.getState();
+        if (!state.pendingFishSales) return;
+        var idx = state.pendingFishSales.findIndex(function (s) { return s.fishId === fishId; });
+        if (idx === -1) return;
+        var sale = state.pendingFishSales.splice(idx, 1)[0];
+        var stub = {
+            id: sale.fishId,
+            name: sale.fishName,
+            speciesName: sale.fishSpecies,
+            rarity: sale.fishRarity,
+            weight_oz: sale.fishWeightOz,
+            alive: true,
+            lake_id: sale.lakeId || null
+        };
+        state.fish.push(stub);
+        Game.addNotification('Cancelled pending ' + sale.type + ' for ' + sale.fishName + '.');
+        UI.showToast(sale.fishName + ' returned to stock.', 'warning');
         Game.saveToStorage();
         renderShop();
     }
@@ -795,7 +818,8 @@ const Shop = (function () {
                 html += '<span class="sell-auction-rarity" style="color:' + col + ';">' + (sale.fishRarity || '') + '</span>';
                 html += '<span class="sell-auction-price">' + (sale.type === 'auction' ? 'Auction' : 'Sale') + '</span>';
                 html += '<span class="sell-auction-days">Arrives tomorrow</span>';
-                html += '<span class="sell-fish-pond-tag">Pending</span>';
+                html += '<span class="sell-fish-pond-tag">' + (sale.lakeId ? (typeof Lakes !== 'undefined' && Lakes.getLakeById ? ((Lakes.getLakeById(sale.lakeId) || {}).name || 'Pending') : 'Pending') : 'Pending') + '</span>';
+                html += '<button class="btn btn-sm btn-secondary" onclick="Shop.cancelPendingSale(\'' + sale.fishId + '\')">Cancel</button>';
                 html += '</div>';
             });
             html += '</div>';
