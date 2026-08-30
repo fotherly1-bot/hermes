@@ -70,7 +70,7 @@
             }
         }
 
-        UI.showToast('Welcome! Remember to hire staff before you start.', 'info');
+        UI.showToast('Welcome! Your team is already in place — manage them from the Staff tab.', 'info');
     }
 
     function _renderCarousel() {
@@ -116,7 +116,7 @@
         if (!container) return;
         var items = [
             { id: 'angler', label: 'Pick your angler' },
-            { id: 'staff',  label: 'Hire staff for every role' }
+            { id: 'staff',  label: 'Review your starting staff' }
         ];
         var saved = (typeof Game !== 'undefined' && Game.loadFromStorage) ? Game.loadFromStorage() : null;
         var completed = new Set();

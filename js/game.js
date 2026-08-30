@@ -214,7 +214,16 @@ const Game = (function () {
                 fishHistory: [], nextFishId: 1, anglerBookings: [], anglerSatisfaction: {},
                 pendingBookings: [], incomeHistory: [], completedQuests: [], disasterLog: [],
                 lakeClosures: {}, biodiversityPenalties: {}, capacityPenalties: {},
-                weather: null, lakeOxygen: {}, hiredStaff: [], availableStaffIds: [],
+                weather: null, lakeOxygen: {}, hiredStaff: [
+     {instanceId:1, poolId:5,  name:'Nicky Pearce',    role:'assistant',     salary:40,  hire:500,  traits:['experienced'],            happiness:80, assignedLakeId:null, hiredDay:1, marketingBudget:0, marketingPool:0},
+     {instanceId:2, poolId:8,  name:'Pete Weston',     role:'manager',       salary:50,  hire:600,  traits:['grumpy','efficient'],     happiness:80, assignedLakeId:null, hiredDay:1, marketingBudget:0, marketingPool:0},
+     {instanceId:3, poolId:11, name:'Susan Fletcher',  role:'keeper',        salary:70,  hire:850,  traits:['experienced','enthusiastic'], happiness:80, assignedLakeId:null, hiredDay:1, marketingBudget:0, marketingPool:0},
+     {instanceId:4, poolId:13, name:'Dave Barker',     role:'guard',         salary:55,  hire:650,  traits:['dedicated','efficient'], happiness:80, assignedLakeId:null, hiredDay:1, marketingBudget:0, marketingPool:0},
+     {instanceId:5, poolId:17, name:'Colin Shepherd',  role:'groundskeeper', salary:40,  hire:450,  traits:['experienced'],            happiness:80, assignedLakeId:null, hiredDay:1, marketingBudget:0, marketingPool:0},
+     {instanceId:6, poolId:23, name:'Samantha Voss',   role:'scientist',     salary:60,  hire:700,  traits:['enthusiastic'],           happiness:80, assignedLakeId:null, hiredDay:1, marketingBudget:0, marketingPool:0},
+     {instanceId:7, poolId:29, name:'Tom Briscoe',     role:'marketer',      salary:45,  hire:500,  traits:['dedicated'],              happiness:80, assignedLakeId:null, hiredDay:1, marketingBudget:220, marketingPool:0}
+ ],
+ availableStaffIds: [],
                 loans: [], marketingCampaigns: [], financeLog: [], spawnLog: {},
                 breedingSettings: { feedQuality: 0, feedFrequency: 1, pondTemp: 1, stressControl: 1 },
                 eventLog: [], fishCreationLog: [], nextEventId: 1, lastBreedingOutcome: null,
