@@ -427,13 +427,14 @@ const Anglers = (function () {
             UI.showToast('Not enough money! You need ' + UI.formatMoney(item.cost) + '.', 'error');
             return false;
         }
-        (state.pendingTacklePurchases || []).push(tackleId);
-        UI.showToast(item.icon + ' ' + item.name + ' ordered — it arrives tomorrow.', 'success');
+        if ((state.anglerTackle || []).indexOf(tackleId) === -1) state.anglerTackle.push(tackleId);
+        UI.showToast(item.icon + ' ' + item.name + ' purchased!', 'success');
         if (typeof Finance !== 'undefined') {
-            Finance.addFinanceLog('tackle_purchase', -item.cost, item.name + ' (pending)');
+            Finance.addFinanceLog('tackle_purchase', -item.cost, item.name);
         }
         Game.saveToStorage && Game.saveToStorage();
         renderAnglers && renderAnglers();
+        if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') Shop.renderShop();
         return true;
     }
 
