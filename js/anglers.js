@@ -831,38 +831,42 @@ const Anglers = (function () {
         var dailyAnglerIncome = 0;
         var activeAnglerCount = 0;
 
-        // VIP booking priority: if player angler is not booked for today, auto-book immediately
+        // VIP booking priority: if player angler is not booked for today, auto-book every 2 days
         if (state.playerAnglerId && typeof Anglers !== 'undefined') {
             var playerAlreadyBooked = state.anglerBookings.some(function (booking) {
                 return booking.anglerId === state.playerAnglerId && state.day >= booking.startDay && state.day <= booking.endDay;
             });
             if (!playerAlreadyBooked && state.ownedLakes && state.ownedLakes.length > 0) {
-                var playerAngler = Anglers.getAnglerById(state.playerAnglerId);
-                if (playerAngler) {
-                    var preferredLakes = state.ownedLakes.slice().sort(function (a, b) {
-                        var la = typeof Lakes !== 'undefined' ? Lakes.getLakeById(a) : null;
-                        var lb = typeof Lakes !== 'undefined' ? Lakes.getLakeById(b) : null;
-                        if (!la || !lb) return 0;
-                        var scoreA = (playerAngler.preferred.indexOf(la.waterType) !== -1 ? 3 : 0) + (la.dailyIncomePerAngler || 0) * 0.1;
-                        var scoreB = (playerAngler.preferred.indexOf(lb.waterType) !== -1 ? 3 : 0) + (lb.dailyIncomePerAngler || 0) * 0.1;
-                        return scoreB - scoreA;
-                    });
-                    var vipLakeId = preferredLakes[0];
-                    var vipLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(vipLakeId) : null;
-                    var vipDuration = 2;
-                    var vipDailyRate = Math.max(100, Math.round((playerAngler.skill || 5) * 18 + (vipLake ? vipLake.dailyIncomePerAngler * 1.4 : 80)));
-                    state.anglerBookings.push({
-                        anglerId: state.playerAnglerId,
-                        anglerName: playerAngler.name,
-                        lakeId: vipLakeId,
-                        startDay: state.day,
-                        endDay: state.day + vipDuration - 1,
-                        duration: vipDuration,
-                        dailyRate: vipDailyRate,
-                        satisfaction: 70,
-                        isVip: true
-                    });
-                    UI.showToast('⭐ VIP Booking: ' + playerAngler.name + ' booked at ' + (vipLake ? vipLake.name : vipLakeId) + '!', 'success');
+                var lastVipDay = typeof state.lastVipBookingDay === 'number' ? state.lastVipBookingDay : -999;
+                if (state.day - lastVipDay >= 2) {
+                    var playerAngler = Anglers.getAnglerById(state.playerAnglerId);
+                    if (playerAngler) {
+                        var preferredLakes = state.ownedLakes.slice().sort(function (a, b) {
+                            var la = typeof Lakes !== 'undefined' ? Lakes.getLakeById(a) : null;
+                            var lb = typeof Lakes !== 'undefined' ? Lakes.getLakeById(b) : null;
+                            if (!la || !lb) return 0;
+                            var scoreA = (playerAngler.preferred.indexOf(la.waterType) !== -1 ? 3 : 0) + (la.dailyIncomePerAngler || 0) * 0.1;
+                            var scoreB = (playerAngler.preferred.indexOf(lb.waterType) !== -1 ? 3 : 0) + (lb.dailyIncomePerAngler || 0) * 0.1;
+                            return scoreB - scoreA;
+                        });
+                        var vipLakeId = preferredLakes[0];
+                        var vipLake = typeof Lakes !== 'undefined' ? Lakes.getLakeById(vipLakeId) : null;
+                        var vipDuration = 2;
+                        var vipDailyRate = Math.max(100, Math.round((playerAngler.skill || 5) * 18 + (vipLake ? vipLake.dailyIncomePerAngler * 1.4 : 80)));
+                        state.anglerBookings.push({
+                            anglerId: state.playerAnglerId,
+                            anglerName: playerAngler.name,
+                            lakeId: vipLakeId,
+                            startDay: state.day,
+                            endDay: state.day + vipDuration - 1,
+                            duration: vipDuration,
+                            dailyRate: vipDailyRate,
+                            satisfaction: 70,
+                            isVip: true
+                        });
+                        state.lastVipBookingDay = state.day;
+                        UI.showToast('⭐ VIP Booking: ' + playerAngler.name + ' booked at ' + (vipLake ? vipLake.name : vipLakeId) + '!', 'success');
+                    }
                 }
             }
         }
@@ -933,6 +937,9 @@ const Anglers = (function () {
                     if (tackleEffects.satisfactionBonus > 0) {
                         booking.satisfaction = Math.max(0, Math.min(100, booking.satisfaction + tackleEffects.satisfactionBonus));
                     }
+
+                    // Daily catch simulation for all active bookings
+                    if (booking.lakeId) simulateDailyCatch(booking);
                 }
             }
         });
@@ -981,8 +988,6 @@ const Anglers = (function () {
                 }
                 Game.addReputation(bookingRep);
                 Game.addNotification(booking.anglerName + ' left very satisfied! (+' + bookingRep + ' reputation)');
-                // Record visit stats for leaderboard
-                if (booking.lakeId) simulateDailyCatch(booking);
             } else if (booking.satisfaction >= 40) {
                 Game.addReputation(10);
                 Game.addNotification(booking.anglerName + ' had a decent visit. (+10 reputation)');
@@ -1734,6 +1739,8 @@ const Anglers = (function () {
         if (!lakeFish.length) return 0;
 
         var catchCount = Math.floor(Math.random() * 2) + 1;
+        var isPlayer = state.playerAnglerId && booking.anglerId === state.playerAnglerId;
+        if (!isPlayer) catchCount = Math.max(1, Math.floor(catchCount * 0.6));
         var tackleEffects = typeof Anglers !== 'undefined' && Anglers.getTackleEffects ? Anglers.getTackleEffects() : { catchRateBonus: 0, weightBonus: 0 };
         if (tackleEffects.catchRateBonus > 0) catchCount += Math.floor(catchCount * tackleEffects.catchRateBonus);
         var rigBonus = 0;
@@ -1766,6 +1773,7 @@ const Anglers = (function () {
         if (!state.anglerStats[anglerName]) {
             state.anglerStats[anglerName] = { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0, tripFishCaught: 0 };
         }
+        var prevPB = state.anglerStats[anglerName].biggestFishOz || 0;
         state.anglerStats[anglerName].fishCaught += catchCount;
         state.anglerStats[anglerName].tripFishCaught = (state.anglerStats[anglerName].tripFishCaught || 0) + catchCount;
 
@@ -1780,8 +1788,11 @@ const Anglers = (function () {
                 if ((lakeFish[i].weight_oz || 0) > (heaviestToday.weight_oz || 0)) heaviestToday = lakeFish[i];
             }
             var targetWeight = heaviestToday.weight_oz || 0;
-            if (targetWeight > (state.anglerStats[anglerName].biggestFishOz || 0)) {
+            if (targetWeight > prevPB) {
                 state.anglerStats[anglerName].biggestFishOz = targetWeight;
+                if (typeof UI !== 'undefined' && UI.showToast) {
+                    UI.showToast('🎉 New PB: ' + UI.formatWeight(targetWeight) + ' by ' + anglerName + '!', 'success');
+                }
             }
             if ((targetWeight || 0) >= 800 && typeof state.anglerStats[anglerName].wins === 'number') {
                 state.anglerStats[anglerName].wins += 1;
