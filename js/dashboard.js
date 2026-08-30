@@ -1465,7 +1465,7 @@ const Dashboard = (function () {
         return '<div class="dashboard-card" style="padding:1rem;">' +
             '<img src="img/anglers/adampenning12.png" alt="Adam Penning" style="width:100%;max-height:9rem;object-fit:contain;border-radius:8px;margin-bottom:0.8rem;" onerror="this.style.display=\'none\'" />' +
             '<h4 style="margin:0 0 0.6rem;color:var(--colour-gold);font-size:1rem;">🎣 Advice from Adam Penning</h4>' +
-            '<div style="max-height:22rem;overflow-y:auto;border:1px solid var(--colour-border);border-radius:10px;background:rgba(0,0,0,0.18);padding:0.4rem;">' +
+            '<div style="border:1px solid var(--colour-border);border-radius:10px;background:rgba(0,0,0,0.18);padding:0.4rem;">' +
             items +
             '</div>' +
             '</div>';
