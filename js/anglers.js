@@ -457,7 +457,11 @@ const Anglers = (function () {
             ];
         }
         var item = catalog.find(function(b){ return b.id === baitId; });
-        if (!item) { UI.showToast('Bait not found.', 'error'); return false; }
+        if (!item) {
+            UI.showToast('Bait not found.', 'error');
+            return false;
+        }
+        if (baitId === 'boilie_standard') item.cost = 0;
         if ((state.anglerBait || []).indexOf(baitId) !== -1) {
             UI.showToast('You already own ' + item.name + '.', 'warning');
             return false;
@@ -466,18 +470,20 @@ const Anglers = (function () {
             UI.showToast(item.name + ' is already pending delivery.', 'warning');
             return false;
         }
-        if ((state.money || 0) < item.cost) {
+        if ((state.money || 0) < (item.cost || 0)) {
             UI.showToast('Not enough money for ' + item.name + '.', 'error');
             return false;
         }
-        state.money -= item.cost;
-        (state.pendingBaitPurchases || []).push(baitId);
+        state.money -= (item.cost || 0);
+        (state.pendingBaitPurchases || (state.pendingBaitPurchases = [])).push(baitId);
         UI.showToast('🪱 ' + item.name + ' ordered — it arrives tomorrow.', 'success');
         if (typeof Finance !== 'undefined') {
-            Finance.addFinanceLog('bait_purchase', -item.cost, item.name + ' (pending)');
+            Finance.addFinanceLog('bait_purchase', -(item.cost || 0), item.name + ' (pending)');
         }
+        if (typeof UI !== 'undefined' && typeof UI.updateTransitBanner === 'function') UI.updateTransitBanner();
         Game.saveToStorage && Game.saveToStorage();
         renderAnglers && renderAnglers();
+        if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') Shop.renderShop();
         return true;
     }
 
