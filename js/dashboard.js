@@ -1611,19 +1611,13 @@ const Dashboard = (function () {
 
         var stats = (state.anglerStats || {})[angler.name] || { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0 };
         var pbWeight = stats.biggestFishOz || 0;
-        if (pbWeight === 0) {
-            return '<div class="dash-fish-feature-card">' +
-                '<h4 class="dash-section-subheading">🎣 Your Angler PB</h4>' +
-                '<div class="dash-fish-feature">' + getFishIconHtml('common', true) + '<div class="dash-fish-name">No catches yet</div></div>' +
-                '</div>';
-        }
 
         // Try to find the actual fish object for richer display
         var pbFish = null;
-        if (state.fish) {
-            state.fish.forEach(function(f) {
-                if (f.alive && (f.weight_oz || 0) === pbWeight) pbFish = f;
-            });
+        if (state.fish && pbWeight > 0) {
+            var candidates = state.fish.filter(function(f){ return f.alive && (f.weight_oz || 0) > 0; });
+            candidates.sort(function(a,b){ return (b.weight_oz||0) - (a.weight_oz||0); });
+            pbFish = candidates[0] || null;
         }
 
         var rd = typeof Fish !== 'undefined' ? (Fish.RARITIES[(pbFish && pbFish.rarity) ? pbFish.rarity : 'common'] || { name: 'Common', colour: '#aaa' }) : { name: 'Common', colour: '#aaa' };
@@ -1642,8 +1636,12 @@ const Dashboard = (function () {
         var pbValue = pbFish && typeof Fish !== 'undefined' ? Fish.getFishValue(pbFish) : 0;
         var valuePct = totalValue > 0 ? Math.round((pbValue / totalValue) * 100) : 0;
 
+        var pbLabel = pbWeight > 0 ? UI.formatWeight(pbWeight) : '—';
+        var pbName = pbFish ? pbFish.name : (pbWeight > 0 ? angler.name + '\'s Best' : 'No catches yet');
+        var pbLake = pbFish && pbFish.lake_id ? (typeof Lakes !== 'undefined' && Lakes.getLakeById(pbFish.lake_id) ? Lakes.getLakeById(pbFish.lake_id).name : pbFish.lake_id) : '—';
+
         var bars = [
-            { label: 'Weight vs Max', pct: weightPct, value: UI.formatWeight(pbWeight), colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '⚖️' },
+            { label: 'Weight vs Max', pct: weightPct, value: pbLabel, colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '⚖️' },
             { label: 'Rarity Tier', pct: rarityPct, value: rd.name, colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '💎' },
             { label: 'Health', pct: health, value: (pbFish && pbFish.stats ? (pbFish.stats.health || 0) : 0) + '/100', colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '❤️' },
             { label: 'Age Progress', pct: agePct, value: (pbFish ? (pbFish.age_days || 0) : 0) + ' days', colour: 'linear-gradient(90deg, #27ae60, #2ecc71)', icon: '📅' },
@@ -1661,11 +1659,11 @@ const Dashboard = (function () {
             '<h4 class="dash-section-subheading">🎣 Your Angler PB</h4>' +
             '<div class="dash-fish-feature">' +
                 (pbFish && typeof Fish !== 'undefined' ? getFishIconHtml(pbFish.species, true) : getFishIconHtml('common', true)) +
-                '<span class="dash-fish-name">' + (pbFish ? pbFish.name : angler.name + '\'s Best') + '</span>' +
+                '<span class="dash-fish-name">' + pbName + '</span>' +
                 '<span class="dash-fish-species">' + sp + '</span>' +
                 '<span class="dash-fish-rarity" style="color:' + rd.colour + ';">' + rd.name + '</span>' +
-                '<span class="dash-fish-weight" style="color:var(--colour-gold);font-size:1.4rem;font-weight:800;">' + UI.formatWeight(pbWeight) + '</span>' +
-                '<span class="dash-fish-lake">Lake: ' + (pbFish && pbFish.lake_id ? (typeof Lakes !== 'undefined' && Lakes.getLakeById(pbFish.lake_id) ? Lakes.getLakeById(pbFish.lake_id).name : pbFish.lake_id) : '—') + '</span>' +
+                '<span class="dash-fish-weight" style="color:var(--colour-gold);font-size:1.4rem;font-weight:800;">' + pbLabel + '</span>' +
+                '<span class="dash-fish-lake">Lake: ' + pbLake + '</span>' +
             '</div>' +
             '<div class="dash-fish-stat-bars">' + barsHtml + '</div>' +
         '</div>';
