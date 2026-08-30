@@ -141,14 +141,18 @@
             if (!state.rigInventory) state.rigInventory = [];
             if (!state.rigEquipped) state.rigEquipped = [null, null, null];
             if (!state.rigBaitEquipped) state.rigBaitEquipped = ['boilie_standard','boilie_standard','boilie_standard'];
+            // Migrate old saves that used fishmeal or nulls
+            for (var i = 0; i < 3; i++) {
+                if (!state.rigBaitEquipped[i] || state.rigBaitEquipped[i] === 'boilie_fishmeal') state.rigBaitEquipped[i] = 'boilie_standard';
+            }
             // Starter setup: always equipped Hair Rig + Standard Boilies on all 3 rods
             var allEquipped = state.rigEquipped.every(function(s){ return !!s; });
             var allBaited = state.rigBaitEquipped.every(function(b){ return !!b; });
             if (!allEquipped || !allBaited) {
                 state.rigInventory.push('hair');
-                for (var i = 0; i < 3; i++) {
-                    state.rigEquipped[i] = { rigId: 'hair', leadType: 'lead_clip' };
-                    state.rigBaitEquipped[i] = 'boilie_standard';
+                for (var j = 0; j < 3; j++) {
+                    state.rigEquipped[j] = { rigId: 'hair', leadType: 'lead_clip' };
+                    state.rigBaitEquipped[j] = 'boilie_standard';
                 }
             }
             if (!state.anglerBait) state.anglerBait = [];
@@ -461,16 +465,13 @@
             html += '<div class="rigs-shop-grid">';
             RIG_CATALOG.forEach(function (def) {
                 var inv = state.rigInventory || [];
-                var pending = (state.pendingRigPurchases || []).indexOf(def.id) !== -1;
                 var alreadyOwned = inv.indexOf(def.id) !== -1;
-                html += '<div class="rigs-shop-card' + (alreadyOwned ? ' rig-owned' : '') + (pending ? ' rig-pending' : '') + '">';
+                html += '<div class="rigs-shop-card' + (alreadyOwned ? ' rig-owned' : '') + '">';
                 html += '<div class="rigs-shop-card-name">' + def.name + '</div>';
                 html += '<div class="rigs-shop-card-desc">' + def.description + '</div>';
                 if (alreadyOwned) {
                     html += '<span class="rig-badge rig-badge-owned">Owned</span>';
-                } else if (pending) {
-                    html += '<span class="rig-badge rig-badge-pending">Pending</span>';
-                    html += '<button class="btn btn-sm btn-muted" disabled>Arriving tomorrow</button>';
+                    html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
                 } else {
                     html += '<span class="rig-badge rig-badge-cost">£' + UI.formatMoney(def.cost) + '</span>';
                     html += '<button class="btn btn-sm btn-primary" onclick="Rigs.buyRigFromShop(\'' + def.id + '\')">Buy</button>';
@@ -494,19 +495,15 @@
                 renderRigs();
                 return;
             }
-            if ((state.pendingRigPurchases || []).indexOf(rigId) !== -1) {
-                UI.showToast(def.name + ' is already pending delivery.', 'warning');
-                return;
-            }
             var cost = def.cost || 2500;
             if (!Game.spendMoney(cost)) {
                 UI.showToast('Not enough money! You need ' + UI.formatMoney(cost) + '.', 'error');
                 return;
             }
-            (state.pendingRigPurchases || []).push(rigId);
-            UI.showToast(def.icon + ' ' + def.name + ' ordered — it arrives tomorrow.', 'success');
+            if ((state.rigInventory || []).indexOf(rigId) === -1) state.rigInventory.push(rigId);
+            UI.showToast(def.icon + ' ' + def.name + ' purchased!', 'success');
             if (typeof Finance !== 'undefined') {
-                Finance.addFinanceLog('rig_purchase', -cost, def.name + ' (pending)');
+                Finance.addFinanceLog('rig_purchase', -cost, def.name);
             }
             Game.saveToStorage();
             renderTackleBoxShop();

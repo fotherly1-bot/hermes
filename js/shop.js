@@ -248,11 +248,6 @@ const Shop = (function () {
             return false;
         }
 
-        if ((state.pendingFishPurchases || []).some(function(p){ return (p && p.index) === index; })) {
-            UI.showToast(stockItem.label + ' is already pending delivery.', 'warning');
-            return false;
-        }
-
         if (state.money < stockItem.cost) {
             UI.showToast('Not enough money! You need ' + UI.formatMoney(stockItem.cost) + '.', 'error');
             return false;
@@ -273,13 +268,14 @@ const Shop = (function () {
         if (!Game.spendMoney(stockItem.cost)) { return false; }
 
         if (typeof Finance !== 'undefined') {
-            Finance.addFinanceLog('shop_purchase', -stockItem.cost, 'Stocked fish: ' + stockItem.label + ' (' + stockItem.size + ') (pending)');
+            Finance.addFinanceLog('shop_purchase', -stockItem.cost, 'Stocked fish: ' + stockItem.label + ' (' + stockItem.size + ')');
         }
 
-        (state.pendingFishPurchases || []).push({ index: index, lakeId: lakeId });
-        UI.showToast('🐟 ' + stockItem.label + ' ordered — it arrives tomorrow.', 'success');
+        var newFish = Fish.createFish({ species: stockItem.species, rarity: stockItem.rarity, lake_id: lakeId });
+        state.fish.push(newFish);
+
+        UI.showToast('🐟 ' + stockItem.label + ' added to ' + (typeof Lakes !== 'undefined' && Lakes.getLakeById ? Lakes.getLakeById(lakeId).name : lakeId) + '.', 'success');
         Game.saveToStorage && Game.saveToStorage();
-        if (typeof UI.updateTransitBanner === 'function') UI.updateTransitBanner(Game.getState());
         renderShop();
         UI.renderTopBar();
         return true;
@@ -387,12 +383,10 @@ const Shop = (function () {
 
             var ownedBait = (state.anglerBait || []);
             if (ownedBait.indexOf('boilie_standard') === -1) ownedBait = ['boilie_standard'].concat(ownedBait);
-            var pendingBait = (state.pendingBaitPurchases || []);
             html += '<div class="bait-grid">';
             BAIT_CATALOG.forEach(function(item, idx){
                 var owned = ownedBait.indexOf(item.id) !== -1;
-                var pending = pendingBait.indexOf(item.id) !== -1;
-                html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + (pending ? ' tackle-pending' : '') + '">';
+                html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
                 html += '<div class="tackle-icon">';
                 if (item.image) {
                     html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\'">';
@@ -422,8 +416,6 @@ const Shop = (function () {
                 html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
                 if (owned) {
                     html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
-                } else if (pending) {
-                    html += '<button class="btn btn-sm btn-muted" disabled>Pending</button>';
                 } else {
                     html += '<button class="btn btn-sm btn-primary buy-bait-btn" data-bait="' + item.id + '">Buy</button>';
                 }
@@ -544,11 +536,7 @@ const Shop = (function () {
                     if (owned) {
                         html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
                     } else if (!locked) {
-                        if ((state.pendingTacklePurchases || []).indexOf(item.id) !== -1) {
-                            html += '<button class="btn btn-sm btn-muted" disabled>Pending</button>';
-                        } else {
-                            html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyTackle(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
-                        }
+                        html += '<button class="btn btn-sm btn-primary" onclick="try{Anglers.buyTackle(\'' + item.id + '\');}catch(err){console.error(err);}if(typeof Shop!==\'undefined\')Shop.renderShop();">Buy</button>';
                     } else {
                         html += '<button class="btn btn-sm btn-muted" disabled>Locked</button>';
                     }
@@ -640,8 +628,7 @@ const Shop = (function () {
                 var sizeMeta = SIZE_META[item.size] || { label: item.size, emoji: '', colour: '#888', hint: '' };
                 var full = spaceLeft <= 0;
                 var afford = state.money >= item.cost;
-                var pending = (state.pendingFishPurchases || []).some(function(p){ return p && p.index === gIdx; });
-                html += '<div class="st-stock-card' + (full || !afford || pending ? ' shop-card-disabled' : '') + '">';
+                html += '<div class="st-stock-card' + (full || !afford ? ' shop-card-disabled' : '') + '">';
                 html += '<div class="st-stock-badges">';
                 html += '<span class="shop-size-badge" style="background:' + sizeMeta.colour + '22;color:' + sizeMeta.colour + ';border:1px solid ' + sizeMeta.colour + '55;">' + sizeMeta.emoji + ' ' + sizeMeta.label + '</span>';
                 html += '<span class="shop-card-rarity" style="background:' + rarDef.colour + ';color:' + (item.rarity === 'common' ? '#333' : '#fff') + ';">' + rarDef.name + '</span>';
@@ -657,8 +644,6 @@ const Shop = (function () {
                 html += '<span class="shop-card-cost">' + UI.formatMoney(item.cost) + '</span>';
                 if (full) {
                     html += '<button class="btn btn-secondary btn-sm" disabled>Full</button>';
-                } else if (pending) {
-                    html += '<button class="btn btn-secondary btn-sm" disabled>Pending</button>';
                 } else if (!afford) {
                     html += '<button class="btn btn-secondary btn-sm" disabled>Can\'t afford</button>';
                 } else {
