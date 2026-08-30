@@ -433,6 +433,26 @@ const Game = (function () {
             }
         }
 
+        // Resolve pending bait purchases
+        if (state.pendingBaitPurchases && state.pendingBaitPurchases.length) {
+            state.pendingBaitPurchases.forEach(function (baitId) {
+                if ((state.anglerBait || []).indexOf(baitId) === -1) {
+                    state.anglerBait.push(baitId);
+                }
+            });
+            state.pendingBaitPurchases = [];
+        }
+
+        // Resolve pending tackle purchases
+        if (state.pendingTacklePurchases && state.pendingTacklePurchases.length) {
+            state.pendingTacklePurchases.forEach(function (tackleId) {
+                if ((state.anglerTackle || []).indexOf(tackleId) === -1) {
+                    state.anglerTackle.push(tackleId);
+                }
+            });
+            state.pendingTacklePurchases = [];
+        }
+
         // Resolve pending fish purchases
         if (state.pendingFishPurchases && state.pendingFishPurchases.length) {
             state.pendingFishPurchases.forEach(function (idx) {
