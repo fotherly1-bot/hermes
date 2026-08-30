@@ -116,6 +116,9 @@ const Breeding = (function () {
                 if (typeof Game.logFishCreation === 'function')
                     Game.logFishCreation(offspring, 'breeding', [p1.name, p2.name]);
                 offspringList.push({ name: offspring.name, rarity: rarity, species: species, weight_oz: offspring.weight_oz });
+                if (!lakeId && typeof Cards !== 'undefined' && typeof Cards.createFishCard === 'function') {
+                    Cards.createFishCard(offspring);
+                }
             }
         }
 
