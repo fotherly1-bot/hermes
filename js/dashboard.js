@@ -1397,7 +1397,7 @@ const Dashboard = (function () {
         html += '<div style="margin-top:0.9rem;padding:0.75rem 1rem;background:' + (activeBooking ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.1)') + ';border:1px solid ' + (activeBooking ? 'var(--colour-border)' : 'rgba(255,255,255,0.08)') + ';border-radius:var(--radius);opacity:' + (activeBooking ? '1' : '0.6') + ';">';
         html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:0.4rem;">📍 Currently Booked At</div>';
         if (bookedLake) {
-            var lakeImgPath = 'img/lakes/' + bookedLake.id.replace(/_lake$/, '') + '.png';
+            var lakeImgPath = 'img/lakes/thumbs/' + bookedLake.id.replace(/_lake$/, '') + '_thumb.png';
             html += '<div style="display:flex;gap:0.9rem;align-items:flex-start;">';
             html += '<img src="' + lakeImgPath + '" alt="' + bookedLake.name + '" style="width:7.5rem;max-height:10rem;border-radius:8px;border:1px solid var(--colour-border);object-fit:contain;flex:0 0 auto;" onerror="this.style.display=\'none\'" />';
             html += '<div style="flex:1 1 0%;min-width:0;">';
