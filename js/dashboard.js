@@ -1455,14 +1455,7 @@ const Dashboard = (function () {
     function renderAnglerQuestsCard(state) {
         var quests = state.anglerQuests || [];
         var total = quests.length;
-        var page = _questPage || 0;
-        var maxPage = Math.max(0, Math.ceil(total / QUESTS_PER_PAGE) - 1);
-        if (page > maxPage) page = maxPage;
-        _questPage = page;
-
-        var start = page * QUESTS_PER_PAGE;
-        var pageQuests = quests.slice(start, start + QUESTS_PER_PAGE);
-        if (total === 0) pageQuests = [];
+        _questPage = 0;
 
         var html = '<div class="dashboard-card" style="margin-bottom:1rem;">';
         html += '<h4 style="margin:0 0 0.6rem;font-size:0.95rem;color:var(--colour-gold);">🎯 Quests</h4>';
@@ -1470,8 +1463,9 @@ const Dashboard = (function () {
         if (total === 0) {
             html += '<p class="empty-state">No quests yet.</p>';
         } else {
+            html += '<div style="max-height:14rem;overflow-y:auto;padding-right:0.2rem;">';
             html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
-            pageQuests.forEach(function(q) {
+            quests.forEach(function(q) {
                 var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
                 var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
                 var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
@@ -1491,16 +1485,10 @@ const Dashboard = (function () {
                 html += '</div>';
             });
             html += '</div>';
-
-            html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.6rem;">';
-            html += '<button class="btn btn-secondary btn-sm" onclick="Dashboard.setQuestPage(' + (page - 1) + ')" ' + (page <= 0 ? 'disabled' : '') + '>◀ Prev</button>';
-            html += '<span style="font-size:0.75rem;color:var(--colour-text-muted);">Page ' + (page + 1) + ' of ' + (maxPage + 1) + '</span>';
-            html += '<button class="btn btn-secondary btn-sm" onclick="Dashboard.setQuestPage(' + (page + 1) + ')" ' + (page >= maxPage ? 'disabled' : '') + '>Next ▶</button>';
             html += '</div>';
         }
 
         html += '</div>';
-
         return html;
     }
 
