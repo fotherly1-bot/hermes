@@ -339,33 +339,9 @@
 
                 // Bait selector below rig
                 html += '<div class="rig-bait-selector">';
-                html += '<div class="rig-selector-label">Bait for ' + slotLabel + ' <span class="rig-help-trigger" title="Choose bait for this rod. Use bait that matches your target species for better results.">?</span></div>';
-                html += '<div class="rig-selector-grid rig-bait-grid">';
-                var baitOptions = [
-                    {id:'boilie_standard', name:'Standard Boilies'},
-                    {id:'boilie_fishmeal', name:'Fishmeal Boilies'},
-                    {id:'boilie_birdfood', name:'Birdfood Blend Boilies'},
-                    {id:'boilie_tigernut', name:'Tiger Nut Boilies'},
-                    {id:'popup_white', name:'White Popups'},
-                    {id:'popup_yellow', name:'Yellow Popups'},
-                    {id:'popup_pink', name:'Pink Popups'},
-                    {id:'popup_orange', name:'Orange Popups'},
-                    {id:'popup_purple', name:'Purple Popups'},
-                    {id:'spod_mix', name:'Spod Mix'}
-                ];
-                var currentBait = summary.baitId || 'boilie_standard';
-                var ownedBait = (state.anglerBait || []);
-                baitOptions.forEach(function(opt){
-                    var isActive = currentBait === opt.id;
-                    var isOwned = ownedBait.indexOf(opt.id) !== -1;
-                    var cls = 'btn btn-sm bait-opt ' + (isActive ? 'btn-primary' : 'btn-secondary');
-                    html += '<button class="' + cls + '" onclick="' + (isOwned ? 'Rigs.equipBait(' + i + ',\'' + opt.id + '\');Rigs.renderRigs();' : '') + '" aria-pressed="' + isActive + '" ' + (isOwned ? '' : 'disabled') + '>' + opt.name + (isActive ? ' ✓' : '') + '</button>';
-                });
-                html += '</div>';
-                html += '<div class="rig-bait-bonus">';
-                var bFx = getEquippedBaitEffects();
-                html += '<span>Bait Bonus: +' + (bFx.catchRateBonus * 100).toFixed(0) + '% catch | +' + (bFx.weightBonus * 100).toFixed(0) + '% weight</span>';
-                html += '</div>';
+                html += '<div class="rig-selector-label">Bait for ' + slotLabel + ' <span class="rig-help-trigger" title="Opens the full bait list. Owned baits are selectable.">?</span></div>';
+                html += '<button class="btn btn-primary" onclick="Rigs.openBaitModal(' + i + ')">Select Bait</button>';
+                html += '<div style="margin-top:0.4rem;font-size:0.82rem;color:var(--colour-text-muted);">Equipped: ' + (summary.baitName || 'Standard Boilies') + '</div>';
                 html += '</div>';
 
                 html += '</div>'; // close rig-rod-col
@@ -434,6 +410,43 @@
                 var lead = getLeadDef(leadType);
                 UI.showToast((def ? def.icon : '') + ' Equipped ' + (def ? def.name : rigId) + ' + ' + lead.name, 'success');
             }
+        }
+
+        function openBaitModal(rodIndex) {
+            initState();
+            var state = Game.getState();
+            var ownedBait = (state.anglerBait || []);
+            var currentBait = (state.rigBaitEquipped || [])[rodIndex] || 'boilie_standard';
+            var summary = getEquippedSummary()[rodIndex];
+
+            var html = '<div class="rig-equip-modal">';
+            html += '<h4>Bait for Rod ' + (rodIndex + 1) + '</h4>';
+            html += '<div style="margin-bottom:0.6rem;font-size:0.85rem;color:var(--colour-text-muted);">Currently equipped: ' + (summary.baitName || 'Standard Boilies') + '</div>';
+
+            html += '<div class="rig-bait-grid">';
+            [
+                {id:'boilie_standard', name:'Standard Boilies'},
+                {id:'boilie_fishmeal', name:'Fishmeal Boilies'},
+                {id:'boilie_birdfood', name:'Birdfood Blend Boilies'},
+                {id:'boilie_tigernut', name:'Tiger Nut Boilies'},
+                {id:'popup_white', name:'White Popups'},
+                {id:'popup_yellow', name:'Yellow Popups'},
+                {id:'popup_pink', name:'Pink Popups'},
+                {id:'popup_orange', name:'Orange Popups'},
+                {id:'popup_purple', name:'Purple Popups'},
+                {id:'spod_mix', name:'Spod Mix'}
+            ].forEach(function(opt){
+                var isActive = currentBait === opt.id;
+                var isOwned = ownedBait.indexOf(opt.id) !== -1;
+                var cls = 'btn btn-sm bait-opt ' + (isActive ? 'btn-primary' : 'btn-secondary');
+                html += '<button class="' + cls + '" onclick="Rigs.equipBait(' + rodIndex + ',\'' + opt.id + '\');Rigs.renderRigs();UI.hideModal();" aria-pressed="' + isActive + '" ' + (isOwned ? '' : 'disabled') + '>' + opt.name + (isActive ? ' ✓' : '') + '</button>';
+            });
+            html += '</div>';
+
+            html += '<button class="btn btn-secondary" style="margin-top:1rem;width:100%;" onclick="UI.hideModal()">Close</button>';
+            html += '</div>';
+
+            UI.showModal('<h3 style="margin-top:0;color:var(--colour-gold);">Select Bait</h3>' + html);
         }
 
         /* ── TACKLE BOX SHOP ──────────────────────────────────────────────── */
@@ -510,6 +523,7 @@
             getRigWeatherBonus: getRigWeatherBonus,
             renderRigs: renderRigs,
             openEquipModal: openEquipModal,
+            openBaitModal: openBaitModal,
             selectLead: selectLead,
             buyRigFromShop: buyRigFromShop,
             renderTackleBoxShop: renderTackleBoxShop,
