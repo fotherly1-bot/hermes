@@ -1889,7 +1889,7 @@ const Lakes = (function () {
 
                 // Compact fish list
                 html += '<div class="lake-fish-list">';
-                html += '<div class="lake-fish-list-header"><span>Name</span><span>Species</span><span>Rarity</span><span>Weight</span><span>Value</span></div>';
+                html += '<div class="lake-fish-list-header"><span>Name</span><span>Species</span><span>Rarity</span><span>Weight</span><span>Preferred Bait</span><span>Value</span></div>';
                 html += '<div class="lake-fish-list-body">';
                 var curYr = Math.ceil(state.day / 365);
                 lakeFish.slice().sort(function(a,b){ var ro={common:0,uncommon:1,rare:2,epic:3,legendary:4,mythic:5}; return (ro[b.rarity]||0)-(ro[a.rarity]||0); }).forEach(function (f) {
@@ -1903,6 +1903,7 @@ const Lakes = (function () {
                     html += '<span>' + sp + '</span>';
                     html += '<span style="color:' + col + ';font-weight:700;">' + (Fish.RARITIES[f.rarity] ? Fish.RARITIES[f.rarity].name : f.rarity) + '</span>';
                     html += '<span>' + UI.formatWeight(f.weight_oz) + '</span>';
+                    html += '<span style="color:var(--colour-text-muted);">' + (f.preferredBaits && f.preferredBaits.length ? f.preferredBaits.join(', ') : '—') + '</span>';
                     html += '<span style="color:var(--colour-gold);">' + UI.formatMoney(val) + '</span>';
                     html += '</div>';
                 });

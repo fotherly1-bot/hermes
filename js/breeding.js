@@ -382,6 +382,29 @@ const Breeding = (function () {
             } else {
                 html += '<p style="font-size:0.68rem;color:var(--colour-text-muted);margin-top:0.5rem;">No inherited traits — all offspring traits will be from mutation.</p>';
             }
+
+            // Bait Preference Odds
+            var baitPrefCounts = {};
+            [p1,p2].forEach(function(parent){
+                (parent && parent.preferredBaits || []).forEach(function(bid){ baitPrefCounts[bid] = (baitPrefCounts[bid]||0) + 1; });
+            });
+            var totalBaitPrefs = Object.keys(baitPrefCounts).length;
+            if (totalBaitPrefs > 0) {
+                html += '<div class="breed-trait-section-title" style="margin-top:0.55rem;">Bait Preference Odds</div>';
+                Object.keys(baitPrefCounts).forEach(function(bid){
+                    var count = baitPrefCounts[bid];
+                    var pct = Math.min(95, 20 + count * 35);
+                    var baitName = bid.replace(/_/g,' ').replace(/\b\w/g, function(l){ return l.toUpperCase(); });
+                    html += '<div class="breed-odds-row">';
+                    html += '<span class="breed-odds-label" style="color:#f1c40f;font-size:0.62rem;">' + baitName + '</span>';
+                    html += '<div class="breed-stat-track" style="margin:0 0.4rem;"><div class="breed-stat-fill" style="width:'+pct+'%;background:#f1c40f66;border:none;"></div></div>';
+                    html += '<span class="breed-odds-pct" style="color:#f1c40f;">'+pct+'%</span>';
+                    html += '</div>';
+                });
+            } else {
+                html += '<p style="font-size:0.68rem;color:var(--colour-text-muted);margin-top:0.5rem;">No bait preference data available.</p>';
+            }
+
             html += '</div></div>';
 
             html += '</div>'; // breed-parent-cards
