@@ -6241,6 +6241,16 @@ details[open] > .lake-accordion-summary::before {
     flex-direction: column;
     gap: 0.4rem;
 }
+.st-stock-thumb {
+    width: 100%;
+    height: 88px;
+    object-fit: contain;
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 6px;
+    border: 1px solid var(--colour-border);
+    display: block;
+}
 .st-stock-badges {
     display: flex;
     gap: 0.35rem;

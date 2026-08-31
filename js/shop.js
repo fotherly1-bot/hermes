@@ -615,6 +615,7 @@ const Shop = (function () {
                 var full = spaceLeft <= 0;
                 var afford = state.money >= item.cost;
                 html += '<div class="st-stock-card' + (full || !afford ? ' shop-card-disabled' : '') + '">';
+                html += '<img src="img/carp/' + item.species + '-carp.png" alt="' + item.species + '" class="st-stock-thumb" onerror="this.style.display=\'none\'"/>';
                 html += '<div class="st-stock-badges">';
                 html += '<span class="shop-size-badge" style="background:' + sizeMeta.colour + '22;color:' + sizeMeta.colour + ';border:1px solid ' + sizeMeta.colour + '55;">' + sizeMeta.emoji + ' ' + sizeMeta.label + '</span>';
                 html += '<span class="shop-card-rarity" style="background:' + rarDef.colour + ';color:' + (item.rarity === 'common' ? '#333' : '#fff') + ';">' + rarDef.name + '</span>';
