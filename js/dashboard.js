@@ -373,16 +373,12 @@ const Dashboard = (function () {
             // ── Row 0: Your Angler | Adam Placeholder + Angler Quests ─────────────
             html += '<div class="dash-row dash-row-equal">';
             html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
-            html += '<div class="dashboard-card">' ;
+            html += '<div class="dashboard-card" style="display:flex;flex-direction:column;gap:1rem;">' ;
             html += renderAdamPlaceholderCard(state);
             html += '<h4 style="margin:0.8rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🎯 Angler Quests</h4>' ;
             html += renderAnglerQuestsCard(state);
+            html += '<div class="dashboard-card" style="margin-top:0;">' + renderFisheryPulse(state) + '</div>';
             html += '</div>';
-            html += '</div>';
-
-            // ── Row 1: Fishery Pulse ─────────────────────────────────────────────────
-            html += '<div class="dash-row">';
-            html += '<div class="dashboard-card">' + renderFisheryPulse(state) + '</div>';
             html += '</div>';
 
             // ── Row 2: Weather & Conditions | Progression ───────────────────────────
