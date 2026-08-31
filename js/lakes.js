@@ -1373,6 +1373,9 @@ const Lakes = (function () {
             t += '<div class="lake-stat-item"><span class="lake-stat-value">' + lake.capacity + '</span><span class="lake-stat-label">Fish</span></div>';
             t += '<div class="lake-stat-item"><span class="lake-stat-value">' + lake.biodiversityScore + '/10</span><span class="lake-stat-label">Biodiversity</span></div>';
             t += '<div class="lake-stat-item"><span class="lake-stat-value">' + UI.formatMoney(lake.dailyIncomePerAngler) + '</span><span class="lake-stat-label">Income/angler</span></div>';
+            if (lake.substrateTraits && lake.substrateTraits.length) {
+                t += '<div class="lake-stat-item"><span class="lake-stat-value" style="color:#f1c40f;">' + lake.substrateTraits.join(', ') + '</span><span class="lake-stat-label">Substrate</span></div>';
+            }
             t += '</div>';
             t += buffHtml;
             t += '<div class="lake-card-footer">';
@@ -1409,6 +1412,9 @@ const Lakes = (function () {
             d += '<div class="lake-detail-box"><div class="lake-detail-box-value">' + lake.capacity + '</div><div class="lake-detail-box-label">Capacity</div></div>';
             d += '<div class="lake-detail-box"><div class="lake-detail-box-value">' + lake.biodiversityScore + '/10</div><div class="lake-detail-box-label">Biodiversity</div></div>';
             d += '<div class="lake-detail-box"><div class="lake-detail-box-value">' + formatWaterType(lake.waterType) + '</div><div class="lake-detail-box-label">Water Type</div></div>';
+            if (lake.substrateTraits && lake.substrateTraits.length) {
+                d += '<div class="lake-detail-box"><div class="lake-detail-box-value" style="color:#f1c40f;">' + lake.substrateTraits.join(', ') + '</div><div class="lake-detail-box-label">Substrate</div></div>';
+            }
             d += '<div class="lake-detail-box"><div class="lake-detail-box-value">' + fishInfo.count + '</div><div class="lake-detail-box-label">Pre-stocked Fish</div></div>';
             d += '<div class="lake-detail-box"><div class="lake-detail-box-value">' + UI.formatMoney(weekIncome) + '</div><div class="lake-detail-box-label">Weekly Income</div></div>';
             d += '<div class="lake-detail-box"><div class="lake-detail-box-value" style="color:#f1c40f;">' + fishInfo.topRarity + '</div><div class="lake-detail-box-label">Top Stock Rarity</div></div>';
@@ -1613,6 +1619,19 @@ const Lakes = (function () {
         }
         if ((!lake.buffs || !lake.buffs.positive) && (!lake.buffs || !lake.buffs.negative)) {
             html += '<div class="lake-trait-neutral">No special traits.</div>';
+        }
+        html += '</div></div>';
+
+        // ── Lake Substrate ───────────────────────────────────────────────────
+        html += '<div class="lake-traits">';
+        html += '<div class="lake-traits-title">🏞️ Lake Substrate</div>';
+        html += '<div class="lake-traits-grid">';
+        if (lake.substrateTraits && lake.substrateTraits.length) {
+            lake.substrateTraits.forEach(function(trait){
+                html += '<div class="lake-trait-positive"><span class="lake-trait-label">' + trait.charAt(0).toUpperCase() + trait.slice(1) + '</span></div>';
+            });
+        } else {
+            html += '<div class="lake-trait-neutral">No substrate data.</div>';
         }
         html += '</div></div>';
 
