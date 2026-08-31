@@ -1465,7 +1465,6 @@ const Dashboard = (function () {
     function renderAnglerQuestsCard(state) {
         var quests = state.anglerQuests || [];
         var total = quests.length;
-        _questPage = 0;
 
         var html = '<div class="dashboard-card" style="margin-bottom:1rem;">';
         html += '<h4 style="margin:0 0 0.6rem;font-size:0.95rem;color:var(--colour-gold);">🎯 Quests</h4>';
@@ -1473,29 +1472,22 @@ const Dashboard = (function () {
         if (total === 0) {
             html += '<p class="empty-state">No quests yet.</p>';
         } else {
-            html += '<div style="max-height:28rem;overflow-y:auto;padding-right:0.2rem;">';
-            html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
+            html += '<ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem;">';
             quests.forEach(function(q) {
                 var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
-                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
                 var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
-                html += '<div class="angler-quest-card ' + statusClass + '">';
-                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
+                html += '<li style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;padding:0.35rem 0;border-bottom:1px solid var(--colour-border);">';
+                html += '<div>';
                 html += '<div style="font-weight:700;">' + q.title + '</div>';
-                html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);">' + statusText + '</div>';
+                html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);">' + q.description + '</div>';
+                html += '<div style="font-size:0.75rem;">' + (typeof q.progress === 'number' ? q.progress : 0) + ' / ' + q.required + ' — ' + statusText + '</div>';
                 html += '</div>';
-                html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin:0.35rem 0 0.4rem;">' + q.description + '</div>';
-                html += '<div class="quest-bar-track"><div class="quest-bar-fill" style="width:' + pct + '%;background:' + (q.completed ? 'var(--colour-accent)' : 'linear-gradient(90deg,#f1c40f,#e67e22)') + ';"></div></div>';
-                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-top:0.35rem;">';
-                html += '<span style="font-size:0.75rem;">' + (typeof q.progress === 'number' ? q.progress : 0) + ' / ' + q.required + '</span>';
                 if (q.completed && !q.claimed) {
                     html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');refreshDashboard();">Claim</button>';
                 }
-                html += '</div>';
-                html += '</div>';
+                html += '</li>';
             });
-            html += '</div>';
-            html += '</div>';
+            html += '</ul>';
         }
 
         html += '</div>';
