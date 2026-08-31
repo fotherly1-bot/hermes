@@ -886,10 +886,7 @@ window.Shop = Shop;
         }
         if (e.target && e.target.classList && e.target.classList.contains('buy-bait-btn')) {
             try {
-                var baitId = e.target.getAttribute('data-bait');
-                console.log('[Shop] buy-bait-btn clicked', baitId);
-                var result = Anglers.buyBait(baitId);
-                console.log('[Shop] buyBait result', result);
+                Anglers.buyBait(e.target.getAttribute('data-bait'));
             } catch (err) {
                 console.error('[Shop] buyBait error', err);
                 UI.showToast('Bait purchase failed: ' + (err && err.message ? err.message : err), 'error');
