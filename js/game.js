@@ -286,6 +286,17 @@ const Game = (function () {
             state = JSON.parse(JSON.stringify(DEFAULT_STATE));
             console.log('[Game.init] took ELSE branch, DEFAULT_STATE keys:', Object.keys(state).sort().join(','));
         }
+        // Backfill legacy fish with preferredBaits from species defaults
+        try {
+            if (state.fish && state.fish.length && typeof Fish !== 'undefined' && Fish.SPECIES) {
+                state.fish.forEach(function (f) {
+                    if (!f.preferredBaits || !f.preferredBaits.length) {
+                        var sp = Fish.SPECIES[f.species];
+                        f.preferredBaits = sp && sp.preferredBaits ? sp.preferredBaits.slice() : [];
+                    }
+                });
+            }
+        } catch (e) { console.warn('[Game.init] preferredBaits backfill failed', e); }
         // If loaded/created state has no fish, seed Oakmere Lake stock
         if (!state.fish || state.fish.length === 0) {
             var initial = DEFAULT_STATE._initialFish || null;
