@@ -464,15 +464,15 @@ const Shop = (function () {
               ]},
               { key:'Fish Care', label:'Fish Care', items:[
                   {id:'first_aid_kit', name:'Angler First Aid Kit', cost:400, icon:'🛟', category:'Fish Care', description:'Small kit for hook and nick care.', effects:{fishHealthBonus:0.02}, prerequisite:null, unlocks:['unhooking_mat']},
-                  {id:'unhooking_mat', name:'Unhooking Mat', cost:700, icon:'🛟', category:'Fish Care', description:'Padded mat for safe unhooking.', effects:{fishHealthBonus:0.04}, prerequisite:'first_aid_kit', unlocks:['weigh_sling']},
-                  {id:'weigh_sling', name:'Weigh Sling', cost:900, icon:'🛟', category:'Fish Care', description:'Support sling for accurate weighing.', effects:{fishHealthBonus:0.03}, prerequisite:'unhooking_mat', unlocks:['carp_cradle']},
+                  {id:'unhooking_mat', name:'Unhooking Mat', cost:700, icon:'🛟', image:'img/tackle/unhookingmat.png', category:'Fish Care', description:'Padded mat for safe unhooking.', effects:{fishHealthBonus:0.04}, prerequisite:'first_aid_kit', unlocks:['weigh_sling']},
+                  {id:'weigh_sling', name:'Weigh Sling', cost:900, icon:'🛟', image:'img/tackle/weighsling.png', category:'Fish Care', description:'Support sling for accurate weighing.', effects:{fishHealthBonus:0.03}, prerequisite:'unhooking_mat', unlocks:['carp_cradle']},
                   {id:'carp_cradle', name:'Carp Cradle', cost:1400, icon:'🛟', category:'Fish Care', description:'Cradle for unhooking on the mat.', effects:{fishHealthBonus:0.05}, prerequisite:'weigh_sling', unlocks:[]}
               ]},
               { key:'Extras', label:'Extras', items:[
                   {id:'rod_rest', name:'Rod Rest Kit', cost:450, icon:'🛠️', category:'Extras', description:'Adjustable rod rest for steady holds.', effects:{catchRateBonus:0.02}, unlocks:[]},
-                  {id:'stool', name:'Fishing Stool', cost:500, icon:'🪑', category:'Extras', description:'Comfortable padded seat.', effects:{satisfactionBonus:2}, unlocks:[]},
+                  {id:'chair', name:'Chair', cost:500, icon:'🪑', image:'img/tackle/chair.png', category:'Extras', description:'Comfortable padded seat.', effects:{satisfactionBonus:2}, unlocks:[]},
                   {id:'landing_forceps', name:'Forceps & Pliers', cost:350, icon:'🛠️', category:'Extras', description:'Forceps for safe hook removal.', effects:{fishHealthBonus:0.02}, unlocks:[]},
-                  {id:'scale', name:'Digital Scales', cost:800, icon:'⚖️', category:'Extras', description:'Digital scales to 120lb capacity.', effects:{fishHealthBonus:0.02}, unlocks:[]}
+                  {id:'scale', name:'Digital Scales', cost:800, icon:'⚖️', image:'img/tackle/scales.png', category:'Extras', description:'Digital scales to 120lb capacity.', effects:{fishHealthBonus:0.02}, unlocks:[]}
               ]}
             ];
 

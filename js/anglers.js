@@ -334,9 +334,9 @@ const Anglers = (function () {
         { id:'carp_cradle', name:'Carp Cradle', cost:1400, icon:'🛟', category:'Fish Care', description:'Cradle for unhooking on the mat.', effects:{fishHealthBonus:0.05}, prerequisite:'weigh_sling', unlocks:[]},
         // Extras
         { id:'rod_rest', name:'Rod Rest Kit', cost:450, icon:'🛠️', category:'Extras', description:'Adjustable rod rest for steady holds.', effects:{catchRateBonus:0.02}, unlocks:[]},
-        { id:'stool', name:'Fishing Stool', cost:500, icon:'🪑', category:'Extras', description:'Comfortable padded seat.', effects:{satisfactionBonus:2}, unlocks:[]},
+        { id:'chair', name:'Chair', cost:500, icon:'🪑', image:'img/tackle/chair.png', category:'Extras', description:'Comfortable padded seat.', effects:{satisfactionBonus:2}, unlocks:[]},
         { id:'landing_forceps', name:'Forceps & Pliers', cost:350, icon:'🛠️', category:'Extras', description:'Forceps for safe hook removal.', effects:{fishHealthBonus:0.02}, unlocks:[]},
-        { id:'scale', name:'Digital Scales', cost:800, icon:'⚖️', category:'Extras', description:'Digital scales to 120lb capacity.', effects:{fishHealthBonus:0.02}, unlocks:[]}
+        { id:'scale', name:'Digital Scales', cost:800, icon:'⚖️', image:'img/tackle/scales.png', category:'Extras', description:'Digital scales to 120lb capacity.', effects:{fishHealthBonus:0.02}, unlocks:[]}
     ];
 
     /** Sub-tab state */
