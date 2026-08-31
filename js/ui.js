@@ -451,6 +451,12 @@ const UI = (function () {
                     Finance.renderFinance();
                 }
                 break;
+            case 'dlc':
+                if (typeof DLC !== 'undefined') {
+                    var dlcContainer = document.getElementById('dlc-content');
+                    if (dlcContainer) dlcContainer.innerHTML = DLC.render();
+                }
+                break;
             default:
                 break;
         }
