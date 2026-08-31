@@ -271,7 +271,7 @@ const Shop = (function () {
             Finance.addFinanceLog('shop_purchase', -stockItem.cost, 'Stocked fish: ' + stockItem.label + ' (' + stockItem.size + ')');
         }
 
-        var newFish = Fish.createFish({ species: stockItem.species, rarity: stockItem.rarity, lake_id: lakeId });
+        var newFish = Fish.createFish({ species: stockItem.species, rarity: stockItem.rarity, lake_id: lakeId, preferredBaits: (typeof Fish !== 'undefined' && Fish.randomPreferredBaits) ? Fish.randomPreferredBaits() : null });
         state.fish.push(newFish);
 
         UI.showToast('🐟 ' + stockItem.label + ' added to ' + (typeof Lakes !== 'undefined' && Lakes.getLakeById ? Lakes.getLakeById(lakeId).name : lakeId) + '.', 'success');
