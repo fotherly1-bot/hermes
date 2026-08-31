@@ -366,53 +366,30 @@ const Shop = (function () {
         if (_shopView === 'bait') {
             html += '<div class="tackle-shop-root">';
             html += '<h3 class="tackle-heading">The Bait Shed</h3>';
-            html += '<p class="tackle-subtitle">Popups, boilies, and spod mix to tempt fish into feeding.</p>';
+            html += '<p class="tackle-subtitle">Buy bait once and it stays in your inventory forever.</p>';
 
             var BAIT_CATALOG = [
-              {id:'boilie_standard', name:'Standard Boilies', cost:0, image:'img/bait/boilie-standard.png', category:'Boilies', description:'Reliable standard boilies. Unlocked by default.', effects:{catchRateBonus:0.01}, preference:'boilie_standard', free:true},
-              {id:'popup_white', name:'White Popups', cost:350, image:'img/bait/popup-white.png', category:'Popups', description:'Classic white buoyant popups.', effects:{catchRateBonus:0.01}, preference:'popup_white'},
-              {id:'popup_yellow', name:'Yellow Popups', cost:400, image:'img/bait/popup-yellow.png', category:'Popups', description:'Bright yellow popups for extra attraction.', effects:{catchRateBonus:0.01}, preference:'popup_yellow', lakeBonus:0.02},
-              {id:'popup_pink', name:'Pink Popups', cost:400, image:'img/bait/popup-pink.png', category:'Popups', description:'Pink popups for wary fish.', effects:{catchRateBonus:0.01}, preference:'popup_pink'},
-              {id:'popup_orange', name:'Orange Popups', cost:400, image:'img/bait/popup-orange.png', category:'Popups', description:'Orange popups for low-visibility swims.', effects:{catchRateBonus:0.01}, preference:'popup_orange'},
-              {id:'popup_purple', name:'Purple Popups', cost:420, image:'img/bait/popup-purple.png', category:'Popups', description:'Deep purple popups for specimen triggers.', effects:{catchRateBonus:0.01}, preference:'popup_purple'},
-              {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, image:'img/bait/boilie-fishmeal.png', category:'Boilies', description:'High-protein fishmeal boilies.', effects:{catchRateBonus:0.02}, preference:'boilie_fishmeal'},
-              {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, image:'img/bait/boilie-birdfood.png', category:'Boilies', description:'Multibirdfood boilies for all-round attraction.', effects:{catchRateBonus:0.02}, preference:'boilie_birdfood'},
-              {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, image:'img/bait/boilie-tigernut.png', category:'Boilies', description:'Tiger nut boilies for big carp.', effects:{catchRateBonus:0.02, weightBonus:0.01}, preference:'boilie_tigernut'},
-              {id:'spod_mix', name:'Spod Mix', cost:700, image:'img/bait/spod-mix.png', category:'Spod Mix', description:'Mixed particle spod mix to draw fish in.', effects:{catchRateBonus:0.01}, preference:'spod_mix', lakeBonus:0.02}
+                {id:'boilie_standard', name:'Standard Boilies', cost:0, image:'img/bait/boilie-standard.png'},
+                {id:'popup_white', name:'White Popups', cost:350, image:'img/bait/popup-white.png'},
+                {id:'popup_yellow', name:'Yellow Popups', cost:400, image:'img/bait/popup-yellow.png'},
+                {id:'popup_pink', name:'Pink Popups', cost:400, image:'img/bait/popup-pink.png'},
+                {id:'popup_orange', name:'Orange Popups', cost:400, image:'img/bait/popup-orange.png'},
+                {id:'popup_purple', name:'Purple Popups', cost:420, image:'img/bait/popup-purple.png'},
+                {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, image:'img/bait/boilie-fishmeal.png'},
+                {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, image:'img/bait/boilie-birdfood.png'},
+                {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, image:'img/bait/boilie-tigernut.png'},
+                {id:'spod_mix', name:'Spod Mix', cost:700, image:'img/bait/spod-mix.png'}
             ];
 
             var ownedBait = (state.anglerBait || []);
-            if (ownedBait.indexOf('boilie_standard') === -1) ownedBait = ['boilie_standard'].concat(ownedBait);
             html += '<div class="bait-grid">';
-            BAIT_CATALOG.forEach(function(item, idx){
+            BAIT_CATALOG.forEach(function(item){
                 var owned = ownedBait.indexOf(item.id) !== -1;
                 html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + '">';
                 html += '<div class="tackle-icon">';
-                if (item.image) {
-                    html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\'">';
-                } else {
-                    html += (item.icon || '🪱');
-                }
+                html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\'">';
                 html += '</div>';
                 html += '<div class="tackle-name">' + item.name + '</div>';
-                html += '<div class="tackle-category">' + item.category + '</div>';
-                html += '<div class="tackle-desc">' + item.description + '</div>';
-                if (item.preference) {
-                    html += '<div class="tackle-buffs"><span class="tackle-buff">🐟 Preferred by fish</span></div>';
-                }
-                if (item.effects) {
-                    html += '<div class="tackle-buffs">';
-                    Object.keys(item.effects).forEach(function(k){
-                        var v = item.effects[k];
-                        if (!v) return;
-                        var label = k;
-                        if (k === 'catchRateBonus') label = 'Catch Chance +' + (v*100).toFixed(0) + '%';
-                        else if (k === 'weightBonus') label = 'Weight +' + (v*100).toFixed(0) + '%';
-                        else if (k === 'lakeBonus') label = 'Booked Lake Bonus +' + (v*100).toFixed(0) + '%';
-                        html += '<span class="tackle-buff">' + label + '</span>';
-                    });
-                    html += '</div>';
-                }
                 html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
                 if (owned) {
                     html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
