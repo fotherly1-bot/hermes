@@ -11082,4 +11082,53 @@ details[open] > .lake-accordion-summary::before {
     }
 }
 
+/* === DLC === */
+.dlc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+.dlc-card {
+    background: var(--colour-card);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.dlc-thumb {
+    width: 100%;
+    height: 140px;
+    border-radius: calc(var(--radius) - 2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dlc-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.dlc-type {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--colour-text-muted);
+}
+.dlc-title {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--colour-gold);
+}
+.dlc-bullets {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.82rem;
+    color: var(--colour-text);
+}
+.dlc-bullets li {
+    margin-bottom: 0.2rem;
+}
 
