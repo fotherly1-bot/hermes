@@ -457,6 +457,10 @@ const UI = (function () {
                     if (dlcContainer) dlcContainer.innerHTML = DLC.render();
                 }
                 break;
+            case 'test':
+                var testContainer = document.getElementById('test-content');
+                if (testContainer) testContainer.innerHTML = '<p class="empty-state">Test page ready.</p>';
+                break;
             default:
                 break;
         }
