@@ -9067,7 +9067,7 @@ details[open] > .lake-accordion-summary::before {
 .breed-stat-fill         { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
 .breed-stat-val          { font-size: 0.65rem; font-weight: 700; width: 24px; text-align: right; }
 .breed-parent-traits     { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0 0.65rem 0.6rem; }
-
+.breed-parent-preferred-baits { padding: 0 0.65rem 0.5rem; font-size: 0.68rem; color: var(--colour-text-muted); }
 
 .breed-odds-row          { display: flex; align-items: center; margin-bottom: 0.3rem; }
 .breed-odds-label        { font-size: 0.68rem; font-weight: 700; width: 72px; flex-shrink: 0; }

@@ -313,6 +313,11 @@ const Breeding = (function () {
                     });
                     html += '</div>';
                 }
+                if (f.preferredBaits && f.preferredBaits.length) {
+                    html += '<div class="breed-parent-preferred-baits">';
+                    html += '<span style="color:var(--colour-text-muted);">Preferred bait: ' + f.preferredBaits.join(', ') + '</span>';
+                    html += '</div>';
+                }
                 html += '</div>'; // breed-parent-body
                 html += '</div>'; // breed-parent-card
             } else {
