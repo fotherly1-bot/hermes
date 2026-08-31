@@ -1427,11 +1427,8 @@ const Dashboard = (function () {
         }
         advice.push(
             { text: 'Start with Standard Boilies on all rods until you unlock better bait.', urgency: 'low' },
-            { text: 'Keep your booking window active to build daily catch history.', urgency: 'medium' },
             { text: 'Book deeper lake sections when light levels are low.', urgency: 'medium' },
-            { text: 'Check rig weight against lake notes — too heavy and bites drop.', urgency: 'high' },
-            { text: 'Upgrade your reel before chasing rare Mirror Carp.', urgency: 'medium' },
-            { text: 'Pause bookings during heavy weather to protect your PB chance.', urgency: 'high' }
+            { text: 'Upgrade your reel before chasing rare Mirror Carp.', urgency: 'medium' }
         );
         var urgencyColor = {
             low: 'var(--colour-text-muted)',
