@@ -1480,7 +1480,9 @@ const Dashboard = (function () {
                 var rewardEmoji = [];
                 if (typeof q.rewardMoney === 'number' && q.rewardMoney > 0) { rewardText.push(UI.formatMoney(q.rewardMoney)); rewardEmoji.push('💰'); }
                 if (typeof q.rewardRep === 'number' && q.rewardRep > 0) { rewardText.push(q.rewardRep + ' rep'); rewardEmoji.push('🏆'); }
-                var rewardHtml = rewardText.length ? '<div style="display:flex;flex-direction:column;align-items:center;gap:0.15rem;font-size:0.75rem;color:var(--colour-accent);min-width:3.5rem;"><div style="font-size:1.4rem;">' + rewardEmoji.join('<br>') + '</div><div>' + rewardText.join(' + ') + '</div></div>' : '';
+                var rewardHtml = rewardText.length ? '<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--colour-accent);">' + rewardEmoji.map(function(em, idx) {
+                    return '<div style="display:flex;flex-direction:column;align-items:center;min-width:2.5rem;"><div style="font-size:1.4rem;">' + em + '</div><div>' + rewardText[idx] + '</div></div>';
+                }).join('') + '</div>' : '';
                 html += '<li style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;padding:0.35rem 0;border-bottom:1px solid var(--colour-border);">';
                 html += '<div>';
                 html += '<div style="font-weight:700;">' + q.title + '</div>';
