@@ -171,7 +171,8 @@ const Game = (function () {
                 parent_ids: [],
                 lake_id: 'oakmere_lake',
                 growth_stage: 'adult',
-                alive: true
+                alive: true,
+                preferredBaits: (typeof Fish !== 'undefined' && Fish.SPECIES['common']) ? (Fish.SPECIES['common'].preferredBaits || []) : []
             };
             f.weight_oz = commonWeights[i];
             f.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
@@ -195,7 +196,8 @@ const Game = (function () {
                 parent_ids: [],
                 lake_id: 'oakmere_lake',
                 growth_stage: 'adult',
-                alive: true
+                alive: true,
+                preferredBaits: (typeof Fish !== 'undefined' && Fish.SPECIES['mirror']) ? (Fish.SPECIES['mirror'].preferredBaits || []) : []
             };
             f2.weight_oz = uncommonWeights[j];
             f2.value = (typeof Fish !== 'undefined' && typeof Fish.getFishValue === 'function')
