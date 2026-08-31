@@ -10770,12 +10770,13 @@ details[open] > .lake-accordion-summary::before {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    opacity: 0.85;
+    color: #fff;
+    font-weight: 400;
     margin-bottom: 0.3rem;
 }
 .rigs-bait-tip-text {
-    font-weight: 800;
-    color: #00ff88;
+    font-weight: 400;
+    color: #fff;
 }
 
 /* Rig Shop */
