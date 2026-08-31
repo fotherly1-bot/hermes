@@ -401,6 +401,11 @@ const Breeding = (function () {
                     html += '<span class="breed-odds-pct" style="color:#f1c40f;">'+pct+'%</span>';
                     html += '</div>';
                 });
+                html += '<div class="breed-odds-row">';
+                html += '<span class="breed-odds-label" style="color:#e67e22;font-size:0.62rem;">Random</span>';
+                html += '<div class="breed-stat-track" style="margin:0 0.4rem;"><div class="breed-stat-fill" style="width:20%;background:#e67e2266;border:none;"></div></div>';
+                html += '<span class="breed-odds-pct" style="color:#e67e22;">20%</span>';
+                html += '</div>';
             } else {
                 html += '<p style="font-size:0.68rem;color:var(--colour-text-muted);margin-top:0.5rem;">No bait preference data available.</p>';
             }
