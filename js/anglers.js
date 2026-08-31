@@ -311,7 +311,7 @@ const Anglers = (function () {
         { id:'backlead_1oz', name:'1oz Backlead', cost:400, icon:'🪨', category:'Leads', description:'Light backlead for slip presentations.', effects:{castRangeBonus:0.02}, prerequisite:null, unlocks:['inline_lead_2oz']},
         { id:'inline_lead_2oz', name:'2oz Inline Lead', cost:500, icon:'🪨', category:'Leads', description:'Classic inline lead for distance.', effects:{castRangeBonus:0.03, hookSetBonus:0.02}, prerequisite:'backlead_1oz', unlocks:['window_lead_2oz']},
         { id:'window_lead_2oz', name:'2oz Window Lead', cost:650, icon:'🪨', category:'Leads', description:'Window lead for hard lake beds.', effects:{hookSetBonus:0.03}, prerequisite:'inline_lead_2oz', unlocks:['method_lead_3oz']},
-        { id:'method_lead_3oz', name:'3oz Method Lead', cost:700, icon:'🪨', category:'Leads', description:'Method lead with open insert.', effects:{catchRateBonus:0.03, hookSetBonus:0.01}, prerequisite:'window_lead_2oz', unlocks:[]},
+        { id:'method_lead_3oz', name:'3oz Method Lead', cost:700, icon:'🪨', image:'img/tackle/3ozlead.png', category:'Leads', description:'Method lead with open insert.', effects:{catchRateBonus:0.03, hookSetBonus:0.01}, prerequisite:'window_lead_2oz', unlocks:[]},
         // Bivvys
         { id:'bivvy_groundsheet', name:'Insulated Groundsheet', cost:700, icon:'⛺', category:'Bivvys', description:'Keeps moisture out and warmth in.', effects:{fishHealthBonus:0.02}, prerequisite:null, unlocks:['bivvy_brolly']},
         { id:'bivvy_brolly', name:'Brolly System', cost:900, icon:'⛺', category:'Bivvys', description:'Quick-deploy umbrella shelter.', effects:{fishHealthBonus:0.01, satisfactionBonus:1}, prerequisite:'bivvy_groundsheet', unlocks:['bivvy_1man']},
