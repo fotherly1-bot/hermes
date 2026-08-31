@@ -10575,9 +10575,8 @@ details[open] > .lake-accordion-summary::before {
 
 .rig-rod-static-img {
     width: 100%;
-    max-width: 20rem;
-    height: 12rem;
-    object-fit: contain;
+    max-width: 11rem;
+    height: auto;
     display: block;
     margin: 0 auto;
 }
