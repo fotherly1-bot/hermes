@@ -382,12 +382,6 @@ const Dashboard = (function () {
             html += '</div>';
             html += '</div>';
 
-            // ── Row 1: Angler PB | Most Expensive Fish ─────────────────────────────
-            html += '<div class="dash-row dash-row-2-2">';
-            html += '<div class="dashboard-card">' + renderAnglerPBCard(state) + '</div>';
-            html += '<div class="dashboard-card">' + renderMostExpensiveFishCard(state) + '</div>';
-            html += '</div>';
-
             // ── Row 1: Fishery Pulse ─────────────────────────────────────────────────
             html += '<div class="dash-row">';
             html += '<div class="dashboard-card">' + renderFisheryPulse(state) + '</div>';
@@ -1233,6 +1227,11 @@ const Dashboard = (function () {
 
         // Bivvy image under booking info
         html += '<img src="img/tackle/bivvy.png" alt="Bivvy" style="width:100%;max-height:11rem;margin-top:0.6rem;border-radius:8px;border:1px solid var(--colour-border);object-fit:contain;background:rgba(0,0,0,0.15);" onerror="this.style.display=\'none\'" />';
+
+        // Angler PB under bivvy
+        html += '<div style="margin-top:0.75rem;">';
+        html += renderAnglerPBCard(state);
+        html += '</div>';
 
         return html;
     }
