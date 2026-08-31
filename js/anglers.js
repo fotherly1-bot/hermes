@@ -443,6 +443,7 @@ const Anglers = (function () {
     function buyBait(baitId) {
         initState();
         var state = Game.getState();
+        console.log('[Anglers] buyBait start', baitId, 'money=', state.money, 'bait=', state.anglerBait);
         var catalog = [];
         catalog = [];
         if (!catalog.length) {
@@ -460,6 +461,7 @@ const Anglers = (function () {
             ];
         }
         var item = catalog.find(function(b){ return b.id === baitId; });
+        console.log('[Anglers] buyBait item', item);
         if (!item) {
             UI.showToast('Bait not found.', 'error');
             return false;
@@ -467,19 +469,23 @@ const Anglers = (function () {
         if (baitId === 'boilie_standard') item.cost = 0;
         if ((state.anglerBait || []).indexOf(baitId) !== -1) {
             UI.showToast('You already own ' + item.name + '.', 'warning');
+            console.log('[Anglers] buyBait already owned');
             return false;
         }
         if ((state.pendingBaitPurchases || []).indexOf(baitId) !== -1) {
             UI.showToast(item.name + ' is already pending delivery.', 'warning');
+            console.log('[Anglers] buyBait pending');
             return false;
         }
         if ((state.money || 0) < (item.cost || 0)) {
             UI.showToast('Not enough money for ' + item.name + '.', 'error');
+            console.log('[Anglers] buyBait cannot afford', item.cost);
             return false;
         }
         state.money -= (item.cost || 0);
         if ((state.anglerBait || []).indexOf(baitId) === -1) state.anglerBait.push(baitId);
         state.pendingBaitPurchases = (state.pendingBaitPurchases || []).filter(function(id){ return id !== baitId; });
+        console.log('[Anglers] buyBait success', baitId, 'newBait=', state.anglerBait);
         UI.showToast('🪱 ' + item.name + ' purchased!', 'success');
         if (typeof Finance !== 'undefined') {
             Finance.addFinanceLog('bait_purchase', -(item.cost || 0), item.name);

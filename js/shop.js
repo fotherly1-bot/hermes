@@ -885,7 +885,15 @@ window.Shop = Shop;
             return;
         }
         if (e.target && e.target.classList && e.target.classList.contains('buy-bait-btn')) {
-            try { Anglers.buyBait(e.target.getAttribute('data-bait')); } catch (err) { console.error(err); }
+            try {
+                var baitId = e.target.getAttribute('data-bait');
+                console.log('[Shop] buy-bait-btn clicked', baitId);
+                var result = Anglers.buyBait(baitId);
+                console.log('[Shop] buyBait result', result);
+            } catch (err) {
+                console.error('[Shop] buyBait error', err);
+                UI.showToast('Bait purchase failed: ' + (err && err.message ? err.message : err), 'error');
+            }
             if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') Shop.renderShop();
         }
     });
