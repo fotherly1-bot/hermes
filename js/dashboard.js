@@ -1676,6 +1676,10 @@ const Dashboard = (function () {
                 '<span class="dash-fish-lake">Lake: ' + pbLake + '</span>' +
             '</div>' +
             '<div class="dash-fish-stat-bars">' + barsHtml + '</div>' +
+            (pbFish && pbFish.preferredBaits && pbFish.preferredBaits.length ?
+                '<div class="dash-fish-preferred-baits"><span style="font-size:0.68rem;color:var(--colour-text-muted);margin-right:0.4rem;">Preferred Bait</span>' +
+                pbFish.preferredBaits.map(function(bid){ return '<img src="img/bait/' + bid.replace(/_/g,'-') + '.png" class="dash-fish-preferred-thumb" title="' + bid + '"/>'; }).join('') +
+                '</div>' : '') +
         '</div>';
     }
 
@@ -1727,6 +1731,10 @@ const Dashboard = (function () {
                 '<span class="dash-fish-lake">Lake: ' + (mostExpensive.lake_id ? (typeof Lakes !== 'undefined' && Lakes.getLakeById(mostExpensive.lake_id) ? Lakes.getLakeById(mostExpensive.lake_id).name : mostExpensive.lake_id) : '—') + '</span>' +
             '</div>' +
             '<div class="dash-fish-stat-bars">' + barsHtml + '</div>' +
+            (mostExpensive.preferredBaits && mostExpensive.preferredBaits.length ?
+                '<div class="dash-fish-preferred-baits"><span style="font-size:0.68rem;color:var(--colour-text-muted);margin-right:0.4rem;">Preferred Bait</span>' +
+                mostExpensive.preferredBaits.map(function(bid){ return '<img src="img/bait/' + bid.replace(/_/g,'-') + '.png" class="dash-fish-preferred-thumb" title="' + bid + '"/>'; }).join('') +
+                '</div>' : '') +
         '</div>';
     }
 
