@@ -10,14 +10,25 @@ const Fish = (function () {
      * Species definitions with base stats.
      */
     const SPECIES = {
-        common: { name: 'Common Carp', maxWeight: 960, baseGrowth: 1.0, colour: '#8B7355', preferredBaits: ['boilie_fishmeal','popup_white'] },
-        mirror: { name: 'Mirror Carp', maxWeight: 1080, baseGrowth: 0.9, colour: '#B8860B', preferredBaits: ['boilie_birdfood','popup_yellow'] },
-        leather: { name: 'Leather Carp', maxWeight: 840, baseGrowth: 0.85, colour: '#6B4226', preferredBaits: ['popup_purple','boilie_standard'] },
-        ghost: { name: 'Ghost Carp', maxWeight: 720, baseGrowth: 1.1, colour: '#C0C0C0', preferredBaits: ['popup_white','boilie_fishmeal'] },
-        koi: { name: 'Koi Carp', maxWeight: 600, baseGrowth: 0.95, colour: '#FF6347', preferredBaits: ['boilie_tigernut','popup_pink'] },
-        grass: { name: 'Grass Carp', maxWeight: 900, baseGrowth: 1.2, colour: '#556B2F', preferredBaits: ['spod_mix','popup_orange'] },
-        crucian: { name: 'Crucian Carp', maxWeight: 120, baseGrowth: 0.7, colour: '#DAA520', preferredBaits: ['popup_yellow','boilie_standard'] }
+        common: { name: 'Common Carp', maxWeight: 960, baseGrowth: 1.0, colour: '#8B7355' },
+        mirror: { name: 'Mirror Carp', maxWeight: 1080, baseGrowth: 0.9, colour: '#B8860B' },
+        leather: { name: 'Leather Carp', maxWeight: 840, baseGrowth: 0.85, colour: '#6B4226' },
+        ghost: { name: 'Ghost Carp', maxWeight: 720, baseGrowth: 1.1, colour: '#C0C0C0' },
+        koi: { name: 'Koi Carp', maxWeight: 600, baseGrowth: 0.95, colour: '#FF6347' },
+        grass: { name: 'Grass Carp', maxWeight: 900, baseGrowth: 1.2, colour: '#556B2F' },
+        crucian: { name: 'Crucian Carp', maxWeight: 120, baseGrowth: 0.7, colour: '#DAA520' }
     };
+
+    const ALL_BAIT_IDS = ['boilie_standard','boilie_fishmeal','boilie_birdfood','boilie_tigernut','popup_white','popup_yellow','popup_pink','popup_orange','popup_purple','spod_mix'];
+
+    function randomPreferredBaits() {
+        var shuffled = ALL_BAIT_IDS.slice();
+        for (var i = shuffled.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+        }
+        return shuffled.slice(0, 2);
+    }
 
     /**
      * Growth stage definitions.
@@ -206,7 +217,7 @@ const Fish = (function () {
             lake_id: options.lake_id || null,
             growth_stage: getGrowthStage(ageDays),
             alive: true,
-            preferredBaits: options.preferredBaits || (speciesDef.preferredBaits || [])
+            preferredBaits: options.preferredBaits || randomPreferredBaits()
         };
 
         return fish;
