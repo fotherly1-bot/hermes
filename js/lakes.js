@@ -976,7 +976,7 @@ const Lakes = (function () {
 
         // Per-lake stocking profiles: [species, rarity, minWeight, maxWeight]
         var PROFILES = {
-            'oakmere_lake':      { count: 35, entries: [
+            'oakmere_lake':      { count: 30, entries: [
                 ['common','common',60,160], ['mirror','common',70,180], ['crucian','common',40,100],
                 ['grass','uncommon',80,200], ['ghost','uncommon',75,190], ['leather','common',65,170],
                 ['common','uncommon',320,480], ['mirror','uncommon',320,480], ['leather','uncommon',320,480]
@@ -1010,11 +1010,46 @@ const Lakes = (function () {
                 ['mirror','epic',180,320], ['koi','epic',175,320], ['leather','legendary',180,320],
                 ['ghost','epic',170,320], ['grass','epic',175,320], ['common','rare',160,320],
                 ['mirror','legendary',320,480], ['koi','epic',320,480], ['leather','epic',320,480]
+            ]},
+            'monks_mere':        { count: 50, entries: [
+                ['common','uncommon',90,220], ['mirror','uncommon',100,240], ['leather','rare',95,230],
+                ['grass','rare',110,280], ['ghost','rare',105,270], ['koi','uncommon',100,260],
+                ['mirror','rare',320,480], ['leather','rare',320,480], ['ghost','uncommon',320,480]
+            ]},
+            'bradshaw_pits':     { count: 50, entries: [
+                ['common','common',80,200], ['mirror','uncommon',90,220], ['crucian','common',60,140],
+                ['grass','uncommon',85,210], ['ghost','uncommon',80,200], ['leather','common',75,190],
+                ['common','uncommon',320,480], ['mirror','uncommon',320,480], ['grass','rare',320,480]
+            ]},
+            'cranfield_weir':    { count: 45, entries: [
+                ['common','uncommon',85,210], ['mirror','rare',95,230], ['leather','rare',90,220],
+                ['grass','rare',100,260], ['ghost','rare',95,250], ['koi','uncommon',90,240],
+                ['mirror','rare',320,480], ['leather','rare',320,480], ['common','rare',320,480]
+            ]},
+            'harrington_park':   { count: 55, entries: [
+                ['common','rare',100,260], ['mirror','rare',110,280], ['leather','epic',105,270],
+                ['grass','epic',120,300], ['ghost','rare',115,290], ['koi','rare',100,280],
+                ['mirror','epic',320,480], ['leather','epic',320,480], ['koi','rare',320,480]
+            ]},
+            'loch_davan':        { count: 60, entries: [
+                ['common','rare',110,280], ['mirror','rare',120,300], ['leather','epic',115,290],
+                ['grass','epic',130,320], ['ghost','epic',125,310], ['koi','rare',110,290],
+                ['mirror','epic',320,480], ['ghost','epic',320,480], ['leather','legendary',320,480]
+            ]},
+            'clearbeck_reservoir': { count: 50, entries: [
+                ['common','uncommon',95,230], ['mirror','uncommon',105,250], ['leather','rare',100,240],
+                ['grass','rare',115,290], ['ghost','rare',110,280], ['koi','rare',105,270],
+                ['mirror','rare',320,480], ['leather','rare',320,480], ['grass','rare',320,480]
             ]}
         };
 
-        var profile = PROFILES[lakeId];
-        if (!profile) return;
+        var FALLBACK_PROFILE = { count: 35, entries: [
+            ['common','common',70,160], ['mirror','common',80,180], ['crucian','common',50,110],
+            ['grass','uncommon',85,200], ['ghost','uncommon',80,190], ['leather','common',75,170], ['koi','common',70,160],
+            ['common','uncommon',320,480], ['mirror','uncommon',320,480], ['leather','uncommon',320,480]
+        ]};
+
+        var profile = PROFILES[lakeId] || FALLBACK_PROFILE;
 
         for (var i = 0; i < profile.count; i++) {
             var entry = profile.entries[Math.floor(Math.random() * profile.entries.length)];
@@ -1026,8 +1061,38 @@ const Lakes = (function () {
                 weight_oz: wt,
                 lake_id:   lakeId
             });
+            // Broaden trait variance for stocked fish
+            if (fish.personality_traits && fish.personality_traits.length < 3) {
+                var extraTraits = Fish.TRAIT_DEFINITIONS ? Object.keys(Fish.TRAIT_DEFINITIONS) : [];
+                for (var t = fish.personality_traits.length; t < 3 && extraTraits.length; t++) {
+                    var pick = extraTraits[Math.floor(Math.random() * extraTraits.length)];
+                    if (fish.personality_traits.indexOf(pick) === -1) fish.personality_traits.push(pick);
+                }
+            }
             state.fish.push(fish);
         }
+
+        // Fallback: ensure all bait preference types are represented in stocked fish
+        try {
+            var allBaitIds = ['boilie_standard','boilie_fishmeal','boilie_birdfood','boilie_tigernut','popup_white','popup_yellow','popup_pink','popup_orange','popup_purple','spod_mix'];
+            var presentPrefs = {};
+            state.fish.forEach(function(f){ if (f.lake_id === lakeId && f.preferredBaits) f.preferredBaits.forEach(function(b){ presentPrefs[b] = true; }); });
+            var missing = allBaitIds.filter(function(b){ return !presentPrefs[b]; });
+            missing.slice(0, 6).forEach(function(bid){
+                var sp = Fish.randomSpeciesKey ? Fish.randomSpeciesKey() : 'common';
+                var rf = Fish.createFish({ species: sp, rarity: 'common', age_days: 200 + Math.floor(Math.random()*300), weight_oz: 60 + Math.floor(Math.random()*200), lake_id: lakeId });
+                rf.preferredBaits = [bid];
+                rf.personality_traits = rf.personality_traits || [];
+                if (Fish.TRAIT_DEFINITIONS && rf.personality_traits.length < 2) {
+                    var keys = Object.keys(Fish.TRAIT_DEFINITIONS);
+                    for (var k = 0; k < 2; k++) {
+                        var tp = keys[Math.floor(Math.random()*keys.length)];
+                        if (rf.personality_traits.indexOf(tp)===-1) rf.personality_traits.push(tp);
+                    }
+                }
+                state.fish.push(rf);
+            });
+        } catch(e){}
 
         Game.addNotification(
             '\uD83D\uDC1F ' + lake.name + ' arrives pre-stocked with ' + profile.count + ' fish!'
