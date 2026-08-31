@@ -369,16 +369,16 @@ const Shop = (function () {
             html += '<p class="tackle-subtitle">Buy bait once and it stays in your inventory forever.</p>';
 
             var BAIT_CATALOG = [
-                {id:'boilie_standard', name:'Standard Boilies', cost:0, image:'img/bait/boilie-standard.png'},
-                {id:'popup_white', name:'White Popups', cost:350, image:'img/bait/popup-white.png'},
-                {id:'popup_yellow', name:'Yellow Popups', cost:400, image:'img/bait/popup-yellow.png'},
-                {id:'popup_pink', name:'Pink Popups', cost:400, image:'img/bait/popup-pink.png'},
-                {id:'popup_orange', name:'Orange Popups', cost:400, image:'img/bait/popup-orange.png'},
-                {id:'popup_purple', name:'Purple Popups', cost:420, image:'img/bait/popup-purple.png'},
-                {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, image:'img/bait/boilie-fishmeal.png'},
-                {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, image:'img/bait/boilie-birdfood.png'},
-                {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, image:'img/bait/boilie-tigernut.png'},
-                {id:'spod_mix', name:'Spod Mix', cost:700, image:'img/bait/spod-mix.png'}
+                {id:'boilie_standard', name:'Standard Boilies', cost:0, image:'img/bait/boilie-standard.png', info:'Reliable all-rounder bait.'},
+                {id:'popup_white', name:'White Popups', cost:350, image:'img/bait/popup-white.png', info:'Classic buoyant attractor.'},
+                {id:'popup_yellow', name:'Yellow Popups', cost:400, image:'img/bait/popup-yellow.png', info:'Bright visual attractor.'},
+                {id:'popup_pink', name:'Pink Popups', cost:400, image:'img/bait/popup-pink.png', info:'Best for wary fish.'},
+                {id:'popup_orange', name:'Orange Popups', cost:400, image:'img/bait/popup-orange.png', info:'Good for low-visibility swims.'},
+                {id:'popup_purple', name:'Purple Popups', cost:420, image:'img/bait/popup-purple.png', info:'Specimen carp trigger.'},
+                {id:'boilie_fishmeal', name:'Fishmeal Boilies', cost:500, image:'img/bait/boilie-fishmeal.png', info:'High-protein draw.'},
+                {id:'boilie_birdfood', name:'Birdfood Blend Boilies', cost:550, image:'img/bait/boilie-birdfood.png', info:'All-round birdfood blend.'},
+                {id:'boilie_tigernut', name:'Tiger Nut Boilies', cost:600, image:'img/bait/boilie-tigernut.png', info:'High attract for big carp.'},
+                {id:'spod_mix', name:'Spod Mix', cost:700, image:'img/bait/spod-mix.png', info:'Particle mix to build a bed.'}
             ];
 
             var ownedBait = (state.anglerBait || []);
@@ -390,6 +390,9 @@ const Shop = (function () {
                 html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\'">';
                 html += '</div>';
                 html += '<div class="tackle-name">' + item.name + '</div>';
+                if (item.info) {
+                    html += '<div class="tackle-desc">' + item.info + '</div>';
+                }
                 html += '<div class="tackle-cost">' + UI.formatMoney(item.cost) + '</div>';
                 if (owned) {
                     html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
