@@ -318,7 +318,7 @@ const Breeding = (function () {
                     html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.25rem;">Preferred Bait</div>';
                     html += '<div class="breed-parent-preferred-thumbs">';
                     f.preferredBaits.forEach(function(bid){
-                        var src = 'img/bait/' + bid + '.png';
+                        var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
                     });
                     html += '</div>';
