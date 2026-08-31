@@ -346,7 +346,8 @@
 
                 // Bait selector below rig
                 html += '<div class="rig-bait-selector">';
-                html += '<div class="rig-selector-label">Bait for ' + slotLabel + ' <span class="rig-help-trigger" title="Opens the full bait list. Owned baits are selectable.">?</span></div>';
+                html += '<div class="rig-selector-label">Bait for ' + slotLabel + '</div>';
+                html += '<div style="font-size:0.72rem;color:var(--colour-text-muted);margin-top:0.25rem;">All fish prefer 2 baits. Equipping a matching bait gives a catch bonus, especially on bigger fish.</div>';
                 html += '<button class="btn btn-primary" onclick="Rigs.openBaitModal(' + i + ')">Select Bait</button>';
                 html += '<div style="margin-top:0.4rem;font-size:0.82rem;color:var(--colour-text-muted);">Equipped: ' + (summary.baitName || 'Standard Boilies') + '</div>';
                 html += '</div>';
