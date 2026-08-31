@@ -1,9 +1,16 @@
 const DLC = (function () {
     'use strict';
 
+    var CATEGORIES = [
+        { key: 'fish', label: 'Fish Card Packs', emoji: '🐟' },
+        { key: 'lake', label: 'Lake Packs', emoji: '🏞️' },
+        { key: 'angler', label: 'Angler Packs', emoji: '🎣' }
+    ];
+
     var PACKS = [
         {
             id: 'fish-pack-1',
+            category: 'fish',
             type: 'Fish Card Pack',
             title: 'Mystic Carp Collection',
             emoji: '🐟',
@@ -16,6 +23,7 @@ const DLC = (function () {
         },
         {
             id: 'fish-pack-2',
+            category: 'fish',
             type: 'Fish Card Pack',
             title: 'Ghost Koi Expansion',
             emoji: '🐟',
@@ -28,6 +36,7 @@ const DLC = (function () {
         },
         {
             id: 'fish-pack-3',
+            category: 'fish',
             type: 'Fish Card Pack',
             title: 'Tropical Invaders',
             emoji: '🐟',
@@ -40,6 +49,7 @@ const DLC = (function () {
         },
         {
             id: 'lake-pack-1',
+            category: 'lake',
             type: 'Lake Pack',
             title: 'Northern Meres',
             emoji: '🏞️',
@@ -53,6 +63,7 @@ const DLC = (function () {
         },
         {
             id: 'lake-pack-2',
+            category: 'lake',
             type: 'Lake Pack',
             title: 'River Delta Network',
             emoji: '🏞️',
@@ -66,6 +77,7 @@ const DLC = (function () {
         },
         {
             id: 'lake-pack-3',
+            category: 'lake',
             type: 'Lake Pack',
             title: 'Alpine High Lakes',
             emoji: '🏞️',
@@ -79,6 +91,7 @@ const DLC = (function () {
         },
         {
             id: 'angler-pack-1',
+            category: 'angler',
             type: 'Angler Pack',
             title: 'Pro Circuit',
             emoji: '🎣',
@@ -92,6 +105,7 @@ const DLC = (function () {
         },
         {
             id: 'angler-pack-2',
+            category: 'angler',
             type: 'Angler Pack',
             title: 'Celebrity Guests',
             emoji: '🎣',
@@ -105,6 +119,7 @@ const DLC = (function () {
         },
         {
             id: 'angler-pack-3',
+            category: 'angler',
             type: 'Angler Pack',
             title: 'Local Legends',
             emoji: '🎣',
@@ -135,9 +150,14 @@ const DLC = (function () {
 
     function render() {
         var html = '<p class="empty-state" style="margin-bottom:1rem;">Expand your fishery with official DLC packs. Each pack unlocks immediately after purchase.</p>';
-        html += '<div class="dlc-grid">';
-        PACKS.forEach(function(p){ html += card(p); });
-        html += '</div>';
+        CATEGORIES.forEach(function(cat){
+            var items = PACKS.filter(function(p){ return p.category === cat.key; });
+            if (!items.length) return;
+            html += '<h3 class="dlc-section-title">' + cat.emoji + ' ' + cat.label + '</h3>';
+            html += '<div class="dlc-grid">';
+            items.forEach(function(p){ html += card(p); });
+            html += '</div>';
+        });
         return html;
     }
 

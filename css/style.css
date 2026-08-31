@@ -11131,4 +11131,10 @@ details[open] > .lake-accordion-summary::before {
 .dlc-bullets li {
     margin-bottom: 0.2rem;
 }
+.dlc-section-title {
+    margin: 1.1rem 0 0.6rem;
+    font-size: 0.95rem;
+    color: var(--colour-gold);
+    letter-spacing: 0.04em;
+}
 
