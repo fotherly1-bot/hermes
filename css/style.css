@@ -9070,7 +9070,9 @@ details[open] > .lake-accordion-summary::before {
 .breed-parent-traits     { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0 0.65rem 0.6rem; }
 .breed-parent-preferred-baits { padding: 0 0.65rem 0.5rem; font-size: 0.68rem; color: var(--colour-text-muted); }
 .breed-parent-preferred-thumbs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.breed-parent-preferred-thumb { width: 54px; height: 54px; object-fit: contain; border-radius: 8px; background: rgba(0,0,0,0.25); padding: 4px; border: 1px solid var(--colour-border); }
+.breed-parent-preferred-thumb { width: 72px; height: 72px; object-fit: contain; border-radius: 10px; background: rgba(0,0,0,0.25); padding: 5px; border: 1px solid var(--colour-border); }
+.breed-parent-preferred-thumb-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+.breed-parent-preferred-caption { font-size: 0.65rem; color: var(--colour-text-muted); text-align: center; line-height: 1.1; }
 .breed-parent-preferred-thumb[src=""], .breed-parent-preferred-thumb:not([src]) { display: none; }
 
 .breed-odds-row          { display: flex; align-items: center; margin-bottom: 0.3rem; }

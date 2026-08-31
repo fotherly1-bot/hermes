@@ -329,7 +329,12 @@ const Breeding = (function () {
                     html += '<div class="breed-parent-preferred-thumbs">';
                     f.preferredBaits.forEach(function(bid){
                         var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
+                        var bdef = (typeof Anglers !== 'undefined' && Anglers.getBaitDef) ? Anglers.getBaitDef(bid) : null;
+                        var bname = bdef ? bdef.name : bid;
+                        html += '<div class="breed-parent-preferred-thumb-wrap">';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
+                        html += '<div class="breed-parent-preferred-caption">' + bname + '</div>';
+                        html += '</div>';
                     });
                     html += '</div>';
                     html += '</div>';
@@ -339,7 +344,12 @@ const Breeding = (function () {
                     html += '<div class="breed-parent-preferred-thumbs">';
                     Fish.SPECIES[f.species].preferredBaits.forEach(function(bid){
                         var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
+                        var bdef = (typeof Anglers !== 'undefined' && Anglers.getBaitDef) ? Anglers.getBaitDef(bid) : null;
+                        var bname = bdef ? bdef.name : bid;
+                        html += '<div class="breed-parent-preferred-thumb-wrap">';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
+                        html += '<div class="breed-parent-preferred-caption">' + bname + '</div>';
+                        html += '</div>';
                     });
                     html += '</div>';
                     html += '</div>';
@@ -349,7 +359,12 @@ const Breeding = (function () {
                     html += '<div class="breed-parent-preferred-thumbs">';
                     (Fish.randomPreferredBaits() || []).forEach(function(bid){
                         var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
+                        var bdef = (typeof Anglers !== 'undefined' && Anglers.getBaitDef) ? Anglers.getBaitDef(bid) : null;
+                        var bname = bdef ? bdef.name : bid;
+                        html += '<div class="breed-parent-preferred-thumb-wrap">';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
+                        html += '<div class="breed-parent-preferred-caption">' + bname + '</div>';
+                        html += '</div>';
                     });
                     html += '</div>';
                     html += '</div>';
