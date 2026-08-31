@@ -421,10 +421,10 @@ const Shop = (function () {
 
             var sections = [
               { key:'Rods', label:'Rods', items:[
-                  {id:'rod_12ft_carp', name:'12ft Carp Rod', cost:1800, icon:'🎣', category:'Rod', description:'Versatile 12ft rod for general carp fishing.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['rod_carbon_carp']},
-                  {id:'rod_carbon_carp', name:'Carbon Carp Rod', cost:2600, icon:'🎣', category:'Rod', description:'Lightweight carbon blank with responsive action.', effects:{catchRateBonus:0.03, castRangeBonus:0.02}, prerequisite:'rod_12ft_carp', unlocks:['rod_13ft_carp']},
-                  {id:'rod_13ft_carp', name:'13ft Carp Rod', cost:3400, icon:'🎣', category:'Rod', description:'Extra length for longer casts and better leverage.', effects:{castRangeBonus:0.05, catchRateBonus:0.02}, prerequisite:'rod_carbon_carp', unlocks:['rod_custom_carp']},
-                  {id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, icon:'🎣', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02, reputationBonus:1}, prerequisite:'rod_13ft_carp', unlocks:[]}
+                  {id:'rod_12ft_carp', name:'12ft Carp Rod', cost:1800, image:'img/rigs/rod112.png', category:'Rod', description:'Versatile 12ft rod for general carp fishing.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['rod_carbon_carp']},
+                  {id:'rod_carbon_carp', name:'Carbon Carp Rod', cost:2600, image:'img/rigs/rod112.png', category:'Rod', description:'Lightweight carbon blank with responsive action.', effects:{catchRateBonus:0.03, castRangeBonus:0.02}, prerequisite:'rod_12ft_carp', unlocks:['rod_13ft_carp']},
+                  {id:'rod_13ft_carp', name:'13ft Carp Rod', cost:3400, image:'img/rigs/rod112.png', category:'Rod', description:'Extra length for longer casts and better leverage.', effects:{castRangeBonus:0.05, catchRateBonus:0.02}, prerequisite:'rod_carbon_carp', unlocks:['rod_custom_carp']},
+                  {id:'rod_custom_carp', name:'Custom Carp Rod', cost:4800, image:'img/rigs/rod112.png', category:'Rod', description:'Bespoke build tuned for specimen carp.', effects:{castRangeBonus:0.08, catchRateBonus:0.04, breakStrengthBonus:0.02, reputationBonus:1}, prerequisite:'rod_13ft_carp', unlocks:[]}
               ]},
               { key:'Reels', label:'Reels', items:[
                   {id:'standard_reel', name:'Standard Reel', cost:1200, icon:'🔄', image:'img/reels/reel1.png', category:'Reel', description:'Reliable entry-level fixed spool reel.', effects:{catchRateBonus:0.02}, prerequisite:null, unlocks:['big_pit_reel']},
@@ -486,7 +486,13 @@ const Shop = (function () {
                     locked = locked || (!owned && item.crossUnlocks && item.crossUnlocks.length && item.crossUnlocks.some(function(u){ return (state.anglerTackle || []).indexOf(u) === -1; }));
                     if (idx > 0) html += '<div class="tackle-arrow" aria-hidden="true">👉</div>';
                     html += '<div class="tackle-card' + (owned ? ' tackle-owned' : '') + (locked ? ' tackle-locked' : '') + '">';
-                    html += '<div class="tackle-icon">' + item.icon + '</div>';
+                    html += '<div class="tackle-icon">';
+                    if (item.image) {
+                        html += '<img src="' + item.image + '" alt="' + item.name + '" class="tackle-item-img" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'' + (item.icon || '') + '\';">';
+                    } else {
+                        html += (item.icon || '');
+                    }
+                    html += '</div>';
                     html += '<div class="tackle-name">' + item.name + '</div>';
                     html += '<div class="tackle-category">' + item.category + '</div>';
                     html += '<div class="tackle-desc">' + item.description + '</div>';
