@@ -873,25 +873,20 @@ const Shop = (function () {
 
 window.Shop = Shop;
 
-document.addEventListener('click', function(e){
-    if(e.target && e.target.classList && e.target.classList.contains('buy-bait-btn')){
-        try{ Anglers.buyBait(e.target.getAttribute('data-bait')); }catch(err){ console.error(err); }
-        if(typeof Shop !== 'undefined') Shop.renderShop();
-    }
-});
-
 (function(){
     if (typeof document === 'undefined') return;
     document.addEventListener('click', function(e){
         var tab = e.target.closest('.shop-tab[data-view]');
-        if (!tab) return;
-        var view = tab.getAttribute('data-view');
-        if (view && typeof Shop !== 'undefined' && typeof Shop.showShopView === 'function') {
-            try {
-                Shop.showShopView(view);
-            } catch (err) {
-                console.error('[Shop] showShopView error:', err);
+        if (tab) {
+            var view = tab.getAttribute('data-view');
+            if (view && typeof Shop !== 'undefined' && typeof Shop.showShopView === 'function') {
+                try { Shop.showShopView(view); } catch (err) { console.error('[Shop] showShopView error:', err); }
             }
+            return;
+        }
+        if (e.target && e.target.classList && e.target.classList.contains('buy-bait-btn')) {
+            try { Anglers.buyBait(e.target.getAttribute('data-bait')); } catch (err) { console.error(err); }
+            if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') Shop.renderShop();
         }
     });
 })();
