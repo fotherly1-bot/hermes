@@ -447,6 +447,7 @@ const Anglers = (function () {
         catalog = [];
         if (!catalog.length) {
             catalog = [
+                {id:'boilie_standard', name:'Standard Boilies', cost:0},
                 {id:'popup_white', name:'White Popups', cost:350},
                 {id:'popup_yellow', name:'Yellow Popups', cost:400},
                 {id:'popup_pink', name:'Pink Popups', cost:400},
