@@ -15,7 +15,8 @@
                 bestLead: 'inline',
                 baseCatchMod: 0.03,
                 baseWeightMod: 0.01,
-                weatherBonus: { sunny: 0.04, cloudy: 0.02, overcast: 0.00, rainy: -0.02, stormy: -0.06, foggy: -0.01, frost: -0.04, snowfall: -0.08, heatwave: 0.02 }
+                weatherBonus: { sunny: 0.04, cloudy: 0.02, overcast: 0.00, rainy: -0.02, stormy: -0.06, foggy: -0.01, frost: -0.04, snowfall: -0.08, heatwave: 0.02 },
+                substrateBonus: { weedy: 0.04, silty: 0.02, gravel: 0.00, rocky: -0.01, clay: 0.01, sandy: 0.00, muddy: 0.03, peaty: 0.01 }
             },
             {
                 id: 'ronnie',
@@ -28,7 +29,8 @@
                 bestLead: 'heli',
                 baseCatchMod: 0.02,
                 baseWeightMod: 0.02,
-                weatherBonus: { sunny: 0.02, cloudy: 0.03, overcast: 0.01, rainy: 0.00, stormy: -0.03, foggy: 0.01, frost: -0.02, snowfall: -0.05, heatwave: 0.01 }
+                weatherBonus: { sunny: 0.02, cloudy: 0.03, overcast: 0.01, rainy: 0.00, stormy: -0.03, foggy: 0.01, frost: -0.02, snowfall: -0.05, heatwave: 0.01 },
+                substrateBonus: { weedy: 0.01, silty: 0.02, gravel: 0.03, rocky: 0.04, clay: 0.02, sandy: 0.03, muddy: 0.01, peaty: 0.02 }
             },
             {
                 id: 'inline_ronnie',
@@ -41,7 +43,8 @@
                 bestLead: 'inline',
                 baseCatchMod: 0.025,
                 baseWeightMod: 0.015,
-                weatherBonus: { sunny: 0.03, cloudy: 0.02, overcast: 0.01, rainy: -0.01, stormy: -0.04, foggy: 0.01, frost: -0.03, snowfall: -0.06, heatwave: 0.02 }
+                weatherBonus: { sunny: 0.03, cloudy: 0.02, overcast: 0.01, rainy: -0.01, stormy: -0.04, foggy: 0.01, frost: -0.03, snowfall: -0.06, heatwave: 0.02 },
+                substrateBonus: { weedy: 0.02, silty: 0.03, gravel: 0.02, rocky: 0.01, clay: 0.03, sandy: 0.02, muddy: 0.04, peaty: 0.03 }
             },
             {
                 id: 'hair',
@@ -55,7 +58,8 @@
                 bestLead: 'lead_clip',
                 baseCatchMod: 0.04,
                 baseWeightMod: 0.02,
-                weatherBonus: { sunny: 0.05, cloudy: 0.03, overcast: 0.01, rainy: -0.01, stormy: -0.04, foggy: -0.02, frost: -0.03, snowfall: -0.06, heatwave: 0.04 }
+                weatherBonus: { sunny: 0.05, cloudy: 0.03, overcast: 0.01, rainy: -0.01, stormy: -0.04, foggy: -0.02, frost: -0.03, snowfall: -0.06, heatwave: 0.04 },
+                substrateBonus: { weedy: 0.02, silty: 0.01, gravel: 0.02, rocky: 0.00, clay: 0.01, sandy: 0.02, muddy: 0.02, peaty: 0.01 }
             },
             {
                 id: 'chod',
@@ -69,7 +73,8 @@
                 bestLead: 'heli',
                 baseCatchMod: 0.02,
                 baseWeightMod: 0.00,
-                weatherBonus: { sunny: 0.01, cloudy: 0.02, overcast: 0.03, rainy: 0.02, stormy: -0.01, foggy: 0.02, frost: -0.01, snowfall: -0.03, heatwave: 0.00 }
+                weatherBonus: { sunny: 0.01, cloudy: 0.02, overcast: 0.03, rainy: 0.02, stormy: -0.01, foggy: 0.02, frost: -0.01, snowfall: -0.03, heatwave: 0.00 },
+                substrateBonus: { weedy: 0.06, silty: 0.05, gravel: -0.02, rocky: 0.04, clay: 0.03, sandy: 0.02, muddy: 0.06, peaty: 0.04 }
             },
             {
                 id: 'zig',
@@ -83,7 +88,8 @@
                 bestLead: 'inline',
                 baseCatchMod: 0.01,
                 baseWeightMod: -0.01,
-                weatherBonus: { sunny: 0.03, cloudy: 0.01, overcast: -0.01, rainy: -0.03, stormy: -0.05, foggy: -0.02, frost: -0.06, snowfall: -0.10, heatwave: 0.06 }
+                weatherBonus: { sunny: 0.03, cloudy: 0.01, overcast: -0.01, rainy: -0.03, stormy: -0.05, foggy: -0.02, frost: -0.06, snowfall: -0.10, heatwave: 0.06 },
+                substrateBonus: { weedy: 0.02, silty: 0.02, gravel: 0.02, rocky: 0.02, clay: 0.02, sandy: 0.02, muddy: 0.02, peaty: 0.02 }
             },
             {
                 id: 'dumpy',
@@ -97,7 +103,8 @@
                 bestLead: 'lead_clip',
                 baseCatchMod: 0.01,
                 baseWeightMod: 0.03,
-                weatherBonus: { sunny: -0.01, cloudy: 0.00, overcast: 0.01, rainy: 0.02, stormy: 0.04, foggy: 0.02, frost: 0.01, snowfall: 0.00, heatwave: -0.02 }
+                weatherBonus: { sunny: -0.01, cloudy: 0.00, overcast: 0.01, rainy: 0.02, stormy: 0.04, foggy: 0.02, frost: 0.01, snowfall: 0.00, heatwave: -0.02 },
+                substrateBonus: { weedy: -0.01, silty: 0.01, gravel: 0.02, rocky: 0.02, clay: 0.01, sandy: 0.00, muddy: 0.01, peaty: 0.00 }
             },
             {
                 id: 'popup',
@@ -111,7 +118,8 @@
                 bestLead: 'inline',
                 baseCatchMod: 0.03,
                 baseWeightMod: 0.00,
-                weatherBonus: { sunny: 0.03, cloudy: 0.02, overcast: 0.01, rainy: -0.01, stormy: -0.02, foggy: 0.00, frost: -0.02, snowfall: -0.04, heatwave: 0.03 }
+                weatherBonus: { sunny: 0.03, cloudy: 0.02, overcast: 0.01, rainy: -0.01, stormy: -0.02, foggy: 0.00, frost: -0.02, snowfall: -0.04, heatwave: 0.03 },
+                substrateBonus: { weedy: 0.04, silty: 0.03, gravel: 0.00, rocky: -0.01, clay: 0.01, sandy: 0.01, muddy: 0.04, peaty: 0.02 }
             },
             {
                 id: 'straight',
@@ -124,7 +132,8 @@
                 bestLead: 'running',
                 baseCatchMod: 0.02,
                 baseWeightMod: 0.01,
-                weatherBonus: { sunny: 0.01, cloudy: 0.01, overcast: 0.02, rainy: 0.04, stormy: 0.03, foggy: 0.02, frost: -0.01, snowfall: -0.02, heatwave: -0.01 }
+                weatherBonus: { sunny: 0.01, cloudy: 0.01, overcast: 0.02, rainy: 0.04, stormy: 0.03, foggy: 0.02, frost: -0.01, snowfall: -0.02, heatwave: -0.01 },
+                substrateBonus: { weedy: -0.01, silty: -0.01, gravel: 0.03, rocky: 0.02, clay: 0.01, sandy: 0.02, muddy: -0.01, peaty: 0.01 }
             }
         ];
 
@@ -205,6 +214,22 @@
                 }
             });
             return { catchRateBonus: catchBonus, weightBonus: weightBonus };
+        }
+
+        function getRigSubstrateBonus(substrateTrait) {
+            var state = Game.getState();
+            initState();
+            var equipped = state.rigEquipped || [null, null, null];
+            var bonus = 0;
+            if (!substrateTrait) return bonus;
+            equipped.forEach(function (slot) {
+                if (!slot) return;
+                var def = getRigById(slot.rigId);
+                if (!def || !def.substrateBonus) return;
+                var sb = def.substrateBonus[substrateTrait];
+                if (typeof sb === 'number') bonus += sb;
+            });
+            return bonus;
         }
 
         function getRigWeatherBonus(weatherType) {
@@ -357,6 +382,12 @@
 
             // Bait preference tip panel
             html += '<div class="rigs-bait-tip-panel">';
+            html += '<div class="rigs-bait-tip-title">🌍 Lake Substrate</div>';
+            html += '<div class="rigs-bait-tip-text">Lakes have substrate traits like weedy, silty, gravel, rocky, clay, sandy, muddy, peaty. Equipped rigs gain catch bonuses when their Lake Substrate matches the active lake.</div>';
+            html += '</div>';
+
+            // Bait preference tip panel
+            html += '<div class="rigs-bait-tip-panel">';
             html += '<div class="rigs-bait-tip-title">🎣 Bait Selection</div>';
             html += '<div class="rigs-bait-tip-text">All fish prefer 2 baits. Equipping a matching bait gives a catch bonus, especially on bigger fish.</div>';
             html += '</div>';
@@ -394,6 +425,10 @@
                 html += '<div class="rig-equip-icon">' + def.icon + '</div>';
                 html += '<div class="rig-equip-name">' + def.name + '</div>';
                 html += '<div class="rig-equip-desc">' + def.description + '</div>';
+                if (def.substrateBonus) {
+                    var substrateEntries = Object.keys(def.substrateBonus).map(function(k){ return k + ' ' + (def.substrateBonus[k] >= 0 ? '+' : '') + (def.substrateBonus[k] * 100).toFixed(0) + '%'; }).filter(function(s){ return s.indexOf('+0') === -1 && s.indexOf('-0') === -1; });
+                    if (substrateEntries.length) html += '<div style="font-size:0.72rem;color:var(--colour-text-muted);margin-top:0.35rem;"><strong>Lake Substrate:</strong> ' + substrateEntries.join(', ') + '</div>';
+                }
                 if (owned) {
                     html += '<div class="rig-lead-selector">';
                     def.leadTypes.forEach(function (lt) {
@@ -477,6 +512,12 @@
                 html += '<div class="rigs-shop-card-icon">' + (def.icon || '') + '</div>';
                 html += '<div class="rigs-shop-card-name">' + def.name + '</div>';
                 html += '<div class="rigs-shop-card-desc">' + def.description + '</div>';
+                if (def.substrateBonus) {
+                    var substrateEntries = Object.keys(def.substrateBonus).map(function(k){ return k + ' ' + (def.substrateBonus[k] >= 0 ? '+' : '') + (def.substrateBonus[k] * 100).toFixed(0) + '%'; }).filter(function(s){ return s.indexOf('+0') === -1 && s.indexOf('-0') === -1; });
+                    if (substrateEntries.length) {
+                        html += '<div style="font-size:0.7rem;color:var(--colour-text-muted);margin-top:0.35rem;"><strong>Lake Substrate:</strong> ' + substrateEntries.join(', ') + '</div>';
+                    }
+                }
                 if (alreadyOwned) {
                     html += '<span class="rig-badge rig-badge-owned">Owned</span>';
                     html += '<button class="btn btn-sm btn-muted" disabled>Owned</button>';
@@ -529,6 +570,7 @@
             unequipRig: unequipRig,
             getEquippedRigEffects: getEquippedRigEffects,
             getRigWeatherBonus: getRigWeatherBonus,
+            getRigSubstrateBonus: getRigSubstrateBonus,
             renderRigs: renderRigs,
             openEquipModal: openEquipModal,
             openBaitModal: openBaitModal,

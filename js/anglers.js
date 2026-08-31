@@ -1777,6 +1777,17 @@ const Anglers = (function () {
         }
         if (rigBonus > 0) catchCount += Math.floor(catchCount * rigBonus);
 
+        // Lake substrate trait bonus from equipped rigs
+        try {
+            var lakeDef = typeof Lakes !== 'undefined' && Lakes.getLakeById ? Lakes.getLakeById(booking.lakeId) : null;
+            var substrateTraits = lakeDef && lakeDef.substrateTraits ? lakeDef.substrateTraits : [];
+            var substrateBonus = 0;
+            substrateTraits.forEach(function(trait){
+                if (typeof Rigs !== 'undefined' && Rigs.getRigSubstrateBonus) substrateBonus += Rigs.getRigSubstrateBonus(trait);
+            });
+            if (substrateBonus > 0) catchCount = Math.max(1, catchCount + Math.floor(catchCount * substrateBonus));
+        } catch(e){}
+
         var baitEffects = typeof Anglers !== 'undefined' && Anglers.getBaitEffects ? Anglers.getBaitEffects() : {};
         if (baitEffects.lakeBonus && booking.lakeId) {
             var lakeSpeciesPrefs = [];

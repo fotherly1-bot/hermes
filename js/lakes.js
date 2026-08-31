@@ -23,6 +23,7 @@ const Lakes = (function () {
             biodiversityScore: 6,
             dailyIncomePerAngler: 40,
             description: 'A picturesque two-acre lake nestled amongst ancient oak trees.',
+            substrateTraits: ['weedy', 'silty'],
             buffs: {
                 positive: { healthRegen: 1, summary: 'Oak tannins → +1 daily fish health' },
                 negative: { siltBuildUp: 0.03, summary: 'Leaf fall → +3% monthly silt event chance' }
@@ -39,6 +40,7 @@ const Lakes = (function () {
             biodiversityScore: 7,
             dailyIncomePerAngler: 55,
             description: 'A spring-fed lake with crystal-clear running water. Excellent biodiversity.',
+            substrateTraits: ['gravel', 'rocky'],
             buffs: {
                 positive: { oxygenBonus: 0.5, summary: 'Spring flow → +0.5 mg/L base oxygen' },
                 negative: { floodRisk: 0.04, summary: 'Flash floods → +4% seasonal fish displacement' }
@@ -55,6 +57,7 @@ const Lakes = (function () {
             biodiversityScore: 8,
             dailyIncomePerAngler: 80,
             description: 'A former gravel pit transformed into a premier carp fishery in Oxfordshire.',
+            substrateTraits: ['gravel', 'clay'],
             buffs: {
                 positive: { growthBonus: 0.15, summary: 'Mineral-rich clay → +15% fish growth' },
                 negative: { predatorChance: 0.05, summary: 'Deep margins → +5% otter/perch predation' }
@@ -71,6 +74,7 @@ const Lakes = (function () {
             biodiversityScore: 9,
             dailyIncomePerAngler: 120,
             description: 'A legendary gravel pit near Heathrow. Home to some of the largest carp in the country.',
+            substrateTraits: ['gravel', 'silty'],
             buffs: {
                 positive: { maxWeightBonus: 0.20, rarityBoost: 0.10, summary: 'Legendary genetics → +20% max weight, +10% rarity rolls' },
                 negative: { poachingRisk: 0.06, stressPenalty: 0.05, summary: 'High profile → +6% poaching, +5% angling stress' }
@@ -103,6 +107,7 @@ const Lakes = (function () {
             biodiversityScore: 9,
             dailyIncomePerAngler: 250,
             description: 'The birthplace of modern carp fishing in Herefordshire. A truly hallowed venue.',
+            substrateTraits: ['clay', 'muddy'],
             buffs: {
                 positive: { growthBonus: 0.25, rarityBoost: 0.15, maxWeightBonus: 0.15, summary: 'Hallowed waters → +25% growth, +15% rarity, +15% max weight' },
                 negative: { anglingPressure: 0.10, capacityPenalty: 0.15, summary: 'Famous venue → +10% hook pulls, -15% effective capacity' }
@@ -119,6 +124,7 @@ const Lakes = (function () {
             biodiversityScore: 10,
             dailyIncomePerAngler: 350,
             description: 'The crown jewel of British carp fishing. An exclusive estate lake of unrivalled prestige.',
+            substrateTraits: ['silty', 'peaty'],
             buffs: {
                 positive: { growthBonus: 0.30, rarityBoost: 0.20, reputationGain: 3, incomeBonus: 0.15, summary: 'Apex fishery → +30% growth, +20% rarity, +3 rep/day, +15% income' },
                 negative: { maintenanceCostMult: 1.50, poachingRisk: 0.08, anglingPressure: 0.12, summary: 'Ultra-high profile → +50% maint, +8% poaching, +12% hook pulls' }
@@ -136,6 +142,7 @@ const Lakes = (function () {
             biodiversityScore: 7,
             dailyIncomePerAngler: 65,
             description: 'A former water-supply reservoir converted to a premium fishery. Deep, cold and full of specimens.',
+            substrateTraits: ['rocky', 'sandy'],
             buffs: {
                 positive: { growthBonus: 0.10, oxygenBonus: 0.3, summary: 'Cold depths → +10% growth, +0.3mg/L oxygen' },
                 negative: { winterKill: 0.04, summary: 'Ice cover → +4% winter mortality' }
@@ -152,6 +159,7 @@ const Lakes = (function () {
             biodiversityScore: 8,
             dailyIncomePerAngler: 95,
             description: 'Peaceful monastic grounds with a sheltered three-acre mere. Prized for its tranquil setting.',
+            substrateTraits: ['muddy', 'clay'],
             buffs: {
                 positive: { stressReduction: 0.10, reputationGain: 1, summary: 'Sanctuary waters → -10% angling stress, +1 rep/day' },
                 negative: { growthPenalty: 0.05, capacityLimit: 200, summary: 'No feeding → -5% growth, max 200 fish' }
@@ -168,6 +176,7 @@ const Lakes = (function () {
             biodiversityScore: 9,
             dailyIncomePerAngler: 145,
             description: 'A series of interconnected gravel pits in Lancashire. Wide open water and big fish.',
+            substrateTraits: ['gravel', 'sandy'],
             buffs: {
                 positive: { growthBonus: 0.20, maxWeightBonus: 0.15, summary: 'Interconnected pits → +20% growth, +15% max weight' },
                 negative: { predatorChance: 0.07, diseaseSpread: 0.03, summary: 'Connected system → +7% predators, +3% disease spread' }
@@ -184,6 +193,7 @@ const Lakes = (function () {
             biodiversityScore: 9,
             dailyIncomePerAngler: 160,
             description: 'A dramatic weir pool on the River Ouse. Moving water and exceptional biodiversity attract specialist anglers.',
+            substrateTraits: ['gravel', 'rocky'],
             buffs: {
                 positive: { oxygenBonus: 0.8, biodiversityBonus: 1, reputationGain: 1, summary: 'Weir turbulence → +0.8mg/L oxygen, +1 biodiversity, +1 rep/day' },
                 negative: { floodRisk: 0.06, washoutChance: 0.02, summary: 'River surges → +6% flood displacement, +2% washout' }
@@ -200,6 +210,7 @@ const Lakes = (function () {
             biodiversityScore: 9,
             dailyIncomePerAngler: 210,
             description: 'A Georgian estate lake surrounded by ancient parkland. One of the finest addresses in English fishing.',
+            substrateTraits: ['silty', 'weedy'],
             buffs: {
                 positive: { reputationGain: 2, incomeBonus: 0.10, maxWeightBonus: 0.10, summary: 'Heritage venue → +2 rep/day, +10% income, +10% max weight' },
                 negative: { maintenanceCostMult: 1.30, anglingPressure: 0.08, summary: 'Listed grounds → +30% maint, +8% hook pulls' }
@@ -216,6 +227,7 @@ const Lakes = (function () {
             biodiversityScore: 10,
             dailyIncomePerAngler: 300,
             description: 'A remote Scottish loch of legendary status. Wild, windswept and home to the most elusive fish in Britain.',
+            substrateTraits: ['rocky', 'peaty'],
             buffs: {
                 positive: { growthBonus: 0.25, rarityBoost: 0.18, reputationGain: 2, maxWeightBonus: 0.25, summary: 'Wild loch → +25% growth, +18% rarity, +2 rep/day, +25% max weight' },
                 negative: { winterKill: 0.08, stormRisk: 0.06, accessPenalty: 0.10, summary: 'Remote/harsh → +8% winter kill, +6% storms, -10% angler access' }
