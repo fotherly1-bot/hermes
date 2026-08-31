@@ -352,10 +352,8 @@ const Dashboard = (function () {
                     '" onclick="Dashboard.showDashTab(\'overview\')">Overview</button>';
             html += '<button class="dash-subtab' + (_dashTab === 'quests' ? ' dash-subtab-active' : '') +
                     '" onclick="Dashboard.showDashTab(\'quests\')">🏆 Main Quests</button>' ;
-            html += '<button class="dash-subtab' + (_dashTab === 'quests-anglers' ? ' dash-subtab-active' : '') +
-                    '" onclick="Dashboard.showDashTab(\'quests-anglers\')">🎯 Angler Quests</button>' ;
             html += '<button class="dash-subtab' + (_dashTab === 'fish' ? ' dash-subtab-active' : '') +
-                    '" onclick="Dashboard.showDashTab(\'fish\')">🐟 Fish Tracker</button>';
+                    '" onclick=\"Dashboard.showDashTab(\'fish\')">🐟 Fish Tracker</button>' ;
             html += '</div>';
 
             if (_dashTab === 'fish') {
