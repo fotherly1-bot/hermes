@@ -325,12 +325,11 @@ const Breeding = (function () {
                 }
                 if (f.preferredBaits && f.preferredBaits.length) {
                     html += '<div class="breed-parent-preferred-baits">';
-                    html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.25rem;">Preferred Bait</div>';
                     html += '<div class="breed-parent-preferred-thumbs">';
                     f.preferredBaits.forEach(function(bid){
                         var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
                         var bdef = (typeof Anglers !== 'undefined' && Anglers.getBaitDef) ? Anglers.getBaitDef(bid) : null;
-                        var bname = bdef ? bdef.name : bid;
+                        var bname = bdef ? bdef.name : bid.replace(/_/g,' ').replace(/\b\w/g, function(l){ return l.toUpperCase(); });
                         html += '<div class="breed-parent-preferred-thumb-wrap">';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
                         html += '<div class="breed-parent-preferred-caption">' + bname + '</div>';
@@ -340,12 +339,11 @@ const Breeding = (function () {
                     html += '</div>';
                 } else if (typeof Fish !== 'undefined' && Fish.SPECIES && Fish.SPECIES[f.species] && Fish.SPECIES[f.species].preferredBaits && Fish.SPECIES[f.species].preferredBaits.length) {
                     html += '<div class="breed-parent-preferred-baits">';
-                    html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.25rem;">Preferred Bait</div>';
                     html += '<div class="breed-parent-preferred-thumbs">';
                     Fish.SPECIES[f.species].preferredBaits.forEach(function(bid){
                         var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
                         var bdef = (typeof Anglers !== 'undefined' && Anglers.getBaitDef) ? Anglers.getBaitDef(bid) : null;
-                        var bname = bdef ? bdef.name : bid;
+                        var bname = bdef ? bdef.name : bid.replace(/_/g,' ').replace(/\b\w/g, function(l){ return l.toUpperCase(); });
                         html += '<div class="breed-parent-preferred-thumb-wrap">';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
                         html += '<div class="breed-parent-preferred-caption">' + bname + '</div>';
@@ -355,12 +353,11 @@ const Breeding = (function () {
                     html += '</div>';
                 } else if (typeof Fish !== 'undefined' && Fish.randomPreferredBaits) {
                     html += '<div class="breed-parent-preferred-baits">';
-                    html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.25rem;">Preferred Bait</div>';
                     html += '<div class="breed-parent-preferred-thumbs">';
                     (Fish.randomPreferredBaits() || []).forEach(function(bid){
                         var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
                         var bdef = (typeof Anglers !== 'undefined' && Anglers.getBaitDef) ? Anglers.getBaitDef(bid) : null;
-                        var bname = bdef ? bdef.name : bid;
+                        var bname = bdef ? bdef.name : bid.replace(/_/g,' ').replace(/\b\w/g, function(l){ return l.toUpperCase(); });
                         html += '<div class="breed-parent-preferred-thumb-wrap">';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
                         html += '<div class="breed-parent-preferred-caption">' + bname + '</div>';
