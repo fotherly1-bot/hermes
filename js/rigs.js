@@ -501,6 +501,7 @@
                 return;
             }
             if ((state.rigInventory || []).indexOf(rigId) === -1) state.rigInventory.push(rigId);
+            state.pendingRigPurchases = (state.pendingRigPurchases || []).filter(function(id){ return id !== rigId; });
             UI.showToast(def.icon + ' ' + def.name + ' purchased!', 'success');
             if (typeof Finance !== 'undefined') {
                 Finance.addFinanceLog('rig_purchase', -cost, def.name);
