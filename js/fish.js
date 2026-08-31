@@ -217,7 +217,8 @@ const Fish = (function () {
             lake_id: options.lake_id || null,
             growth_stage: getGrowthStage(ageDays),
             alive: true,
-            preferredBaits: options.preferredBaits || randomPreferredBaits()
+            preferredBaits: options.preferredBaits || randomPreferredBaits(),
+            times_caught: options.times_caught || 0
         };
 
         return fish;

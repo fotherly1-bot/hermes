@@ -266,6 +266,7 @@ const Game = (function () {
             // Backfill legacy fish with preferredBaits from species defaults/random pool
             if (s.fish && s.fish.length && typeof Fish !== 'undefined' && Fish.SPECIES && Fish.randomPreferredBaits) {
                 s.fish.forEach(function (f) {
+                    if (typeof f.times_caught === 'undefined') f.times_caught = f.times_caught || 0;
                     if (!f.preferredBaits || !f.preferredBaits.length) {
                         var sp = Fish.SPECIES[f.species];
                         f.preferredBaits = (sp && sp.preferredBaits && sp.preferredBaits.length) ? sp.preferredBaits.slice() : Fish.randomPreferredBaits();
