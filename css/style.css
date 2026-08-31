@@ -10629,7 +10629,8 @@ details[open] > .lake-accordion-summary::before {
     font-weight: 700;
 }
 
-.rig-rod-selector {
+.rig-rod-selector,
+.rig-bait-selector {
     background: rgba(0,0,0,0.18);
     border: 1px solid var(--colour-border);
     border-radius: var(--radius);
