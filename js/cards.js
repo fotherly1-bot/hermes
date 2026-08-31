@@ -373,6 +373,16 @@ const Cards = (function () {
                     card.traits.forEach(function(t){ var td=typeof Fish!=='undefined'&&Fish.TRAIT_DEFINITIONS?Fish.TRAIT_DEFINITIONS[t]:null,tc=td?td.colour:'#4a9c6d'; html+='<span class="trait-badge" style="border-color:'+tc+';color:'+tc+';">'+t+'</span>'; });
                     html += '</div>';
                 }
+                var spBait = (typeof Fish !== 'undefined' && Fish.SPECIES && Fish.SPECIES[card.species] ? Fish.SPECIES[card.species].preferredBaits : null);
+                if (spBait && spBait.length) {
+                    html += '<div class="card-item-preferred-baits" style="margin-top:0.4rem;font-size:0.78rem;color:var(--colour-text-muted);">Preferred bait: ';
+                    spBait.forEach(function(bid){
+                        var bdef = (typeof Anglers !== 'undefined' && Anglers.getBaitDef) ? Anglers.getBaitDef(bid) : null;
+                        var bname = bdef ? bdef.name : bid;
+                        html += (bdef && bdef.icon ? bdef.icon + ' ' : '') + bname + ' ';
+                    });
+                    html += '</div>';
+                }
             } else {
                 html += '<div class="card-item-sub" style="color:'+card.buffColour+';">'+(card.buffDuration>0?card.buffDuration+'d effect':'Instant')+'</div>';
             }
@@ -434,7 +444,8 @@ const Cards = (function () {
             weight_oz: fish.weight_oz || 0,
             age_days: fish.age_days || 0,
             traits: fish.personality_traits || [],
-            flavour: rarityDef && speciesDef ? (speciesDef.name || fish.species) + ' offspring.' : 'Bred offspring.'
+            flavour: rarityDef && speciesDef ? (speciesDef.name || fish.species) + ' offspring.' : 'Bred offspring.',
+            preferredBaits: fish.preferredBaits || []
         };
         (state.cardInventory || []).push(card);
         Game.saveToStorage && Game.saveToStorage();

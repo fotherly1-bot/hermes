@@ -361,6 +361,21 @@ const Anglers = (function () {
         return combined;
     }
 
+    /** Resolve bait definitions used by shop/cards/breeding. */
+    function getBaitDef(id) {
+        if (id === 'boilie_standard') return { id: 'boilie_standard', name: 'Standard Boilies', icon: '🪱', effects: { catchRateBonus: 0.01 } };
+        if (id === 'boilie_fishmeal') return { id: 'boilie_fishmeal', name: 'Fishmeal Boilies', icon: '🪱', effects: { catchRateBonus: 0.02 } };
+        if (id === 'boilie_birdfood') return { id: 'boilie_birdfood', name: 'Birdfood Blend Boilies', icon: '🪱', effects: { catchRateBonus: 0.02 } };
+        if (id === 'boilie_tigernut') return { id: 'boilie_tigernut', name: 'Tiger Nut Boilies', icon: '🪱', effects: { catchRateBonus: 0.02, weightBonus: 0.01 } };
+        if (id === 'popup_white') return { id: 'popup_white', name: 'White Popups', icon: '🪱', effects: { catchRateBonus: 0.01 } };
+        if (id === 'popup_yellow') return { id: 'popup_yellow', name: 'Yellow Popups', icon: '🪱', effects: { catchRateBonus: 0.01 } };
+        if (id === 'popup_pink') return { id: 'popup_pink', name: 'Pink Popups', icon: '🪱', effects: { catchRateBonus: 0.01 } };
+        if (id === 'popup_orange') return { id: 'popup_orange', name: 'Orange Popups', icon: '🪱', effects: { catchRateBonus: 0.01 } };
+        if (id === 'popup_purple') return { id: 'popup_purple', name: 'Purple Popups', icon: '🪱', effects: { catchRateBonus: 0.01 } };
+        if (id === 'spod_mix') return { id: 'spod_mix', name: 'Spod Mix', icon: '🪱', effects: { catchRateBonus: 0.01 } };
+        return null;
+    }
+
     /** Get the combined effects from all owned bait. */
     function getBaitEffects() {
         initState();
@@ -1768,13 +1783,26 @@ const Anglers = (function () {
             try {
                 lakeFish.forEach(function(f){
                     var sp = typeof Fish !== 'undefined' && Fish.getSpecies ? Fish.getSpecies(f.species) : null;
-                    if (sp && sp.preferredBait) lakeSpeciesPrefs.push(sp.preferredBait);
+                    if (sp && sp.preferredBaits && sp.preferredBaits.length) lakeSpeciesPrefs = lakeSpeciesPrefs.concat(sp.preferredBaits);
                 });
             } catch(e){}
             var ownedBait = (typeof state.anglerBait !== 'undefined' ? state.anglerBait : []);
             var matchedBait = ownedBait.some(function(b){ return lakeSpeciesPrefs.indexOf(b) !== -1; });
             if (matchedBait) catchCount = Math.max(1, Math.floor(catchCount * (1 + baitEffects.lakeBonus)));
         }
+
+        // Rod-bait preference bonus: if equipped rod bait matches fish preferred baits
+        try {
+            var rigBaitEquip = state.rigBaitEquipped || [null, null, null];
+            var rodBaitMatchBonus = 0;
+            lakeFish.forEach(function(f){
+                var sp2 = typeof Fish !== 'undefined' && Fish.getSpecies ? Fish.getSpecies(f.species) : null;
+                if (!sp2 || !sp2.preferredBaits || !sp2.preferredBaits.length) return;
+                var match = rigBaitEquip.some(function(bid){ return bid && sp2.preferredBaits.indexOf(bid) !== -1; });
+                if (match) rodBaitMatchBonus = Math.max(rodBaitMatchBonus, 0.03);
+            });
+            if (rodBaitMatchBonus > 0) catchCount = Math.max(1, catchCount + Math.floor(catchCount * rodBaitMatchBonus));
+        } catch(e){}
 
         var anglerName = booking.anglerName;
         if (!state.anglerStats) state.anglerStats = {};

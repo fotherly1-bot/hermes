@@ -400,6 +400,9 @@ const Breeding = (function () {
                     html += '<span style="color:'+col+';font-size:0.68rem;font-weight:700;">'+(o.rarity.charAt(0).toUpperCase()+o.rarity.slice(1))+'</span>';
                     html += '<span style="font-size:0.78rem;font-weight:600;">'+o.name+'</span>';
                     html += '<span style="font-size:0.68rem;color:var(--colour-text-muted);">'+o.species+'</span>';
+                    if (o.preferredBaits && o.preferredBaits.length) {
+                        html += '<span style="font-size:0.68rem;color:var(--colour-text-muted);">Pref bait: ' + o.preferredBaits.join(', ') + '</span>';
+                    }
                     html += '</div>';
                 });
                 html += '</div>';

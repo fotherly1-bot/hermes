@@ -10,13 +10,13 @@ const Fish = (function () {
      * Species definitions with base stats.
      */
     const SPECIES = {
-        common: { name: 'Common Carp', maxWeight: 960, baseGrowth: 1.0, colour: '#8B7355', preferredBait: 'boilie_fishmeal' },
-        mirror: { name: 'Mirror Carp', maxWeight: 1080, baseGrowth: 0.9, colour: '#B8860B', preferredBait: 'boilie_birdfood' },
-        leather: { name: 'Leather Carp', maxWeight: 840, baseGrowth: 0.85, colour: '#6B4226', preferredBait: 'popup_purple' },
-        ghost: { name: 'Ghost Carp', maxWeight: 720, baseGrowth: 1.1, colour: '#C0C0C0', preferredBait: 'popup_white' },
-        koi: { name: 'Koi Carp', maxWeight: 600, baseGrowth: 0.95, colour: '#FF6347', preferredBait: 'boilie_tigernut' },
-        grass: { name: 'Grass Carp', maxWeight: 900, baseGrowth: 1.2, colour: '#556B2F', preferredBait: 'spod_mix' },
-        crucian: { name: 'Crucian Carp', maxWeight: 120, baseGrowth: 0.7, colour: '#DAA520', preferredBait: 'popup_yellow' }
+        common: { name: 'Common Carp', maxWeight: 960, baseGrowth: 1.0, colour: '#8B7355', preferredBaits: ['boilie_fishmeal','popup_white'] },
+        mirror: { name: 'Mirror Carp', maxWeight: 1080, baseGrowth: 0.9, colour: '#B8860B', preferredBaits: ['boilie_birdfood','popup_yellow'] },
+        leather: { name: 'Leather Carp', maxWeight: 840, baseGrowth: 0.85, colour: '#6B4226', preferredBaits: ['popup_purple','boilie_standard'] },
+        ghost: { name: 'Ghost Carp', maxWeight: 720, baseGrowth: 1.1, colour: '#C0C0C0', preferredBaits: ['popup_white','boilie_fishmeal'] },
+        koi: { name: 'Koi Carp', maxWeight: 600, baseGrowth: 0.95, colour: '#FF6347', preferredBaits: ['boilie_tigernut','popup_pink'] },
+        grass: { name: 'Grass Carp', maxWeight: 900, baseGrowth: 1.2, colour: '#556B2F', preferredBaits: ['spod_mix','popup_orange'] },
+        crucian: { name: 'Crucian Carp', maxWeight: 120, baseGrowth: 0.7, colour: '#DAA520', preferredBaits: ['popup_yellow','boilie_standard'] }
     };
 
     /**
@@ -205,7 +205,8 @@ const Fish = (function () {
             parent_ids: options.parent_ids || [],
             lake_id: options.lake_id || null,
             growth_stage: getGrowthStage(ageDays),
-            alive: true
+            alive: true,
+            preferredBaits: options.preferredBaits || (speciesDef.preferredBaits || [])
         };
 
         return fish;
