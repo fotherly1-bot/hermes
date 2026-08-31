@@ -1428,7 +1428,13 @@ const Dashboard = (function () {
         advice.push(
             { text: 'Start with Standard Boilies on all rods until you unlock better bait.', urgency: 'low' },
             { text: 'Book deeper lake sections when light levels are low.', urgency: 'medium' },
-            { text: 'Upgrade your reel before chasing rare Mirror Carp.', urgency: 'medium' }
+            { text: 'Upgrade your reel before chasing rare Mirror Carp.', urgency: 'medium' },
+            { text: 'Remember the game does its calculations at the end of each day.', urgency: 'low' },
+            { text: 'Staff members will leave if they are not happy.', urgency: 'medium' },
+            { text: 'Remember to buy bait.', urgency: 'low' },
+            { text: 'Remember you can move your fish.', urgency: 'low' },
+            { text: 'Remember you can sell fish.', urgency: 'low' },
+            { text: 'Remember you can buy card packs.', urgency: 'low' }
         );
         var urgencyColor = {
             low: 'var(--colour-text-muted)',

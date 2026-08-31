@@ -156,17 +156,6 @@ body {
 
 .transit-banner.hidden { display: none; }
 
-.day-cycle-notice {
-    background: rgba(255,255,255,0.04);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    color: var(--colour-text-muted);
-    text-align: center;
-    font-size: 0.8rem;
-    padding: 0.55rem 1rem;
-    line-height: 1.5;
-}
-.day-cycle-notice strong { color: var(--colour-text); }
-
 .stat-item {
     font-size: 0.95rem;
     color: var(--colour-text-muted);
@@ -7626,7 +7615,7 @@ details[open] > .lake-accordion-summary::before {
     height: 3px;
     background: rgba(255,255,255,0.08);
     position: sticky;
-    top: 92px; /* below top-bar + notice */
+    top: 60px; /* below top-bar */
     z-index: 99;
 }
 
