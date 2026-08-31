@@ -9069,7 +9069,7 @@ details[open] > .lake-accordion-summary::before {
 .breed-parent-traits     { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0 0.65rem 0.6rem; }
 .breed-parent-preferred-baits { padding: 0 0.65rem 0.5rem; font-size: 0.68rem; color: var(--colour-text-muted); }
 .breed-parent-preferred-thumbs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.breed-parent-preferred-thumb { width: 36px; height: 36px; object-fit: contain; border-radius: 6px; background: rgba(0,0,0,0.25); padding: 3px; border: 1px solid var(--colour-border); }
+.breed-parent-preferred-thumb { width: 54px; height: 54px; object-fit: contain; border-radius: 8px; background: rgba(0,0,0,0.25); padding: 4px; border: 1px solid var(--colour-border); }
 
 .breed-odds-row          { display: flex; align-items: center; margin-bottom: 0.3rem; }
 .breed-odds-label        { font-size: 0.68rem; font-weight: 700; width: 72px; flex-shrink: 0; }
