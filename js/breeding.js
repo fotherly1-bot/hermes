@@ -566,10 +566,55 @@ const Breeding = (function () {
         }
 
         container.innerHTML = html;
+        if (typeof renderBreedingQuests === 'function') {
+            var questsHtml = renderBreedingQuests();
+            if (questsHtml) container.innerHTML += questsHtml;
+        }
     }
 
-    // ── Breeding pond destination lake ─────────────────────────────────────
-    function getDestinationLakeId() {
+    // ── Breeding pond quests ─────────────────────────────────────────────
+    function renderBreedingQuests() {
+        var state = Game.getState();
+        var completedIds = state.completedQuests || [];
+        var breedQuestIds = ['breed_rare','breeder_pro','breed_25','breed_100','breed_250','breed_600','breed_1200','breed_2000','breed_500','endgame_breed_1000','endgame_breed_2500'];
+        var active = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) === -1 && breedQuestIds.indexOf(q.id) !== -1; });
+        var done = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) !== -1 && breedQuestIds.indexOf(q.id) !== -1; });
+
+        function renderQuestItem(q) {
+            var progress = q.checkProgress(state);
+            var pct = Math.min(100, Math.floor((progress.current / progress.target) * 100));
+            var reward = '';
+            if (q.reward.money > 0) reward += UI.formatMoney(q.reward.money);
+            if (q.reward.reputation > 0) reward += (reward ? ' · ' : '') + '+' + q.reward.reputation + ' rep';
+            return '<div class="quest-item">' +
+                '<div class="quest-header"><span class="quest-title">' + q.title + '</span><span class="quest-reward">' + reward + '</span></div>' +
+                '<p class="quest-desc">' + q.description + '</p>' +
+                '<div class="quest-progress"><div class="quest-progress-track"><div class="quest-progress-fill" style="width:' + pct + '%;"></div></div>' +
+                '<span class="quest-progress-text">' + progress.current + '/' + progress.target + '</span></div>' +
+                '</div>';
+        }
+
+        var html = '<div class="breed-quests-section" style="margin-top:1rem;">';
+        html += '<h3 style="margin:0 0 0.6rem;font-size:0.95rem;color:var(--colour-gold);">🐟 Breeding & Stock Quests</h3>';
+        if (active.length === 0 && done.length === 0) {
+            html += '<p class="empty-state">No breeding quests yet.</p>';
+        } else {
+            html += '<div class="quest-list">';
+            active.forEach(function(q){ html += renderQuestItem(q); });
+            html += '</div>';
+            if (done.length > 0) {
+                html += '<div class="quest-completed-list">';
+                done.forEach(function(q){
+                    html += '<div class="quest-completed-entry"><span class="quest-done-tick">\u2713</span><span class="quest-done-title">' + q.title + '</span></div>';
+                });
+                html += '</div>';
+            }
+        }
+        html += '</div>';
+        return html;
+    }
+
+    function renderLakeDestinationControl() {
         var s = Game.getState();
         var preferred = s.breedingDestinationLakeId || (s.ownedLakes && s.ownedLakes.length ? s.ownedLakes[0] : null);
         if (!preferred) return null;
@@ -611,5 +656,5 @@ const Breeding = (function () {
         html += '</div>';
         return html;
     }
-    return { initState, processDailyBreeding, renderBreedingPond, sellFish, setDestinationLakeId, renderLakeDestinationControl };
+    return { initState, processDailyBreeding, renderBreedingPond, sellFish, setDestinationLakeId, renderLakeDestinationControl, renderBreedingQuests };
 })();

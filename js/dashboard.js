@@ -377,8 +377,6 @@ const Dashboard = (function () {
             html += renderAdamPlaceholderCard(state);
             html += '<h4 style="margin:0.8rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🎯 Angler Quests</h4>' ;
             html += renderAnglerQuestsCard(state);
-            html += '<h4 style="margin:0.8rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏆 Main Quests</h4>' ;
-            html += renderQuests(state);
             html += '</div>';
             html += '</div>';
 
@@ -1814,11 +1812,9 @@ const Dashboard = (function () {
         }
 
         var lakeGroup = [];
-        var breedGroup = [];
         activeQuests.forEach(function (quest) {
             var cat = questCategory(quest);
             if (cat === 'Lake Ownership & Management') lakeGroup.push(quest);
-            else if (cat === 'Breeding & Stock') breedGroup.push(quest);
         });
 
         var html = '';
@@ -1853,38 +1849,6 @@ const Dashboard = (function () {
         });
         html += '</div>';
         if (lakeGroup.length > 6) html += '<p class="quest-queue-note">+' + (lakeGroup.length - 6) + ' more in this category</p>';
-        html += '</div>';
-
-        // ── Breeding & Stock ─────────────────────────────────────────────────
-        html += '<div class="quest-category">';
-        html += '<div class="quest-category-header">🐟 Breeding & Stock</div>';
-        html += '<div class="quest-list">';
-        (breedGroup.length ? breedGroup : [{title:'No active breeding quests yet.', progress:{current:0,target:1}, reward:{}}]).slice(0, 6).forEach(function (quest) {
-            if (!quest.reward) {
-                html += '<div class="quest-item"><div class="quest-header"><span class="quest-title">' + quest.title + '</span></div>';
-                html += '<p class="quest-desc">Complete breeding milestones.</p>';
-                html += '</div>';
-                return;
-            }
-            var progress = quest.checkProgress(state);
-            var percentage = Math.min(100, Math.floor((progress.current / progress.target) * 100));
-            html += '<div class="quest-item">';
-            html += '<div class="quest-header">';
-            html += '<span class="quest-title">' + quest.title + '</span>';
-            html += '<span class="quest-reward">';
-            if (quest.reward.money > 0) html += UI.formatMoney(quest.reward.money);
-            if (quest.reward.reputation > 0) html += ' +' + quest.reward.reputation + ' rep';
-            html += '</span>';
-            html += '</div>';
-            html += '<p class="quest-desc">' + quest.description + '</p>';
-            html += '<div class="quest-progress">';
-            html += '<div class="quest-progress-track"><div class="quest-progress-fill" style="width:' + percentage + '%;"></div></div>';
-            html += '<span class="quest-progress-text">' + progress.current + '/' + progress.target + '</span>';
-            html += '</div>';
-            html += '</div>';
-        });
-        html += '</div>';
-        if (breedGroup.length > 6) html += '<p class="quest-queue-note">+' + (breedGroup.length - 6) + ' more in this category</p>';
         html += '</div>';
 
         // ── Completed ────────────────────────────────────────────────────────
