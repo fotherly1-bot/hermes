@@ -1071,7 +1071,8 @@ const Lakes = (function () {
                 rarity:    entry[1],
                 age_days:  250 + Math.floor(Math.random() * 350),
                 weight_oz: wt,
-                lake_id:   lakeId
+                lake_id:   lakeId,
+                preferredBaits: (typeof Fish !== 'undefined' && Fish.randomPreferredBaits) ? Fish.randomPreferredBaits() : null
             });
             // Broaden trait variance for stocked fish
             if (fish.personality_traits && fish.personality_traits.length < 3) {
@@ -1092,7 +1093,7 @@ const Lakes = (function () {
             var missing = allBaitIds.filter(function(b){ return !presentPrefs[b]; });
             missing.slice(0, 6).forEach(function(bid){
                 var sp = Fish.randomSpeciesKey ? Fish.randomSpeciesKey() : 'common';
-                var rf = Fish.createFish({ species: sp, rarity: 'common', age_days: 200 + Math.floor(Math.random()*300), weight_oz: 60 + Math.floor(Math.random()*200), lake_id: lakeId });
+                var rf = Fish.createFish({ species: sp, rarity: 'common', age_days: 200 + Math.floor(Math.random()*300), weight_oz: 60 + Math.floor(Math.random()*200), lake_id: lakeId, preferredBaits: (typeof Fish !== 'undefined' && Fish.randomPreferredBaits) ? Fish.randomPreferredBaits() : null });
                 rf.preferredBaits = [bid];
                 rf.personality_traits = rf.personality_traits || [];
                 if (Fish.TRAIT_DEFINITIONS && rf.personality_traits.length < 2) {

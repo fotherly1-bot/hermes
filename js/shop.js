@@ -717,7 +717,8 @@ const Shop = (function () {
                 rarity:    auction.fishRarity,
                 age_days:  200,
                 weight_oz: auction.fishWeightOz,
-                lake_id:   state.activeLakeId || (state.ownedLakes[0] || null)
+                lake_id:   state.activeLakeId || (state.ownedLakes[0] || null),
+                preferredBaits: (typeof Fish !== 'undefined' && Fish.randomPreferredBaits) ? Fish.randomPreferredBaits() : null
             });
             stub.id   = auction.fishId;
             stub.name = auction.fishName;
