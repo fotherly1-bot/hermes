@@ -1425,16 +1425,71 @@ const Dashboard = (function () {
         if (missing.length) {
             advice.push({ text: 'Missing staff: ' + missing.join(', ') + ' — go to Staff tab urgently.', urgency: 'critical', missingRole: true });
         }
-        advice.push(
-            { text: 'Start with Standard Boilies on all rods until you unlock better bait.', urgency: 'low' },
-            { text: 'Upgrade your reel before chasing rare Mirror Carp.', urgency: 'medium' },
-            { text: 'Remember the game does its calculations at the end of each day.', urgency: 'low' },
-            { text: 'Staff members will leave if they are not happy.', urgency: 'medium' },
-            { text: 'Remember to buy bait.', urgency: 'low' },
-            { text: 'Remember you can move your fish.', urgency: 'low' },
-            { text: 'Remember you can sell fish.', urgency: 'low' },
-            { text: 'Remember you can buy card packs.', urgency: 'low' }
-        );
+        var ownedLakes = (s.ownedLakes || []).length;
+        if (ownedLakes === 0) {
+            advice.push({ text: 'No lakes owned yet. Buy your first lake to start earning.', urgency: 'high' });
+        }
+        if ((s.hiredStaff || []).length === 0) {
+            advice.push({ text: 'No staff hired. Hire someone to improve bookings and maintenance.', urgency: 'high' });
+        }
+        var unhappy = (s.hiredStaff || []).filter(function(m){ return (m.happiness || 50) < 35; }).length;
+        if (unhappy > 0) {
+            advice.push({ text: unhappy + ' staff are unhappy. Check Staff happiness or they may leave.', urgency: 'high' });
+        }
+        var stockCount = (s.fish || []).filter(function(f){ return f.alive; }).length;
+        if (stockCount === 0) {
+            advice.push({ text: 'No fish in your lakes. Buy stock from the Shop.', urgency: 'high' });
+        }
+        var activeBookings = (s.anglerBookings || []).filter(function(b){ return s.day >= b.startDay && s.day <= b.endDay; }).length;
+        if (activeBookings === 0 && ownedLakes > 0) {
+            advice.push({ text: 'No anglers visiting today. Reputation and weather affect bookings.', urgency: 'medium' });
+        }
+        var canBuyPacks = typeof Cards !== 'undefined' && Cards.renderCardShopSection && (s.money || 0) >= 3000;
+        if (canBuyPacks) {
+            advice.push({ text: 'You can afford a card pack. Try your luck in Shop → Card Packs.', urgency: 'medium' });
+        }
+        var fishToMove = (s.fish || []).filter(function(f){ return f.alive && f.lake_id && ownedLakes > 1; }).length;
+        if (fishToMove > 0 && ownedLakes > 1) {
+            advice.push({ text: 'You have fish and multiple lakes. Consider moving fish to balance stock.', urgency: 'low' });
+        }
+        var lowBait = ((s.anglerBait || []).length === 0) ? true : false;
+        if (lowBait) {
+            advice.push({ text: 'You have no bait in inventory. Visit the Bait Shop.', urgency: 'medium' });
+        }
+        var expensiveRigs = false;
+        if (typeof Rigs !== 'undefined' && Rigs.getEquippedRigEffects) {
+            try { expensiveRigs = Object.keys(Rigs.getEquippedRigEffects() || {}).length > 0; } catch(e){}
+        }
+        if (!expensiveRigs && (s.money || 0) >= 2000) {
+            advice.push({ text: 'Consider upgrading rigs for better catch rates.', urgency: 'medium' });
+        }
+
+        var rotatingLow = [
+            'Check your rod bait matches your target fish preferences for bigger catches.',
+            'Keep an eye on oxygen levels — low oxygen hurts growth.',
+            'Remember the game does its calculations at the end of each day.',
+            'Staff members will leave if they are not happy.',
+            'Remember to buy bait.',
+            'Remember you can move your fish.',
+            'Remember you can sell fish.',
+            'Remember you can buy card packs.',
+            'Use the speed controls to advance time faster when waiting.',
+            'Monitor lake capacity — overcrowding reduces growth.',
+            'Breeding takes 5 days. Plan parents ahead.',
+            'Upgrades improve income and capacity over time.',
+            'High biodiversity increases angler satisfaction.',
+            'Sell unwanted fish to free capacity and earn cash.'
+        ];
+        var lastAdviceDay = (s._lastAdviceDay || 0);
+        var cycle = Math.floor((s.day || 1) / 3);
+        if (cycle !== lastAdviceDay) {
+            s._lastAdviceDay = cycle;
+            s._rotatingAdviceIndex = ((s._rotatingAdviceIndex || 0) + 1) % rotatingLow.length;
+        }
+        var rotIdx = (s._rotatingAdviceIndex || 0);
+        advice.push({ text: rotatingLow[rotIdx], urgency: 'low' });
+        if (advice.length > 6) advice = advice.slice(0, 6);
+
         var urgencyColor = {
             low: 'var(--colour-text-muted)',
             medium: 'var(--colour-text)',
