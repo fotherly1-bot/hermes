@@ -220,6 +220,16 @@ const Breeding = (function () {
 
         var html = '<h2>\uD83E\uDD5A Breeding Pond</h2>';
 
+        // DEBUG: show in UI temporarily
+        try {
+            var _pp = (s.breedingPond || []).slice(0,2);
+            html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.5rem;">DEBUG pond prefs: ' +
+              (_pp[0] ? (_pp[0].name + '=' + JSON.stringify(_pp[0].preferredBaits)) : 'none') +
+              ' | ' +
+              (_pp[1] ? (_pp[1].name + '=' + JSON.stringify(_pp[1].preferredBaits)) : 'none') +
+              '</div>';
+        } catch(e){}
+
         // ── Scientist status banner ───────────────────────────────────────────
         if (sci) {
             var eff = Math.round((function(m){
@@ -318,6 +328,16 @@ const Breeding = (function () {
                     html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.25rem;">Preferred Bait</div>';
                     html += '<div class="breed-parent-preferred-thumbs">';
                     f.preferredBaits.forEach(function(bid){
+                        var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
+                        html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
+                    });
+                    html += '</div>';
+                    html += '</div>';
+                } else if (typeof Fish !== 'undefined' && Fish.randomPreferredBaits) {
+                    html += '<div class="breed-parent-preferred-baits">';
+                    html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.25rem;">Preferred Bait</div>';
+                    html += '<div class="breed-parent-preferred-thumbs">';
+                    (Fish.randomPreferredBaits() || []).forEach(function(bid){
                         var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
                     });

@@ -263,6 +263,15 @@ const Game = (function () {
             if ((s.anglerBait || []).indexOf('boilie_standard') === -1) s.anglerBait = ['boilie_standard'].concat(s.anglerBait || []);
             if ((s.rigEquipped || []).some(function(slot, i){ return !slot; })) s.rigEquipped = [{ rigId: 'hair', leadType: 'lead_clip' }, { rigId: 'hair', leadType: 'lead_clip' }, { rigId: 'hair', leadType: 'lead_clip' }];
             if ((s.rigBaitEquipped || []).some(function(b){ return b !== 'boilie_standard'; })) s.rigBaitEquipped = ['boilie_standard','boilie_standard','boilie_standard'];
+            // Backfill legacy fish with preferredBaits from species defaults/random pool
+            if (s.fish && s.fish.length && typeof Fish !== 'undefined' && Fish.SPECIES && Fish.randomPreferredBaits) {
+                s.fish.forEach(function (f) {
+                    if (!f.preferredBaits || !f.preferredBaits.length) {
+                        var sp = Fish.SPECIES[f.species];
+                        f.preferredBaits = (sp && sp.preferredBaits && sp.preferredBaits.length) ? sp.preferredBaits.slice() : Fish.randomPreferredBaits();
+                    }
+                });
+            }
         }
         return s;
     }
