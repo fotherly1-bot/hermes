@@ -10701,6 +10701,28 @@ details[open] > .lake-accordion-summary::before {
     color: var(--colour-text);
 }
 
+.rigs-bait-tip-panel {
+    margin-top: 1rem;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    color: #00ff88;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.rigs-bait-tip-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+    margin-bottom: 0.3rem;
+}
+.rigs-bait-tip-text {
+    font-weight: 800;
+    color: #00ff88;
+}
+
 /* Rig Shop */
 .rigs-shop-root {
     margin-top: 1.5rem;
