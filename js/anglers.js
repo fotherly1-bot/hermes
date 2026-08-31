@@ -2491,6 +2491,7 @@ const Anglers = (function () {
         updateAnglerQuestProgress: updateAnglerQuestProgress,
         claimAnglerQuest: claimAnglerQuest,
         buyTackle: buyTackle,
+        buyBait: buyBait,
         getTackleEffects: getTackleEffects,
         processTackleEffects: processTackleEffects,
         processSeasonalSocialDecay: processSeasonalSocialDecay,
