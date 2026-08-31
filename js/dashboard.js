@@ -1482,9 +1482,6 @@ const Dashboard = (function () {
                 html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);">' + q.description + '</div>';
                 html += '<div style="font-size:0.75rem;">' + (typeof q.progress === 'number' ? q.progress : 0) + ' / ' + q.required + ' — ' + statusText + '</div>';
                 html += '</div>';
-                if (q.completed && !q.claimed) {
-                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');refreshDashboard();">Claim</button>';
-                }
                 html += '</li>';
             });
             html += '</ul>';

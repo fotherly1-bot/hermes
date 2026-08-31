@@ -2259,27 +2259,17 @@ const Anglers = (function () {
         if (state.playerAnglerId === angler.id && state.anglerQuests && state.anglerQuests.length) {
             html += '<div style="margin-top:1rem;border-top:1px solid var(--colour-border);padding-top:0.75rem;">';
             html += '<h4 style="margin:0 0 0.6rem;font-size:0.95rem;color:var(--colour-gold);">🎯 Your Quests</h4>';
-            html += '<div style="display:flex;flex-direction:column;gap:0.6rem;">';
+            html += '<ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem;">';
             state.anglerQuests.forEach(function(q) {
-                var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
-                var statusClass = q.claimed ? 'quest-claimed' : (q.completed ? 'quest-complete' : 'quest-active');
-                var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
-                html += '<div class="angler-quest-card ' + statusClass + '">';
-                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">';
+                html += '<li style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;padding:0.35rem 0;border-bottom:1px solid var(--colour-border);">';
+                html += '<div>';
                 html += '<div style="font-weight:700;">' + q.title + '</div>';
-                html += '<div style="font-size:0.75rem;color:var(--colour-text-muted);">' + statusText + '</div>';
+                html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);">' + q.description + '</div>';
+                html += '<div style="font-size:0.75rem;">' + q.progress + ' / ' + q.required + '</div>';
                 html += '</div>';
-                html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);margin:0.35rem 0 0.4rem;">' + q.description + '</div>';
-                html += '<div class="quest-bar-track"><div class="quest-bar-fill" style="width:' + pct + '%;background:' + (q.completed ? 'var(--colour-accent)' : 'linear-gradient(90deg,#f1c40f,#e67e22)') + ';"></div></div>';
-                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-top:0.35rem;">';
-                html += '<span style="font-size:0.75rem;">' + q.progress + ' / ' + q.required + '</span>';
-                if (q.completed && !q.claimed) {
-                    html += '<button class="btn btn-primary btn-sm" onclick="Anglers.claimAnglerQuest(' + q.id + ');UI.hideModal();">Claim</button>';
-                }
-                html += '</div>';
-                html += '</div>';
+                html += '</li>';
             });
-            html += '</div>';
+            html += '</ul>';
             html += '</div>';
         }
 
@@ -2373,14 +2363,51 @@ const Anglers = (function () {
         if (!angler) return;
         var stats = (state.anglerStats || {})[angler.name] || { fishCaught: 0, biggestFishOz: 0, wins: 0, winnings: 0, visits: 0 };
         state.anglerQuests.forEach(function(q) {
-            if (q.completed) return;
+            if (q.completed) {
+                // Auto-claim rewards if not already claimed
+                if (!q.claimed) {
+                    q.claimed = true;
+                    state.money += q.rewardMoney;
+                    state.reputation += q.rewardRep;
+                    if (typeof Finance !== 'undefined') {
+                        var logEntry = {
+                            day: state.day,
+                            type: 'angler_quest',
+                            description: 'Quest reward: ' + q.title,
+                            amount: q.rewardMoney,
+                            balance: state.money
+                        };
+                        if (!state.financeLog) state.financeLog = [];
+                        state.financeLog.push(logEntry);
+                    }
+                }
+                return;
+            }
             var current = stats[q.target];
             if (typeof current === 'undefined' && typeof state[q.target] !== 'undefined') current = state[q.target];
             q.progress = current || 0;
             if (q.progress >= q.required) {
                 q.completed = true;
+                // Award rewards immediately on completion
+                state.money += q.rewardMoney;
+                state.reputation += q.rewardRep;
+                if (typeof Finance !== 'undefined') {
+                    var logEntry = {
+                        day: state.day,
+                        type: 'angler_quest',
+                        description: 'Quest reward: ' + q.title,
+                        amount: q.rewardMoney,
+                        balance: state.money
+                    };
+                    if (!state.financeLog) state.financeLog = [];
+                    state.financeLog.push(logEntry);
+                }
+                Game.addNotification('Quest complete: ' + q.title + '. Reward: ' + (q.rewardMoney > 0 ? UI.formatMoney(q.rewardMoney) : '') + (q.rewardRep > 0 ? ' +' + q.rewardRep + ' rep' : '') + '.');
             }
         });
+
+        // Remove completed/claimed quests from the angler quest list
+        state.anglerQuests = state.anglerQuests.filter(function(q) { return !q.completed; });
     }
 
     function claimAnglerQuest(questId) {
