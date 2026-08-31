@@ -9047,6 +9047,7 @@ details[open] > .lake-accordion-summary::before {
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow);
+    min-height: 320px;
 }
 .breed-parent-card-header {
     display: flex;
@@ -9085,8 +9086,8 @@ details[open] > .lake-accordion-summary::before {
 /* ── Breeding parent card banner + body ─────────────────────────────── */
 .breed-parent-banner { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--colour-border); }
 .breed-parent-banner-label { display: flex; align-items: center; gap: 0.4rem; }
-.breed-parent-body   { padding: 0.65rem 0.75rem; display: flex; flex-direction: column; gap: 0.28rem; }
-.breed-parent-extra  { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--colour-text-muted); margin-bottom: 0.1rem; }
+.breed-parent-body   { padding: 0.85rem 0.9rem; display: flex; flex-direction: column; gap: 0.34rem; }
+.breed-parent-extra  { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--colour-text-muted); margin-bottom: 0.15rem; }
 .breed-parent-placeholder { opacity: 0.4; }
 .breed-placeholder-body { padding: 0.5rem 0.65rem; display: flex; flex-direction: column; gap: 0.22rem; }
 .breed-placeholder-fish  { font-size: 1.5rem; text-align: center; opacity: 0.3; margin-bottom: 0.2rem; }

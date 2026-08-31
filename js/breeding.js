@@ -302,6 +302,8 @@ const Breeding = (function () {
                 html += '<div class="breed-parent-extra">';
                 html += '<span>\uD83D\uDCC5 ' + f.age_days + ' days old</span>';
                 html += '<span style="color:var(--colour-gold);">\uD83D\uDCB7 ' + fishVal + '</span>';
+                html += '<span>\uD83C\uDF0E ' + (typeof Lakes !== 'undefined' && Lakes.getLakeById ? (Lakes.getLakeById(f.lake_id) ? Lakes.getLakeById(f.lake_id).name : (f.lake_id || '—')) : (f.lake_id || '—')) + '</span>';
+                html += '<span>\uD83D\uDCFA Caught: ' + (typeof f.times_caught === 'number' ? f.times_caught : 0) + '</span>';
                 html += '</div>';
                 var statDefs = [
                     { label:'Strength',      val: sts.strength,       col:'#e74c3c' },
@@ -406,7 +408,8 @@ const Breeding = (function () {
             // Bait Preference Odds
             var baitPrefCounts = {};
             [p1,p2].forEach(function(parent){
-                (parent && parent.preferredBaits || []).forEach(function(bid){ baitPrefCounts[bid] = (baitPrefCounts[bid]||0) + 1; });
+                var baits = (parent && parent.preferredBaits && parent.preferredBaits.length) ? parent.preferredBaits : ((typeof Fish !== 'undefined' && Fish.SPECIES && Fish.SPECIES[parent && parent.species] && Fish.SPECIES[parent.species].preferredBaits) ? Fish.SPECIES[parent.species].preferredBaits : []);
+                baits.forEach(function(bid){ baitPrefCounts[bid] = (baitPrefCounts[bid]||0) + 1; });
             });
             var totalBaitPrefs = Object.keys(baitPrefCounts).length;
             if (totalBaitPrefs > 0) {
