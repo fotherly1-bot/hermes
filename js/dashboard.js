@@ -2403,7 +2403,8 @@ const Dashboard = (function () {
         showDashTab: showDashTab,
         showFinanceTab: showFinanceTab,
         showFishLineage: showFishLineage,
-        setQuestPage: function(page){ _questPage = page; renderDashboard(); }
+        setQuestPage: function(page){ _questPage = page; renderDashboard(); },
+        _getQuests: function(){ return QUESTS; }
     };
 })();
 

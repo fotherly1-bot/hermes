@@ -566,19 +566,30 @@ const Breeding = (function () {
         }
 
         container.innerHTML = html;
-        if (typeof renderBreedingQuests === 'function') {
-            var questsHtml = renderBreedingQuests();
-            if (questsHtml) container.innerHTML += questsHtml;
+        try {
+            if (typeof renderBreedingQuests === 'function') {
+                var questsHtml = renderBreedingQuests();
+                if (questsHtml) container.innerHTML += questsHtml;
+            }
+        } catch (e) {
+            console.warn('Breeding quests render failed:', e);
         }
     }
 
     // ── Breeding pond quests ─────────────────────────────────────────────
+    var BREED_QUEST_IDS = ['breed_rare','breeder_pro','breed_25','breed_100','breed_250','breed_600','breed_1200','breed_2000','breed_500','endgame_breed_1000','endgame_breed_2500'];
     function renderBreedingQuests() {
         var state = Game.getState();
         var completedIds = state.completedQuests || [];
-        var breedQuestIds = ['breed_rare','breeder_pro','breed_25','breed_100','breed_250','breed_600','breed_1200','breed_2000','breed_500','endgame_breed_1000','endgame_breed_2500'];
-        var active = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) === -1 && breedQuestIds.indexOf(q.id) !== -1; });
-        var done = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) !== -1 && breedQuestIds.indexOf(q.id) !== -1; });
+        var quests = [];
+        try {
+            if (typeof Dashboard !== 'undefined' && Dashboard._getQuests) {
+                quests = Dashboard._getQuests();
+            }
+        } catch(e) {}
+        if (!quests.length) quests = [];
+        var active = quests.filter(function (q) { return completedIds.indexOf(q.id) === -1 && BREED_QUEST_IDS.indexOf(q.id) !== -1; });
+        var done = quests.filter(function (q) { return completedIds.indexOf(q.id) !== -1 && BREED_QUEST_IDS.indexOf(q.id) !== -1; });
 
         function renderQuestItem(q) {
             var progress = q.checkProgress(state);
