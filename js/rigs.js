@@ -322,6 +322,7 @@
                 html += '<div class="rig-rod-card">';
                 html += '<div class="rig-rod-label">' + summary.rodLabel + '</div>';
                 html += '<div class="rig-rod-icon">';
+                html += '<img src="img/rigs/rod112.png" alt="Rod" class="rig-rod-static-img" onerror="this.style.display=\'none\'">';
                 if (summary.rigImage) {
                     html += '<img src="' + summary.rigImage + '" alt="' + summary.rigName + '" class="rig-rod-img" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'' + summary.rigIcon + '\';">';
                 } else {
