@@ -413,7 +413,6 @@ const Cards = (function () {
             var glowColour = bought ? 'none' : '0 0 12px ' + pack.colour + '44';
             html += '<div class="card-pack-card' + (bought ? ' card-pack-sold' : '') + '" style="border-color:' + borderCol + ';box-shadow:' + glowColour + ';">' ;
             html += '<img src="img/card-packs/' + pack.id + '-pack.png" alt="' + pack.name + '" class="card-pack-thumb" onerror="this.style.display=\'none\'"/>' ;
-            html += '<div class="card-pack-icon">' + pack.icon + '</div>';
             html += '<div class="card-pack-name" style="color:' + (bought ? 'var(--colour-text-muted)' : pack.colour) + ';">' + pack.name + '</div>';
             html += '<div class="card-pack-desc">' + pack.desc + '</div>';
             html += '<div class="card-pack-odds">';
