@@ -366,7 +366,7 @@ const Shop = (function () {
         if (_shopView === 'bait') {
             html += '<div class="tackle-shop-root">';
             html += '<h3 class="tackle-heading">The Bait Shed</h3>';
-            html += '<p class="tackle-subtitle">Buy bait once and it stays in your inventory forever.</p>';
+            html += '<p class="tackle-subtitle">Buy bait once and it stays in your inventory forever. In this game all fish have a preference to 2 baits, applying baits to your rods increases catch chance for the fish with those bait preferences.</p>';
 
             var BAIT_CATALOG = [
                 {id:'boilie_standard', name:'Standard Boilies', cost:0, image:'img/bait/boilie-standard.png', info:'Reliable all-rounder bait.'},
