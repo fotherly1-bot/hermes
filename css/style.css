@@ -10714,7 +10714,12 @@ details[open] > .lake-accordion-summary::before {
 }
 
 .rigs-shop-card-icon {
-    font-size: 1.6rem;
+    height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    line-height: 1;
 }
 
 .rigs-shop-card-name {
