@@ -1476,11 +1476,16 @@ const Dashboard = (function () {
             quests.forEach(function(q) {
                 var pct = Math.min(100, Math.round((q.progress / q.required) * 100));
                 var statusText = q.claimed ? 'Claimed' : (q.completed ? 'Complete!' : 'In Progress');
+                var rewardText = [];
+                if (typeof q.rewardMoney === 'number' && q.rewardMoney > 0) rewardText.push(UI.formatMoney(q.rewardMoney));
+                if (typeof q.rewardRep === 'number' && q.rewardRep > 0) rewardText.push(q.rewardRep + ' rep');
+                var rewardHtml = rewardText.length ? '<div style="font-size:0.75rem;color:var(--colour-accent);">' + rewardText.join(' + ') + '</div>' : '';
                 html += '<li style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;padding:0.35rem 0;border-bottom:1px solid var(--colour-border);">';
                 html += '<div>';
                 html += '<div style="font-weight:700;">' + q.title + '</div>';
                 html += '<div style="font-size:0.8rem;color:var(--colour-text-muted);">' + q.description + '</div>';
                 html += '<div style="font-size:0.75rem;">' + (typeof q.progress === 'number' ? q.progress : 0) + ' / ' + q.required + ' — ' + statusText + '</div>';
+                html += rewardHtml;
                 html += '</div>';
                 html += '</li>';
             });
