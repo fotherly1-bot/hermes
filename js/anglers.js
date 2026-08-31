@@ -259,6 +259,7 @@ const Anglers = (function () {
         if (!state.incomeHistory) state.incomeHistory = [];
         if (!state.anglerTackle) state.anglerTackle = [];
         if (!state.anglerBait) state.anglerBait = [];
+        if (state.anglerBait.indexOf('boilie_standard') === -1) state.anglerBait.unshift('boilie_standard');
         if (!state.anglerStats) state.anglerStats = {};
         if (!state.lastProcessedSeason) state.lastProcessedSeason = getCurrentSeasonNum(state.day);
         if (state.playerAnglerId) {
@@ -477,12 +478,12 @@ const Anglers = (function () {
         }
         state.money -= (item.cost || 0);
         if ((state.anglerBait || []).indexOf(baitId) === -1) state.anglerBait.push(baitId);
+        state.pendingBaitPurchases = (state.pendingBaitPurchases || []).filter(function(id){ return id !== baitId; });
         UI.showToast('🪱 ' + item.name + ' purchased!', 'success');
         if (typeof Finance !== 'undefined') {
             Finance.addFinanceLog('bait_purchase', -(item.cost || 0), item.name);
         }
-        Game.saveToStorage && Game.saveToStorage();
-        renderAnglers && renderAnglers();
+        Game.saveToStorage();
         if (typeof Shop !== 'undefined' && typeof Shop.renderShop === 'function') Shop.renderShop();
         return true;
     }
