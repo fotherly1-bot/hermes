@@ -228,7 +228,13 @@ const Breeding = (function () {
 
         var html = '<h2>\uD83E\uDD5A Breeding Pond</h2>';
         html += '<div class="breed-help">';
-        html += '<strong>How it works:</strong> Hire a <strong>Breeding Scientist</strong> from Staff, then pick two parent fish from your lakes. Breeding runs automatically over <strong>' + CYCLE_DAYS + ' days</strong> and produces offspring that inherit traits from both parents. Set a <strong>destination lake</strong> for the fry, and note that matching rod bait to a parent\'s <strong>preferred bait</strong> can boost outcome odds.';
+        html += '<strong>How it works:</strong><ul>';
+        html += '<li>Breeding is conducted by a <strong>Breeding Scientist</strong> and only works if you hire one from the Staff page.</li>';
+        html += '<li>The scientist picks two parent fish from your lakes.</li>';
+        html += '<li>Breeding runs automatically over <strong>5 days</strong> and produces offspring that inherit traits from both parents.</li>';
+        html += '<li>Fish can only breed if they are in good health, mature, and within limits on breeding times per year.</li>';
+        html += '<li>Set a <strong>destination lake</strong> for the fry.</li>';
+        html += '</ul>';
         html += '</div>';
 
         // ── Scientist status banner ───────────────────────────────────────────

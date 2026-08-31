@@ -9028,6 +9028,8 @@ details[open] > .lake-accordion-summary::before {
     line-height: 1.45;
 }
 .breed-help strong { color: var(--colour-text); }
+.breed-help ul { margin: 0.35rem 0 0; padding-left: 1.15rem; }
+.breed-help li { margin-bottom: 0.2rem; }
 
 .breed-active-card {
     background: var(--colour-card);
