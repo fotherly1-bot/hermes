@@ -1604,6 +1604,10 @@ const Lakes = (function () {
 
         html += '<p class="lake-accordion-desc">' + lake.description + '</p>';
 
+        // ── Lake image ────────────────────────────────────────────────────────
+        var lakeImgSrc = 'img/lakes/' + lake.id.replace(/_lake$/, '') + '.png';
+        html += '<img src="' + lakeImgSrc + '" alt="' + lake.name + '" class="lake-detail-hero-img" onerror="this.style.display=\'none\'"/>';
+
         // ── Lake Traits ──────────────────────────────────────────────────────
         html += '<div class="lake-traits">';
         html += '<div class="lake-traits-title">🌿 Lake Traits</div>';
@@ -1641,9 +1645,8 @@ const Lakes = (function () {
                 state.lakeClosures[state.activeLakeId] + '</div>';
         }
 
-        // ── Two-column layout ────────────────────────────────────────────────
-        html += '<div class="lake-detail-two-col">';
-        html += '<div class="lake-detail-left">';
+        // ── Single-column details layout ────────────────────────────────────
+        html += '<div class="lake-detail-single">';
 
         // ── Stats data ───────────────────────────────────────────────────────
         var stockVal = (typeof Fish !== 'undefined') ? Fish.getTotalStockValue(lakeFish) : 0;
@@ -1746,14 +1749,13 @@ const Lakes = (function () {
         html += '</div>';
 
 
-        html += '</div>'; // end lake-detail-left
+        html += '</div>'; // end lake-detail-single
 
-        // ── Right column: Water test chart ───────────────────────────────────
-        html += '<div class="lake-detail-right">';
+        // ── Water Quality Chart ─────────────────────────────────────────────
+        html += '<div class="lake-water-quality-section" style="margin-top:1rem;">';
+        html += '<div class="lake-water-quality-title">💧 Water Quality</div>';
         html += renderWaterTestChart(lake, lakeFish, oxygen, effectiveCapacity, bioScore, state);
         html += '</div>';
-
-        html += '</div>'; // end lake-detail-two-col
 
         // ── Upgrades — 4-column tiles (full width below) ─────────────────────
         if (typeof Shop !== 'undefined') {

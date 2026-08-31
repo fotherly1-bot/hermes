@@ -12,6 +12,7 @@ const Dashboard = (function () {
     const QUESTS = [
         {
             id: 'breed_rare',
+            category: 'main',
             title: 'Master Breeder',
             description: 'Breed a Rare (or higher) rarity fish.',
             reward: { money: 5000, reputation: 5 },
@@ -24,28 +25,8 @@ const Dashboard = (function () {
             }
         },
         {
-            id: 'reputation_50',
-            title: 'Rising Star',
-            description: 'Reach 200 reputation.',
-            reward: { money: 10000, reputation: 0 },
-            checkProgress: function (state) {
-                return { current: Math.min(200, state.reputation), target: 200 };
-            }
-        },
-        {
-            id: 'fish_over_40lb',
-            title: 'Monster Hunter',
-            description: 'Have a fish weighing over 40 lb.',
-            reward: { money: 8000, reputation: 10 },
-            checkProgress: function (state) {
-                var heavyFish = state.fish.filter(function (f) {
-                    return f.alive && f.weight_oz >= 640; // 40lb = 640oz
-                });
-                return { current: Math.min(1, heavyFish.length), target: 1 };
-            }
-        },
-        {
             id: 'fully_upgrade_lake',
+            category: 'main',
             title: 'Top Facility',
             description: 'Fully upgrade a lake with all available upgrades.',
             reward: { money: 20000, reputation: 10 },
@@ -62,16 +43,8 @@ const Dashboard = (function () {
             }
         },
         {
-            id: 'earn_100k',
-            title: 'Big Earner',
-            description: 'Earn a total of \u00A3100,000.',
-            reward: { money: 5000, reputation: 3 },
-            checkProgress: function (state) {
-                return { current: Math.min(100000, state.totalEarnings), target: 100000 };
-            }
-        },
-        {
             id: 'stock_20_fish',
+            category: 'main',
             title: 'Fish Collector',
             description: 'Have 20 living fish across all lakes.',
             reward: { money: 3000, reputation: 5 },
@@ -81,39 +54,8 @@ const Dashboard = (function () {
             }
         },
         {
-            id: 'legendary_fish',
-            title: 'Legendary Discovery',
-            description: 'Own a Legendary rarity fish.',
-            reward: { money: 25000, reputation: 15 },
-            checkProgress: function (state) {
-                var legendaryFish = state.fish.filter(function (f) {
-                    return f.alive && (f.rarity === 'legendary' || f.rarity === 'mythic');
-                });
-                return { current: Math.min(1, legendaryFish.length), target: 1 };
-            }
-        },
-        {
-            id: 'marketing_maestro',
-            title: 'Marketing Maestro',
-            description: 'Launch 3 marketing campaigns.',
-            reward: { money: 4000, reputation: 5 },
-            checkProgress: function (state) {
-                var campaigns = state.marketingCampaigns || [];
-                return { current: Math.min(3, campaigns.length), target: 3 };
-            }
-        },
-        {
-            id: 'loan_boss',
-            title: 'Loan Boss',
-            description: 'Take out a business loan.',
-            reward: { money: 5000, reputation: 3 },
-            checkProgress: function (state) {
-                var loans = state.loans || [];
-                return { current: Math.min(1, loans.length), target: 1 };
-            }
-        },
-        {
             id: 'experienced_angler',
+            category: 'main',
             title: 'Seasoned Host',
             description: 'Complete 10 angler bookings.',
             reward: { money: 7000, reputation: 8 },
@@ -124,6 +66,7 @@ const Dashboard = (function () {
         },
         {
             id: 'breeder_pro',
+            category: 'main',
             title: 'Breeding Expert',
             description: 'Breed 5 fish.',
             reward: { money: 6000, reputation: 6 },
@@ -136,6 +79,7 @@ const Dashboard = (function () {
         },
         {
             id: 'breed_25',
+            category: 'main',
             title: 'Brood Builder',
             description: 'Breed 25 fish.',
             reward: { money: 4000, reputation: 3 },
@@ -148,6 +92,7 @@ const Dashboard = (function () {
         },
         {
             id: 'breed_100',
+            category: 'main',
             title: 'Century Brood',
             description: 'Breed 100 fish.',
             reward: { money: 8000, reputation: 5 },
@@ -160,6 +105,7 @@ const Dashboard = (function () {
         },
         {
             id: 'breed_250',
+            category: 'main',
             title: 'Hatchery Accelerator',
             description: 'Breed 250 fish.',
             reward: { money: 14000, reputation: 8 },
@@ -172,6 +118,7 @@ const Dashboard = (function () {
         },
         {
             id: 'breed_600',
+            category: 'main',
             title: 'Production Line',
             description: 'Breed 600 fish.',
             reward: { money: 25000, reputation: 12 },
@@ -184,6 +131,7 @@ const Dashboard = (function () {
         },
         {
             id: 'breed_1200',
+            category: 'main',
             title: 'Industrial Breeder',
             description: 'Breed 1,200 fish.',
             reward: { money: 50000, reputation: 18 },
@@ -196,6 +144,7 @@ const Dashboard = (function () {
         },
         {
             id: 'breed_2000',
+            category: 'main',
             title: 'Breeding Titan',
             description: 'Breed 2,000 fish.',
             reward: { money: 80000, reputation: 25 },
@@ -208,6 +157,7 @@ const Dashboard = (function () {
         },
         {
             id: 'breed_500',
+            category: 'main',
             title: 'Hatchery Legend',
             description: 'Breed 500 fish.',
             reward: { money: 45000, reputation: 25 },
@@ -220,6 +170,7 @@ const Dashboard = (function () {
         },
         {
             id: 'lake_magnate',
+            category: 'main',
             title: 'Lake Magnate',
             description: 'Own 5 lakes.',
             reward: { money: 30000, reputation: 10 },
@@ -228,91 +179,8 @@ const Dashboard = (function () {
             }
         },
         {
-            id: 'reputation_master',
-            title: 'Renowned Fishery',
-            description: 'Reach 500 reputation.',
-            reward: { money: 10000, reputation: 0 },
-            checkProgress: function (state) {
-                return { current: Math.min(500, state.reputation), target: 500 };
-            }
-        },
-        {
-            id: 'big_spender',
-            title: 'High Roller',
-            description: 'Spend £50,000 across all operations.',
-            reward: { money: 8000, reputation: 5 },
-            checkProgress: function (state) {
-                return { current: Math.min(50000, state.totalSpent), target: 50000 };
-            }
-        },
-        {
-            id: 'wealthy_angler',
-            title: 'Wealthy Operator',
-            description: 'Have £100,000 cash on hand.',
-            reward: { money: 15000, reputation: 8 },
-            checkProgress: function (state) {
-                return { current: Math.min(100000, state.money), target: 100000 };
-            }
-        },
-        {
-            id: 'bank_millionaire',
-            title: 'First Million',
-            description: 'Have £1,000,000 cash on hand.',
-            reward: { money: 25000, reputation: 10 },
-            checkProgress: function (state) {
-                return { current: Math.min(1000000, state.money), target: 1000000 };
-            }
-        },
-        {
-            id: 'bank_millionaire_2',
-            title: 'Two Million Strong',
-            description: 'Have £2,000,000 cash on hand.',
-            reward: { money: 50000, reputation: 15 },
-            checkProgress: function (state) {
-                return { current: Math.min(2000000, state.money), target: 2000000 };
-            }
-        },
-        {
-            id: 'bank_millionaire_3',
-            title: 'Triple Figures',
-            description: 'Have £3,000,000 cash on hand.',
-            reward: { money: 75000, reputation: 15 },
-            checkProgress: function (state) {
-                return { current: Math.min(3000000, state.money), target: 3000000 };
-            }
-        },
-        {
-            id: 'bank_millionaire_4',
-            title: 'Four Million Club',
-            description: 'Have £4,000,000 cash on hand.',
-            reward: { money: 100000, reputation: 20 },
-            checkProgress: function (state) {
-                return { current: Math.min(4000000, state.money), target: 4000000 };
-            }
-        },
-        {
-            id: 'bank_millionaire_5',
-            title: 'Five Million Fortune',
-            description: 'Have £5,000,000 cash on hand.',
-            reward: { money: 150000, reputation: 25 },
-            checkProgress: function (state) {
-                return { current: Math.min(5000000, state.money), target: 5000000 };
-            }
-        },
-        {
-            id: 'weight_champion',
-            title: 'Heavyweight Breeder',
-            description: 'Breed a fish weighing at least 50 lb (800 oz).',
-            reward: { money: 20000, reputation: 12 },
-            checkProgress: function (state) {
-                var heavyBred = state.fish.filter(function (f) {
-                    return f.alive && f.parent_ids && f.parent_ids.length > 0 && f.weight_oz >= 800;
-                });
-                return { current: Math.min(1, heavyBred.length), target: 1 };
-            }
-        },
-        {
             id: 'lake_value_pro',
+            category: 'main',
             title: 'Prime Portfolio',
             description: 'Own lakes worth a total of £500,000 or more.',
             reward: { money: 20000, reputation: 10 },
@@ -326,6 +194,7 @@ const Dashboard = (function () {
         },
         {
             id: 'lake_value_king',
+            category: 'main',
             title: 'Property Tycoon',
             description: 'Own lakes worth a total of £2,000,000 or more.',
             reward: { money: 50000, reputation: 20 },
@@ -338,25 +207,8 @@ const Dashboard = (function () {
             }
         },
         {
-            id: 'endgame_bank_10m',
-            title: 'Fishery Tycoon',
-            description: 'Have £10,000,000 cash on hand.',
-            reward: { money: 200000, reputation: 30 },
-            checkProgress: function (state) {
-                return { current: Math.min(10000000, state.money), target: 10000000 };
-            }
-        },
-        {
-            id: 'endgame_bank_25m',
-            title: 'Carp Empire',
-            description: 'Have £25,000,000 cash on hand.',
-            reward: { money: 500000, reputation: 50 },
-            checkProgress: function (state) {
-                return { current: Math.min(25000000, state.money), target: 25000000 };
-            }
-        },
-        {
             id: 'endgame_breed_1000',
+            category: 'main',
             title: 'Hatchery Emperor',
             description: 'Breed 1,000 fish.',
             reward: { money: 100000, reputation: 40 },
@@ -368,7 +220,21 @@ const Dashboard = (function () {
             }
         },
         {
+            id: 'endgame_breed_2500',
+            category: 'main',
+            title: 'Dynasty Breeder',
+            description: 'Breed 2,500 fish.',
+            reward: { money: 150000, reputation: 50 },
+            checkProgress: function (state) {
+                var count = state.fish.filter(function (f) {
+                    return f.alive && f.parent_ids && f.parent_ids.length > 0;
+                }).length;
+                return { current: Math.min(2500, count), target: 2500 };
+            }
+        },
+        {
             id: 'endgame_lake_value_10m',
+            category: 'main',
             title: 'Property Emperor',
             description: 'Own lakes worth a total of £10,000,000 or more.',
             reward: { money: 250000, reputation: 40 },
@@ -378,55 +244,6 @@ const Dashboard = (function () {
                     return s + (lake ? lake.price : 0);
                 }, 0);
                 return { current: Math.min(10000000, total), target: 10000000 };
-            }
-        },
-        {
-            id: 'endgame_reputation_1000',
-            title: 'Living Legend',
-            description: 'Reach 1,000 reputation.',
-            reward: { money: 150000, reputation: 0 },
-            checkProgress: function (state) {
-                return { current: Math.min(1000, state.reputation), target: 1000 };
-            }
-        },
-        {
-            id: 'endgame_angler_50',
-            title: 'Legendary Guide',
-            description: 'Complete 50 angler bookings.',
-            reward: { money: 80000, reputation: 25 },
-            checkProgress: function (state) {
-                var completed = state.anglerBookings ? state.anglerBookings.length : 0;
-                return { current: Math.min(50, completed), target: 50 };
-            }
-        },
-        {
-            id: 'endgame_stock_100',
-            title: 'Fishery Colossus',
-            description: 'Have 100 living fish at once across all lakes.',
-            reward: { money: 50000, reputation: 20 },
-            checkProgress: function (state) {
-                var count = state.fish.filter(function (f) { return f.alive; }).length;
-                return { current: Math.min(100, count), target: 100 };
-            }
-        },
-        {
-            id: 'endgame_spend_1m',
-            title: 'Corporate Spender',
-            description: 'Spend £1,000,000 across all operations.',
-            reward: { money: 100000, reputation: 25 },
-            checkProgress: function (state) {
-                return { current: Math.min(1000000, state.totalSpent), target: 1000000 };
-            }
-        },
-        {
-            id: 'endgame_networth_20m',
-            title: 'Carp Dynasty',
-            description: 'Reach a total net worth of £20,000,000 including lakes and assets.',
-            reward: { money: 300000, reputation: 50 },
-            checkProgress: function (state) {
-                var fisheryVal = typeof Finance !== 'undefined' ? Finance.getFisheryValue() : 0;
-                var netWorth = state.money + fisheryVal;
-                return { current: Math.min(20000000, netWorth), target: 20000000 };
             }
         }
     ];
@@ -534,7 +351,9 @@ const Dashboard = (function () {
             html += '<button class="dash-subtab' + (_dashTab === 'overview' ? ' dash-subtab-active' : '') +
                     '" onclick="Dashboard.showDashTab(\'overview\')">Overview</button>';
             html += '<button class="dash-subtab' + (_dashTab === 'quests' ? ' dash-subtab-active' : '') +
-                    '" onclick="Dashboard.showDashTab(\'quests\')">🏆 Main Quests</button>';
+                    '" onclick="Dashboard.showDashTab(\'quests\')">🏆 Main Quests</button>' ;
+            html += '<button class="dash-subtab' + (_dashTab === 'quests-anglers' ? ' dash-subtab-active' : '') +
+                    '" onclick="Dashboard.showDashTab(\'quests-anglers\')">🎯 Angler Quests</button>' ;
             html += '<button class="dash-subtab' + (_dashTab === 'fish' ? ' dash-subtab-active' : '') +
                     '" onclick="Dashboard.showDashTab(\'fish\')">🐟 Fish Tracker</button>';
             html += '</div>';
@@ -554,10 +373,12 @@ const Dashboard = (function () {
             // ── Row 0: Your Angler | Adam Placeholder + Angler Quests ─────────────
             html += '<div class="dash-row dash-row-equal">';
             html += '<div class="dashboard-card" style="text-align:center;">' + renderYourAnglerCard(state) + '</div>';
-            html += '<div class="dashboard-card">';
+            html += '<div class="dashboard-card">' ;
             html += renderAdamPlaceholderCard(state);
-            html += '<h4 style="margin:0.8rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏆 Angler Quests</h4>';
+            html += '<h4 style="margin:0.8rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🎯 Angler Quests</h4>' ;
             html += renderAnglerQuestsCard(state);
+            html += '<h4 style="margin:0.8rem 0 0.6rem;font-size:0.85rem;letter-spacing:0.04em;color:var(--colour-text-muted);text-transform:uppercase;">🏆 Main Quests</h4>' ;
+            html += renderQuests(state);
             html += '</div>';
             html += '</div>';
 
@@ -1977,14 +1798,15 @@ const Dashboard = (function () {
      */
     function renderQuests(state) {
         var completedIds  = state.completedQuests || [];
-        var activeQuests  = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) === -1; });
-        var doneQuests    = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) !== -1; });
+        var MAIN_QUEST_IDS = ['breed_rare','reputation_50','fish_over_40lb','fully_upgrade_lake','earn_100k','stock_20_fish','legendary_fish','marketing_maestro','loan_boss','experienced_angler','breeder_pro','breed_25','breed_100','breed_250','breed_600','breed_1200','breed_2000','breed_500','lake_magnate','reputation_master','big_spender','wealthy_angler','bank_millionaire','bank_millionaire_2','bank_millionaire_3','bank_millionaire_4','bank_millionaire_5','weight_champion','lake_value_pro','lake_value_king','endgame_bank_10m','endgame_bank_25m','endgame_breed_1000','endgame_breed_2500','endgame_spend_1m','endgame_networth_20m','endgame_lake_value_10m','endgame_reputation_1000','endgame_angler_50','endgame_stock_100'];
+        var activeQuests  = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) === -1 && MAIN_QUEST_IDS.indexOf(q.id) !== -1; });
+        var doneQuests    = QUESTS.filter(function (q) { return completedIds.indexOf(q.id) !== -1 && MAIN_QUEST_IDS.indexOf(q.id) !== -1; });
 
         function questCategory(q) {
             var id = q.id || '';
             var title = (q.title || '').toLowerCase();
             if (/breed|brood|hatchery|industrial breeder|production line/.test(id + ' ' + title)) return 'Breeding & Stock';
-            if (/lake|property|portfolio|magnate|tycoon|emperor/.test(id + ' ' + title)) return 'Lake & Property';
+            if (/lake|property|portfolio|magnate|tycoon|emperor/.test(id + ' ' + title)) return 'Lake Ownership & Management';
             if (/reputation|renowned|living legend|seasoned host|legendary guide/.test(id + ' ' + title)) return 'Reputation & Hosting';
             if (/earn|spend|wealthy|millionaire|cash|bank|networth|dynasty|corporate|high roller|loan/.test(id + ' ' + title)) return 'Money & Finance';
             if (/legendary|monster|heavyweight|fish collector|fishery colossus/.test(id + ' ' + title)) return 'Specimen & Trophy';
@@ -1992,50 +1814,79 @@ const Dashboard = (function () {
             return 'General';
         }
 
-        var groups = {};
+        var lakeGroup = [];
+        var breedGroup = [];
         activeQuests.forEach(function (quest) {
             var cat = questCategory(quest);
-            if (!groups[cat]) groups[cat] = [];
-            groups[cat].push(quest);
+            if (cat === 'Lake Ownership & Management') lakeGroup.push(quest);
+            else if (cat === 'Breeding & Stock') breedGroup.push(quest);
         });
 
         var html = '';
 
-        // ── Active grouped ──────────────────────────────────────────────────
-        var groupKeys = Object.keys(groups);
-        if (groupKeys.length === 0 && doneQuests.length === QUESTS.length) {
-            html += '<p class="empty-state" style="color:var(--colour-gold);">\uD83C\uDFC6 All quests complete!</p>';
-        } else {
-            groupKeys.forEach(function (cat) {
-                var list = groups[cat];
-                html += '<div class="quest-category">';
-                html += '<div class="quest-category-header">' + cat + '</div>';
-                html += '<div class="quest-list">';
-                list.slice(0, 3).forEach(function (quest) {
-                    var progress = quest.checkProgress(state);
-                    var percentage = Math.min(100, Math.floor((progress.current / progress.target) * 100));
-                    html += '<div class="quest-item">';
-                    html += '<div class="quest-header">';
-                    html += '<span class="quest-title">' + quest.title + '</span>';
-                    html += '<span class="quest-reward">';
-                    if (quest.reward.money > 0) html += UI.formatMoney(quest.reward.money);
-                    if (quest.reward.reputation > 0) html += ' +' + quest.reward.reputation + ' rep';
-                    html += '</span>';
-                    html += '</div>';
-                    html += '<p class="quest-desc">' + quest.description + '</p>';
-                    html += '<div class="quest-progress">';
-                    html += '<div class="quest-progress-track"><div class="quest-progress-fill" style="width:' + percentage + '%;"></div></div>';
-                    html += '<span class="quest-progress-text">' + progress.current + '/' + progress.target + '</span>';
-                    html += '</div>';
-                    html += '</div>';
-                });
+        // ── Lake Ownership & Management ──────────────────────────────────────
+        html += '<div class="quest-category">';
+        html += '<div class="quest-category-header">🏞️ Lake Ownership & Management</div>';
+        html += '<div class="quest-list">';
+        (lakeGroup.length ? lakeGroup : [{title:'No active lake quests yet.', progress:{current:0,target:1}, reward:{}}]).slice(0, 6).forEach(function (quest) {
+            if (!quest.reward) {
+                html += '<div class="quest-item"><div class="quest-header"><span class="quest-title">' + quest.title + '</span></div>';
+                html += '<p class="quest-desc">Complete lake and facility milestones.</p>';
                 html += '</div>';
-                if (list.length > 3) {
-                    html += '<p class="quest-queue-note">+' + (list.length - 3) + ' more in this category</p>';
-                }
+                return;
+            }
+            var progress = quest.checkProgress(state);
+            var percentage = Math.min(100, Math.floor((progress.current / progress.target) * 100));
+            html += '<div class="quest-item">';
+            html += '<div class="quest-header">';
+            html += '<span class="quest-title">' + quest.title + '</span>';
+            html += '<span class="quest-reward">';
+            if (quest.reward.money > 0) html += UI.formatMoney(quest.reward.money);
+            if (quest.reward.reputation > 0) html += ' +' + quest.reward.reputation + ' rep';
+            html += '</span>';
+            html += '</div>';
+            html += '<p class="quest-desc">' + quest.description + '</p>';
+            html += '<div class="quest-progress">';
+            html += '<div class="quest-progress-track"><div class="quest-progress-fill" style="width:' + percentage + '%;"></div></div>';
+            html += '<span class="quest-progress-text">' + progress.current + '/' + progress.target + '</span>';
+            html += '</div>';
+            html += '</div>';
+        });
+        html += '</div>';
+        if (lakeGroup.length > 6) html += '<p class="quest-queue-note">+' + (lakeGroup.length - 6) + ' more in this category</p>';
+        html += '</div>';
+
+        // ── Breeding & Stock ─────────────────────────────────────────────────
+        html += '<div class="quest-category">';
+        html += '<div class="quest-category-header">🐟 Breeding & Stock</div>';
+        html += '<div class="quest-list">';
+        (breedGroup.length ? breedGroup : [{title:'No active breeding quests yet.', progress:{current:0,target:1}, reward:{}}]).slice(0, 6).forEach(function (quest) {
+            if (!quest.reward) {
+                html += '<div class="quest-item"><div class="quest-header"><span class="quest-title">' + quest.title + '</span></div>';
+                html += '<p class="quest-desc">Complete breeding milestones.</p>';
                 html += '</div>';
-            });
-        }
+                return;
+            }
+            var progress = quest.checkProgress(state);
+            var percentage = Math.min(100, Math.floor((progress.current / progress.target) * 100));
+            html += '<div class="quest-item">';
+            html += '<div class="quest-header">';
+            html += '<span class="quest-title">' + quest.title + '</span>';
+            html += '<span class="quest-reward">';
+            if (quest.reward.money > 0) html += UI.formatMoney(quest.reward.money);
+            if (quest.reward.reputation > 0) html += ' +' + quest.reward.reputation + ' rep';
+            html += '</span>';
+            html += '</div>';
+            html += '<p class="quest-desc">' + quest.description + '</p>';
+            html += '<div class="quest-progress">';
+            html += '<div class="quest-progress-track"><div class="quest-progress-fill" style="width:' + percentage + '%;"></div></div>';
+            html += '<span class="quest-progress-text">' + progress.current + '/' + progress.target + '</span>';
+            html += '</div>';
+            html += '</div>';
+        });
+        html += '</div>';
+        if (breedGroup.length > 6) html += '<p class="quest-queue-note">+' + (breedGroup.length - 6) + ' more in this category</p>';
+        html += '</div>';
 
         // ── Completed ────────────────────────────────────────────────────────
         if (doneQuests.length > 0) {

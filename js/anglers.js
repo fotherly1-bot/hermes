@@ -2363,34 +2363,10 @@ const Anglers = (function () {
             });
         }
         state.anglerQuests.push({
-            id: qid++, title: 'Fish Collector',
-            description: 'Keep 20 fish alive across lakes.',
-            target: 'stock', required: 20, progress: 0,
-            rewardMoney: 3000, rewardRep: 5, completed: false, claimed: false
-        });
-        state.anglerQuests.push({
-            id: qid++, title: 'Rising Star',
-            description: 'Reach 200 rep.',
-            target: 'reputation', required: 200, progress: 0,
-            rewardMoney: 10000, rewardRep: 0, completed: false, claimed: false
-        });
-        state.anglerQuests.push({
-            id: qid++, title: 'Breeding Expert',
-            description: 'Breed 5 offspring.',
-            target: 'bred', required: 5, progress: 0,
-            rewardMoney: 6000, rewardRep: 6, completed: false, claimed: false
-        });
-        state.anglerQuests.push({
             id: qid++, title: 'Seasoned Host',
-            description: 'Complete 10 bookings.',
-            target: 'bookings', required: 10, progress: 0,
+            description: 'Complete ' + baseWinTarget + ' bookings.',
+            target: 'bookings', required: baseWinTarget, progress: 0,
             rewardMoney: 7000, rewardRep: 8, completed: false, claimed: false
-        });
-        state.anglerQuests.push({
-            id: qid++, title: 'Marketing Maestro',
-            description: 'Run 3 campaigns.',
-            target: 'campaigns', required: 3, progress: 0,
-            rewardMoney: 4000, rewardRep: 5, completed: false, claimed: false
         });
 
         // Try to grant immediate progress based on current anglerStats if present
