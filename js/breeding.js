@@ -227,6 +227,9 @@ const Breeding = (function () {
         var lbo = s.lastBreedingOutcome;
 
         var html = '<h2>\uD83E\uDD5A Breeding Pond</h2>';
+        html += '<div class="breed-help">';
+        html += '<strong>How it works:</strong> Hire a <strong>Breeding Scientist</strong> from Staff, then pick two parent fish from your lakes. Breeding runs automatically over <strong>' + CYCLE_DAYS + ' days</strong> and produces offspring that inherit traits from both parents. Set a <strong>destination lake</strong> for the fry, and note that matching rod bait to a parent\'s <strong>preferred bait</strong> can boost outcome odds.';
+        html += '</div>';
 
         // ── Scientist status banner ───────────────────────────────────────────
         if (sci) {

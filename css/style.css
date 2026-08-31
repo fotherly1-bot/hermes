@@ -9017,6 +9017,17 @@ details[open] > .lake-accordion-summary::before {
     color: var(--colour-text-muted);
     margin-bottom: 1rem;
 }
+.breed-help {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 0.65rem 0.9rem;
+    font-size: 0.78rem;
+    color: var(--colour-text-muted);
+    margin-bottom: 0.9rem;
+    line-height: 1.45;
+}
+.breed-help strong { color: var(--colour-text); }
 
 .breed-active-card {
     background: var(--colour-card);
