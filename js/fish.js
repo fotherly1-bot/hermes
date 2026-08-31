@@ -10,13 +10,13 @@ const Fish = (function () {
      * Species definitions with base stats.
      */
     const SPECIES = {
-        common: { name: 'Common Carp', maxWeight: 960, baseGrowth: 1.0, colour: '#8B7355' },
-        mirror: { name: 'Mirror Carp', maxWeight: 1080, baseGrowth: 0.9, colour: '#B8860B' },
-        leather: { name: 'Leather Carp', maxWeight: 840, baseGrowth: 0.85, colour: '#6B4226' },
-        ghost: { name: 'Ghost Carp', maxWeight: 720, baseGrowth: 1.1, colour: '#C0C0C0' },
-        koi: { name: 'Koi Carp', maxWeight: 600, baseGrowth: 0.95, colour: '#FF6347' },
-        grass: { name: 'Grass Carp', maxWeight: 900, baseGrowth: 1.2, colour: '#556B2F' },
-        crucian: { name: 'Crucian Carp', maxWeight: 120, baseGrowth: 0.7, colour: '#DAA520' }
+        common: { name: 'Common Carp', maxWeight: 960, baseGrowth: 1.0, colour: '#8B7355', preferredBaits: ['boilie_standard','boilie_fishmeal'] },
+        mirror: { name: 'Mirror Carp', maxWeight: 1080, baseGrowth: 0.9, colour: '#B8860B', preferredBaits: ['boilie_tigernut','popup_white'] },
+        leather: { name: 'Leather Carp', maxWeight: 840, baseGrowth: 0.85, colour: '#6B4226', preferredBaits: ['boilie_birdfood','popup_yellow'] },
+        ghost: { name: 'Ghost Carp', maxWeight: 720, baseGrowth: 1.1, colour: '#C0C0C0', preferredBaits: ['popup_white','popup_purple'] },
+        koi: { name: 'Koi Carp', maxWeight: 600, baseGrowth: 0.95, colour: '#FF6347', preferredBaits: ['popup_pink','boilie_standard'] },
+        grass: { name: 'Grass Carp', maxWeight: 900, baseGrowth: 1.2, colour: '#556B2F', preferredBaits: ['boilie_fishmeal','spod_mix'] },
+        crucian: { name: 'Crucian Carp', maxWeight: 120, baseGrowth: 0.7, colour: '#DAA520', preferredBaits: ['boilie_standard','popup_yellow'] }
     };
 
     const ALL_BAIT_IDS = ['boilie_standard','boilie_fishmeal','boilie_birdfood','boilie_tigernut','popup_white','popup_yellow','popup_pink','popup_orange','popup_purple','spod_mix'];

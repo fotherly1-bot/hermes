@@ -171,6 +171,14 @@ const Breeding = (function () {
                     if (idx1 !== -1 && idx2 !== -1) {
                         var f1 = s.fish.splice(Math.max(idx1,idx2), 1)[0];
                         var f2 = s.fish.splice(Math.min(idx1,idx2), 1)[0];
+                        if (typeof Fish !== 'undefined' && Fish.SPECIES && Fish.randomPreferredBaits) {
+                            [f1,f2].forEach(function(fp){
+                                if (!fp.preferredBaits || !fp.preferredBaits.length) {
+                                    var sp = Fish.SPECIES[fp.species];
+                                    fp.preferredBaits = (sp && sp.preferredBaits && sp.preferredBaits.length) ? sp.preferredBaits.slice() : Fish.randomPreferredBaits();
+                                }
+                            });
+                        }
                         s.breedingPond = [f2, f1];
                         s.breedingActive = true;
                         s.breedingTimer  = CYCLE_DAYS;
@@ -219,16 +227,6 @@ const Breeding = (function () {
         var lbo = s.lastBreedingOutcome;
 
         var html = '<h2>\uD83E\uDD5A Breeding Pond</h2>';
-
-        // DEBUG: show in UI temporarily
-        try {
-            var _pp = (s.breedingPond || []).slice(0,2);
-            html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.5rem;">DEBUG pond prefs: ' +
-              (_pp[0] ? (_pp[0].name + '=' + JSON.stringify(_pp[0].preferredBaits)) : 'none') +
-              ' | ' +
-              (_pp[1] ? (_pp[1].name + '=' + JSON.stringify(_pp[1].preferredBaits)) : 'none') +
-              '</div>';
-        } catch(e){}
 
         // ── Scientist status banner ───────────────────────────────────────────
         if (sci) {
@@ -330,6 +328,16 @@ const Breeding = (function () {
                     html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.25rem;">Preferred Bait</div>';
                     html += '<div class="breed-parent-preferred-thumbs">';
                     f.preferredBaits.forEach(function(bid){
+                        var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
+                        html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
+                    });
+                    html += '</div>';
+                    html += '</div>';
+                } else if (typeof Fish !== 'undefined' && Fish.SPECIES && Fish.SPECIES[f.species] && Fish.SPECIES[f.species].preferredBaits && Fish.SPECIES[f.species].preferredBaits.length) {
+                    html += '<div class="breed-parent-preferred-baits">';
+                    html += '<div style="font-size:0.68rem;color:var(--colour-text-muted);margin-bottom:0.25rem;">Preferred Bait</div>';
+                    html += '<div class="breed-parent-preferred-thumbs">';
+                    Fish.SPECIES[f.species].preferredBaits.forEach(function(bid){
                         var src = 'img/bait/' + bid.replace(/_/g, '-') + '.png';
                         html += '<img src="' + src + '" alt="' + bid + '" class="breed-parent-preferred-thumb" title="' + bid + '"/>';
                     });
