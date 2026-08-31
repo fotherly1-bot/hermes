@@ -2258,7 +2258,11 @@ body {
 }
 
 .tackle-icon {
-    font-size: 1.6rem;
+    height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
     line-height: 1;
 }
 
@@ -2270,7 +2274,7 @@ body {
 }
 
 .tackle-icon-fallback {
-    font-size: 1.6rem;
+    font-size: 3.2rem;
     line-height: 1;
     display: inline-block;
 }
@@ -10867,9 +10871,6 @@ details[open] > .lake-accordion-summary::before {
 .tackle-card.tackle-owned {
     opacity: 0.85;
     border-color: rgba(255,255,255,0.15);
-}
-.tackle-icon {
-    font-size: 1.5rem;
 }
 .tackle-name {
     font-weight: 700;
