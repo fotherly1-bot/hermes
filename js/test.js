@@ -9,10 +9,10 @@ const Test = (function () {
     ];
 
     var MYTHICS = [
-        { name: 'Mythic Abyss', sub: 'Abyss Koi · 31lb 8oz · 12yr old', fish: 'img/carp/koi-carp.png', bait: 'Secret Popup', traits: ['Void Scale', 'Phantom Drift'] },
-        { name: 'Mythic Aether', sub: 'Aether Koi · 29lb 1oz · 10yr old', fish: 'img/carp/koi-carp.png', bait: 'Luminous Pellet', traits: ['Prismatic Sheen', 'Static Field'] },
-        { name: 'Mythic Ember', sub: 'Ember Koi · 33lb 4oz · 14yr old', fish: 'img/carp/koi-carp.png', bait: 'Chili Crust', traits: ['Magma Scale', 'Searing Wake'] },
-        { name: 'Mythic Frost', sub: 'Frost Koi · 27lb 9oz · 11yr old', fish: 'img/carp/koi-carp.png', bait: 'Glacial Worm', traits: ['Ice Mirror', 'Frozen Trail'] }
+        { name: 'Mythic Abyss', rarity: 'mythic', sub: 'Abyss Koi · 31lb 8oz · 12yr old', fish: 'img/carp/koi-carp.png', bait: 'Secret Popup', traits: ['Void Scale', 'Phantom Drift'] },
+        { name: 'Mythic Aether', rarity: 'mythic', sub: 'Aether Koi · 29lb 1oz · 10yr old', fish: 'img/carp/koi-carp.png', bait: 'Luminous Pellet', traits: ['Prismatic Sheen', 'Static Field'] },
+        { name: 'Mythic Ember', rarity: 'mythic', sub: 'Ember Koi · 33lb 4oz · 14yr old', fish: 'img/carp/koi-carp.png', bait: 'Chili Crust', traits: ['Magma Scale', 'Searing Wake'] },
+        { name: 'Mythic Frost', rarity: 'mythic', sub: 'Frost Koi · 27lb 9oz · 11yr old', fish: 'img/carp/koi-carp.png', bait: 'Glacial Worm', traits: ['Ice Mirror', 'Frozen Trail'] }
     ];
 
     var RARITY_GRADIENT = {
