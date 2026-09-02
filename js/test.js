@@ -15,6 +15,18 @@ const Test = (function () {
         { name: 'Mythic Frost', rarity: 'mythic', sub: 'Frost Koi · 27lb 9oz · 11yr old', fish: 'img/carp/koi-carp.png', bait: 'Glacial Worm', traits: ['Ice Mirror', 'Frozen Trail'] }
     ];
 
+    var WEATHER_CARDS = [
+        { name: 'Sunny',    rarity: 'common',   emoji: '☀️', bonus: '+4%',  rig: '12ft Carp Rod' },
+        { name: 'Cloudy',   rarity: 'common',   emoji: '⛅', bonus: '+2%',  rig: 'Carbon Rod' },
+        { name: 'Overcast', rarity: 'common',   emoji: '☁️', bonus: '+1%',  rig: '13ft Carp Rod' },
+        { name: 'Rainy',    rarity: 'rare',     emoji: '🌧️', bonus: '-1%',  rig: 'Custom Rod' },
+        { name: 'Stormy',   rarity: 'epic',     emoji: '⛈️', bonus: '-6%',  rig: '12ft Carp Rod' },
+        { name: 'Foggy',    rarity: 'common',   emoji: '🌫️', bonus: '+1%',  rig: 'Carbon Rod' },
+        { name: 'Frost',    rarity: 'epic',     emoji: '❄️', bonus: '-3%',  rig: '13ft Carp Rod' },
+        { name: 'Snowfall', rarity: 'legendary', emoji: '❄️', bonus: '-10%', rig: 'Custom Rod' },
+        { name: 'Heatwave', rarity: 'legendary', emoji: '🔥', bonus: '+6%',  rig: '12ft Carp Rod' }
+    ];
+
     var RARITY_GRADIENT = {
         common: 'linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.0))',
         rare: 'linear-gradient(180deg, rgba(51,136,255,0.25), rgba(51,136,255,0.05))',
@@ -39,6 +51,18 @@ const Test = (function () {
                '</div>';
     }
 
+    function weatherCardFor(item) {
+        var bg = RARITY_GRADIENT[item.rarity] || '';
+        return '<div class="test-card top-header-card th-' + item.rarity + '">' +
+               '<div class="th-topbar"><span class="th-badge th-badge-' + item.rarity + '">' + item.rarity.toUpperCase() + '</span><span class="th-name">' + item.emoji + ' ' + item.name + '</span></div>' +
+               '<div class="th-art" style="background:' + bg + '; display:flex; align-items:center; justify-content:center; font-size:3.2rem;">' + item.emoji + '</div>' +
+               '<div class="th-body">' +
+               '<div class="th-line">Catch bonus: <strong>' + item.bonus + '</strong></div>' +
+               '<div class="th-line">Best rig: <strong>' + item.rig + '</strong></div>' +
+               '</div>' +
+               '</div>';
+    }
+
     function render() {
         var html = '<p class="empty-state" style="margin-bottom:0.6rem;">One card per rarity, 4-across row.</p>';
         html += '<div class="test-card-grid test-card-grid-4">';
@@ -51,6 +75,13 @@ const Test = (function () {
         html += '<div class="test-card-grid test-card-grid-4">';
         MYTHICS.forEach(function(item) {
             html += cardFor(item);
+        });
+        html += '</div>';
+
+        html += '<p class="empty-state" style="margin:1.2rem 0 0.6rem;">Weather buff cards.</p>';
+        html += '<div class="test-card-grid test-card-grid-5">';
+        WEATHER_CARDS.forEach(function(item) {
+            html += weatherCardFor(item);
         });
         html += '</div>';
         return html;
