@@ -450,7 +450,28 @@ const UI = (function () {
                 if (typeof DLC !== 'undefined') DLC.render();
                 break;
             case 'test':
-                if (typeof Test !== 'undefined') Test.open();
+                (function () {
+                    var container = document.getElementById('test-content');
+                    if (!container) return;
+                    if (typeof Test === 'undefined') {
+                        container.innerHTML = '<p class="empty-state">Test module not loaded.</p>';
+                        return;
+                    }
+                    try {
+                        if (typeof Test.open === 'function') {
+                            Test.open();
+                            return;
+                        }
+                        if (typeof Test.render === 'function') {
+                            container.innerHTML = Test.render();
+                            return;
+                        }
+                        container.innerHTML = '<p class="empty-state">Test module missing render/open.</p>';
+                    } catch (e) {
+                        console.warn('[test] render failed', e);
+                        container.innerHTML = '<p class="empty-state">Test render failed: ' + (e && e.message ? e.message : 'unknown') + '</p>';
+                    }
+                })();
                 break;
             case 'finance':
                 if (typeof Finance !== 'undefined') {
