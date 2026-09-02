@@ -14,26 +14,10 @@ const Test = (function () {
                '</div>';
     }
 
-    function inlayCardB2() {
-        return '<div class="test-card inlay-card inlay-metal">' +
-               '<div class="inlay-frame inlay-frame-heavy">' +
-               '<div class="inlay-window inlay-window-etched"><img src="img/carp/ghost-carp.png" class="inlay-img" onerror="this.style.display=\'none\'" /></div>' +
-               '</div>' +
-               '<div class="inlay-body">' +
-               '<div class="inlay-title">Ghost Koi</div>' +
-               '<div class="inlay-sub">Ghost Carp · 12lb 4oz · 3yr old</div>' +
-               '<div class="inlay-line">Preferred bait: <strong>Boilies, Popups</strong></div>' +
-               '<div class="cf-traits"><span class="cf-trait cf-trait-pos">Giant</span><span class="cf-trait cf-trait-neg">Shy</span></div>' +
-               '<div class="inlay-actions"><button class="btn btn-primary btn-sm">Use</button><button class="btn btn-secondary btn-sm">Discard</button></div>' +
-               '</div>' +
-               '</div>';
-    }
-
     function render() {
-        var html = '<p class="empty-state" style="margin-bottom:1rem;">Two base card designs.</p>';
+        var html = '<p class="empty-state" style="margin-bottom:1rem;">One base card design.</p>';
         html += '<div class="test-card-grid">';
         html += topHeaderCardA2();
-        html += inlayCardB2();
         html += '</div>';
         return html;
     }
