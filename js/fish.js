@@ -524,7 +524,8 @@ const Fish = (function () {
             leather: 'img/carp/leather-carp.png',
             ghost: 'img/carp/ghost-carp.png',
             koi: 'img/carp/koi-carp.png',
-            grass: 'img/carp/grass-carp.png'
+            grass: 'img/carp/grass-carp.png',
+            crucian: 'img/carp/crucian-carp.png'
         };
         return map[speciesKey] || '';
     }
