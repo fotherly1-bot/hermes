@@ -1,1 +1,87 @@
-[]
+[
+  {
+    "flow": "dashboard-load",
+    "status": "START",
+    "detail": "Navigating to localhost:8080"
+  },
+  {
+    "flow": "dashboard-load",
+    "status": "INFO",
+    "detail": "Welcome screen visible - clicking Start Game"
+  },
+  {
+    "flow": "dashboard-load",
+    "status": "PASS",
+    "detail": "Title: Carp Fishing Tycoon"
+  },
+  {
+    "flow": "dashboard-load",
+    "status": "PASS",
+    "detail": "Visible: #day-counter"
+  },
+  {
+    "flow": "dashboard-load",
+    "status": "PASS",
+    "detail": "Visible: #money-display"
+  },
+  {
+    "flow": "dashboard-load",
+    "status": "PASS",
+    "detail": "Visible: #reputation-display"
+  },
+  {
+    "flow": "dashboard-load",
+    "status": "PASS",
+    "detail": "Visible: #timer-display"
+  },
+  {
+    "flow": "dashboard-load",
+    "status": "PASS",
+    "detail": "Visible: #weather-display"
+  },
+  {
+    "flow": "angler-booking",
+    "status": "START",
+    "detail": "Opening Anglers tab"
+  },
+  {
+    "flow": "angler-booking",
+    "status": "PASS",
+    "detail": "Anglers panel visible"
+  },
+  {
+    "flow": "angler-booking",
+    "status": "PASS",
+    "detail": "Booked angler (buttons found: 1)"
+  },
+  {
+    "flow": "fish-cards",
+    "status": "START",
+    "detail": "Opening Cards tab"
+  },
+  {
+    "flow": "fish-cards",
+    "status": "PASS",
+    "detail": "Cards panel visible"
+  },
+  {
+    "flow": "button-responses",
+    "status": "START",
+    "detail": "Testing buttons"
+  },
+  {
+    "flow": "button-responses",
+    "status": "PASS",
+    "detail": "Pause clicked, text: \u25b6 Resume"
+  },
+  {
+    "flow": "button-responses",
+    "status": "PASS",
+    "detail": "Speed clicked, text: \u23e9 4x"
+  },
+  {
+    "flow": "console-output",
+    "status": "INFO",
+    "detail": "Total console entries: 9"
+  }
+]

@@ -43,6 +43,8 @@
         <button class="tab-btn" data-tab="staff">Staff</button>
         <button class="tab-btn" data-tab="cards">&#x1F0CF; Cards</button>
         <button class="tab-btn" data-tab="news">&#x1F4F0; News</button>
+        <button class="tab-btn" data-tab="dlc">🎁 DLC</button>
+        <button class="tab-btn" data-tab="test">🧪 Test</button>
     </nav>
 
     <!-- Content Panels -->
@@ -143,6 +145,18 @@
             <p class="empty-state">Loading staff...</p>
         </section>
 
+        <!-- DLC Panel -->
+        <section id="panel-dlc" class="panel">
+            <h2>🎁 DLC</h2>
+            <div id="dlc-content"></div>
+        </section>
+
+        <!-- Test Panel -->
+        <section id="panel-test" class="panel">
+            <h2>🧪 Test</h2>
+            <div id="test-content">Test page placeholder</div>
+        </section>
+
         <!-- Finance Panel -->
         <section id="panel-finance" class="panel">
             <h2>Finance</h2>
@@ -240,6 +254,8 @@
     <script src="js/lakes.js?v=28"></script>
     <script src="js/welcome-entry.js?v=17"></script>
     <script src="js/staff.js?v=14"></script>
+    <script src="js/dlc.js"></script>
+    <script src="js/test.js?v=8"></script>
     <script>
         window.addEventListener('DOMContentLoaded', function () {
             if (typeof Game === 'undefined' || typeof Game.init !== 'function') return;

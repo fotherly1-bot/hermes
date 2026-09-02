@@ -446,6 +446,12 @@ const UI = (function () {
                     Staff.renderStaff();
                 }
                 break;
+            case 'dlc':
+                if (typeof DLC !== 'undefined') DLC.render();
+                break;
+            case 'test':
+                if (typeof Test !== 'undefined') Test.open();
+                break;
             case 'finance':
                 if (typeof Finance !== 'undefined') {
                     Finance.renderFinance();
