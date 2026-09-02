@@ -8,11 +8,19 @@ const Test = (function () {
         { name: 'Legendary Koi', rarity: 'legendary', fish: 'img/carp/koi-carp.png', sub: 'Koi · 18lb 2oz · 5yr old', bait: 'Corn, Dough', traits: ['Golden Scale', 'Wary'] }
     ];
 
+    var MYTHICS = [
+        { name: 'Mythic Abyss', sub: 'Abyss Koi · 31lb 8oz · 12yr old', fish: 'img/carp/koi-carp.png', bait: 'Secret Popup', traits: ['Void Scale', 'Phantom Drift'] },
+        { name: 'Mythic Aether', sub: 'Aether Koi · 29lb 1oz · 10yr old', fish: 'img/carp/koi-carp.png', bait: 'Luminous Pellet', traits: ['Prismatic Sheen', 'Static Field'] },
+        { name: 'Mythic Ember', sub: 'Ember Koi · 33lb 4oz · 14yr old', fish: 'img/carp/koi-carp.png', bait: 'Chili Crust', traits: ['Magma Scale', 'Searing Wake'] },
+        { name: 'Mythic Frost', sub: 'Frost Koi · 27lb 9oz · 11yr old', fish: 'img/carp/koi-carp.png', bait: 'Glacial Worm', traits: ['Ice Mirror', 'Frozen Trail'] }
+    ];
+
     var RARITY_GRADIENT = {
         common: 'linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.0))',
         rare: 'linear-gradient(180deg, rgba(51,136,255,0.25), rgba(51,136,255,0.05))',
         epic: 'linear-gradient(180deg, rgba(170,68,255,0.25), rgba(170,68,255,0.05))',
-        legendary: 'linear-gradient(180deg, rgba(255,170,0,0.30), rgba(255,170,0,0.05))'
+        legendary: 'linear-gradient(180deg, rgba(255,170,0,0.30), rgba(255,170,0,0.05))',
+        mythic: 'linear-gradient(180deg, rgba(255,34,102,0.40), rgba(255,34,102,0.08))'
     };
 
     function cardFor(item) {
@@ -32,9 +40,16 @@ const Test = (function () {
     }
 
     function render() {
-        var html = '<p class="empty-state" style="margin-bottom:1rem;">One card per rarity, 4-across row.</p>';
+        var html = '<p class="empty-state" style="margin-bottom:0.6rem;">One card per rarity, 4-across row.</p>';
         html += '<div class="test-card-grid test-card-grid-4">';
         CARDS.forEach(function(item) {
+            html += cardFor(item);
+        });
+        html += '</div>';
+
+        html += '<p class="empty-state" style="margin:1.2rem 0 0.6rem;">Mythic variations.</p>';
+        html += '<div class="test-card-grid test-card-grid-4">';
+        MYTHICS.forEach(function(item) {
             html += cardFor(item);
         });
         html += '</div>';
